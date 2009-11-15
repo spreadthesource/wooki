@@ -10,6 +10,6 @@ public class Index {
 	
 	@AfterRender
 	void addScript() {
-		support.addScript(";");
+		support.addScript("Wooki.bubbles.init();");
 	}
 }

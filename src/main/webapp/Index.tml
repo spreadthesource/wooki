@@ -1,22 +1,42 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+     
+    <t:delegate to="userCtx" />
     
-    <section id="presentation">
-    	<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
-    	<p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
-    	
-    	<p id="signup">
-    		<a href="#">Signup in 30 seconds.<br />
-    		<em>Create and review documents now</em></a>
-    	</p>
-    	
+    <t:block id="userBlock">
+        <section id="author-feed">
+            <h1>${username}'s books :</h1>
+            <ol>
+                    <t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
+                    <li>
+                    <a href="#">${currentBook.title}</a>
+            </li>
+            </t:loop>
+            </ol>
     </section>
+    </t:block>          
     
+    <t:block id="noBooks">
+    	<p>No books available</p>
+    </t:block>
+    
+    <t:block id="presBlock">
+            <section id="presentation">
+                <p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
+                <p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
+                
+                <p id="signup">
+                        <a href="#">Signup in 30 seconds.<br />
+                        <em>Create and review documents now</em></a>
+                </p>
+        </section>
+    </t:block>
+
     <section id="book-feed" class="activity-feed">
         <h1>Fresh stuff</h1>
         <ol>
         	<t:loop source="freshStuffs" value="current">
         	<li>
-                ${current.bookTitle} <em>${current.action} </em> <a href="#">${current.username}</a> <em> ${current.period}</em>
+                ${current.bookTitle} <em>${current.action} </em> <a href="#" t:type="pagelink" t:page="Index" t:context="current.username">${current.username}</a> <em> ${current.period}</em>
             </li>
             </t:loop>
         </ol>

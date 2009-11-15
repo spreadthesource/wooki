@@ -44,6 +44,7 @@ public class WookiModule {
 				List<Asset> jsStack = (List<Asset>) invocation.getResult();
 				jsStack.add(source.getClasspathAsset("context:static/js/jquery-1.3.2.min.js"));
 				jsStack.add(source.getClasspathAsset("context:static/js/jquery.noconflict.js"));
+				jsStack.add(source.getClasspathAsset("context:static/js/wooki.js")); 
 			}
 		};
 

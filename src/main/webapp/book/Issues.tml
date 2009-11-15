@@ -1,0 +1,18 @@
+<html t:type="booklayout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<section id="content" class="body">
+<h2>Issues</h2>
+<ul id="issues-list">
+	<li>
+	<h3>Issue #21</h3>
+	<quote>Chapter 3 : Lorem ipsum [...] dolor sit amet</quote>
+	<p>This paragraph is far too long, it would be more simple if ti was shorter</p>
+	</li>
+	<li>
+	<h3>...</h3>
+	</li>
+</ul>
+<p>1 2 3 ... 13</p>
+</section>
+</html>

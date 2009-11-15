@@ -1,0 +1,3 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+   <t:commentdialog id="test">Dialog test</t:commentdialog>
+</html>

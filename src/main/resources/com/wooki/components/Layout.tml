@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<head>
+<meta charset="utf-8" />
+<title>wooki - Collaborative Writing</title>
+</head>
+<body>
+<div id="top">
+	<header class="body">
+			<hgroup id="wooki">
+				<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
+				<h2>Collaborative Writing</h2>
+			</hgroup>
+			
+			<nav id="quick-nav">
+				<ul>
+					<li>Tour</li>
+					<li>Have an account? <a href="#" t:type="pagelink" t:page="signin">Login</a></li>
+					<li><a href="#">FAQ</a></li>
+				</ul>
+			</nav>
+			
+			<div id="search-box">
+				<form action="#">
+					<p><label for="search-field">Looking for a document? </label><input type="text" name="search-field" id="search-field" class="form-field" /><a class="form-field" id="submit-search" href="#">Search</a></p>
+				</form>
+			</div>	
+	</header>
+</div>
+
+<div id="content">
+	<div class="body">
+		<t:body />
+	</div>
+	<div class="clearer" />
+</div>
+
+<div id="bottom">
+	<footer class="body">
+		<div class="footer-nav" id="footer-wooki">
+			<h1>Wooki</h1>
+			<ul>
+				<li>About</li>
+				<li>FAQ</li>
+				<li>Help</li>
+			</ul>
+		</div>
+		
+		<div class="footer-nav" id="footer-dashboard">
+			<h1>Users</h1>
+			<ul>
+				<li>Dashboard</li>
+			</ul>
+		</div>
+		
+		<div class="footer-nav" id="footer-legal">
+			<h1>Legal</h1>
+			<ul>
+				<li>Legal mentions</li>
+				<li>Data privacy</li>
+				<li>Licence</li>
+			</ul>
+		</div>
+	</footer>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+    
+    <section id="presentation">
+    	<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
+    	<p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
+    	
+    	<p id="signup">
+    		<a href="#">Signup in 30 seconds.<br />
+    		<em>Create and review documents now</em></a>
+    	</p>
+    	
+    </section>
+    
+    <section id="book-feed" class="activity-feed">
+        <h1>Fresh stuff</h1>
+        <ol>
+        	<t:loop source="freshStuffs" value="current">
+        	<li>
+                ${current.bookTitle} <em>${current.action} </em> <a href="#">${current.username}</a> <em> ${current.period}</em>
+            </li>
+            </t:loop>
+        </ol>
+    </section>
+    
+    <section id="user-feed" class="activity-feed">
+        <h1>Last users activity</h1>
+        <ol>
+            <li>
+                <a href="#">ccordenier</a> <em> just joined wooki</em>
+            </li>
+            <li>
+                <a href="#">gg</a> <em> has posted a comment on </em> <a href="#">Ride Rails</a>
+            </li>
+            <li>
+                <a href="#">robink</a> <em> just joined wooki</em>
+            </li>
+        </ol>
+    </section>
+</html>

@@ -1,0 +1,28 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+    
+    <section id="signin-form" class="wookiForm">
+    	<form t:type="form" t:id="loginForm">
+    		<t:errors />
+    		<h1>Sign on Wooki</h1>
+    		<fieldset>
+    			<ol>
+    				<li><label t:type="label" t:for="username"/><input type="text" t:type="textfield" t:id="username" /></li>
+					<li><label t:type="label" t:for="password"/><input type="text" t:type="passwordfield" t:id="password" /><small><a href="#">Forgot</a></small></li>
+    			</ol>
+			</fieldset>
+			<fieldset class="rememberMe">
+				<input t:type="checkbox" t:id="rememberMe"/><small>Remember me</small>
+			</fieldset>
+			<p id="submit">
+				<a t:type="linksubmit">Signin</a>
+			</p>
+    	</form>
+    </section>
+    
+    <section id="signin-signup">
+    	<p>Create your account</p>
+    	<p id="signup">
+    		<a t:type="pagelink" t:page="signup">Signup</a>
+    	</p>
+    </section>
+</html>

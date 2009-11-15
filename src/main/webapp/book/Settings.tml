@@ -1,0 +1,13 @@
+<html t:type="booklayout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<section id="content" class="body">
+<h2>Settings</h2>
+<nav>
+<ul id="settings-list">
+	<li>book authors : Christophe, Robin. <a href="#">edit</a></li>
+	<li><a href="#">delete this book</a></li>
+</ul>
+</nav>
+</section>
+</html>

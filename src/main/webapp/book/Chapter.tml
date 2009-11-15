@@ -1,0 +1,129 @@
+<html t:type="booklayout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet art">
+
+
+<div class="entry-content commentable">
+	<header>
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">Welcome to Apache Tapestry</a></h2>
+		<nav id="book-nav">
+		<ol>
+			<li id="nav-left">&lt; Table of Contents</li>
+			<li id="nav-right">Releases &gt;</li>
+		</ol>
+		</nav>
+	</header> 
+	
+	
+	
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	Vestibulum sodales dapibus lacinia. Praesent ultricies, purus nec
+	fermentum scelerisque, augue mi convallis eros, a molestie ante neque
+	nec augue. Etiam augue mauris, suscipit id faucibus sed, egestas et
+	turpis. Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida. Nam eget
+	ante in nisl sagittis euismod non in mauris. Praesent sodales est ut
+	risus dapibus vel commodo eros aliquet. Praesent fringilla ornare dui
+	fringilla bibendum. Sed consequat posuere lectus, at mattis sem placerat
+	ultricies.</p>
+	<h3><a href="#">Pellentesque convallis</a></h3>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	Vestibulum sodales dapibus lacinia. Praesent ultricies, purus nec
+	fermentum scelerisque, augue mi convallis eros, a molestie ante neque
+	nec augue. Etiam augue mauris, suscipit id faucibus sed, egestas et
+	turpis. Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida: 
+	<quote>Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida.</quote>
+	Nam eget ante in nisl sagittis euismod non in mauris. Praesent sodales est ut
+	risus dapibus vel commodo eros aliquet. Praesent fringilla ornare dui
+	fringilla bibendum. Sed consequat posuere lectus, at mattis sem placerat
+	ultricies.</p>
+	<blockquote>Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida.</blockquote>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	Vestibulum sodales dapibus lacinia. Praesent ultricies, purus nec
+	fermentum scelerisque, augue mi convallis eros, a molestie ante neque
+	nec augue. Etiam augue mauris, suscipit id faucibus sed, egestas et
+	turpis. Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida. Nam eget
+	ante in nisl sagittis euismod non in mauris. Praesent sodales est ut
+	risus dapibus vel commodo eros aliquet. Praesent fringilla ornare dui
+	fringilla bibendum. Sed consequat posuere lectus, at mattis sem placerat
+	ultricies.</p>
+	<p>Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>.
+	Vestibulum sodales dapibus lacinia. Praesent ultricies, purus nec
+	fermentum scelerisque, augue mi convallis eros, a molestie ante neque
+	nec augue. Etiam augue mauris, suscipit id faucibus sed, egestas et
+	turpis. Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida. Nam eget
+	ante in nisl sagittis euismod non in mauris. Praesent sodales est ut
+	risus dapibus vel commodo eros aliquet. Praesent fringilla ornare dui
+	fringilla bibendum. Sed consequat posuere lectus, at mattis sem placerat
+	ultricies.</p>
+	<h3>Donec fermentum</h3>
+	<pre>
+	package com.wooki.services;
+
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wooki.domain.exception.AuthorAlreadyException;
+import com.wooki.domain.model.Author;
+
+/**
+ * Simple User management interface.
+ * 
+ * TODO Replace by or link to more general security feature
+ */
+@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+public interface AuthorManager {
+
+	/**
+	 * Add a new author to DB
+	 * 
+	 * @param author
+	 * @return
+	 * @throws AuthorAlreadyException
+	 */
+	@Transactional(readOnly = false)
+	Author addAuthor(Author author) throws AuthorAlreadyException;
+
+	/**
+	 * Can be used to check user login.
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	boolean checkPassword(String username, String password);
+
+	/**
+	 * Verify that a user exists.
+	 * 
+	 * @param username
+	 * @return
+	 */
+	Author findByUsername(String username);
+
+}
+	</pre>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+	Vestibulum sodales dapibus lacinia. Praesent ultricies, purus nec
+	fermentum scelerisque, augue mi convallis eros, a molestie ante neque
+	nec augue. Etiam augue mauris, suscipit id faucibus sed, egestas et
+	turpis. Pellentesque convallis fringilla velit, dignissim posuere arcu
+	placerat eu. Donec fermentum augue sit amet sapien iaculis pellentesque.
+	In molestie suscipit massa, quis luctus turpis commodo gravida. Nam eget
+	ante in nisl sagittis euismod non in mauris. Praesent sodales est ut
+	risus dapibus vel commodo eros aliquet. Praesent fringilla ornare dui
+	fringilla bibendum. Sed consequat posuere lectus, at mattis sem placerat
+	ultricies.</p>
+</div>
+</html>

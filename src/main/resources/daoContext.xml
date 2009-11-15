@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+	<!-- Application context DAO layer -->
+
+<beans>
+	<!-- General  -->
+	<bean id="bookDao" class="com.wooki.domain.dao.BookDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="chapterDao" class="com.wooki.domain.dao.ChapterDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="commentDao" class="com.wooki.domain.dao.CommentDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="authorDao" class="com.wooki.domain.dao.AuthorDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="activityDao" class="com.wooki.domain.dao.ActivityDAOImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="domManager" class="com.wooki.services.parsers.DOMManagerImpl" />
+	<bean id="xhtmlToFOConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet" value="classpath:Xhtml2fo.xsl" />
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
+
+	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
+		<property name="proxyHostPlusPort" value="noproxy:3128" />
+	</bean>
+
+	<bean id="httpParams" class="org.apache.commons.httpclient.params.HttpClientParams">
+		<!-- Timeout in milliseconds: in this case 2 minutes -->
+		<property name="soTimeout" value="120000" />
+	</bean>
+
+	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient">
+		<!--
+			hostConfiguration set to myHostConfig that sets the proxy host and
+			port as shown above
+		-->
+		<property name="hostConfiguration" ref="myHostConfig" />
+		<property name="params" ref="httpParams" />
+	</bean>
+	<bean id="FOToPDFConvertor" class="com.wooki.services.parsers.FormattingObjectsToPDF">
+	</bean>
+
+	<bean id="documentToXHTMLConvertor" class="com.wooki.services.parsers.DocumentToXHTML">
+	</bean>
+	<!-- Cache definition -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+		<property name="shared" value="false" />
+	</bean>
+
+	<!-- sessionFactory  -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="configLocation">
+			<value>classpath:hibernate.cfg.xml</value>
+		</property>
+		<property name="configurationClass">
+			<value>org.hibernate.cfg.AnnotationConfiguration</value>
+		</property>
+	</bean>
+
+	<!-- Application Managers -->
+	<bean id="bookManagerTarget" class="com.wooki.services.BookManagerImpl">
+		<property name="bookDao">
+			<ref bean="bookDao" />
+		</property>
+		<property name="authorDao">
+			<ref bean="authorDao" />
+		</property>
+		<property name="activityDao">
+			<ref bean="activityDao" />
+		</property>
+	</bean>
+	<bean id="bookManager" parent="transactionProxy">
+		<property name="target">
+			<ref bean="bookManagerTarget" />
+		</property>
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<bean id="chapterManagerTarget" class="com.wooki.services.ChapterManagerImpl">
+		<property name="chapterDao">
+			<ref bean="chapterDao" />
+		</property>
+		<property name="bookDao">
+			<ref bean="bookDao" />
+		</property>
+		<property name="domManager">
+			<ref bean="domManager" />
+		</property>
+	</bean>
+	<bean id="chapterManager" parent="transactionProxy">
+		<property name="target">
+			<ref bean="chapterManagerTarget" />
+		</property>
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<bean id="authorManagerTarget" class="com.wooki.services.AuthorManagerImpl">
+		<property name="authorDao">
+			<ref bean="authorDao" />
+		</property>
+	</bean>
+	<bean id="authorManager" parent="transactionProxy">
+		<property name="target">
+			<ref bean="authorManagerTarget" />
+		</property>
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<bean id="commentManagerTarget" class="com.wooki.services.CommentManagerImpl">
+		<property name="commentDao">
+			<ref bean="commentDao" />
+		</property>
+	</bean>
+	<bean id="commentManager" parent="transactionProxy">
+		<property name="target">
+			<ref bean="commentManagerTarget" />
+		</property>
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+	<bean id="activityManagerTarget" class="com.wooki.services.ActivityManagerImpl">
+		<property name="activityDao">
+			<ref bean="activityDao" />
+		</property>
+	</bean>
+	<bean id="activityManager" parent="transactionProxy">
+		<property name="target">
+			<ref bean="activityManagerTarget" />
+		</property>
+		<property name="transactionAttributeSource">
+			<bean
+				class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+		</property>
+	</bean>
+
+</beans>

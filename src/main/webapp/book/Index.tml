@@ -1,0 +1,82 @@
+<html t:type="booklayout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet Art">
+
+<header>
+	<p id="authors">
+		 Howard Lewis Ship <a href="#">hlship</a>, Christophe Cordenier <a href="#">ccordenier</a>, Ulrich Starck <a href="#">whiner</a>
+	</p>
+	
+	<p id="published">
+		10th October 2005 Edition
+	</p>
+	
+	<section class="abstract">
+		<p class="commentable" id="b1">Apache Tapestry is an open-source framework for creating dynamic, robust, highly scalable web applications in Java. Tapestry complements and builds upon the standard Java Servlet API, and so it works in any servlet container or application server.</p>
+
+		<p class="commentable" id="b2">Tapestry divides a web application into a set of pages, each constructed from components. This provides a consistent structure, allowing the Tapestry framework to assume responsibility for key concerns such as URL construction and dispatch, persistent state storage on the client or on the server, user input validation, localization/internationalization, and exception reporting. Developing Tapestry applications involves creating HTML templates using plain HTML, and combining the templates with small amounts of Java code. In Tapestry, you create your application in terms of objects, and the methods and properties of those objects -- and specifically not in terms of URLs and query parameters. Tapestry brings true object oriented development to Java web applications.</p>
+		
+ 
+	</section>
+</header> 
+
+
+<div class="entry-content">
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">Table of contents</a></h2>
+	
+	<ol id="chapters-list">
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Welcome to Apache Tapestry</t:pagelink></h3>
+			<p>04/03/09</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Releases</t:pagelink></h3>
+			<p>one week ago</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Training and Support</t:pagelink></h3>
+			<p>4 hours ago</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Third Party Libraries, Tutorials and Resources</t:pagelink></h3>
+			<p>11/03/09</p>
+		</li>
+		<li>
+			<h3>...</h3>
+		</li>
+		
+	</ol>
+	
+	<div id="comments">
+	<a href="#1" id="c1" class="comment-accessor"><div class="no-comment"></div></a>
+	<a href="#2" id="c2" class="comment-accessor"><div class="no-comment"></div></a>
+	</div>
+	
+	<div class="clearer"  />
+</div>
+		<script type="text/javascript">
+			jQuery(document).ready(function() { 
+				jQuery('.commentable').each(function(i) { 
+					jQuery(this).bind("mouseenter mouseleave", function(e){
+						jQuery(".comment-accessor").css('visibility','hidden');
+								
+						comment = jQuery('#' +jQuery(this).attr('id').replace('b','c'));
+						comment.css({
+							'top': (jQuery(this).offset().top + 10) + 'px',
+							'left': (jQuery(this).offset().left - 50)  + 'px',
+							'height' : jQuery(this).height() + 'px',
+						});
+					    comment.css('visibility','visible');
+					 });
+				});
+
+				jQuery('#book').bind("mouseleave", function(e){
+					jQuery(".comment-accessor").css('visibility','hidden');
+				});
+			}); 
+		</script>
+
+</html>

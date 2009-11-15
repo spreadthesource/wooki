@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 import com.wooki.domain.model.Comment;
 import com.wooki.services.parsers.Convertor;
 import com.wooki.services.parsers.DOMManager;
-import com.wooki.services.parsers.XHTMLToFormattingObjects;
 
 /**
  * Test case for DOM manipulation.
@@ -113,7 +112,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Test
 	public void testAddIds() {
 		String result = generator
-				.adaptContent("<html><head></head><body><h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p></body></html>");
+				.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>");
 		Assert.assertTrue(result.contains("idStart=\"4\""));
 		Assert
 				.assertTrue(result

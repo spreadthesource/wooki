@@ -79,4 +79,21 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 		getHibernateTemplate().update(book);
 	}
 
+	public boolean verifyBookOwner(Long bookId, String username) {
+		if (bookId == null) {
+			throw new IllegalArgumentException("Book cannot be null");
+		}
+		try {
+			Session session = getHibernateTemplate().getSessionFactory()
+					.getCurrentSession();
+			Object result = session.getNamedQuery(
+					"com.wooki.domain.model.book.verifyBookOwner")
+					.setParameter("un", username).setParameter("id", bookId)
+					.uniqueResult();
+			return result != null;
+		} catch (DataAccessException daEx) {
+			logger.debug(daEx);
+			return false;
+		}
+	}
 }

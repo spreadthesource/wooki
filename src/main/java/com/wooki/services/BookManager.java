@@ -31,6 +31,18 @@ public interface BookManager {
 	Book create(String title, Author author);
 
 	/**
+	 * Add an author to a given book, author must exist before calling this method.
+	 * 
+	 * @param book
+	 *            Book must exists in DB before a call to this method.
+	 * @param title
+	 *            The tile for the new chapter.
+	 * @param username TODO
+	 */
+	@Transactional(readOnly = false)
+	void addAuthor(Book book, String username);
+
+	/**
 	 * Add a chapter to a given book.
 	 * 
 	 * @param book
@@ -41,7 +53,7 @@ public interface BookManager {
 	 */
 	@Transactional(readOnly = false)
 	Chapter addChapter(Book book, String title, String username);
-
+	
 	/**
 	 * Get a book from it short name.
 	 * 

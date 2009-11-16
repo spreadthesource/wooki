@@ -27,7 +27,9 @@ import javax.persistence.TemporalType;
  * 
  */
 @Entity
-@NamedQueries( { @NamedQuery(name = "com.wooki.domain.model.book.findBySlugTitle", query = "select b from Book b where b.slugTitle=:st") })
+@NamedQueries( {
+		@NamedQuery(name = "com.wooki.domain.model.book.findBySlugTitle", query = "select b from Book b where b.slugTitle=:st"),
+		@NamedQuery(name = "com.wooki.domain.model.book.verifyBookOwner", query = "select b from Book b join b.authors as a where b.id=:id and a.username=:un") })
 public class Book {
 
 	@Id

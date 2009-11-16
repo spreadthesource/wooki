@@ -70,4 +70,11 @@ public interface BookDAO {
 	 * @param book
 	 */
 	void update(Book book);
+
+	/**
+	 * Verify if an author owns a book.
+	 *
+	 * @return
+	 */
+	boolean verifyBookOwner(Long bookId, String username);
 }

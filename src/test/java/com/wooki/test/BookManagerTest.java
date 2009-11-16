@@ -81,6 +81,32 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	}
 
 	/**
+	 * Check that an author cannot add a chapter if he is not author of the
+	 * book.
+	 */
+	@Test
+	public void verifyCheckAuthor() {
+		Author robink = new Author();
+		robink.setEmail("robink@gmail.com");
+		robink.setUsername("robink");
+		robink.setPassword("password");
+		robink = authorManager.addAuthor(robink);
+
+		Book myProduct = bookManager
+				.findBookBySlugTitle("my-first-product-book");
+		Assert.assertNotNull(myProduct,
+				"'my-first-product-book' is not available.");
+
+		try {
+			bookManager.addChapter(myProduct, "My New Chapter", "robink");
+			// Robin is not an author of the book
+			Assert.fail();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	/**
 	 * Verify like feature
 	 */
 	@Test

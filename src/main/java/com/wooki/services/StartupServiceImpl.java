@@ -1,6 +1,5 @@
 package com.wooki.services;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.context.ApplicationContext;
 
 import com.wooki.domain.model.Author;
@@ -9,7 +8,6 @@ import com.wooki.domain.model.Chapter;
 
 public class StartupServiceImpl implements StartupService {
 
-	
 	public StartupServiceImpl(ApplicationContext applicationContext) {
 
 		BookManager bookManager = (BookManager) applicationContext
@@ -42,8 +40,12 @@ public class StartupServiceImpl implements StartupService {
 				"Requirements", "john");
 		chapterManager.updateContent(chapterOne, "<p>You will need ...</p>");
 
+		// Add robin to author's list
+		bookManager.addAuthor(productBook, "robink");
+
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", "robink");
+
 		chapterManager.updateContent(chapterTwo,
 				"<p>First you have to set environment variables...</p>");
 

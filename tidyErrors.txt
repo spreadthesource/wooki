@@ -1,7 +1,0 @@
-
-Tidy (vers 4th August 2000) Parsing "InputStream"
-InputStream:1:1: Warning: inserting missing 'title' element
-
-InputStream: Document content looks like HTML 2.0
-1 warnings/errors were found!
-

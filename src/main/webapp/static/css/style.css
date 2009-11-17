@@ -330,8 +330,6 @@ a {
 
 #book div.commentable:hover .comment-accessor {
 	visibility:visible;
-	-moz-user-select:none;
-	user-select:none;
 }
 
 #book .comment-accessor {
@@ -341,8 +339,22 @@ a {
 	display:block;
 }
 
+#book #comments a{
+	color: #FFD8A1;
+	font-weight: bold;
+	text-decoration: none;
+}
+
 #book .comment-accessor .no-comment {
 	background:url("../img/bubble_inactive.png") no-repeat center;
+	line-height: 25px;
+	height: 25px;
+	width: 40px;
+	text-align:center;
+}
+
+#book .comment-accessor .commented {
+	background:url("../img/bubble_active.png") no-repeat center;
 	line-height: 25px;
 	height: 25px;
 	width: 40px;

@@ -25,12 +25,16 @@ public class CommentDialog implements ClientElement {
 	@BeginRender
 	void startDiv(MarkupWriter writer) {
 		writer.element("div", "id", getClientId());
+		writer.element("div", "class", "dialog-content");
 	}
 
 	@AfterRender
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
-		support.addScript("$j('#%s').dialog()", resources.getId());
+		writer.end();
+		support.addScript("$j('#%s').dialog({" +
+				"modal: true" +
+				"})", resources.getId());
 	}
 
 	public String getClientId() {

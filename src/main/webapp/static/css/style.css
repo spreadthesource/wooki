@@ -486,3 +486,40 @@ a {
 	font-size: 20px;
 	font-style: normal;
 }
+
+/*** dialog */
+.ui-widget-overlay {
+	background:#666;
+	top:0px;
+	opacity: .5; 
+	filter: alpha(opacity=50); 
+	-moz-opacity: 0.5; 
+	position:absolute;
+}
+
+.ui-dialog {
+	background: #FF7351;
+	border:1px solid #FF7351;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	color:white;
+	padding:0px;
+	margin:0px;
+}
+
+.ui-dialog-titlebar {
+	float:right;
+	width:10px;
+}
+
+.dialog-content {
+	color:black;
+	padding:10px;
+	background: white;
+	margin-right:10px;
+	margin-bottom:10px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}

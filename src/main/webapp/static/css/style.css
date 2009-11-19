@@ -491,9 +491,7 @@ a {
 .ui-widget-overlay {
 	background:#666;
 	top:0px;
-	opacity: .5; 
-	filter: alpha(opacity=50); 
-	-moz-opacity: 0.5; 
+	opacity: 0.5;  
 	position:absolute;
 }
 
@@ -510,15 +508,38 @@ a {
 
 .ui-dialog-titlebar {
 	float:right;
-	width:10px;
+	width:20px;
+	
+}
+
+.ui-dialog-titlebar-close {
+	color:white;
+}
+
+.ui-icon {
+	text-indent: -99999px;
+	overflow:hidden;
+	height:20px;
+	width:20px; 
+	background:url('../img/bubble_close_button.png');
+	display:block;
+	border-top-right-radius: 10px;
+	-moz-border-radius-topright: 10px;
+	-webkit-border-top-right-radius: 10px;
+}
+
+.ui-dialog-title {
+	visibility: hidden; 
+	display:block;
+	width:0px;
+	height:0px;
 }
 
 .dialog-content {
 	color:black;
 	padding:10px;
 	background: white;
-	margin-right:10px;
-	margin-bottom:10px;
+	margin:0px 20px 20px 0px;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;

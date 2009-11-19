@@ -33,7 +33,7 @@ public class CommentDialog implements ClientElement {
 		writer.end();
 		writer.end();
 		support.addScript("$j('#%s').dialog({" +
-				"modal: true" +
+				"modal: true, width: 780, minHeight:30" +
 				"})", resources.getId());
 	}
 

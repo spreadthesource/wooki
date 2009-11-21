@@ -8,6 +8,8 @@ import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 import com.wooki.domain.model.Author;
 import com.wooki.pages.book.Index;
@@ -65,8 +67,12 @@ public class Signup {
 		Author author = new Author();
 		author.setUsername(username);
 		author.setEmail(email);
-		author.setPassword(password);
+		author.setPassword(password+"{DEADBEEF}");
 		authorManager.addAuthor(author);
+		
+		// Alert spring security that an author has logged in
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));
+		
 		return Index.class;
 	}
 

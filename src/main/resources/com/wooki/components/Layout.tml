@@ -17,7 +17,12 @@
 			<nav id="quick-nav">
 				<ul>
 					<li>Tour</li>
-					<li>Have an account? <a href="#" t:type="pagelink" t:page="signin">Login</a></li>
+					<t:security.ifLoggedIn>
+						<li>${username} <a href="#" t:type="actionlink" t:id="logout">Logout</a></li>
+						<p:else>
+							<li>Have an account? <a href="#" t:type="pagelink" t:page="signin">Login</a></li>
+						</p:else>
+					</t:security.ifLoggedIn>
 					<li><a href="#">FAQ</a></li>
 				</ul>
 			</nav>

@@ -3,54 +3,57 @@ package com.wooki.domain.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Activity;
 
-public class ActivityDAOImpl extends HibernateDaoSupport implements ActivityDAO {
+@Repository("activityDao")
+public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements
+		ActivityDAO {
 
-	public Activity add(Activity activity) {
-		if (activity == null) {
-			throw new IllegalArgumentException("author cannot be null");
-		}
+	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
+
+	public List<Activity> list(int nbElements) {
 		try {
-			getHibernateTemplate().saveOrUpdate(activity);
-			return activity;
-		} catch (DataAccessException daEx) {
-			logger.debug(daEx);
+			Criteria crit = getSession().createCriteria(Activity.class);
+			crit.addOrder(Order.desc("eventDate"));
+			crit.setMaxResults(nbElements);
+			return crit.list();
+		} catch (RuntimeException ex) {
+			logger.error("Error during listing activites.", ex);
 			return null;
 		}
 	}
 
-	public List<Activity> list(int nbElements) {
-		Session session = getHibernateTemplate().getSessionFactory()
-				.getCurrentSession();
-		Criteria crit = session.createCriteria(Activity.class);
-		crit.addOrder(Order.desc("eventDate"));
-		crit.setMaxResults(nbElements);
-		return crit.list();
-	}
-
 	public List<Activity> listForBook(Long bookId, int nbElements) {
-		Session session = getHibernateTemplate().getSessionFactory()
-				.getCurrentSession();
-		Criteria crit = session.createCriteria(Activity.class);
-		crit.add(Restrictions.eq("bookId", bookId));
-		crit.addOrder(Order.desc("eventDate"));
-		crit.setMaxResults(nbElements);
-		return crit.list();
+		try {
+			Criteria crit = getSession().createCriteria(Activity.class);
+			crit.add(Restrictions.eq("bookId", bookId));
+			crit.addOrder(Order.desc("eventDate"));
+			crit.setMaxResults(nbElements);
+			return crit.list();
+		} catch (RuntimeException ex) {
+			logger.error(String.format(
+					"Error during listing activites for book %d", bookId), ex);
+			return null;
+		}
 	}
 
 	public List<Activity> listByChapter(Long chapterId) {
-		Session session = getHibernateTemplate().getSessionFactory()
-				.getCurrentSession();
-		Criteria crit = session.createCriteria(Activity.class);
-		crit.add(Restrictions.eq("chapterId", chapterId));
-		return crit.list();
+		try {
+			Criteria crit = getSession().createCriteria(Activity.class);
+			crit.add(Restrictions.eq("chapterId", chapterId));
+			return crit.list();
+		} catch (RuntimeException ex) {
+			logger.error(String.format(
+					"Error during listing activities for chapter", chapterId),
+					ex);
+			return null;
+		}
 	}
 
 }

@@ -10,30 +10,7 @@ import com.wooki.domain.model.Chapter;
  * @author ccordenier
  *
  */
-public interface ChapterDAO {
-
-	/**
-	 * Create a chapter.
-	 * 
-	 * @param chapter
-	 * @return
-	 */
-	Chapter add(Chapter chapter);
-
-	/**
-	 * Remove a chapter.
-	 * 
-	 * @param chapter
-	 */
-	void delete(Chapter chapter);
-
-	/**
-	 * Obtain a chapter for a given id.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Chapter findById(Long id);
+public interface ChapterDAO extends GenericDAO<Chapter, Long> {
 
 	/**
 	 * Get the content of a book.
@@ -59,12 +36,5 @@ public interface ChapterDAO {
 	 * @return
 	 */
 	List<Chapter> listLastModified(Long id, int nbElts);
-	
-	/**
-	 * Update a chapter.
-	 * 
-	 * @param chapter
-	 */
-	void update(Chapter chapter);
 
 }

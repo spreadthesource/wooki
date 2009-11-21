@@ -3,55 +3,23 @@ package com.wooki.domain.dao;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
 
-public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
+@Repository("bookDao")
+public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 
-	public Book add(Book book) {
-		if (book == null) {
-			throw new IllegalArgumentException("Book cannot be null");
-		}
-		try {
-			getHibernateTemplate().saveOrUpdate(book);
-			return book;
-		} catch (DataAccessException daEx) {
-			logger.debug(daEx);
-			return null;
-		}
-	}
-
-	public void delete(Book book) {
-		if (book == null) {
-			throw new IllegalArgumentException("Book to delete cannot be null.");
-		}
-		getHibernateTemplate().delete(book);
-	}
-
-	public Book findById(Long id) {
-		if (id == null) {
-			throw new IllegalArgumentException("Id cannot be null in findById");
-		}
-		return (Book) getHibernateTemplate().get(Book.class, id);
-	}
+	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
 
 	public Book findBookBySlugTitle(String title) {
-		Session session = getHibernateTemplate().getSessionFactory()
-				.getCurrentSession();
-		Book result = (Book) session.getNamedQuery(
+		Book result = (Book) getSession().getNamedQuery(
 				"com.wooki.domain.model.book.findBySlugTitle").setParameter(
 				"st", title).uniqueResult();
-		return result;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<Book> listAll() {
-		List<Book> result = (List<Book>) getHibernateTemplate().loadAll(
-				Book.class);
 		return result;
 	}
 
@@ -61,9 +29,7 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 
 	public List<Book> listByTitle(String title) {
 		try {
-			Session session = getHibernateTemplate().getSessionFactory()
-					.getCurrentSession();
-			Criteria criteria = session.createCriteria(Book.class);
+			Criteria criteria = getSession().createCriteria(Book.class);
 			criteria.add(Restrictions.like("title", "%" + title + "%"));
 			return criteria.list();
 		} catch (DataAccessException daEx) {
@@ -72,27 +38,18 @@ public class BookDAOImpl extends HibernateDaoSupport implements BookDAO {
 		}
 	}
 
-	public void update(Book book) {
-		if (book == null) {
-			throw new IllegalArgumentException("The book cannot be null");
-		}
-		getHibernateTemplate().update(book);
-	}
-
 	public boolean verifyBookOwner(Long bookId, String username) {
 		if (bookId == null) {
 			throw new IllegalArgumentException("Book cannot be null");
 		}
 		try {
-			Session session = getHibernateTemplate().getSessionFactory()
-					.getCurrentSession();
-			Object result = session.getNamedQuery(
+			Object result = getSession().getNamedQuery(
 					"com.wooki.domain.model.book.verifyBookOwner")
 					.setParameter("un", username).setParameter("id", bookId)
 					.uniqueResult();
 			return result != null;
-		} catch (DataAccessException daEx) {
-			logger.debug(daEx);
+		} catch (RuntimeException ex) {
+			logger.debug("Error during owner verification", ex);
 			return false;
 		}
 	}

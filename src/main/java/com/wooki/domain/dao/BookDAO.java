@@ -10,29 +10,7 @@ import com.wooki.domain.model.Book;
  * @author ccordenier
  * 
  */
-public interface BookDAO {
-
-	/**
-	 * Add a newly created book.
-	 * 
-	 * @param book
-	 */
-	Book add(Book book);
-
-	/**
-	 * Delete a book.
-	 *
-	 * @param book
-	 */
-	void delete(Book book);
-
-	/**
-	 * Return the book for an id.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Book findById(Long id);
+public interface BookDAO extends GenericDAO<Book, Long>{
 
 	/**
 	 * 
@@ -50,13 +28,6 @@ public interface BookDAO {
 	List<Book> listByTitle(String title);
 	
 	/**
-	 * Return the book list.
-	 *
-	 * @return
-	 */
-	List<Book> listAll();
-
-	/**
 	 * 
 	 * 
 	 * @param id
@@ -64,13 +35,6 @@ public interface BookDAO {
 	 */
 	List<Book> listByAuthor(Long id);
 	
-	/**
-	 * Update the given book.
-	 *
-	 * @param book
-	 */
-	void update(Book book);
-
 	/**
 	 * Verify if an author owns a book.
 	 *

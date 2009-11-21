@@ -10,15 +10,7 @@ import com.wooki.domain.model.Activity;
  * @author ccordenier
  * 
  */
-public interface ActivityDAO {
-
-	/**
-	 * Create a new element in activity table.
-	 * 
-	 * @param activity
-	 * @return
-	 */
-	Activity add(Activity activity);
+public interface ActivityDAO extends GenericDAO<Activity, Long> {
 
 	/**
 	 * List the last nbElelements activities.
@@ -29,15 +21,15 @@ public interface ActivityDAO {
 	List<Activity> list(int nbElements);
 
 	/**
-	 * List the last nbElelements activities.
-	 * 
+	 * List the last nbElelements activities for a given book.
+	 *
 	 * @param nbElements
 	 * @return
 	 */
 	List<Activity> listForBook(Long bookId, int nbElements);
 
 	/**
-	 * List the last nbElelements activities.
+	 * List the last nbElelements activities for a corresponding chapter
 	 * 
 	 * @param nbElements
 	 * @return

@@ -10,25 +10,11 @@ import com.wooki.domain.model.Comment;
  * @author ccordenier
  * 
  */
-public interface CommentDAO {
+public interface CommentDAO extends GenericDAO<Comment, Long> {
 
 	/**
-	 * Add a comment.
-	 * 
-	 * @param comment
-	 * @return TODO
-	 */
-	Comment add(Comment comment);
-
-	/**
-	 * Remove the comment and its relations.
-	 * 
-	 * @param comment
-	 */
-	void delete(Comment comment);
-
-	/**
-	 * 
+	 * List all the comments for a given chapter.
+	 *
 	 * @return
 	 */
 	List<Comment> listForChapter(Long chapterId);
@@ -47,13 +33,5 @@ public interface CommentDAO {
 	 * @return
 	 */
 	List<Comment> listForBook(Long book);
-
-	/**
-	 * Update a comment.
-	 * 
-	 * @param comment
-	 * @return TODO
-	 */
-	void update(Comment comment);
 
 }

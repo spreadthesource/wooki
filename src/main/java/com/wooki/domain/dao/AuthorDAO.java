@@ -8,24 +8,7 @@ import com.wooki.domain.model.Author;
  * @author ccordenier
  * 
  */
-public interface AuthorDAO {
-
-	/**
-	 * Add a new Author. Call this method before attaching a book to an author.
-	 * 
-	 * @param author
-	 * @return
-	 */
-	Author add(Author author);
-
-	/**
-	 * Verify the password set is correct.
-	 * 
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	boolean checkPassword(String username, String password);
+public interface AuthorDAO extends GenericDAO<Author, Long>{
 
 	/**
 	 * Find an author by its username, case is insensitive.

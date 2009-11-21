@@ -1,21 +1,29 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
     <section id="signin-form" class="wookiForm">
-    	<form t:type="form" t:id="loginForm">
-    		<t:errors />
+    
+    	<form id="loginForm" action="${loginCheckUrl}" method="POST">
     		<h1>Sign on Wooki</h1>
+    		<t:if test="failed">
+    			<p class="wooki-form-error">Username and/or password was wrong!</p>
+    		</t:if>
     		<fieldset>
     			<ol>
-    				<li><label t:type="label" t:for="username"/><input type="text" t:type="textfield" t:id="username" /></li>
-					<li><label t:type="label" t:for="password"/><input type="text" t:type="passwordfield" t:id="password" /><small><a href="#">Forgot</a></small></li>
+    				<li>
+    					<label class="username" for="j_username">Username</label>
+						<input class="username" name="j_username" type="text" size="10" maxlength="30" /></li>
+					<li>
+						<label class="password" for="j_password">Password</label>
+						<input class="password" name="j_password" type="password" size="10" maxlength="30" /><small><a href="#">Forgot</a></small>
+					</li>
     			</ol>
 			</fieldset>
 			<fieldset class="rememberMe">
-				<input t:type="checkbox" t:id="rememberMe"/><small>Remember me</small>
+				<input type="checkbox" id="rememberMe"/><small>Remember me</small>
 			</fieldset>
-			<p id="submit">
-				<a t:type="linksubmit">Signin</a>
-			</p>
+			<fieldset>
+				<input id="submit" class="submit" type="submit" value="log in"/>
+			</fieldset>
     	</form>
     </section>
     

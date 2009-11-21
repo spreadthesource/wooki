@@ -85,36 +85,88 @@
 			<artifactId>tapestry-spring</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
+		
+		<!-- Hibernate -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-hibernate3</artifactId>
-			<version>2.0.8</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate</artifactId>
+			<version>${hibernate-version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-annotations</artifactId>
+			<version>${hibernate-annotations-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate-entitymanager-version}</version>
+		</dependency>
+		
+		<!-- Spring -->
+		<!-- Spring Framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>2.5.6</version>
+			<version>${spring-version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>2.5.6</version>
+			<version>${spring-version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>2.5.6</version>
+			<version>${spring-version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>2.5.6</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>2.5.6</version>
+			<version>${spring-version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
@@ -140,7 +192,7 @@
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev-hudson-1</version>
 		</dependency>
-		<dependency> 
+		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
@@ -156,7 +208,16 @@
 			<artifactId>jsr250-api</artifactId>
 			<version>1.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>nu.localhost.tapestry</groupId>
+			<artifactId>tapestry-spring-security</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>wooki</finalName>
@@ -257,6 +318,11 @@
 			<url>http://repo1.maven.org/maven2/org/apache/xmlgraphics/fop</url>
 		</repository>
 
+		<repository>
+			<id>localhost.nu</id>
+			<url>http://www.localhost.nu/java/mvn</url>
+		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
@@ -274,6 +340,12 @@
 	</pluginRepositories>
 
 	<properties>
+		<env>LOCAL</env>
+		<maven.test.failure.ignore>true</maven.test.failure.ignore>
+		<hibernate-version>3.2.6.ga</hibernate-version>
+		<hibernate-annotations-version>3.3.1.ga</hibernate-annotations-version>
+		<hibernate-entitymanager-version>3.3.2.ga</hibernate-entitymanager-version>
 		<tapestry-release-version>5.1.0.5</tapestry-release-version>
+		<spring-version>2.5.6</spring-version>
 	</properties>
 </project>

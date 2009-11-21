@@ -20,9 +20,11 @@ import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.wooki.domain.model.Comment;
 
+@Service("domManager")
 public class DOMManagerImpl implements DOMManager {
 
 	private static final String CHAPTER_ROOT_NODE = "chapter";

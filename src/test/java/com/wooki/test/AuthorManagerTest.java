@@ -1,5 +1,6 @@
 package com.wooki.test;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
@@ -16,24 +17,21 @@ import com.wooki.services.AuthorManager;
  * @author ccordenier
  * 
  */
-@ContextConfiguration(locations = { "/daoContext.xml",
-		"/applicationContext.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 
+	@Autowired
 	private AuthorManager authorManager;
 
 	@BeforeClass
 	public void initDb() throws AuthorAlreadyException {
-
-		authorManager = (AuthorManager) applicationContext
-				.getBean("authorManager");
 
 		// Add author to the book
 		Author john = new Author();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("johndoe");
 		john.setPassword("password");
-		john = authorManager.addAuthor(john);
+		authorManager.addAuthor(john);
 
 	}
 
@@ -59,7 +57,7 @@ public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 		john.setUsername("johndoe");
 		john.setPassword("passpass");
 		try {
-			john = authorManager.addAuthor(john);
+			authorManager.addAuthor(john);
 			Assert
 					.fail("User john already exists, call add must raise an exception.");
 		} catch (AuthorAlreadyException uaEx) {
@@ -77,16 +75,4 @@ public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(author);
 	}
 
-	/**
-	 * Verify password handling.
-	 *
-	 */
-	@Test
-	public void checkPasswordVerification() {
-		Assert.assertTrue(authorManager.checkPassword("JoHnDoe", "password"),
-				"John password is 'password. This must match.");
-		Assert.assertFalse(
-				authorManager.checkPassword("JoHnDoe", "falsePassword"),
-				"John password is 'password. This must not match.");
-	}
 }

@@ -2,6 +2,7 @@ package com.wooki.test;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
@@ -23,39 +24,36 @@ import com.wooki.services.CommentManager;
  * @author ccordenier
  * 
  */
-@ContextConfiguration(locations = { "/daoContext.xml",
-		"/applicationContext.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
+	@Autowired
 	private BookManager bookManager;
 
+	@Autowired
 	private ChapterManager chapterManager;
 
+	@Autowired
 	private AuthorManager authorManager;
 
+	@Autowired
 	private CommentManager commentManager;
 
 	@BeforeClass
 	public void initDb() {
-
-		bookManager = (BookManager) applicationContext.getBean("bookManager");
-		chapterManager = (ChapterManager) applicationContext
-				.getBean("chapterManager");
-		authorManager = (AuthorManager) applicationContext
-				.getBean("authorManager");
-		commentManager = (CommentManager) applicationContext
-				.getBean("commentManager");
 
 		// Add author to the book
 		Author john = new Author();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
 		john.setPassword("password");
-		john = authorManager.addAuthor(john);
+		authorManager.addAuthor(john);
 
 		// Create books
-		Book productBook = bookManager.create("My First Product Book", john);
-		Book cacheBook = bookManager.create("My Cache Product Book", john);
+		Book productBook = bookManager.create("My First Product Book", john
+				.getUsername());
+		Book cacheBook = bookManager.create("My Cache Product Book", john
+				.getUsername());
 
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
@@ -90,7 +88,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		robink.setEmail("robink@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		robink = authorManager.addAuthor(robink);
+		authorManager.addAuthor(robink);
 
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -145,9 +143,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		Assert
-				.assertEquals(
-						chapterOne.getContent(),
-						"<?xml version=\"1.0\" encoding=\"UTF-8\"?><chapter xmlns=\"\" idStart=\"1\"><p id=\"0\">You will need ...</p></chapter>");
+				.assertEquals(chapterOne.getContent(),
+						"<p>You will need ...</p>");
 	}
 
 	@Test
@@ -164,7 +161,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		Assert.assertTrue(chapterOne.getContent().contains(
-				"<p id=\"0\">You will need ...</p>"));
+				"<p>You will need ...</p>"));
 	}
 
 	/**

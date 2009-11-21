@@ -8,13 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.wooki.domain.model.Comment;
@@ -27,14 +28,25 @@ import com.wooki.services.parsers.DOMManager;
  * @author ccordenier
  * 
  */
-@ContextConfiguration(locations = { "/daoContext.xml",
-		"/applicationContext.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 	private Logger logger = Logger.getLogger(DOMManagerTest.class);
-	
+
+	@Autowired
 	private DOMManager generator;
+
+	@Autowired
+	@Qualifier("xhtmlToFOConvertor")
 	private Convertor toFOConvertor;
+
+	@Autowired
+	@Qualifier("FOToPDFConvertor")
+	private Convertor toPDFConvertor;
+
+	@Autowired
+	@Qualifier("documentToXHTMLConvertor")
+	private Convertor toXHTMLConvertor;
 
 	public Convertor getToFOConvertor() {
 		return toFOConvertor;
@@ -43,9 +55,6 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	public void setToFOConvertor(Convertor toFOConvertor) {
 		this.toFOConvertor = toFOConvertor;
 	}
-
-	private Convertor toPDFConvertor;
-	private Convertor toXHTMLConvertor;
 
 	public Convertor getToXHTMLConvertor() {
 		return toXHTMLConvertor;
@@ -61,17 +70,6 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 	public void setToPDFConvertor(Convertor toPDFConvertor) {
 		this.toPDFConvertor = toPDFConvertor;
-	}
-
-	@BeforeClass
-	public void init() {
-		generator = (DOMManager) applicationContext.getBean("domManager");
-		toFOConvertor = (Convertor) applicationContext
-				.getBean("xhtmlToFOConvertor");
-		toPDFConvertor = (Convertor) applicationContext
-				.getBean("FOToPDFConvertor");
-		toXHTMLConvertor = (Convertor) applicationContext
-				.getBean("documentToXHTMLConvertor");
 	}
 
 	@Test

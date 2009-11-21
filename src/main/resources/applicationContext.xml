@@ -1,25 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
+
+	<!-- Placholders to import inherited variables -->
+	<bean id="project-properties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>
+					classpath*:com/wooki/domain/dao/database.properties
+				</value>
+			</list>
+		</property>
 	</bean>
 
-	<bean id="transactionProxy" abstract="true"
-		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager">
-			<ref bean="transactionManager" />
+	<!-- post-processors for all standard config annotations -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.wooki" />
+
+	<!-- Exception translation bean post processor -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaDialect">
+			<bean class="${jpa.dialect}" />
 		</property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="insert*">PROPAGATION_REQUIRED</prop>
-				<prop key="update*">PROPAGATION_REQUIRED</prop>
-				<prop key="save*">PROPAGATION_REQUIRED</prop>
-				<prop key="*">PROPAGATION_REQUIRED, readOnly</prop>
-			</props>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.${jpa.vendor.adapter}">
+				<property name="showSql" value="${hibernate.show_sql}" />
+				<property name="databasePlatform" value="${hibernate.dialect}" />
+				<!-- On ne genere pas la BDD au demarrage -->
+				<property name="generateDdl" value="false" />
+			</bean>
 		</property>
 	</bean>
+
+	<bean id="xhtmlToFOConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet" value="classpath:Xhtml2fo.xsl" />
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
+
+	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
+		<property name="proxyHostPlusPort" value="noproxy:3128" />
+	</bean>
+
+	<bean id="httpParams" class="org.apache.commons.httpclient.params.HttpClientParams">
+		<!-- Timeout in milliseconds: in this case 2 minutes -->
+		<property name="soTimeout" value="120000" />
+	</bean>
+
+	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient">
+		<!--
+			hostConfiguration set to myHostConfig that sets the proxy host and
+			port as shown above
+		-->
+		<property name="hostConfiguration" ref="myHostConfig" />
+		<property name="params" ref="httpParams" />
+	</bean>
+	<bean id="FOToPDFConvertor" class="com.wooki.services.parsers.FormattingObjectsToPDF">
+	</bean>
+
+	<bean id="documentToXHTMLConvertor" class="com.wooki.services.parsers.DocumentToXHTML">
+	</bean>
+	<!-- Cache definition -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+		<property name="shared" value="false" />
+	</bean>
+
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!--
+		enable the configuration of transactional behavior based on
+		annotations
+	-->
+	<tx:annotation-driven transaction-manager="txManager" />
 
 </beans>

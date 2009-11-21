@@ -2,10 +2,6 @@ package com.wooki.services;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 
@@ -15,7 +11,6 @@ import com.wooki.domain.model.Chapter;
  * @author ccordenier
  * 
  */
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public interface BookManager {
 
 	/**
@@ -27,8 +22,7 @@ public interface BookManager {
 	 *            Author must exist before a call to this method.
 	 * @return
 	 */
-	@Transactional(readOnly = false)
-	Book create(String title, Author author);
+	Book create(String title, String author);
 
 	/**
 	 * Add an author to a given book, author must exist before calling this method.
@@ -39,7 +33,6 @@ public interface BookManager {
 	 *            The tile for the new chapter.
 	 * @param username TODO
 	 */
-	@Transactional(readOnly = false)
 	void addAuthor(Book book, String username);
 
 	/**
@@ -51,7 +44,6 @@ public interface BookManager {
 	 *            The tile for the new chapter.
 	 * @param username TODO
 	 */
-	@Transactional(readOnly = false)
 	Chapter addChapter(Book book, String title, String username);
 	
 	/**

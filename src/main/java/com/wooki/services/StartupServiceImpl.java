@@ -22,18 +22,18 @@ public class StartupServiceImpl implements StartupService {
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
 		john.setPassword("password");
-		john = authorManager.addAuthor(john);
+		authorManager.addAuthor(john);
 
 		Author robink = new Author();
 		robink.setEmail("robin@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		robink = authorManager.addAuthor(robink);
+		authorManager.addAuthor(robink);
 
 		// Create books
 		Book productBook = bookManager.create(
-				"Tapestry 5 : When art meets Development", john);
-		Book cacheBook = bookManager.create("My Cache Product Book", john);
+				"Tapestry 5 : When art meets Development", "john");
+		Book cacheBook = bookManager.create("My Cache Product Book", "john");
 
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,

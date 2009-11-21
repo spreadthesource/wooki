@@ -1,17 +1,12 @@
 package com.wooki.services;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wooki.domain.exception.AuthorAlreadyException;
 import com.wooki.domain.model.Author;
 
 /**
- * Simple User management interface.
+ * Author registration and retrival manager.
  * 
- * TODO Replace by or link to more general security feature
  */
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public interface AuthorManager {
 
 	/**
@@ -21,17 +16,7 @@ public interface AuthorManager {
 	 * @return
 	 * @throws AuthorAlreadyException
 	 */
-	@Transactional(readOnly = false)
-	Author addAuthor(Author author) throws AuthorAlreadyException;
-
-	/**
-	 * Can be used to check user login.
-	 * 
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	boolean checkPassword(String username, String password);
+	void addAuthor(Author author) throws AuthorAlreadyException;
 
 	/**
 	 * Verify that a user exists.

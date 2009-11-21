@@ -2,9 +2,6 @@ package com.wooki.services;
 
 import java.util.List;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
@@ -16,7 +13,6 @@ import com.wooki.domain.model.Comment;
  * @author ccordenier
  * 
  */
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public interface ChapterManager {
 
 	/**
@@ -27,7 +23,6 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	@Transactional(readOnly = false)
 	Comment addComment(Chapter chapter, Author author, String content,
 			String domId);
 
@@ -46,7 +41,6 @@ public interface ChapterManager {
 	 * 
 	 * @param chapter
 	 */
-	@Transactional(readOnly = false)
 	void updateContent(Chapter chapter, String content);
 
 	/**
@@ -55,7 +49,6 @@ public interface ChapterManager {
 	 * @param book
 	 * @param chapter
 	 */
-	@Transactional(readOnly = false)
 	void delete(Chapter chapter);
 
 	/**

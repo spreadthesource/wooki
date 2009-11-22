@@ -13,6 +13,7 @@ import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.Publication;
 import com.wooki.services.AuthorManager;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
@@ -231,5 +232,38 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(openComs);
 		Assert.assertEquals(openComs.size(), 1,
 				"There is at least one open comment.");
+	}
+
+	/**
+	 * Verify if publication mechanism creates the good entities and content.
+	 * 
+	 */
+	@Test
+	public void testPublication() {
+
+		Book myProduct = bookManager
+				.findBookBySlugTitle("my-first-product-book");
+		Assert.assertNotNull(myProduct,
+				"'my-first-product-book' is not available.");
+
+		List<Chapter> chapters = chapterManager.listChapters(myProduct.getId());
+		Assert.assertNotNull(chapters, "Chapters are missing.");
+		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
+
+		Publication published = chapterManager.getLastPublishedContent(chapters
+				.get(0).getId());
+		Assert.assertNull(published, "No revision has been published.");
+
+		// Update content and publish
+		chapterManager.updateContent(chapters.get(0),
+				"<p>Tapestry is totally amazing</p>");
+		chapterManager.publishChapter(chapters.get(0));
+		published = chapterManager.getLastPublishedContent(chapters.get(0)
+				.getId());
+		Assert.assertNotNull(published, "No revision has been published.");
+		Assert.assertNotNull(published.getContent());
+		Assert.assertEquals(published.getContent(),
+				"<p id=\"0\">Tapestry is totally amazing</p>");
+
 	}
 }

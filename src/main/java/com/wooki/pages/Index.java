@@ -1,13 +1,16 @@
 package com.wooki.pages;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.PageAttached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.RequestGlobals;
 import org.springframework.context.ApplicationContext;
 
 import com.wooki.domain.model.Book;
@@ -33,6 +36,9 @@ public class Index {
 	private BookManager bookManager;
 
 	@Inject
+	private RequestGlobals requestGlobals;
+
+	@Inject
 	private Block presBlock;
 
 	@Inject
@@ -53,9 +59,25 @@ public class Index {
 	@Property
 	private String username;
 
+	@PageAttached
+	private void setupServices() {
+		this.bookManager = (BookManager) applicationContext
+				.getBean("bookManager");
+	}
+
+	/**
+	 * Set current user if someone has logged in.
+	 * 
+	 * @return
+	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupListBook() {
-		// TODO Implement book list for authenticated user
+		Principal principal = requestGlobals.getHTTPServletRequest()
+				.getUserPrincipal();
+		if (principal != null && principal.getName() != "") {
+			this.username = principal.getName();
+			this.userBooks = bookManager.listByAuthor(username);
+		}
 		return true;
 	}
 
@@ -69,8 +91,6 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupBookList(String username) {
 		this.username = username;
-		this.bookManager = (BookManager) applicationContext
-				.getBean("bookManager");
 		this.userBooks = bookManager.listByAuthor(username);
 		return true;
 	}

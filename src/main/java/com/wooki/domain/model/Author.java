@@ -24,6 +24,8 @@ import org.springframework.security.userdetails.UserDetails;
 @Entity
 public class Author implements UserDetails {
 
+	private static final long serialVersionUID = 4060967693790504175L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)

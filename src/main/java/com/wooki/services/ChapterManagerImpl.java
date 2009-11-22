@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.dao.ChapterDAO;
+import com.wooki.domain.dao.PublicationDAO;
 import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
+import com.wooki.domain.model.Publication;
+import com.wooki.services.parsers.DOMManager;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Service("chapterManager")
@@ -20,6 +23,12 @@ public class ChapterManagerImpl implements ChapterManager {
 
 	@Autowired
 	private ChapterDAO chapterDao;
+
+	@Autowired
+	private PublicationDAO publicationDao;
+
+	@Autowired
+	private DOMManager domManager;
 
 	@Transactional(readOnly = false)
 	public Comment addComment(Chapter chapter, Author author, String content,
@@ -51,6 +60,25 @@ public class ChapterManagerImpl implements ChapterManager {
 		chapter.setContent(content);
 		chapter.setLastModifed(new Date());
 		chapterDao.update(chapter);
+	}
+
+	@Transactional(readOnly = false)
+	public void publishChapter(Chapter chapter) {
+		if (chapter == null) {
+			throw new IllegalArgumentException("Chapter parameter cannot be null for publication.");
+		}
+		Chapter toPublish = chapterDao.findById(chapter.getId());
+		if (chapter != null) {
+			Publication published = new Publication();
+			published.setChapter(chapter);
+			published.setContent(domManager.adaptContent(chapter.getContent()));
+			published.setRevisionDate(new Date());
+			publicationDao.create(published);
+		}
+	}
+
+	public Publication getLastPublishedContent(Long chapterId) {
+		return publicationDao.findLastRevision(chapterId);
 	}
 
 	@Transactional(readOnly = false)

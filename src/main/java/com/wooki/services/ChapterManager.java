@@ -5,6 +5,7 @@ import java.util.List;
 import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.Publication;
 
 /**
  * Interface used to access to chapter related information from the wooki
@@ -35,6 +36,21 @@ public interface ChapterManager {
 	 */
 	String getContent(Chapter chapter);
 
+	/**
+	 * Publish chapter content
+	 *
+	 * @param chapterId
+	 */
+	void publishChapter(Chapter chapter);
+
+	/**
+	 * Find the last published chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	Publication getLastPublishedContent(Long chapterId);
+	
 	/**
 	 * When a chapter content is update then all its related comments must be
 	 * re-organized for the sake of consistency.

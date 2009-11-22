@@ -37,7 +37,7 @@ public class BookManagerImpl implements BookManager {
 
 	@Autowired
 	private ActivityDAO activityDao;
-	
+
 	@Transactional(readOnly = false)
 	public void addAuthor(Book book, String username) {
 		if (book == null || username == null) {
@@ -124,6 +124,17 @@ public class BookManagerImpl implements BookManager {
 		activityDao.create(activity);
 
 		return book;
+	}
+
+	public Chapter getBookAbstract(Book book) {
+		if(book == null) {
+			throw new IllegalArgumentException("Book parameter cannot be null");
+		}
+		Book upToDate = bookDao.findById(book.getId());
+		if (book != null) {
+			return upToDate.getChapters().get(0);
+		}
+		return null;
 	}
 
 	public Book findBookBySlugTitle(String title) {

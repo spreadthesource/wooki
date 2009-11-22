@@ -25,13 +25,15 @@ public interface BookManager {
 	Book create(String title, String author);
 
 	/**
-	 * Add an author to a given book, author must exist before calling this method.
+	 * Add an author to a given book, author must exist before calling this
+	 * method.
 	 * 
 	 * @param book
 	 *            Book must exists in DB before a call to this method.
 	 * @param title
 	 *            The tile for the new chapter.
-	 * @param username TODO
+	 * @param username
+	 *            TODO
 	 */
 	void addAuthor(Book book, String username);
 
@@ -42,10 +44,19 @@ public interface BookManager {
 	 *            Book must exists in DB before a call to this method.
 	 * @param title
 	 *            The tile for the new chapter.
-	 * @param username TODO
+	 * @param username
+	 *            TODO
 	 */
 	Chapter addChapter(Book book, String title, String username);
-	
+
+	/**
+	 * Get the book abstract chapter (first item in the list)
+	 * 
+	 * @param bookId
+	 * @return
+	 */
+	Chapter getBookAbstract(Book book);
+
 	/**
 	 * Get a book from it short name.
 	 * 
@@ -71,7 +82,7 @@ public interface BookManager {
 
 	/**
 	 * Find all the books matching a title.
-	 *
+	 * 
 	 * @param title
 	 * @return
 	 */

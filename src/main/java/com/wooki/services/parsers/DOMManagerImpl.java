@@ -16,6 +16,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
@@ -62,8 +63,8 @@ public class DOMManagerImpl implements DOMManager {
 
 	public String adaptContent(String content) {
 		StringBuffer result = new StringBuffer();
-		result.append("<").append(CHAPTER_ROOT_NODE).append(" ")
-				.append(ID_START).append("=\"0\">");
+		result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(
+				ID_START).append("=\"0\">");
 		result.append(content);
 		result.append("</").append(CHAPTER_ROOT_NODE).append(">");
 		return addIds(result.toString());
@@ -218,38 +219,63 @@ public class DOMManagerImpl implements DOMManager {
 	 */
 	private String serializeContent(Document doc) {
 
+		XMLOutputter output = new XMLOutputter();
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
 		try {
-
-			// Serialize document
-			Transformer transformer;
-
-			transformer = TransformerFactory.newInstance().newTransformer();
-			JDOMSource source = new JDOMSource(doc);
-			StreamResult result = new StreamResult(bos);
-			transformer.transform(source, result);
-
+			if (doc != null) {
+				List<Element> children = doc.getRootElement().getChildren();
+				if (children != null) {
+					for (Element elt : children) {
+						output.output(elt, bos);
+					}
+				}
+			}
+			bos.flush();
 			return new String(bos.toByteArray());
-
-		} catch (TransformerConfigurationException e) {
-			logger.error(e.getMessage());
-		} catch (TransformerFactoryConfigurationError e) {
-			logger.error(e.getMessage());
-		} catch (TransformerException e) {
-			logger.error(e.getMessage());
+		} catch (IOException ioEx) {
+			logger.error("Error during document serialization", ioEx);
+			return "";
 		} finally {
-
-			// Close output stream
 			if (bos != null) {
 				try {
 					bos.close();
-				} catch (Exception ex) {
-					logger.error(ex.getMessage());
+				} catch (IOException ioEx) {
+					// Cannot do anything
 				}
 			}
 		}
-		return null;
-	}
 
+		// ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		//
+		// try {
+		//
+		// // Serialize document
+		// Transformer transformer;
+		//
+		// transformer = TransformerFactory.newInstance().newTransformer();
+		// JDOMSource source = new JDOMSource(doc);
+		// StreamResult result = new StreamResult(bos);
+		// transformer.transform(source, result);
+		//
+		// return new String(bos.toByteArray());
+		//
+		// } catch (TransformerConfigurationException e) {
+		// logger.error(e.getMessage());
+		// } catch (TransformerFactoryConfigurationError e) {
+		// logger.error(e.getMessage());
+		// } catch (TransformerException e) {
+		// logger.error(e.getMessage());
+		// } finally {
+		//
+		// // Close output stream
+		// if (bos != null) {
+		// try {
+		// bos.close();
+		// } catch (Exception ex) {
+		// logger.error(ex.getMessage());
+		// }
+		// }
+		// }
+		// return null;
+	}
 }

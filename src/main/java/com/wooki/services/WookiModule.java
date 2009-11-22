@@ -36,7 +36,7 @@ public class WookiModule {
 		configuration.add(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
 		configuration.add("spring-security.failure.url", "/signin/failed");
 		configuration.add("spring-security.accessDenied.url", "/signin");
-		configuration.add("spring-security.target.url", "/book/");
+		configuration.add("spring-security.target.url", "/index");
 		configuration.add("spring-security.password.salt", SALT);
 		configuration.add("spring-security.afterlogout.url", "/signin");
 	}

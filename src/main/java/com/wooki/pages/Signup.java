@@ -12,7 +12,7 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 import com.wooki.domain.model.Author;
-import com.wooki.pages.book.Index;
+import com.wooki.pages.book.IndexDesign;
 import com.wooki.services.AuthorManager;
 
 /**
@@ -73,7 +73,7 @@ public class Signup {
 		// Alert spring security that an author has logged in
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));
 		
-		return Index.class;
+		return IndexDesign.class;
 	}
 
 }

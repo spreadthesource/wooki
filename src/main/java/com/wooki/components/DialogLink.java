@@ -31,7 +31,10 @@ public class DialogLink implements ClientElement {
 	@AfterRender
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
-		support.addScript("$j('#%s').", resources.getId());// TODO:
+		support
+				.addScript(
+						"jQuery('#%s').click(function() {jQuery('#%s').dialog('open');});",
+						resources.getId(), dialogId);
 	}
 
 	public String getClientId() {

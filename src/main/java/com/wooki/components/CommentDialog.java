@@ -32,8 +32,8 @@ public class CommentDialog implements ClientElement {
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
 		writer.end();
-		support.addScript("$j('#%s').dialog({" +
-				"modal: true, width: 780, minHeight:30" +
+		support.addScript("jQuery('#%s').dialog({" +
+				"modal: true, width: 780, minHeight:30, autoOpen: false" +
 				"});", resources.getId());
 	}
 

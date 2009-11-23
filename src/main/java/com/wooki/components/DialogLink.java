@@ -15,7 +15,7 @@ public class DialogLink implements ClientElement {
 	private String clientId;
 
 	@Parameter(required = true)
-	private String dialogId;
+	private String dialog;
 
 	@Inject
 	private RenderSupport support;
@@ -34,7 +34,7 @@ public class DialogLink implements ClientElement {
 		support
 				.addScript(
 						"jQuery('#%s').click(function() {jQuery('#%s').dialog('open');});",
-						resources.getId(), dialogId);
+						resources.getId(), dialog);
 	}
 
 	public String getClientId() {

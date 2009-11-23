@@ -2,6 +2,7 @@ package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -12,7 +13,6 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 import com.wooki.domain.model.Author;
-import com.wooki.pages.book.Index;
 import com.wooki.services.AuthorManager;
 
 /**
@@ -30,6 +30,9 @@ public class Signup {
 	private ApplicationContext context;
 
 	private AuthorManager authorManager;
+
+	@InjectPage
+	private Index successPage;
 
 	@Property
 	@Validate("required")
@@ -58,7 +61,7 @@ public class Signup {
 			signupForm.recordError("Password do not match");
 		}
 		if (authorManager.findByUsername(username) != null) {
-			signupForm.recordError("User already exist");
+			signupForm.recordError("User already exists");
 		}
 	}
 
@@ -67,13 +70,15 @@ public class Signup {
 		Author author = new Author();
 		author.setUsername(username);
 		author.setEmail(email);
-		author.setPassword(password+"{DEADBEEF}");
+		author.setPassword(password);
 		authorManager.addAuthor(author);
-		
+
 		// Alert spring security that an author has logged in
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));
-		
-		return Index.class;
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(author, author
+						.getAuthorities()));
+		successPage.setUsername(username);
+		return successPage;
 	}
 
 }

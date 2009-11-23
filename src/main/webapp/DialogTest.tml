@@ -1,5 +1,6 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-
+   
+   <t:dialogLink t:dialog="test">open dialog</t:dialogLink>
    <t:commentdialog t:id="test">Dialog test vmkfvks dmfksdq lfkdsml fmldsfk mdskfm ldskflm dslmkf dsmlkf dsmlkf dsmfk dmlsfdsf
    dsf 
    dskfdskmlf dksflm dskqmlf dslmf kdsfk dsfkdsmlfk dsf

@@ -24,7 +24,7 @@ public class CommentDialog implements ClientElement {
 
 	@BeginRender
 	void startDiv(MarkupWriter writer) {
-		writer.element("div", "id", getClientId());
+		writer.element("div", "id", getClientId(), "class", "dialog-container");
 		writer.element("div", "class", "dialog-content");
 	}
 
@@ -34,7 +34,7 @@ public class CommentDialog implements ClientElement {
 		writer.end();
 		support.addScript("$j('#%s').dialog({" +
 				"modal: true, width: 780, minHeight:30" +
-				"})", resources.getId());
+				"});", resources.getId());
 	}
 
 	public String getClientId() {

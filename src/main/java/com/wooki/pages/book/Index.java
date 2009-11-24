@@ -9,7 +9,6 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.PageRenderLinkSource;
 
 import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Book;
@@ -29,9 +28,6 @@ public class Index {
 
 	@Inject
 	private RenderSupport support;
-
-	@Inject
-	private PageRenderLinkSource linkSource;
 
 	@InjectPage
 	private Edit editChapter;
@@ -80,16 +76,12 @@ public class Index {
 	}
 
 	/**
-	 * Set from URL to redirect the user to the good URL
-	 * 
-	 * @param chapterId
+	 * Get edit context for chapter 
+	 *
+	 * @return
 	 */
-	@OnEvent(value = "editAbstract")
-	public Object editAbstract() {
-		editChapter.setBookId(this.bookId);
-		editChapter.setChapterId(bookAbstract.getId());
-		editChapter.setFrom(linkSource.createPageRenderLink(Index.class));
-		return editChapter;
+	public Object[] getEditCtx() {
+		return new Object[] { this.bookId, this.bookAbstract.getId() };
 	}
 
 	@AfterRender

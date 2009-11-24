@@ -35,23 +35,26 @@ jQuery.extend(Wooki, {
 
 /**
  * Initialize jquery dialog popup on click of a elt.
+ *
  */
 Tapestry.Initializer.openJQueryDialogOnClick = function(triggerId, dialogId) { 
 	jQuery('#'+triggerId).click(function() {
 		jQuery('#'+dialogId).dialog('open');
 	});
-}
+};
 
 /**
- * Build a JQuery Dialog box
+ * Build a JQuery Dialog box.
+ *
  */
 Tapestry.Initializer.initJQueryDialog = function(data) {
 	jQuery('#'+data.elt).dialog(data.params);
-}
+};
 
 /**
- * Transform a textarea object into a wymeditor instance
+ * Transform a textarea object into a wymeditor instance.
+ *
  */
 Tapestry.Initializer.initWymEdit = function(data) {
 	jQuery('#'+data.elt).wymeditor(data.params);
-}
+};

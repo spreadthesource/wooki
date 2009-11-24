@@ -11,8 +11,8 @@ public class WookiBase {
 
 	@PageAttached
 	private void setupUsername() {
-		username = SecurityContextHolder.getContext()
-				.getAuthentication().getName();
+		username = SecurityContextHolder.getContext().getAuthentication()
+				.getName();
 	}
 
 }

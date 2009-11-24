@@ -1,10 +1,8 @@
 package com.wooki.pages.chapter;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.Link;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -28,14 +26,11 @@ public class Edit {
 	private Long bookId;
 
 	private Long chapterId;
-
+	
 	@Property
 	private String data;
 
 	private boolean publish;
-
-	@Persist
-	private Link from;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(Long bookId, Long chapterId) {
@@ -75,9 +70,6 @@ public class Edit {
 			chapterManager.publishChapter(chapterId);
 		}
 		index.setBookId(bookId);
-		if (from != null) {
-			return from;
-		}
 		return index;
 	}
 
@@ -95,14 +87,6 @@ public class Edit {
 
 	public void setChapterId(Long chapterId) {
 		this.chapterId = chapterId;
-	}
-
-	public Link getFrom() {
-		return from;
-	}
-
-	public void setFrom(Link from) {
-		this.from = from;
 	}
 
 }

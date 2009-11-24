@@ -241,7 +241,7 @@ a {
 	padding-bottom:10px;
 }
 
-#book h1 {
+#book h1, #signup-form h1 {
 	font-family: Georgia;
 	font-size: 30px;
 	margin-bottom: 20px;
@@ -361,7 +361,10 @@ a {
 }
 
 /*** Signup elements */
-
+#signup-form div {
+	background:white;
+	border: 1px solid #C9BB9B;
+} 
 
 .wookiForm form {
 	background: white;

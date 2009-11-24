@@ -76,7 +76,7 @@ public class Index {
 				.getUserPrincipal();
 		if (principal != null && principal.getName() != "") {
 			this.username = principal.getName();
-			this.userBooks = bookManager.listByAuthor(username);
+			this.userBooks = bookManager.listByUser(username);
 		}
 		return true;
 	}
@@ -91,7 +91,7 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupBookList(String username) {
 		this.username = username;
-		this.userBooks = bookManager.listByAuthor(username);
+		this.userBooks = bookManager.listByUser(username);
 		return true;
 	}
 

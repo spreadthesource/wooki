@@ -1,6 +1,6 @@
 package com.wooki.domain.dao;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 
 /**
  * Implements handling of Wooki Authors.
@@ -8,7 +8,7 @@ import com.wooki.domain.model.Author;
  * @author ccordenier
  * 
  */
-public interface AuthorDAO extends GenericDAO<Author, Long>{
+public interface UserDAO extends GenericDAO<User, Long>{
 
 	/**
 	 * Find an author by its username, case is insensitive.
@@ -16,6 +16,6 @@ public interface AuthorDAO extends GenericDAO<Author, Long>{
 	 * @param username
 	 * @return
 	 */
-	Author findByUsername(String username);
+	User findByUsername(String username);
 	
 }

@@ -2,7 +2,7 @@ package com.wooki.services;
 
 import org.springframework.context.ApplicationContext;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 
@@ -14,21 +14,21 @@ public class StartupServiceImpl implements StartupService {
 				.getBean("bookManager");
 		ChapterManager chapterManager = (ChapterManager) applicationContext
 				.getBean("chapterManager");
-		AuthorManager authorManager = (AuthorManager) applicationContext
+		UserManager authorManager = (UserManager) applicationContext
 				.getBean("authorManager");
 
 		// Add author to the book
-		Author john = new Author();
+		User john = new User();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
 		john.setPassword("password");
-		authorManager.addAuthor(john);
+		authorManager.addUser(john);
 
-		Author robink = new Author();
+		User robink = new User();
 		robink.setEmail("robin@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		authorManager.addAuthor(robink);
+		authorManager.addUser(robink);
 
 		// Create books
 		Book productBook = bookManager.create(

@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.PublicationDAO;
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
@@ -31,7 +31,7 @@ public class ChapterManagerImpl implements ChapterManager {
 	private DOMManager domManager;
 
 	@Transactional(readOnly = false)
-	public Comment addComment(Chapter chapter, Author author, String content,
+	public Comment addComment(Chapter chapter, User author, String content,
 			String domId) {
 		if (chapter == null || content == null) {
 			throw new IllegalArgumentException(
@@ -43,7 +43,7 @@ public class ChapterManagerImpl implements ChapterManager {
 		comment.setState(CommentState.OPEN);
 		comment.setCreationDate(new Date());
 		comment.setDomId(domId);
-		comment.setAuthor(author);
+		comment.setUser(author);
 		comment.setContent(content);
 		comment.setChapter(chapter);
 		toUpdate.addComment(comment);

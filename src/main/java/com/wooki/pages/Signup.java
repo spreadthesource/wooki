@@ -12,14 +12,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
-<<<<<<< HEAD
 import com.wooki.domain.model.User;
 import com.wooki.pages.book.IndexDesign;
 import com.wooki.services.UserManager;
-=======
-import com.wooki.domain.model.Author;
-import com.wooki.services.AuthorManager;
->>>>>>> e6a2e915e7983956cf275a6591eb928c4278b7df
 
 /**
  * Signup page for new authors.

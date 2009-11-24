@@ -36,6 +36,13 @@ a {
 	float: left;
 }
 
+#wooki a {
+	color: #2F2F32;
+	text-decoration: none;
+	display:block;
+}
+
+
 #wooki h1 {
 	font-size: 76px;
 	font-weight: normal;
@@ -543,4 +550,8 @@ a {
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+}
+
+.dialog-container {
+	display:none;
 }

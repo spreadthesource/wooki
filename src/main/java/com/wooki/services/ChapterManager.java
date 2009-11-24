@@ -34,14 +34,14 @@ public interface ChapterManager {
 	 * @param chapter
 	 * @return
 	 */
-	String getContent(Chapter chapter);
+	String getContent(Long chapterId);
 
 	/**
 	 * Publish chapter content
 	 *
 	 * @param chapterId
 	 */
-	void publishChapter(Chapter chapter);
+	void publishChapter(Long chapter);
 
 	/**
 	 * Find the last published chapter.
@@ -57,7 +57,7 @@ public interface ChapterManager {
 	 * 
 	 * @param chapter
 	 */
-	void updateContent(Chapter chapter, String content);
+	void updateContent(Long chapterId, String content);
 
 	/**
 	 * Remove chapter from book.

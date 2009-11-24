@@ -12,8 +12,8 @@ import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("authorManager")
-public class AuthorManagerImpl implements UserManager {
+@Service("userManager")
+public class UserManagerImpl implements UserManager {
 
 	@Autowired
 	private UserDAO authorDao;

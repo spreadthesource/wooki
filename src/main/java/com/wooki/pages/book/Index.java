@@ -10,9 +10,9 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.domain.model.Author;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
@@ -39,7 +39,7 @@ public class Index {
 	private com.wooki.domain.model.Chapter bookAbstract;
 
 	@Property
-	private Author currentAuthor;
+	private User currentUser;
 
 	@Property
 	private int loopIdx;

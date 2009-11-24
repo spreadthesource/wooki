@@ -71,15 +71,9 @@ public class Signup {
 		User author = new User();
 		author.setUsername(username);
 		author.setEmail(email);
-<<<<<<< HEAD
 		author.setPassword(password+"{DEADBEEF}");
 		authorManager.addUser(author);
 		
-=======
-		author.setPassword(password);
-		authorManager.addAuthor(author);
-
->>>>>>> e6a2e915e7983956cf275a6591eb928c4278b7df
 		// Alert spring security that an author has logged in
 		SecurityContextHolder.getContext().setAuthentication(
 				new UsernamePasswordAuthenticationToken(author, author

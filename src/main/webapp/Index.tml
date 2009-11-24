@@ -15,7 +15,7 @@
     <t:delegate to="userCtx" />
     
     <t:block id="userBlock">
-        <section id="author-feed">
+        <section id="author-feed" class="radied-box">
             <h1>${username}'s books :</h1>
             <ol>
             	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
@@ -32,18 +32,25 @@
     </t:block>
     
     <t:block id="presBlock">
-            <section id="presentation">
+            <section id="presentation" class="radied-box">
                 <p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
                 <p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
                 
+<<<<<<< HEAD
                 <p id="signup">
                         <a t:type="pagelink" t:page="signup">Signup in 30 seconds.<br />
                         <em>Create and review documents now</em></a>
                 </p>
+=======
+                <t:pagelink t:page="signup" id="signup" class="radied-box">
+                        <p>Signup in 30 seconds.<br />
+                        <em>Create and review documents now</em></p>
+                </t:pagelink>
+>>>>>>> b292d26012c29c790674e19ee287212c63d03308
         </section>
     </t:block>
 
-    <section id="book-feed" class="activity-feed">
+    <section id="book-feed" class="activity-feed radied-box">
         <h1>Fresh stuff</h1>
         <ol>
         	<t:loop source="freshStuffs" value="current">
@@ -54,7 +61,7 @@
         </ol>
     </section>
     
-    <section id="user-feed" class="activity-feed">
+    <section id="user-feed" class="activity-feed radied-box">
         <h1>Last users activity</h1>
         <ol>
             <li>

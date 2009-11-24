@@ -26,7 +26,7 @@ public class CommentDialog implements ClientElement {
 	@BeginRender
 	void startDiv(MarkupWriter writer) {
 		writer.element("div", "id", getClientId(), "class", "dialog-container");
-		writer.element("div", "class", "dialog-content");
+		writer.element("div", "class", "dialog-content radied-box");
 	}
 
 	@AfterRender

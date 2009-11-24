@@ -6,7 +6,7 @@
 
 	<p id="book-admin">
 		<ul>
-			<li><a t:type="eventlink" t:event="editAbstract">Edit Abstract</a></li>
+			<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
 		</ul>
 	</p>
 

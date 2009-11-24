@@ -1,23 +1,28 @@
 <html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet Art">
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title">
 
 <header>
+
+	<p id="book-admin">
+		<ul>
+			<li><a t:type="eventlink" t:event="editAbstract">Edit Abstract</a></li>
+		</ul>
+	</p>
+
 	<p id="authors">
-		 Howard Lewis Ship <a href="#">hlship</a>, Christophe Cordenier <a href="#">ccordenier</a>, Ulrich Starck <a href="#">whiner</a>
+		<t:loop source="book?.authors" value="currentAuthor" index="loopIdx">
+			${currentAuthor.name} <a t:type="pagelink" t:page="index" t:context="currentAuthor.username">${currentAuthor.username}</a>
+			<t:if test="notLastAuthor">, </t:if>
+		</t:loop>		
 	</p>
 	
 	<p id="published">
-		10th October 2005 Edition
+		<t:output value="prop:book?.creationDate" t:format="prop:format" /> Edition
 	</p>
 	
 	<section class="abstract">
-		<p class="commentable" id="b1">Apache Tapestry is an open-source framework for creating dynamic, robust, highly scalable web applications in Java. Tapestry complements and builds upon the standard Java Servlet API, and so it works in any servlet container or application server.</p>
-
-		<p class="commentable" id="b2">Tapestry divides a web application into a set of pages, each constructed from components. This provides a consistent structure, allowing the Tapestry framework to assume responsibility for key concerns such as URL construction and dispatch, persistent state storage on the client or on the server, user input validation, localization/internationalization, and exception reporting. Developing Tapestry applications involves creating HTML templates using plain HTML, and combining the templates with small amounts of Java code. In Tapestry, you create your application in terms of objects, and the methods and properties of those objects -- and specifically not in terms of URLs and query parameters. Tapestry brings true object oriented development to Java web applications.</p>
-		
-		<p class="commentable" id="b3">Apache Tapestry is an open-source framework for creating dynamic, robust, highly scalable web applications in Java. Tapestry complements and builds upon the standard Java Servlet API, and so it works in any servlet container or application server.</p>
- 
+		<t:outputRaw value="abstractContent" />
 	</section>
 </header> 
 

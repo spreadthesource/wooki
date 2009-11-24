@@ -1,11 +1,14 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-
-   <t:commentdialog id="test">Dialog test vmkfvks dmfksdq lfkdsml fmldsfk mdskfm ldskflm dslmkf dsmlkf dsmlkf dsmfk dmlsfdsf
-   dsf
+   
+   <t:dialogLink t:dialog="literal:test">open dialog</t:dialogLink>
+   <t:commentdialog t:id="test">Dialog test vmkfvks dmfksdq lfkdsml fmldsfk mdskfm ldskflm dslmkf dsmlkf dsmlkf dsmfk dmlsfdsf
+   dsf 
    dskfdskmlf dksflm dskqmlf dslmf kdsfk dsfkdsmlfk dsf
    dsqf dsklfdsmfqk dslmfk mdlskf mdlskfm dsfk dslmfkds fmldskf dskmfl ds
    fdsmlfkdsmfk dsf dmsfk smdfkld msfkd msfkdsqfmldksflm sdmlf msldfk ds
    fdsfmkldsf sdfsdfsdf sdfmlkds fmlkd smfkdsm fkds fmlk ds</t:commentdialog>
+   
+   
    
    
    

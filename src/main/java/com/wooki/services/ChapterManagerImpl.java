@@ -1,5 +1,6 @@
 package com.wooki.services;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -51,28 +52,36 @@ public class ChapterManagerImpl implements ChapterManager {
 		return comment;
 	}
 
-	public String getContent(Chapter chapter) {
+	public String getContent(Long chapterId) {
+		Chapter chapter = chapterDao.findById(chapterId);
+		if (chapter == null) {
+			return null;
+		}
 		return chapterDao.getContent(chapter);
 	}
 
 	@Transactional(readOnly = false)
-	public void updateContent(Chapter chapter, String content) {
-		chapter.setContent(content);
-		chapter.setLastModifed(new Date());
-		chapterDao.update(chapter);
+	public void updateContent(Long chapterId, String content) {
+		Chapter chapter = chapterDao.findById(chapterId);
+		if (chapter != null) {
+			chapter.setContent(content);
+			chapter.setLastModifed(new Date());
+			chapterDao.update(chapter);
+		}
 	}
 
 	@Transactional(readOnly = false)
-	public void publishChapter(Chapter chapter) {
+	public void publishChapter(Long chapterId) {
+		Chapter chapter = chapterDao.findById(chapterId);
 		if (chapter == null) {
-			throw new IllegalArgumentException("Chapter parameter cannot be null for publication.");
+			throw new IllegalArgumentException(
+					"Chapter parameter cannot be null for publication.");
 		}
-		Chapter toPublish = chapterDao.findById(chapter.getId());
 		if (chapter != null) {
 			Publication published = new Publication();
 			published.setChapter(chapter);
 			published.setContent(domManager.adaptContent(chapter.getContent()));
-			published.setRevisionDate(new Date());
+			published.setRevisionDate(new Timestamp(System.currentTimeMillis()));
 			publicationDao.create(published);
 		}
 	}

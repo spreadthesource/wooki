@@ -59,11 +59,11 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", john.getUsername());
-		chapterManager.updateContent(chapterOne, "<p>You will need ...</p>");
+		chapterManager.updateContent(chapterOne.getId(), "<p>You will need ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", john.getUsername());
-		chapterManager.updateContent(chapterTwo,
+		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
 
 	}
@@ -188,7 +188,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Add a chapter and do search again
 		Chapter chapterThree = bookManager.addChapter(myProduct,
 				"Chapter Tree", "john");
-		chapterManager.updateContent(chapterThree,
+		chapterManager.updateContent(chapterThree.getId(),
 				"<p>Sample Chapter Three Content</p>");
 
 		myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
@@ -255,9 +255,9 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNull(published, "No revision has been published.");
 
 		// Update content and publish
-		chapterManager.updateContent(chapters.get(0),
+		chapterManager.updateContent(chapters.get(0).getId(),
 				"<p>Tapestry is totally amazing</p>");
-		chapterManager.publishChapter(chapters.get(0));
+		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
 		Assert.assertNotNull(published, "No revision has been published.");

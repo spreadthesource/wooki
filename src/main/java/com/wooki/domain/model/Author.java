@@ -34,6 +34,9 @@ public class Author implements UserDetails {
 	@Column(nullable = false, unique = true)
 	private String username;
 
+	/** More complete name */
+	private String name;
+	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "authors")
 	private List<Book> books;
 
@@ -80,6 +83,14 @@ public class Author implements UserDetails {
 
 	public void setBooks(List<Book> books) {
 		this.books = books;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public GrantedAuthority[] getAuthorities() {

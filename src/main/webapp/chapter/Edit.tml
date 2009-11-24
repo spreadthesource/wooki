@@ -1,0 +1,16 @@
+<html t:type="layout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet Art">
+
+	<form t:type="form" t:id="editChapterForm">
+		<fieldset>
+			<label t:type="label" t:for="data" />
+			<input t:type="textarea" t:id="data" t:mixins="WymEditor" />
+		</fieldset>
+		<fieldset>
+			<input t:id="publish" t:type="submit" t:event="publish" class="wymupdate" value="publish" />
+			<input t:id="update"  t:type="submit" t:event="update" class="wymupdate" value="update" />
+		</fieldset>
+	</form>
+
+</html>

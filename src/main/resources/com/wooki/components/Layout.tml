@@ -9,9 +9,10 @@
 <body>
 <div id="top">
 	<div class="body">
-			<hgroup id="wooki">
+			<hgroup id="wooki"><t:pagelink t:page="index" class="button-link">
 				<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
 				<h2>Collaborative Writing</h2>
+				</t:pagelink>
 			</hgroup>
 			
 			<nav id="quick-nav">

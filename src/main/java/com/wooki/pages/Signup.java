@@ -2,6 +2,7 @@ package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -11,9 +12,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
+<<<<<<< HEAD
 import com.wooki.domain.model.User;
 import com.wooki.pages.book.IndexDesign;
 import com.wooki.services.UserManager;
+=======
+import com.wooki.domain.model.Author;
+import com.wooki.services.AuthorManager;
+>>>>>>> e6a2e915e7983956cf275a6591eb928c4278b7df
 
 /**
  * Signup page for new authors.
@@ -30,6 +36,9 @@ public class Signup {
 	private ApplicationContext context;
 
 	private UserManager authorManager;
+
+	@InjectPage
+	private Index successPage;
 
 	@Property
 	@Validate("required")
@@ -58,7 +67,7 @@ public class Signup {
 			signupForm.recordError("Password do not match");
 		}
 		if (authorManager.findByUsername(username) != null) {
-			signupForm.recordError("User already exist");
+			signupForm.recordError("User already exists");
 		}
 	}
 
@@ -67,13 +76,21 @@ public class Signup {
 		User author = new User();
 		author.setUsername(username);
 		author.setEmail(email);
+<<<<<<< HEAD
 		author.setPassword(password+"{DEADBEEF}");
 		authorManager.addUser(author);
 		
+=======
+		author.setPassword(password);
+		authorManager.addAuthor(author);
+
+>>>>>>> e6a2e915e7983956cf275a6591eb928c4278b7df
 		// Alert spring security that an author has logged in
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));
-		
-		return IndexDesign.class;
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(author, author
+						.getAuthorities()));
+		successPage.setUsername(username);
+		return successPage;
 	}
 
 }

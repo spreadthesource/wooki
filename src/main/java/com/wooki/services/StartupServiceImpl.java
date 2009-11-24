@@ -38,7 +38,7 @@ public class StartupServiceImpl implements StartupService {
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", "john");
-		chapterManager.updateContent(chapterOne, "<p>You will need ...</p>");
+		chapterManager.updateContent(chapterOne.getId(), "<p>You will need ...</p>");
 
 		// Add robin to author's list
 		bookManager.addAuthor(productBook, "robink");
@@ -46,7 +46,7 @@ public class StartupServiceImpl implements StartupService {
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", "robink");
 
-		chapterManager.updateContent(chapterTwo,
+		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
 
 	}

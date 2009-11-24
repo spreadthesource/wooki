@@ -1,0 +1,68 @@
+<html t:type="booklayout"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title">
+
+<header>
+
+	<p id="book-admin">
+		<ul>
+			<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
+		</ul>
+	</p>
+
+	<p id="authors">
+		<t:loop source="book?.authors" value="currentAuthor" index="loopIdx">
+			${currentAuthor.name} <a t:type="pagelink" t:page="index" t:context="currentAuthor.username">${currentAuthor.username}</a>
+			<t:if test="notLastAuthor">, </t:if>
+		</t:loop>		
+	</p>
+	
+	<p id="published">
+		<t:output value="prop:book?.creationDate" t:format="prop:format" /> Edition
+	</p>
+	
+	<section class="abstract">
+		<t:outputRaw value="abstractContent" />
+	</section>
+</header> 
+
+
+<div class="entry-content">
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">Table of contents</a></h2>
+	
+	<ol id="chapters-list">
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Welcome to Apache Tapestry</t:pagelink></h3>
+			<p>04/03/09</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Releases</t:pagelink></h3>
+			<p>one week ago</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Training and Support</t:pagelink></h3>
+			<p>4 hours ago</p>
+		</li>
+		
+		<li>
+			<h3><t:pagelink t:page="book/chapter">Third Party Libraries, Tutorials and Resources</t:pagelink></h3>
+			<p>11/03/09</p>
+		</li>
+		<li>
+			<h3>...</h3>
+		</li>
+		
+	</ol>
+	
+	<div id="comments">
+	<a href="#1" id="c1" class="comment-accessor"><div class="no-comment"></div></a>
+	<a href="#2" id="c2" class="comment-accessor"><div class="no-comment"></div></a>
+	<a href="#2" id="c3" class="comment-accessor"><div class="commented">3</div></a>
+	</div>
+	
+	<div class="clearer"  />
+</div>
+
+</html>

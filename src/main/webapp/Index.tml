@@ -1,15 +1,27 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-     
+	
+	<t:security.ifLoggedIn>
+		<section id="book-creation">
+			<form t:type="form" t:id="createBookForm">
+				<p>
+					<t:label t:for="bookTitle" />
+					<input t:type="textfield" t:id="bookTitle" />
+					<a t:type="linkSubmit">Create book</a>
+				</p>
+			</form>
+		</section>
+	</t:security.ifLoggedIn>
+	
     <t:delegate to="userCtx" />
     
     <t:block id="userBlock">
         <section id="author-feed" class="radied-box">
             <h1>${username}'s books :</h1>
             <ol>
-                    <t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
+            	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
                     <li>
-                    <a href="#">${currentBook.title}</a>
-            </li>
+                    <a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+            		</li>
             </t:loop>
             </ol>
     </section>
@@ -23,11 +35,10 @@
             <section id="presentation" class="radied-box">
                 <p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
                 <p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
-                
-                <t:pagelink t:page="signup" id="signup" class="radied-box">
-                        <p>Signup in 30 seconds.<br />
-                        <em>Create and review documents now</em></p>
-                </t:pagelink>
+                <p id="signup">
+                        <a t:type="pagelink" t:page="signup">Signup in 30 seconds.<br />
+                        <em>Create and review documents now</em></a>
+                </p>
         </section>
     </t:block>
 

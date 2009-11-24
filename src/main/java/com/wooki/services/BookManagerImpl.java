@@ -141,6 +141,10 @@ public class BookManagerImpl implements BookManager {
 		return bookDao.findBookBySlugTitle(title);
 	}
 
+	public Book findById(Long id) {
+		return bookDao.findById(id);
+	}
+
 	public List<Book> list() {
 		return bookDao.listAll();
 	}

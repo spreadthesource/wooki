@@ -63,6 +63,14 @@ public interface BookManager {
 	 * @param title
 	 * @return
 	 */
+	Book findById(Long id);
+	
+	/**
+	 * Get a book from it short name.
+	 * 
+	 * @param title
+	 * @return
+	 */
 	Book findBookBySlugTitle(String title);
 
 	/**

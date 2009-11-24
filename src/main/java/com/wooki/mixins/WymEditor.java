@@ -31,16 +31,21 @@ public class WymEditor {
 	@AfterRender
 	public void attachWymEditor() {
 
-		JSONObject custom = new JSONObject();
-		custom.put("logoHtml", "");
+		
+		JSONObject data = new JSONObject();
+		data.put("elt", container.getClientId());
+		
+		JSONObject params = new JSONObject();
+		params.put("logoHtml", "");
 
 		if (wymStyle != null) {
-			custom.put("stylesheet", wymStyle);
+			params.put("stylesheet", wymStyle);
 		}
 
+		data.put("params", params);
+		
 		// Use wymeditor
-		renderSupport.addScript("jQuery('#%s').wymeditor(%s);",
-				container.getClientId(), custom.toString());
+		renderSupport.addInit("initWymEdit", data);
 
 	}
 }

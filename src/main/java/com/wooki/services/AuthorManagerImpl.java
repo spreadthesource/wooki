@@ -7,21 +7,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wooki.domain.dao.AuthorDAO;
-import com.wooki.domain.exception.AuthorAlreadyException;
-import com.wooki.domain.model.Author;
+import com.wooki.domain.dao.UserDAO;
+import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.model.User;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Service("authorManager")
-public class AuthorManagerImpl implements AuthorManager {
+public class AuthorManagerImpl implements UserManager {
 
 	@Autowired
-	private AuthorDAO authorDao;
+	private UserDAO authorDao;
 
 	@Transactional(readOnly = false)
-	public void addAuthor(Author author) throws AuthorAlreadyException {
+	public void addUser(User author) throws UserAlreadyException {
 		if (findByUsername(author.getUsername()) != null) {
-			throw new AuthorAlreadyException();
+			throw new UserAlreadyException();
 		}
 		// Encode password into database
 		PasswordEncoder encoder = new ShaPasswordEncoder();
@@ -30,7 +30,7 @@ public class AuthorManagerImpl implements AuthorManager {
 		authorDao.create(author);
 	}
 
-	public Author findByUsername(String username) {
+	public User findByUsername(String username) {
 		return authorDao.findByUsername(username);
 	}
 

@@ -38,7 +38,7 @@ public class Comment {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn
-	private Author author;
+	private User user;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -107,12 +107,12 @@ public class Comment {
 		this.creationDate = creationDate;
 	}
 
-	public Author getAuthor() {
-		return author;
+	public User getUser() {
+		return user;
 	}
 
-	public void setAuthor(Author author) {
-		this.author = author;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public CommentState getState() {

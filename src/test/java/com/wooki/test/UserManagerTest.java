@@ -7,9 +7,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.wooki.domain.exception.AuthorAlreadyException;
-import com.wooki.domain.model.Author;
-import com.wooki.services.AuthorManager;
+import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.model.User;
+import com.wooki.services.UserManager;
 
 /**
  * Verify authoring management.
@@ -18,20 +18,21 @@ import com.wooki.services.AuthorManager;
  * 
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
+public class UserManagerTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
-	private AuthorManager authorManager;
+	private UserManager userManager;
 
 	@BeforeClass
-	public void initDb() throws AuthorAlreadyException {
+	public void initDb() throws UserAlreadyException {
 
 		// Add author to the book
-		Author john = new Author();
+		User john = new User();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("johndoe");
+		john.setFullname("John Doe");
 		john.setPassword("password");
-		authorManager.addAuthor(john);
+		userManager.addUser(john);
 
 	}
 
@@ -41,8 +42,8 @@ public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 	 */
 	@Test
 	public void checkUserExists() {
-		Author author = authorManager.findByUsername("JohNDOE");
-		Assert.assertNotNull(author, "John doe exist.");
+		User user = userManager.findByUsername("JohNDOE");
+		Assert.assertNotNull(user, "John doe exist.");
 	}
 
 	/**
@@ -52,15 +53,16 @@ public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 	 */
 	@Test
 	public void verifyAuthorAlreadyExists() {
-		Author john = new Author();
+		User john = new User();
 		john.setEmail("john.doe@hotmail.com");
 		john.setUsername("johndoe");
+		john.setFullname("John Doe");
 		john.setPassword("passpass");
 		try {
-			authorManager.addAuthor(john);
+			userManager.addUser(john);
 			Assert
 					.fail("User john already exists, call add must raise an exception.");
-		} catch (AuthorAlreadyException uaEx) {
+		} catch (UserAlreadyException uaEx) {
 			uaEx.printStackTrace();
 		}
 	}
@@ -71,8 +73,8 @@ public class AuthorManagerTest extends AbstractTestNGSpringContextTests {
 	 */
 	@Test
 	public void checkFindByUserName() {
-		Author author = authorManager.findByUsername("JoHnDoe");
-		Assert.assertNotNull(author);
+		User user = userManager.findByUsername("JoHnDoe");
+		Assert.assertNotNull(user);
 	}
 
 }

@@ -2,7 +2,7 @@
     
     <section id="signup-form" class="full-content">
     	<form t:type="form" t:id="signupForm">
-    		<h1>Create your account</h1>
+    		<h1>Create your Wooki account</h1>
     		<div class="radied-box">
     		<t:errors />
     			<ul>

@@ -11,9 +11,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.pages.book.IndexDesign;
-import com.wooki.services.AuthorManager;
+import com.wooki.services.UserManager;
 
 /**
  * Signup page for new authors.
@@ -29,7 +29,7 @@ public class Signup {
 	@Inject
 	private ApplicationContext context;
 
-	private AuthorManager authorManager;
+	private UserManager authorManager;
 
 	@Property
 	@Validate("required")
@@ -49,7 +49,7 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.PREPARE, component = "signupForm")
 	public void prepareSubmit() {
-		authorManager = (AuthorManager) context.getBean("authorManager");
+		authorManager = (UserManager) context.getBean("authorManager");
 	}
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
@@ -64,11 +64,11 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "signupForm")
 	public Object onSignupSuccess() {
-		Author author = new Author();
+		User author = new User();
 		author.setUsername(username);
 		author.setEmail(email);
 		author.setPassword(password+"{DEADBEEF}");
-		authorManager.addAuthor(author);
+		authorManager.addUser(author);
 		
 		// Alert spring security that an author has logged in
 		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));

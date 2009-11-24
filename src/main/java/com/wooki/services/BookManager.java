@@ -78,7 +78,7 @@ public interface BookManager {
 	 * @param userName
 	 * @return
 	 */
-	List<Book> listByAuthor(String userName);
+	List<Book> listByUser(String userName);
 
 	/**
 	 * Find all the books matching a title.

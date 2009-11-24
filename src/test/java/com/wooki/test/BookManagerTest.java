@@ -9,21 +9,18 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
-import com.wooki.services.AuthorManager;
+import com.wooki.services.UserManager;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
 import com.wooki.services.CommentManager;
 
 /**
  * Test case for WookiManager service.
- * 
- * @author ccordenier
- * 
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class BookManagerTest extends AbstractTestNGSpringContextTests {
@@ -35,7 +32,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	private ChapterManager chapterManager;
 
 	@Autowired
-	private AuthorManager authorManager;
+	private UserManager userManager;
 
 	@Autowired
 	private CommentManager commentManager;
@@ -44,11 +41,12 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	public void initDb() {
 
 		// Add author to the book
-		Author john = new Author();
+		User john = new User();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
+		john.setFullname("John Doe");
 		john.setPassword("password");
-		authorManager.addAuthor(john);
+		userManager.addUser(john);
 
 		// Create books
 		Book productBook = bookManager.create("My First Product Book", john
@@ -73,23 +71,24 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	 * 
 	 */
 	@Test
-	public void testListBookByAuthor() {
-		List<Book> books = bookManager.listByAuthor("john");
+	public void testListBookByUser() {
+		List<Book> books = bookManager.listByUser("john");
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has one book");
 	}
 
 	/**
-	 * Check that an author cannot add a chapter if he is not author of the
+	 * Check that an author cannot add a chapter if he is not user of the
 	 * book.
 	 */
 	@Test
 	public void verifyCheckAuthor() {
-		Author robink = new Author();
+		User robink = new User();
 		robink.setEmail("robink@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		authorManager.addAuthor(robink);
+		robink.setFullname("Robin Komiwes");
+		userManager.addUser(robink);
 
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -128,7 +127,6 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Verify initial chapter list size.
-	 * 
 	 */
 	@Test
 	public void testChapterValues() {
@@ -223,7 +221,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(chapters, "Chapters are missing.");
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
-		Author john = authorManager.findByUsername("john");
+		User john = userManager.findByUsername("john");
 		Comment com = chapterManager.addComment(chapters.get(0), john,
 				"This paragraph doesn't make sense.", "0");
 		List<Comment> openComs = commentManager.listOpenForChapter(chapters
@@ -236,7 +234,6 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Verify if publication mechanism creates the good entities and content.
-	 * 
 	 */
 	@Test
 	public void testPublication() {

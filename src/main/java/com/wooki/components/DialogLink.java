@@ -9,8 +9,10 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 
 public class DialogLink implements ClientElement {
+
 	@Parameter(defaultPrefix = BindingConstants.LITERAL)
 	private String clientId;
 
@@ -31,15 +33,13 @@ public class DialogLink implements ClientElement {
 	@AfterRender
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
-		support
-				.addScript(
-						"jQuery('#%s').click(function() {jQuery('#%s').dialog('open');});",
-						resources.getId(), dialog);
+		support.addInit("openJQueryDialogOnClick", getClientId(), dialog);
 	}
 
 	public String getClientId() {
-		if (clientId != null)
-			return support.allocateClientId(clientId);
-		return support.allocateClientId(resources);
+		if (clientId == null) {
+			clientId = support.allocateClientId(resources);
+		}
+		return this.clientId;
 	}
 }

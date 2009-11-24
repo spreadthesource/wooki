@@ -10,6 +10,7 @@ import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 
 @IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.2.custom.min.js")
 public class CommentDialog implements ClientElement {
@@ -32,9 +33,16 @@ public class CommentDialog implements ClientElement {
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
 		writer.end();
-		support.addScript("jQuery('#%s').dialog({" +
-				"modal: true, width: 780, minHeight:30, autoOpen: false" +
-				"});", resources.getId());
+		JSONObject data = new JSONObject();
+		data.put("elt", resources.getId());
+		JSONObject params = new JSONObject();
+		params.put("modal", true);
+		params.put("width", 780);
+		params.put("minHeight", 30);
+		params.put("autoOpen", false);
+		data.put("params", params);
+		support.addInit("initJQueryDialog", data);
+
 	}
 
 	public String getClientId() {

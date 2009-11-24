@@ -5,7 +5,7 @@
 	<form t:type="form" t:id="editChapterForm">
 		<fieldset>
 			<label t:type="label" t:for="data" />
-			<input t:type="textarea" t:id="data" t:mixins="WymEditor" />
+			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
 		</fieldset>
 		<fieldset>
 			<input t:id="publish" t:type="submit" t:event="publish" class="wymupdate" value="publish" />

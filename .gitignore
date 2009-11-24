@@ -7,3 +7,4 @@ temp-testng-customsuite.xml
 target/
 *.tmp_*
 tidyErrors.txt
+*.origin

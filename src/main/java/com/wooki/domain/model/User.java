@@ -31,17 +31,10 @@ public class User implements UserDetails {
 	@Column(nullable = false, unique = true)
 	private String username; 
 
-<<<<<<< HEAD:src/main/java/com/wooki/domain/model/User.java
 	@Column(nullable = false)
 	private String fullname;
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "users")
-=======
-	/** More complete name */
-	private String name;
-	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "authors")
->>>>>>> e6a2e915e7983956cf275a6591eb928c4278b7df:src/main/java/com/wooki/domain/model/Author.java
 	private List<Book> books;
 
 	@Column(nullable = false)
@@ -95,14 +88,6 @@ public class User implements UserDetails {
 
 	public void setBooks(List<Book> books) {
 		this.books = books;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public GrantedAuthority[] getAuthorities() {

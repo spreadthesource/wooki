@@ -2,22 +2,29 @@ package com.wooki.test;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.wooki.domain.model.User;
+import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
-import com.wooki.services.UserManager;
+import com.wooki.domain.model.User;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
 import com.wooki.services.CommentManager;
+import com.wooki.services.UserManager;
 
 /**
  * Test case for WookiManager service.
@@ -37,9 +44,17 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	private CommentManager commentManager;
 
-	@BeforeClass
-	public void initDb() {
+	@Autowired
+	private DataSource ds;
+	
+	@BeforeMethod
+	public void initDb() throws UserAlreadyException, AuthorizationException {
 
+		// Reset datas
+		ClassPathResource script = new ClassPathResource("reset.sql");
+		SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
+		SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+		
 		// Add author to the book
 		User john = new User();
 		john.setEmail("john.doe@gmail.com");
@@ -57,7 +72,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", john.getUsername());
-		chapterManager.updateContent(chapterOne.getId(), "<p>You will need ...</p>");
+		chapterManager.updateContent(chapterOne.getId(),
+				"<p>You will need ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", john.getUsername());
@@ -78,11 +94,11 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	}
 
 	/**
-	 * Check that an author cannot add a chapter if he is not user of the
-	 * book.
+	 * Check that an author cannot add a chapter if he is not user of the book.
 	 */
 	@Test
-	public void verifyCheckAuthor() {
+	public void verifyCheckAuthor() throws UserAlreadyException,
+			AuthorizationException {
 		User robink = new User();
 		robink.setEmail("robink@gmail.com");
 		robink.setUsername("robink");
@@ -172,7 +188,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	 * </ul>
 	 */
 	@Test
-	public void testChapterAdd() {
+	public void testChapterAdd() throws UserAlreadyException,
+			AuthorizationException {
 
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");

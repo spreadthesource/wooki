@@ -2,8 +2,9 @@
     
     <section id="signup-form" class="full-content">
     	<form t:type="form" t:id="signupForm">
-    		<h1>Create your Wooki account</h1>
+    		<h1>Create your account</h1>
     		<div class="radied-box">
+    		<h2>Get active on Wooki now</h2>
     		<t:errors />
     			<ul>
     				<li><label t:type="label" t:for="username"/><input type="text" t:type="textfield" t:id="username" /></li>

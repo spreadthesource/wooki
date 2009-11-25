@@ -3,19 +3,32 @@
     <section id="signup-form" class="full-content">
     	<form t:type="form" t:id="signupForm">
     		<h1>Create your account</h1>
-    		<div class="radied-box">
-    		<h2>Get active on Wooki now</h2>
-    		<t:errors />
-    			<ul>
-    				<li><label t:type="label" t:for="username"/><input type="text" t:type="textfield" t:id="username" /></li>
-    				<li><label t:type="label" t:for="fullname"/><input type="text" t:type="textfield" t:id="fullname" /></li>
-					<li><label t:type="label" t:for="password"/><input type="text" t:type="passwordfield" t:id="password" /></li>
-					<li><label t:type="label" t:for="confirmPassword"/><input type="text" t:type="passwordfield" t:id="confirmPassword" /></li>
-					<li><label t:type="label" t:for="email"/><input type="text" t:type="textfield" t:id="email" /></li>
-    			</ul>
-			<p id="submit">
-				<a t:type="linksubmit">Signup</a>
-			</p>
+    		<div class="radied-box basic-content">
+	    		<h2>Start getting active on Wooki</h2>
+	    		<t:errors />
+	    		<table>
+	    			<tr>
+	    				<th><label t:type="label" t:for="username"/></th>
+	    				<td><input type="text" t:type="textfield" t:id="username" /></td>
+	    			</tr>
+	    			<tr>
+	    				<th><label t:type="label" t:for="fullname"/></th>
+	    				<td><input type="text" t:type="textfield" t:id="fullname" /></td>
+	    			</tr>
+	    			<tr>
+	    				<th><label t:type="label" t:for="password"/></th>
+	    				<td><input type="text" t:type="passwordfield" t:id="password" /></td>
+	    			</tr>
+	    			<tr>
+	    				<th><label t:type="label" t:for="email"/></th>
+	    				<td><input type="text" t:type="textfield" t:id="email" /></td>
+	    			</tr>
+	    		</table>
+				<div id="submit">
+					<a t:type="linksubmit" class="radied-box active-button">Signup</a>
+				</div>
+				
+				<div class="form-footer">By clicking submit your confirm that you accept Wooki <a href="#">terms of service</a></div>
 			</div>
     	</form>
     </section>

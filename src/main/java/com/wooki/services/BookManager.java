@@ -2,6 +2,7 @@ package com.wooki.services;
 
 import java.util.List;
 
+import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 
@@ -47,7 +48,7 @@ public interface BookManager {
 	 * @param username
 	 *            TODO
 	 */
-	Chapter addChapter(Book book, String title, String username);
+	Chapter addChapter(Book book, String title, String username) throws AuthorizationException;
 
 	/**
 	 * Get the book abstract chapter (first item in the list)

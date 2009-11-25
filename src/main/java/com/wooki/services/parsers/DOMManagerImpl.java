@@ -4,20 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.stream.StreamResult;
-
 import org.apache.tools.ant.filters.StringInputStream;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

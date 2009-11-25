@@ -1,6 +1,6 @@
 package com.wooki.domain.exception;
 
-public class UserAlreadyException extends RuntimeException {
+public class UserAlreadyException extends BusinessException {
 
 	/**
 	 * 

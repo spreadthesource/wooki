@@ -13,7 +13,6 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 import com.wooki.domain.model.User;
-import com.wooki.pages.book.IndexDesign;
 import com.wooki.services.UserManager;
 
 /**
@@ -30,7 +29,7 @@ public class Signup {
 	@Inject
 	private ApplicationContext context;
 
-	private UserManager authorManager;
+	private UserManager userManager;
 
 	@InjectPage
 	private Index successPage;
@@ -39,6 +38,10 @@ public class Signup {
 	@Validate("required")
 	private String username;
 
+	@Property
+	@Validate("required")
+	private String fullname;
+	
 	@Property
 	@Validate("required")
 	private String password;
@@ -53,7 +56,7 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.PREPARE, component = "signupForm")
 	public void prepareSubmit() {
-		authorManager = (UserManager) context.getBean("authorManager");
+		userManager = (UserManager) context.getBean("userManager");
 	}
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
@@ -61,22 +64,23 @@ public class Signup {
 		if (!password.equals(confirmPassword)) {
 			signupForm.recordError("Password do not match");
 		}
-		if (authorManager.findByUsername(username) != null) {
+		if (userManager.findByUsername(username) != null) {
 			signupForm.recordError("User already exists");
 		}
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "signupForm")
 	public Object onSignupSuccess() {
-		User author = new User();
-		author.setUsername(username);
-		author.setEmail(email);
-		author.setPassword(password+"{DEADBEEF}");
-		authorManager.addUser(author);
+		User user = new User();
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setPassword(password);
+		user.setFullname(this.fullname);
+		userManager.addUser(user);
 		
 		// Alert spring security that an author has logged in
 		SecurityContextHolder.getContext().setAuthentication(
-				new UsernamePasswordAuthenticationToken(author, author
+				new UsernamePasswordAuthenticationToken(user, user
 						.getAuthorities()));
 		successPage.setUsername(username);
 		return successPage;

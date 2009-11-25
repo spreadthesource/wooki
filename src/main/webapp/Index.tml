@@ -36,7 +36,7 @@
                 <p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
                 <p>Read them directly on the website, as a PDF ebook, or on your SmartPhone. We really want to make your writing as accessible as possible. </p>
                 
-                 <t:pagelink t:page="signup" id="signup" class="radied-box">
+                 <t:pagelink t:page="signup" class="radied-box active-button">
                         <p>Signup in 30 seconds.<br />
                         <em>Create and review documents now</em></p>
                 </t:pagelink>

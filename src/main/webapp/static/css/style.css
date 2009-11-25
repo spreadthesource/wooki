@@ -179,7 +179,7 @@ a {
 }
 
 
-#presentation #signup em {
+.active-button em {
 	font-size: 20px;
 	font-style: normal;
 }

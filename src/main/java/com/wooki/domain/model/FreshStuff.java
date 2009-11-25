@@ -2,9 +2,6 @@ package com.wooki.domain.model;
 
 /**
  * Used in fresh stuff panel to display last document activity.
- * 
- * @author ccordenier
- * 
  */
 public class FreshStuff {
 

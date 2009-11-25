@@ -2,6 +2,12 @@ package com.wooki.domain.dao;
 
 import com.wooki.domain.model.Publication;
 
+/**
+ * Publication will be used to follow book chapter revision.
+ *
+ * @author ccordenier
+ *
+ */
 public interface PublicationDAO extends GenericDAO<Publication, Long>{
 
 	/**

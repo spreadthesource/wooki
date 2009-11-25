@@ -24,7 +24,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 
 		try {
 			String result = (String) getSession().getNamedQuery(
-					"com.wooki.domain.model.chapter.getConent").setParameter(
+					"com.wooki.domain.model.chapter.getContent").setParameter(
 					"id", chapter.getId()).uniqueResult();
 			return result;
 		} catch (RuntimeException ex) {

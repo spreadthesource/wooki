@@ -2,6 +2,7 @@ package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -11,9 +12,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
-import com.wooki.domain.model.Author;
-import com.wooki.pages.book.IndexDesign;
-import com.wooki.services.AuthorManager;
+import com.wooki.domain.model.User;
+import com.wooki.services.UserManager;
 
 /**
  * Signup page for new authors.
@@ -29,12 +29,19 @@ public class Signup {
 	@Inject
 	private ApplicationContext context;
 
-	private AuthorManager authorManager;
+	private UserManager userManager;
+
+	@InjectPage
+	private Index successPage;
 
 	@Property
 	@Validate("required")
 	private String username;
 
+	@Property
+	@Validate("required")
+	private String fullname;
+	
 	@Property
 	@Validate("required")
 	private String password;
@@ -49,7 +56,7 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.PREPARE, component = "signupForm")
 	public void prepareSubmit() {
-		authorManager = (AuthorManager) context.getBean("authorManager");
+		userManager = (UserManager) context.getBean("userManager");
 	}
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
@@ -57,23 +64,26 @@ public class Signup {
 		if (!password.equals(confirmPassword)) {
 			signupForm.recordError("Password do not match");
 		}
-		if (authorManager.findByUsername(username) != null) {
-			signupForm.recordError("User already exist");
+		if (userManager.findByUsername(username) != null) {
+			signupForm.recordError("User already exists");
 		}
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "signupForm")
 	public Object onSignupSuccess() {
-		Author author = new Author();
-		author.setUsername(username);
-		author.setEmail(email);
-		author.setPassword(password+"{DEADBEEF}");
-		authorManager.addAuthor(author);
+		User user = new User();
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setPassword(password);
+		user.setFullname(this.fullname);
+		userManager.addUser(user);
 		
 		// Alert spring security that an author has logged in
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(author, author.getAuthorities()));
-		
-		return IndexDesign.class;
+		SecurityContextHolder.getContext().setAuthentication(
+				new UsernamePasswordAuthenticationToken(user, user
+						.getAuthorities()));
+		successPage.setUsername(username);
+		return successPage;
 	}
 
 }

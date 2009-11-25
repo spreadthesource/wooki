@@ -1,20 +1,21 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    <section id="signup-form" class="wookiForm">
+    <section id="signup-form" class="full-content">
     	<form t:type="form" t:id="signupForm">
+    		<h1>Create your Wooki account</h1>
+    		<div class="radied-box">
     		<t:errors />
-    		<h1>Create your account</h1>
-    		<fieldset>
-    			<ol>
+    			<ul>
     				<li><label t:type="label" t:for="username"/><input type="text" t:type="textfield" t:id="username" /></li>
+    				<li><label t:type="label" t:for="fullname"/><input type="text" t:type="textfield" t:id="fullname" /></li>
 					<li><label t:type="label" t:for="password"/><input type="text" t:type="passwordfield" t:id="password" /></li>
 					<li><label t:type="label" t:for="confirmPassword"/><input type="text" t:type="passwordfield" t:id="confirmPassword" /></li>
 					<li><label t:type="label" t:for="email"/><input type="text" t:type="textfield" t:id="email" /></li>
-    			</ol>
-			</fieldset>
+    			</ul>
 			<p id="submit">
 				<a t:type="linksubmit">Signup</a>
 			</p>
+			</div>
     	</form>
     </section>
 

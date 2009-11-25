@@ -140,34 +140,27 @@ a {
 	color: white;
 	font-family: Georgia;
 	font-size: 24px;
-	width: 400px;
+	width: 380px;
 	float: left;
 	margin: 10px 8px 20px 10px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 }
 
 #presentation p {
-	padding: 20px;
+	padding: 10px;
 	font-weight: normal;
 }
 
 #presentation #signup {
 	background: #FF7351;
-	margin: 20px;
+	color: #FFD8A1;
+	display:block;
+	margin: 10px;
 	text-align: center;
 	font-size: 28px;
 	font-family: Helvetica;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-}
-
-#presentation #signup a {
-	color: #FFD8A1;
 	text-decoration: none;
 }
+
 
 #presentation #signup em {
 	font-size: 20px;
@@ -177,14 +170,10 @@ a {
 #author-feed {
 	background: white;
 	margin: 10px;
-	padding: 10px;
 	width: 340px;
 	height: 300px;
 	float: left;
 	border: 1px solid #C9BB9B;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 }
 
 #author-feed h1 {
@@ -198,13 +187,9 @@ a {
 .activity-feed {
 	background: white;
 	margin: 10px;
-	padding: 10px;
 	width: 340px;
 	float: right;
 	border: 1px solid #C9BB9B;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 }
 
 .activity-feed h1 {
@@ -231,9 +216,19 @@ a {
 	padding: 10px 20px;
 }
 
+.full-content {
+	padding: 10px;
+}
+
+.radied-box {
+	padding: 10px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
 /*** book layout*/
 #book {
-	padding: 10px;
 }
 
 #book h1 a,#book h2 a,#book h3 a,#book h4 a,#book h5 a,#book h6 a {
@@ -246,7 +241,7 @@ a {
 	padding-bottom:10px;
 }
 
-#book h1 {
+#book h1, #signup-form h1 {
 	font-family: Georgia;
 	font-size: 30px;
 	margin-bottom: 20px;
@@ -269,10 +264,6 @@ a {
 
 #book article {
 	background: white;
-	padding: 10px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 }
 
 #book #authors,#book #published {
@@ -369,21 +360,16 @@ a {
 	text-align:center;
 }
 
-/*** Form elements */
-.wookiForm {
-	margin: 0 auto;
-	padding: 14px;
-}
+/*** Signup elements */
+#signup-form div {
+	background:white;
+	border: 1px solid #C9BB9B;
+} 
 
 .wookiForm form {
 	background: white;
-	padding: 10px;
 	border: 1px solid #C9BB9B;
-	border-radius: 10px;
 	float: left;
-	margin: 10px 8px 20px 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 	margin: 10px 8px 20px 10px;
 }
 
@@ -544,12 +530,8 @@ a {
 
 .dialog-content {
 	color:black;
-	padding:10px;
 	background: white;
 	margin:0px 20px 20px 0px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
 }
 
 .dialog-container {

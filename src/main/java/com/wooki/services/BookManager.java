@@ -63,6 +63,14 @@ public interface BookManager {
 	 * @param title
 	 * @return
 	 */
+	Book findById(Long id);
+	
+	/**
+	 * Get a book from it short name.
+	 * 
+	 * @param title
+	 * @return
+	 */
 	Book findBookBySlugTitle(String title);
 
 	/**
@@ -78,7 +86,7 @@ public interface BookManager {
 	 * @param userName
 	 * @return
 	 */
-	List<Book> listByAuthor(String userName);
+	List<Book> listByUser(String userName);
 
 	/**
 	 * Find all the books matching a title.

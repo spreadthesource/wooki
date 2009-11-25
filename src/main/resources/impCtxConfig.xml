@@ -17,6 +17,15 @@
 		<property name="cacheManager" ref="cacheManager" />
 		<property name="cacheName" value="xhtmlToFOConvertorCache" />
 	</bean>
+	
+	<bean id="xhtmlToAPTConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet" value="classpath:xhtml2apt.xsl" />
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
 
 	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
 		<property name="proxyHostPlusPort" value="noproxy:3128" />

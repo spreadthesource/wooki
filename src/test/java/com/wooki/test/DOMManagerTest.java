@@ -39,6 +39,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("xhtmlToFOConvertor")
 	private Convertor toFOConvertor;
+	
+	@Autowired
+	@Qualifier("xhtmlToAPTConvertor")
+	private Convertor toAPTConvertor;
 
 	@Autowired
 	@Qualifier("FOToPDFConvertor")
@@ -71,6 +75,14 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	public void setToPDFConvertor(Convertor toPDFConvertor) {
 		this.toPDFConvertor = toPDFConvertor;
 	}
+	
+	public Convertor getToAPTConvertor() {
+		return toAPTConvertor;
+	}
+
+	public void setToAPTConvertor(Convertor toAPTConvertor) {
+		this.toAPTConvertor = toAPTConvertor;
+	}
 
 	@Test
 	public void testFOConversion() {
@@ -89,7 +101,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		logger.debug("fo to pdf ok");
 		File pdfFile;
 		try {
-			pdfFile = File.createTempFile("toto", ".pdf");
+			pdfFile = File.createTempFile("wooki", ".pdf");
 			FileOutputStream fos = new FileOutputStream(pdfFile);
 			logger.debug("PDF File is " + pdfFile.getAbsolutePath());
 			byte[] content = null;
@@ -97,6 +109,38 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			while ((available = pdf.available()) > 0) {
 				content = new byte[available];
 				pdf.read(content);
+				fos.write(content);
+			}
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testAPTConversion() {
+		String result = /*
+						 * generator .adaptContent(
+						 */"<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>"/* ) */;
+
+		Resource resource = new ByteArrayResource(result.getBytes());
+		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
+		logger.debug("Document to xhtml ok");
+		InputStream apt = toAPTConvertor
+				.performTransformation(new InputStreamResource(xhtml));
+		logger.debug("xhtml to apt ok");
+		File aptFile;
+		try {
+			aptFile = File.createTempFile("wooki", ".apt");
+			FileOutputStream fos = new FileOutputStream(aptFile);
+			logger.debug("APT File is " + aptFile.getAbsolutePath());
+			byte[] content = null;
+			int available = 0;
+			while ((available = apt.available()) > 0) {
+				content = new byte[available];
+				apt.read(content);
 				fos.write(content);
 			}
 			fos.flush();

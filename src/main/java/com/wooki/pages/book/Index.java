@@ -1,6 +1,7 @@
 package com.wooki.pages.book;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.RenderSupport;
@@ -50,6 +51,9 @@ public class Index {
 	@Property
 	private String abstractContent;
 
+	@Property
+	private List<User> authors;
+	
 	private Long bookId;
 
 	/**
@@ -61,6 +65,7 @@ public class Index {
 	public void setupBook(Long bookId) {
 		this.bookId = bookId;
 		book = bookManager.findById(bookId);
+		this.authors = book.getAuthors();
 		Publication published = chapterManager
 				.getLastPublishedContent(bookManager.getBookAbstract(book)
 						.getId());
@@ -103,7 +108,7 @@ public class Index {
 	 * @return
 	 */
 	public boolean isNotLastAuthor() {
-		if (loopIdx == this.book.getAuthors().size()) {
+		if (loopIdx < this.authors.size() - 1) {
 			return true;
 		}
 		return false;

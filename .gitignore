@@ -1,3 +1,4 @@
+.springBeans
 test-output/
 .settings/
 .project
@@ -5,3 +6,5 @@ test-output/
 temp-testng-customsuite.xml
 target/
 *.tmp_*
+tidyErrors.txt
+*.origin

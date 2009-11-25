@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.PageAttached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.springframework.context.ApplicationContext;
@@ -44,6 +46,9 @@ public class Index {
 	@Inject
 	private Block userBlock;
 
+	@InjectPage
+	private com.wooki.pages.book.Index index;
+
 	@Property
 	private List<FreshStuff> freshStuffs;
 
@@ -56,8 +61,11 @@ public class Index {
 	@Property
 	private Book currentBook;
 
-	@Property
 	private String username;
+
+	@Property
+	@Validate("required")
+	private String bookTitle;
 
 	@PageAttached
 	private void setupServices() {
@@ -76,7 +84,7 @@ public class Index {
 				.getUserPrincipal();
 		if (principal != null && principal.getName() != "") {
 			this.username = principal.getName();
-			this.userBooks = bookManager.listByAuthor(username);
+			this.userBooks = bookManager.listByUser(username);
 		}
 		return true;
 	}
@@ -91,7 +99,7 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupBookList(String username) {
 		this.username = username;
-		this.userBooks = bookManager.listByAuthor(username);
+		this.userBooks = bookManager.listByUser(username);
 		return true;
 	}
 
@@ -107,12 +115,27 @@ public class Index {
 		freshStuffs = activityManager.listFreshStuff(10);
 	}
 
+	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
+	public Object createBook() {
+		Book created = bookManager.create(bookTitle, username);
+		index.setBookId(created.getId());
+		return index;
+	}
+	
 	public Block getUserCtx() {
 		if (this.username == null) {
 			return presBlock;
 		} else {
 			return userBlock;
 		}
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

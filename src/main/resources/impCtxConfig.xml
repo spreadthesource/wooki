@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/tx 
+           http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="xhtmlToFOConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet" value="classpath:Xhtml2fo.xsl" />
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
+
+	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
+		<property name="proxyHostPlusPort" value="noproxy:3128" />
+	</bean>
+
+	<bean id="httpParams" class="org.apache.commons.httpclient.params.HttpClientParams">
+		<!-- Timeout in milliseconds: in this case 2 minutes -->
+		<property name="soTimeout" value="120000" />
+	</bean>
+
+	<bean id="httpClient" class="org.apache.commons.httpclient.HttpClient">
+		<!--
+			hostConfiguration set to myHostConfig that sets the proxy host and
+			port as shown above
+		-->
+		<property name="hostConfiguration" ref="myHostConfig" />
+		<property name="params" ref="httpParams" />
+	</bean>
+	<bean id="FOToPDFConvertor" class="com.wooki.services.parsers.FormattingObjectsToPDF">
+	</bean>
+
+	<bean id="documentToXHTMLConvertor" class="com.wooki.services.parsers.DocumentToXHTML">
+	</bean>
+	<!-- Cache definition -->
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation" value="classpath:ehcache.xml" />
+		<property name="shared" value="false" />
+	</bean>
+
+</beans>

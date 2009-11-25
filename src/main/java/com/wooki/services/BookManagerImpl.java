@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.dao.ActivityDAO;
-import com.wooki.domain.dao.AuthorDAO;
+import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Activity;
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.EventType;
@@ -33,7 +33,7 @@ public class BookManagerImpl implements BookManager {
 	private BookDAO bookDao;
 
 	@Autowired
-	private AuthorDAO authorDao;
+	private UserDAO authorDao;
 
 	@Autowired
 	private ActivityDAO activityDao;
@@ -45,14 +45,14 @@ public class BookManagerImpl implements BookManager {
 					"Book and chapter title cannot be null for addition.");
 		}
 
-		Author toAdd = authorDao.findByUsername(username);
+		User toAdd = authorDao.findByUsername(username);
 
 		if (toAdd == null) {
 			return;
 		}
 
 		Book toUpdate = bookDao.findById(book.getId());
-		toUpdate.addAuthor(toAdd);
+		toUpdate.addUser(toAdd);
 		bookDao.update(toUpdate);
 	}
 
@@ -109,7 +109,7 @@ public class BookManagerImpl implements BookManager {
 		bookAbstract.setTitle("Abstract");
 		bookAbstract.setSlugTitle("Abstract");
 		book.addChapter(bookAbstract);
-		book.addAuthor(authorDao.findByUsername(author));
+		book.addUser(authorDao.findByUsername(author));
 		bookAbstract.setBook(book);
 
 		bookDao.create(book);
@@ -141,6 +141,10 @@ public class BookManagerImpl implements BookManager {
 		return bookDao.findBookBySlugTitle(title);
 	}
 
+	public Book findById(Long id) {
+		return bookDao.findById(id);
+	}
+
 	public List<Book> list() {
 		return bookDao.listAll();
 	}
@@ -149,8 +153,8 @@ public class BookManagerImpl implements BookManager {
 		return bookDao.listByTitle(title);
 	}
 
-	public List<Book> listByAuthor(String userName) {
-		Author author = authorDao.findByUsername(userName);
+	public List<Book> listByUser(String userName) {
+		User author = authorDao.findByUsername(userName);
 		if (author != null) {
 			return author.getBooks();
 		}
@@ -161,7 +165,7 @@ public class BookManagerImpl implements BookManager {
 		this.bookDao = bookDao;
 	}
 
-	public void setAuthorDao(AuthorDAO authorDao) {
+	public void setAuthorDao(UserDAO authorDao) {
 		this.authorDao = authorDao;
 	}
 

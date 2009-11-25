@@ -22,14 +22,11 @@ import javax.persistence.TemporalType;
 
 /**
  * Represents a book with its relation to other elements.
- * 
- * @author ccordenier
- * 
  */
 @Entity
 @NamedQueries( {
 		@NamedQuery(name = "com.wooki.domain.model.book.findBySlugTitle", query = "select b from Book b where b.slugTitle=:st"),
-		@NamedQuery(name = "com.wooki.domain.model.book.verifyBookOwner", query = "select b from Book b join b.authors as a where b.id=:id and a.username=:un") })
+		@NamedQuery(name = "com.wooki.domain.model.book.verifyBookOwner", query = "select b from Book b join b.users as u where b.id=:id and u.username=:un") })
 public class Book {
 
 	@Id
@@ -39,7 +36,7 @@ public class Book {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns = { @JoinColumn(name = "surname") })
-	private List<Author> authors;
+	private List<User> users;
 
 	/**
 	 * First element will always be the book abstract
@@ -58,11 +55,11 @@ public class Book {
 	@Temporal(TemporalType.DATE)
 	private Date lastModified;
 
-	public void addAuthor(Author author) {
-		if (this.authors == null) {
-			this.authors = new ArrayList<Author>();
+	public void addUser(User user) {
+		if (this.users == null) {
+			this.users = new ArrayList<User>();
 		}
-		authors.add(author);
+		users.add(user);
 	}
 
 	public void addChapter(Chapter chapter) {
@@ -80,12 +77,12 @@ public class Book {
 		this.id = id;
 	}
 
-	public List<Author> getAuthors() {
-		return authors;
+	public List<User> getAuthors() {
+		return users;
 	}
 
-	public void setAuthors(List<Author> authors) {
-		this.authors = authors;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	public List<Chapter> getChapters() {

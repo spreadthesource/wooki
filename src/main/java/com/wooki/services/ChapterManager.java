@@ -2,7 +2,7 @@ package com.wooki.services;
 
 import java.util.List;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
@@ -24,7 +24,7 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	Comment addComment(Chapter chapter, Author author, String content,
+	Comment addComment(Chapter chapter, User author, String content,
 			String domId);
 
 	/**
@@ -34,14 +34,14 @@ public interface ChapterManager {
 	 * @param chapter
 	 * @return
 	 */
-	String getContent(Chapter chapter);
+	String getContent(Long chapterId);
 
 	/**
 	 * Publish chapter content
 	 *
 	 * @param chapterId
 	 */
-	void publishChapter(Chapter chapter);
+	void publishChapter(Long chapter);
 
 	/**
 	 * Find the last published chapter.
@@ -57,7 +57,7 @@ public interface ChapterManager {
 	 * 
 	 * @param chapter
 	 */
-	void updateContent(Chapter chapter, String content);
+	void updateContent(Long chapterId, String content);
 
 	/**
 	 * Remove chapter from book.

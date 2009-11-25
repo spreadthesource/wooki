@@ -16,13 +16,10 @@ import org.springframework.security.GrantedAuthorityImpl;
 import org.springframework.security.userdetails.UserDetails;
 
 /**
- * Author of a document.
- * 
- * @author ccordenier
- * 
+ * Wooki basic user. Can post comment, write book etc.
  */
 @Entity
-public class Author implements UserDetails {
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 4060967693790504175L;
 
@@ -32,9 +29,12 @@ public class Author implements UserDetails {
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username;
+	private String username; 
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "authors")
+	@Column(nullable = false)
+	private String fullname;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "users")
 	private List<Book> books;
 
 	@Column(nullable = false)
@@ -64,6 +64,14 @@ public class Author implements UserDetails {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
+
+	public String getFullname() {
+		return fullname;
 	}
 
 	public String getPassword() {

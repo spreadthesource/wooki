@@ -2,7 +2,7 @@ package com.wooki.services;
 
 import org.springframework.context.ApplicationContext;
 
-import com.wooki.domain.model.Author;
+import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 
@@ -14,21 +14,24 @@ public class StartupServiceImpl implements StartupService {
 				.getBean("bookManager");
 		ChapterManager chapterManager = (ChapterManager) applicationContext
 				.getBean("chapterManager");
-		AuthorManager authorManager = (AuthorManager) applicationContext
-				.getBean("authorManager");
+		UserManager userManager = (UserManager) applicationContext
+				.getBean("userManager");
 
 		// Add author to the book
-		Author john = new Author();
+		User john = new User();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
 		john.setPassword("password");
-		authorManager.addAuthor(john);
+		john.setFullname("John Doe");
+		userManager.addUser(john);
+		
 
-		Author robink = new Author();
+		User robink = new User();
 		robink.setEmail("robin@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		authorManager.addAuthor(robink);
+		robink.setFullname("Robin K.");
+		userManager.addUser(robink);
 
 		// Create books
 		Book productBook = bookManager.create(
@@ -38,7 +41,7 @@ public class StartupServiceImpl implements StartupService {
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", "john");
-		chapterManager.updateContent(chapterOne, "<p>You will need ...</p>");
+		chapterManager.updateContent(chapterOne.getId(), "<p>You will need ...</p>");
 
 		// Add robin to author's list
 		bookManager.addAuthor(productBook, "robink");
@@ -46,7 +49,7 @@ public class StartupServiceImpl implements StartupService {
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", "robink");
 
-		chapterManager.updateContent(chapterTwo,
+		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
 
 	}

@@ -11,8 +11,8 @@
 	</p>
 
 	<p id="authors">
-		<t:loop source="book?.authors" value="currentAuthor" index="loopIdx">
-			${currentAuthor.name} <a t:type="pagelink" t:page="index" t:context="currentAuthor.username">${currentAuthor.username}</a>
+		<t:loop source="book?.authors" value="currentUser" index="loopIdx">
+			${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
 			<t:if test="notLastAuthor">, </t:if>
 		</t:loop>		
 	</p>

@@ -14,21 +14,24 @@ public class StartupServiceImpl implements StartupService {
 				.getBean("bookManager");
 		ChapterManager chapterManager = (ChapterManager) applicationContext
 				.getBean("chapterManager");
-		UserManager authorManager = (UserManager) applicationContext
-				.getBean("authorManager");
+		UserManager userManager = (UserManager) applicationContext
+				.getBean("userManager");
 
 		// Add author to the book
 		User john = new User();
 		john.setEmail("john.doe@gmail.com");
 		john.setUsername("john");
 		john.setPassword("password");
-		authorManager.addUser(john);
+		john.setFullname("John Doe");
+		userManager.addUser(john);
+		
 
 		User robink = new User();
 		robink.setEmail("robin@gmail.com");
 		robink.setUsername("robink");
 		robink.setPassword("password");
-		authorManager.addUser(robink);
+		robink.setFullname("Robin K.");
+		userManager.addUser(robink);
 
 		// Create books
 		Book productBook = bookManager.create(

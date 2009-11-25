@@ -3,8 +3,6 @@ package com.wooki.services;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.providers.dao.SaltSource;
-import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.userdetails.UserDetails;
 import org.springframework.security.userdetails.UserDetailsService;
 import org.springframework.security.userdetails.UsernameNotFoundException;
@@ -18,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	public UserDetails loadUserByUsername(String username)
 			throws UsernameNotFoundException, DataAccessException {
-		UserManager authManager = (UserManager) applicationContext.getBean("authorManager");
+		UserManager authManager = (UserManager) applicationContext.getBean("userManager");
 		User user = authManager.findByUsername(username);
 		return user;
 	}

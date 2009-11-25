@@ -6,7 +6,7 @@ package com.wooki.domain.exception;
  * @author ccordenier
  * 
  */
-public class AuthorizationException extends RuntimeException {
+public class AuthorizationException extends BusinessException {
 
 	/**
 	 * 

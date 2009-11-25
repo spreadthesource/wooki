@@ -2,13 +2,15 @@ package com.wooki.services;
 
 import org.springframework.context.ApplicationContext;
 
+import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 
 public class StartupServiceImpl implements StartupService {
 
-	public StartupServiceImpl(ApplicationContext applicationContext) {
+	public StartupServiceImpl(ApplicationContext applicationContext) throws UserAlreadyException, AuthorizationException {
 
 		BookManager bookManager = (BookManager) applicationContext
 				.getBean("bookManager");

@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.dao.ActivityDAO;
-import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.dao.BookDAO;
+import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Activity;
-import com.wooki.domain.model.User;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.EventType;
+import com.wooki.domain.model.User;
 import com.wooki.services.utils.SlugBuilder;
 
 /**
@@ -56,8 +56,9 @@ public class BookManagerImpl implements BookManager {
 		bookDao.update(toUpdate);
 	}
 
-	@Transactional(readOnly = false)
-	public Chapter addChapter(Book book, String title, String username) {
+	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
+	public Chapter addChapter(Book book, String title, String username)
+			throws AuthorizationException {
 		if (book == null || title == null || username == null) {
 			throw new IllegalArgumentException(
 					"Book and chapter title cannot be null for addition.");
@@ -127,7 +128,7 @@ public class BookManagerImpl implements BookManager {
 	}
 
 	public Chapter getBookAbstract(Book book) {
-		if(book == null) {
+		if (book == null) {
 			throw new IllegalArgumentException("Book parameter cannot be null");
 		}
 		Book upToDate = bookDao.findById(book.getId());

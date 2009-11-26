@@ -2,6 +2,8 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -24,7 +26,14 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 	}
 
 	public List<Book> listByAuthor(Long id) {
-		return null;
+		if (id == null) {
+			throw new IllegalArgumentException(
+					"Author id cannot be null while listing book.");
+		}
+		Query query = entityManager.createQuery(String.format(
+				"select b from %s b join b.users u where u.id=:uid", Book.class.getName()));
+		query.setParameter("uid", id);
+		return query.getResultList();
 	}
 
 	public List<Book> listByTitle(String title) {

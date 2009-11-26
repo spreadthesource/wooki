@@ -77,21 +77,27 @@ public class Index {
 		this.book = bookManager.findById(bookId);
 		this.authors = book.getAuthors();
 
+		// List chapter infos
+		List<Chapter> chapters = chapterManager.listChaptersInfo(bookId);
+		this.bookAbstractId = chapters.get(0).getId();
+
+		if (chapters.size() > 0) {
+			this.chaptersInfo = chapters.subList(1, chapters.size());
+		}
+
 		// Get abstract content to display
-		this.bookAbstractId = bookManager.getBookAbstract(book).getId();
 		Publication published = chapterManager
 				.getLastPublishedContent(this.bookAbstractId);
 		if (published != null) {
 			try {
-				this.abstractContent = new String(published.getContent(), "UTF-8");
+				this.abstractContent = new String(published.getContent(),
+						"UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		// List chapter infos
-		this.chaptersInfo = chapterManager.listChaptersInfo(bookId);
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -109,8 +115,8 @@ public class Index {
 	}
 
 	/**
-	 * Get id to link to chapter display 
-	 *
+	 * Get id to link to chapter display
+	 * 
 	 * @return
 	 */
 	public Object[] getChapterCtx() {

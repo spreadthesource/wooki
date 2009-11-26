@@ -83,7 +83,8 @@ public class ChapterManagerImpl implements ChapterManager {
 			Publication published = new Publication();
 			published.setChapter(chapter);
 			try {
-				published.setContent(domManager.adaptContent(new String(chapter.getContent())).getBytes("UTF-8"));
+				published.setContent(domManager.adaptContent(
+						new String(chapter.getContent())).getBytes("UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -113,12 +114,7 @@ public class ChapterManagerImpl implements ChapterManager {
 	}
 
 	public List<Chapter> listChaptersInfo(Long bookId) {
-		List<Chapter> chapterInfos = chapterDao.listChapterInfo(bookId);
-		if (chapterInfos.size() > 1) {
-			return chapterInfos.subList(1, chapterInfos.size());
-		} else {
-			return new ArrayList<Chapter>();
-		}
+		return chapterDao.listChapterInfo(bookId);
 	}
 
 }

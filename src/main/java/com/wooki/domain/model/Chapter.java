@@ -1,10 +1,10 @@
 package com.wooki.domain.model;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,8 +49,7 @@ public class Chapter {
 	private String slugTitle;
 
 	/** Last editing date */
-	@Temporal(TemporalType.DATE)
-	private Date lastModifed;
+	private Timestamp lastModifed;
 
 	/** Creation date */
 	@Temporal(TemporalType.DATE)
@@ -58,12 +57,28 @@ public class Chapter {
 
 	/** Content of the book */
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	private String content;
+	private byte[] content;
 
 	/** The list of comment associated to the chapter */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", fetch = FetchType.LAZY)
 	private List<Comment> comments;
+
+	/**
+	 * Constructor used to retrieve only required information for chapters
+	 * display.
+	 * 
+	 * @param id
+	 * @param title
+	 * @param lastModified
+	 */
+	public Chapter(long id, String title) {
+		this.id = id;
+		this.title = title;
+	}
+
+	public Chapter() {
+
+	}
 
 	public void addComment(Comment com) {
 		if (this.comments == null) {
@@ -96,11 +111,11 @@ public class Chapter {
 		this.slugTitle = titleSlug;
 	}
 
-	public Date getLastModifed() {
+	public Timestamp getLastModifed() {
 		return lastModifed;
 	}
 
-	public void setLastModifed(Date lastModifed) {
+	public void setLastModifed(Timestamp lastModifed) {
 		this.lastModifed = lastModifed;
 	}
 
@@ -112,11 +127,11 @@ public class Chapter {
 		this.creationDate = creationDate;
 	}
 
-	public String getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 

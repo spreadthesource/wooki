@@ -29,7 +29,7 @@ public class Publication {
 	private Chapter chapter;
 
 	@Lob
-	private String content;
+	private byte[] content;
 
 	private Timestamp revisionDate;
 
@@ -41,11 +41,11 @@ public class Publication {
 		this.chapter = chapter;
 	}
 
-	public String getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
 

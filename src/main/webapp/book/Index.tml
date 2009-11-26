@@ -32,29 +32,12 @@
 	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">Table of contents</a></h2>
 	
 	<ol id="chapters-list">
-		<li>
-			<h3><t:pagelink t:page="book/chapter">Welcome to Apache Tapestry</t:pagelink></h3>
-			<p>04/03/09</p>
-		</li>
-		
-		<li>
-			<h3><t:pagelink t:page="book/chapter">Releases</t:pagelink></h3>
-			<p>one week ago</p>
-		</li>
-		
-		<li>
-			<h3><t:pagelink t:page="book/chapter">Training and Support</t:pagelink></h3>
-			<p>4 hours ago</p>
-		</li>
-		
-		<li>
-			<h3><t:pagelink t:page="book/chapter">Third Party Libraries, Tutorials and Resources</t:pagelink></h3>
-			<p>11/03/09</p>
-		</li>
-		<li>
-			<h3>...</h3>
-		</li>
-		
+		<t:loop t:source="chaptersInfo" t:value="currentChapter">
+			<li>
+				<h3><t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink></h3>
+				<p>04/03/09</p>
+			</li>
+		</t:loop>
 	</ol>
 	
 	<div id="comments">

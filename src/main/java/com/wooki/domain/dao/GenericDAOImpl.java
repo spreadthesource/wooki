@@ -21,7 +21,7 @@ public class GenericDAOImpl<T, PK extends Serializable> implements
 		GenericDAO<T, PK> {
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	protected EntityManager entityManager;
 
 	private Class<T> type;
 

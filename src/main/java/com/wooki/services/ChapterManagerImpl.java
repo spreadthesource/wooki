@@ -1,6 +1,8 @@
 package com.wooki.services;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -64,8 +66,8 @@ public class ChapterManagerImpl implements ChapterManager {
 	public void updateContent(Long chapterId, String content) {
 		Chapter chapter = chapterDao.findById(chapterId);
 		if (chapter != null) {
-			chapter.setContent(content);
-			chapter.setLastModifed(new Date());
+			chapter.setContent(content.getBytes());
+			chapter.setLastModifed(new Timestamp(System.currentTimeMillis()));
 			chapterDao.update(chapter);
 		}
 	}
@@ -80,8 +82,14 @@ public class ChapterManagerImpl implements ChapterManager {
 		if (chapter != null) {
 			Publication published = new Publication();
 			published.setChapter(chapter);
-			published.setContent(domManager.adaptContent(chapter.getContent()));
-			published.setRevisionDate(new Timestamp(System.currentTimeMillis()));
+			try {
+				published.setContent(domManager.adaptContent(new String(chapter.getContent())).getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			published
+					.setRevisionDate(new Timestamp(System.currentTimeMillis()));
 			publicationDao.create(published);
 		}
 	}
@@ -102,6 +110,15 @@ public class ChapterManagerImpl implements ChapterManager {
 
 	public List<Chapter> listChapters(Long bookId) {
 		return chapterDao.listChapters(bookId);
+	}
+
+	public List<Chapter> listChaptersInfo(Long bookId) {
+		List<Chapter> chapterInfos = chapterDao.listChapterInfo(bookId);
+		if (chapterInfos.size() > 1) {
+			return chapterInfos.subList(1, chapterInfos.size());
+		} else {
+			return new ArrayList<Chapter>();
+		}
 	}
 
 }

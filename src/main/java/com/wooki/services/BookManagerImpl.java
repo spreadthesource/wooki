@@ -1,5 +1,6 @@
 package com.wooki.services;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class BookManagerImpl implements BookManager {
 		chapter.setSlugTitle(SlugBuilder.buildSlug(title));
 		Date creationDate = new Date();
 		chapter.setCreationDate(creationDate);
-		chapter.setLastModifed(creationDate);
+		chapter.setLastModifed(new Timestamp(System.currentTimeMillis()));
 
 		// Get managed entity to update
 		Book toUpdate = bookDao.findById(book.getId());

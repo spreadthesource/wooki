@@ -38,19 +38,19 @@ public interface ChapterManager {
 
 	/**
 	 * Publish chapter content
-	 *
+	 * 
 	 * @param chapterId
 	 */
 	void publishChapter(Long chapter);
 
 	/**
 	 * Find the last published chapter.
-	 *
+	 * 
 	 * @param chapterId
 	 * @return
 	 */
 	Publication getLastPublishedContent(Long chapterId);
-	
+
 	/**
 	 * When a chapter content is update then all its related comments must be
 	 * re-organized for the sake of consistency.
@@ -74,4 +74,14 @@ public interface ChapterManager {
 	 * @return
 	 */
 	List<Chapter> listChapters(Long bookId);
+
+	/**
+	 * List the chapters for a given book, the book abstract chapter is exclude
+	 * from this list.
+	 * 
+	 * @param bookId
+	 * @return
+	 */
+	List<Chapter> listChaptersInfo(Long bookId);
+
 }

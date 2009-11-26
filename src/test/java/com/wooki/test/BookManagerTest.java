@@ -73,7 +73,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", john.getUsername());
 		chapterManager.updateContent(chapterOne.getId(),
-				"<p>You will need ...</p>");
+				"<p>You will need Žˆ ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", john.getUsername());
@@ -158,8 +158,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		Assert
-				.assertEquals(chapterOne.getContent(),
-						"<p>You will need ...</p>");
+				.assertEquals(new String(chapterOne.getContent()),
+						"<p>You will need Žˆ ...</p>");
 	}
 
 	@Test
@@ -175,8 +175,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		Assert.assertTrue(chapterOne.getContent().contains(
-				"<p>You will need ...</p>"));
+		Assert.assertTrue(new String(chapterOne.getContent()).contains(
+				"<p>You will need Žˆ ...</p>"));
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 				.getId());
 		Assert.assertNotNull(published, "No revision has been published.");
 		Assert.assertNotNull(published.getContent());
-		Assert.assertEquals(published.getContent(),
+		Assert.assertEquals(new String(published.getContent()),
 				"<p id=\"0\">Tapestry is totally amazing</p>");
 
 	}

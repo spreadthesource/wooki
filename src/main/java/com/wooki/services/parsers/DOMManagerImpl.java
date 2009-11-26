@@ -191,7 +191,7 @@ public class DOMManagerImpl implements DOMManager {
 			SAXBuilder builder = new SAXBuilder();
 			builder.setValidation(false);
 			builder.setIgnoringElementContentWhitespace(true);
-			Document doc = builder.build(new StringInputStream(content));
+			Document doc = builder.build(new StringInputStream(new String(content.getBytes("UTF-8"))));
 			return doc;
 		} catch (JDOMException jdEx) {
 			logger.error("Error during document parsing", jdEx);
@@ -223,7 +223,7 @@ public class DOMManagerImpl implements DOMManager {
 				}
 			}
 			bos.flush();
-			return new String(bos.toByteArray());
+			return new String(bos.toByteArray(), "UTF-8");
 		} catch (IOException ioEx) {
 			logger.error("Error during document serialization", ioEx);
 			return "";

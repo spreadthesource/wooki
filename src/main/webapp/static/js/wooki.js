@@ -33,28 +33,29 @@ jQuery.extend(Wooki, {
  * Add initialization method to Tapestry.Initializer object
  */
 
-/**
- * Initialize jquery dialog popup on click of a elt.
- *
- */
-Tapestry.Initializer.openJQueryDialogOnClick = function(triggerId, dialogId) { 
-	jQuery('#'+triggerId).click(function() {
-		jQuery('#'+dialogId).dialog('open');
-	});
-};
+jQuery.extend(Tapestry.Initializer,{
+	/**
+	 * Initialize jquery dialog popup on click of a elt.
+	 */
+	openJQueryDialogOnClick : function(triggerId, dialogId) { 
+		jQuery('#'+triggerId).click(function() {
+			jQuery('#'+dialogId).dialog('open');
+		});
+	},
 
-/**
- * Build a JQuery Dialog box.
- *
- */
-Tapestry.Initializer.initJQueryDialog = function(data) {
-	jQuery('#'+data.elt).dialog(data.params);
-};
+	/**
+	 * Build a JQuery Dialog box.
+	 *
+	 */
+	initJQueryDialog : function(data) {
+		jQuery('#'+data.elt).dialog(data.params);
+	},
 
-/**
- * Transform a textarea object into a wymeditor instance.
- *
- */
-Tapestry.Initializer.initWymEdit = function(data) {
-	jQuery('#'+data.elt).wymeditor(data.params);
-};
+	/**
+	 * Transform a textarea object into a wymeditor instance.
+	 *
+	 */
+	initWymEdit : function(data) {
+		jQuery('#'+data.elt).wymeditor(data.params);
+	},	
+});

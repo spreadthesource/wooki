@@ -12,6 +12,10 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 
+/**
+ * CommentDialog create a nice modal window. Wooki classical use of this dialog
+ * is to let users add comments to a block of some published content
+ */
 @IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.2.custom.min.js")
 public class CommentDialog implements ClientElement {
 	@Inject
@@ -33,6 +37,8 @@ public class CommentDialog implements ClientElement {
 	void declareDialog(MarkupWriter writer) {
 		writer.end();
 		writer.end();
+
+		// default wooki dialog settings
 		JSONObject data = new JSONObject();
 		data.put("elt", resources.getId());
 		JSONObject params = new JSONObject();

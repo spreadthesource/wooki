@@ -18,9 +18,6 @@ import com.wooki.services.UserManager;
 
 /**
  * Signup page for new authors.
- * 
- * @author ccordenier
- * 
  */
 public class Signup {
 
@@ -48,10 +45,6 @@ public class Signup {
 	private String password;
 
 	@Property
-	@Validate("required")
-	private String confirmPassword;
-
-	@Property
 	@Validate("required,email")
 	private String email;
 
@@ -62,9 +55,6 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
 	public void onValidate() {
-		if (!password.equals(confirmPassword)) {
-			signupForm.recordError("Password do not match");
-		}
 		// Do a first check
 		if (userManager.findByUsername(username) != null) {
 			signupForm.recordError("User already exists");

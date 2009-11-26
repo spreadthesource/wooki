@@ -125,6 +125,23 @@ a {
 	border: 1px solid #6E6D65;
 }
 
+
+.form-footer {
+	background:#C9BB9B;
+	border:0px;
+	border-top:1px solid #6E6D65;
+	padding:10px;
+	color:#6E6D65;
+	text-align:center;
+	margin:0px -10px -10px -10px;
+	border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	-moz-border-radius-bottomright: 10px;
+	-webkit-border-bottom-right-radius: 10px;
+	
+}
 /*** content */
 #content {
 	background: #FFD8A1;
@@ -150,7 +167,7 @@ a {
 	font-weight: normal;
 }
 
-#presentation #signup {
+.active-button {
 	background: #FF7351;
 	color: #FFD8A1;
 	display:block;
@@ -162,7 +179,7 @@ a {
 }
 
 
-#presentation #signup em {
+.active-button em {
 	font-size: 20px;
 	font-style: normal;
 }
@@ -227,7 +244,9 @@ a {
 	-webkit-border-radius: 10px;
 }
 
-/*** book layout*/
+
+
+/*** book layout */
 #book {
 }
 
@@ -361,46 +380,59 @@ a {
 }
 
 /*** Signup elements */
-#signup-form div {
+.basic-content {
 	background:white;
 	border: 1px solid #C9BB9B;
 } 
 
-.wookiForm form {
-	background: white;
-	border: 1px solid #C9BB9B;
-	float: left;
-	margin: 10px 8px 20px 10px;
+#signup-form h2 {
+	font-size:20px;
 }
 
-.wookiForm h1 {
-	font-size: 18px;
+#signup-form table {
+	width:100%;
+	margin:20px;
 }
 
-.wookiForm fieldset {
-	width: 100%;
-	padding: 5px;
+#signup-form th {
+	text-align:right;
+	padding-right:10px;
+	width:200px;
+	font-size:18px;
+	font-weight: normal;
+	color:#6E6D65;
+	height:40px;
 }
 
-.wookiForm small {
-	margin-left: 1em;
-	font-size: 12px;
+#signup-form td {
 }
 
-.wookiForm fieldset ol {
-	padding: 1em 1em 0 1em;
-	list-style: none;
+#signup-form #submit {
+	margin-left:220px;
+	width:220px;
+	border:none;
 }
 
-.wookiForm fieldset li {
-	float: left;
-	clear: left;
-	width: 100%;
-	padding-bottom: 1em;
+
+div.t-error-popup span {
+	font-size:18px;
 }
 
-.wookiForm p {
-	padding: 10px;
+
+#signup-form input {
+	font-size:18px;
+	padding:8px;
+	border:1px solid #6E6D65;
+	width:240px;
+	font-family: Helvetica;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+
+}
+
+#signup-form input:focus {
+	border: 1px solid #FF7351;
 }
 
 .wookiForm #submit {

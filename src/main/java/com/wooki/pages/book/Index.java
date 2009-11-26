@@ -1,5 +1,6 @@
 package com.wooki.pages.book;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;
+import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
@@ -37,7 +39,7 @@ public class Index {
 	private Book book;
 
 	@Property
-	private com.wooki.domain.model.Chapter bookAbstract;
+	private Long bookAbstractId;
 
 	@Property
 	private User currentUser;
@@ -53,7 +55,13 @@ public class Index {
 
 	@Property
 	private List<User> authors;
-	
+
+	@Property
+	private List<Chapter> chaptersInfo;
+
+	@Property
+	private Chapter currentChapter;
+
 	private Long bookId;
 
 	/**
@@ -64,15 +72,26 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void setupBook(Long bookId) {
 		this.bookId = bookId;
-		book = bookManager.findById(bookId);
+
+		// Get book related information
+		this.book = bookManager.findById(bookId);
 		this.authors = book.getAuthors();
+
+		// Get abstract content to display
+		this.bookAbstractId = bookManager.getBookAbstract(book).getId();
 		Publication published = chapterManager
-				.getLastPublishedContent(bookManager.getBookAbstract(book)
-						.getId());
+				.getLastPublishedContent(this.bookAbstractId);
 		if (published != null) {
-			abstractContent = published.getContent();
+			try {
+				this.abstractContent = new String(published.getContent(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-		bookAbstract = bookManager.getBookAbstract(book);
+
+		// List chapter infos
+		this.chaptersInfo = chapterManager.listChaptersInfo(bookId);
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -81,12 +100,21 @@ public class Index {
 	}
 
 	/**
-	 * Get edit context for chapter 
-	 *
+	 * Get edit context for chapter
+	 * 
 	 * @return
 	 */
 	public Object[] getEditCtx() {
-		return new Object[] { this.bookId, this.bookAbstract.getId() };
+		return new Object[] { this.bookId, this.bookAbstractId };
+	}
+
+	/**
+	 * Get id to link to chapter display 
+	 *
+	 * @return
+	 */
+	public Object[] getChapterCtx() {
+		return new Object[] { this.bookId, this.currentChapter.getId() };
 	}
 
 	@AfterRender

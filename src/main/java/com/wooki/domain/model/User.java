@@ -34,7 +34,7 @@ public class User implements UserDetails {
 	@Column(nullable = false)
 	private String fullname;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "users")
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
 	private List<Book> books;
 
 	@Column(nullable = false)

@@ -158,7 +158,7 @@ public class BookManagerImpl implements BookManager {
 	public List<Book> listByUser(String userName) {
 		User author = authorDao.findByUsername(userName);
 		if (author != null) {
-			return author.getBooks();
+			return bookDao.listByAuthor(author.getId());
 		}
 		return null;
 	}

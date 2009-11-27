@@ -21,6 +21,12 @@ import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
 import com.wooki.services.utils.DateUtils;
 
+/**
+ * This page displays a book with its table of contents. 
+ *
+ * @author ccordenier
+ *
+ */
 public class Index {
 
 	@Inject

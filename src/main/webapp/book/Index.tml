@@ -1,6 +1,6 @@
 <html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="prop:book?.title">
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
 <header>
 
@@ -35,7 +35,7 @@
 		<t:loop t:source="chaptersInfo" t:value="currentChapter">
 			<li>
 				<h3><t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink></h3>
-				<p>04/03/09</p>
+				<p><t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" /></p>
 			</li>
 		</t:loop>
 	</ol>

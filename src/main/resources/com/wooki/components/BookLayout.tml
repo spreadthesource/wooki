@@ -1,8 +1,7 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
 	<section id="book" class="full-content">
-		<h1><a href="#">${title}</a></h1>
-
+		<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="bookId">${title}</a></h1>
 		<div id="wrapper">
 		<article class="radied-box">
 		    	<t:body/>

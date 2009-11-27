@@ -44,7 +44,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		if(bookId == null) {
 			throw new IllegalArgumentException("Book id should not be null while lis chapters informations");
 		}
-		Query query = entityManager.createQuery(String.format("select NEW %s(c.id, c.title) from %s c where c.book.id=:book", Chapter.class.getName(), Chapter.class.getName()));
+		Query query = entityManager.createQuery(String.format("select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book", Chapter.class.getName(), Chapter.class.getName()));
 		query.setParameter("book", bookId);
 		return query.getResultList();
 	}

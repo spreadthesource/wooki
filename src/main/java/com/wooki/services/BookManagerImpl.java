@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.UserDAO;
@@ -73,9 +74,9 @@ public class BookManagerImpl implements BookManager {
 		Chapter chapter = new Chapter();
 		chapter.setTitle(title);
 		chapter.setSlugTitle(SlugBuilder.buildSlug(title));
-		Date creationDate = new Date();
+		Date creationDate = Calendar.getInstance().getTime();
 		chapter.setCreationDate(creationDate);
-		chapter.setLastModifed(new Timestamp(System.currentTimeMillis()));
+		chapter.setLastModified(creationDate);
 
 		// Get managed entity to update
 		Book toUpdate = bookDao.findById(book.getId());

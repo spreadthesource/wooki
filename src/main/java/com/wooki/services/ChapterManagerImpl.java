@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.PublicationDAO;
 import com.wooki.domain.model.User;
@@ -54,6 +55,13 @@ public class ChapterManagerImpl implements ChapterManager {
 		return comment;
 	}
 
+	public Chapter findById(Long chapterId) {
+		if(chapterId == null) {
+			throw new IllegalArgumentException("Chapter id cannot be null.");
+		}
+		return this.chapterDao.findById(chapterId);
+	}
+
 	public String getContent(Long chapterId) {
 		Chapter chapter = chapterDao.findById(chapterId);
 		if (chapter == null) {
@@ -67,7 +75,7 @@ public class ChapterManagerImpl implements ChapterManager {
 		Chapter chapter = chapterDao.findById(chapterId);
 		if (chapter != null) {
 			chapter.setContent(content.getBytes());
-			chapter.setLastModifed(new Timestamp(System.currentTimeMillis()));
+			chapter.setLastModified(Calendar.getInstance().getTime());
 			chapterDao.update(chapter);
 		}
 	}
@@ -90,7 +98,7 @@ public class ChapterManagerImpl implements ChapterManager {
 				e.printStackTrace();
 			}
 			published
-					.setRevisionDate(new Timestamp(System.currentTimeMillis()));
+					.setRevisionDate(Calendar.getInstance().getTime());
 			publicationDao.create(published);
 		}
 	}

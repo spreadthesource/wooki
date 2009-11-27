@@ -1,6 +1,7 @@
 package com.wooki.domain.model;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Publication {
 	@Lob
 	private byte[] content;
 
-	private Timestamp revisionDate;
+	private Date revisionDate;
 
 	public Chapter getChapter() {
 		return chapter;
@@ -49,11 +50,11 @@ public class Publication {
 		this.content = content;
 	}
 
-	public Timestamp getRevisionDate() {
+	public Date getRevisionDate() {
 		return revisionDate;
 	}
 
-	public void setRevisionDate(Timestamp revisionDate) {
+	public void setRevisionDate(Date revisionDate) {
 		this.revisionDate = revisionDate;
 	}
 

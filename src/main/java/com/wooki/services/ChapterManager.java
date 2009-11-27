@@ -28,6 +28,13 @@ public interface ChapterManager {
 			String domId);
 
 	/**
+	 * Load a chapter.
+	 *
+	 * @return
+	 */
+	Chapter findById(Long chapterId);
+	
+	/**
 	 * Retrieve the content for a given chapter. Content is lazy loaded for the
 	 * sake of performance.
 	 * 

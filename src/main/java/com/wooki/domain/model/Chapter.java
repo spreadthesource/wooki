@@ -1,6 +1,5 @@
 package com.wooki.domain.model;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +48,7 @@ public class Chapter {
 	private String slugTitle;
 
 	/** Last editing date */
-	private Timestamp lastModifed;
+	private Date lastModified;
 
 	/** Creation date */
 	@Temporal(TemporalType.DATE)
@@ -71,9 +70,10 @@ public class Chapter {
 	 * @param title
 	 * @param lastModified
 	 */
-	public Chapter(long id, String title) {
+	public Chapter(long id, String title, Date lastModified) {
 		this.id = id;
 		this.title = title;
+		this.lastModified = lastModified;
 	}
 
 	public Chapter() {
@@ -111,12 +111,12 @@ public class Chapter {
 		this.slugTitle = titleSlug;
 	}
 
-	public Timestamp getLastModifed() {
-		return lastModifed;
+	public Date getLastModified() {
+		return lastModified;
 	}
 
-	public void setLastModifed(Timestamp lastModifed) {
-		this.lastModifed = lastModifed;
+	public void setLastModified(Date lastModifed) {
+		this.lastModified = lastModifed;
 	}
 
 	public Date getCreationDate() {

@@ -3,7 +3,9 @@ package com.wooki.services.parsers;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -19,6 +21,11 @@ import com.wooki.domain.model.Comment;
 
 @Service("domManager")
 public class DOMManagerImpl implements DOMManager {
+
+	private static final String COMMENTABLE_CLASS = "commentable";
+
+	private final Set<String> COMMENTABLE = CollectionFactory.newSet("p", "h1",
+			"h2", "h3", "h4", "h5", "h6", "ul", "ol");
 
 	private static final String CHAPTER_ROOT_NODE = "chapter";
 
@@ -172,8 +179,10 @@ public class DOMManagerImpl implements DOMManager {
 	 * @param elt
 	 */
 	private void buildIds(IdAllocator allocator, Element elt) {
-		if (elt.getAttribute("id") == null) {
-			elt.setAttribute("id", "" + allocator.next());
+		if (COMMENTABLE.contains(elt.getName())
+				&& elt.getAttribute("id") == null) {
+			elt.setAttribute("id", "b" + allocator.next());
+			elt.setAttribute("class", COMMENTABLE_CLASS);
 		}
 		for (Element child : (List<Element>) elt.getChildren()) {
 			buildIds(allocator, child);
@@ -191,7 +200,8 @@ public class DOMManagerImpl implements DOMManager {
 			SAXBuilder builder = new SAXBuilder();
 			builder.setValidation(false);
 			builder.setIgnoringElementContentWhitespace(true);
-			Document doc = builder.build(new StringInputStream(new String(content.getBytes("UTF-8"))));
+			Document doc = builder.build(new StringInputStream(new String(
+					content.getBytes("UTF-8"))));
 			return doc;
 		} catch (JDOMException jdEx) {
 			logger.error("Error during document parsing", jdEx);

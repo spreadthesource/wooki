@@ -1,14 +1,18 @@
 package com.wooki.domain.model;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -34,6 +38,18 @@ public class Publication {
 
 	private Date revisionDate;
 
+	/** The list of comment associated to the current publication */
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
+	private List<Comment> comments;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public Chapter getChapter() {
 		return chapter;
 	}
@@ -58,4 +74,18 @@ public class Publication {
 		this.revisionDate = revisionDate;
 	}
 
+	public void addComment(Comment com) {
+		if (this.comments == null) {
+			this.comments = new ArrayList<Comment>();
+		}
+		this.comments.add(com);
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
 }

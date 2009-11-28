@@ -264,7 +264,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(chapters, "Chapters are missing.");
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
-		Publication published = chapterManager.getLastPublishedContent(chapters
+		String published = chapterManager.getLastPublishedContent(chapters
 				.get(0).getId());
 		Assert.assertNull(published, "No revision has been published.");
 
@@ -275,8 +275,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
 		Assert.assertNotNull(published, "No revision has been published.");
-		Assert.assertNotNull(published.getContent());
-		Assert.assertEquals(new String(published.getContent()),
+		Assert.assertEquals(published,
 				"<p id=\"0\">Tapestry is totally amazing</p>");
 
 	}

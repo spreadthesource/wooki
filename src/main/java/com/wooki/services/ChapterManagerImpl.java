@@ -1,8 +1,6 @@
 package com.wooki.services;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.PublicationDAO;
-import com.wooki.domain.model.User;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.User;
 import com.wooki.services.parsers.DOMManager;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -56,7 +54,7 @@ public class ChapterManagerImpl implements ChapterManager {
 	}
 
 	public Chapter findById(Long chapterId) {
-		if(chapterId == null) {
+		if (chapterId == null) {
 			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
 		return this.chapterDao.findById(chapterId);
@@ -97,14 +95,24 @@ public class ChapterManagerImpl implements ChapterManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			published
-					.setRevisionDate(Calendar.getInstance().getTime());
+			published.setRevisionDate(Calendar.getInstance().getTime());
 			publicationDao.create(published);
 		}
 	}
 
-	public Publication getLastPublishedContent(Long chapterId) {
-		return publicationDao.findLastRevision(chapterId);
+	public String getLastPublishedContent(Long chapterId) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException();
+		}
+		Publication published = publicationDao.findLastRevision(chapterId);
+		if (published != null && published.getContent() != null) {
+			try {
+				return new String(published.getContent(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	@Transactional(readOnly = false)

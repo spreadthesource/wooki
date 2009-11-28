@@ -1,8 +1,5 @@
 package com.wooki.pages.chapter;
 
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
@@ -10,7 +7,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
-import com.wooki.domain.model.Publication;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
 
@@ -50,16 +46,8 @@ public class Index {
 		// Get book related information
 		this.book = this.bookManager.findById(bookId);
 		this.chapter = this.chapterManager.findById(chapterId);
-		Publication published = this.chapterManager
-				.getLastPublishedContent(chapterId);
-		if (published != null && published.getContent() != null) {
-			try {
-				this.content = new String(published.getContent(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		this.content = this.chapterManager
+				.getLastPublishedContent(this.chapterId);
 
 	}
 

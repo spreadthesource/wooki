@@ -1,10 +1,7 @@
 package com.wooki.domain.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -58,10 +54,6 @@ public class Chapter {
 	@Lob
 	private byte[] content;
 
-	/** The list of comment associated to the chapter */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", fetch = FetchType.LAZY)
-	private List<Comment> comments;
-
 	/**
 	 * Constructor used to retrieve only required information for chapters
 	 * display.
@@ -78,13 +70,6 @@ public class Chapter {
 
 	public Chapter() {
 
-	}
-
-	public void addComment(Comment com) {
-		if (this.comments == null) {
-			this.comments = new ArrayList<Comment>();
-		}
-		this.comments.add(com);
 	}
 
 	public Long getId() {
@@ -133,14 +118,6 @@ public class Chapter {
 
 	public void setContent(byte[] content) {
 		this.content = content;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
 	}
 
 	public Book getBook() {

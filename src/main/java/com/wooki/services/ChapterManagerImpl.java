@@ -33,21 +33,21 @@ public class ChapterManagerImpl implements ChapterManager {
 	private DOMManager domManager;
 
 	@Transactional(readOnly = false)
-	public Comment addComment(Chapter chapter, User author, String content,
+	public Comment addComment(Long publicationId, User author, String content,
 			String domId) {
-		if (chapter == null || content == null) {
+		if (publicationId == null || content == null) {
 			throw new IllegalArgumentException(
 					"Chapter and comment cannot be null for addition.");
 		}
 
-		Chapter toUpdate = chapterDao.findById(chapter.getId());
+		Publication toUpdate = publicationDao.findById(publicationId);
 		Comment comment = new Comment();
 		comment.setState(CommentState.OPEN);
 		comment.setCreationDate(new Date());
 		comment.setDomId(domId);
 		comment.setUser(author);
 		comment.setContent(content);
-		comment.setChapter(chapter);
+		comment.setPublication(toUpdate);
 		toUpdate.addComment(comment);
 
 		return comment;
@@ -85,7 +85,7 @@ public class ChapterManagerImpl implements ChapterManager {
 			throw new IllegalArgumentException(
 					"Chapter parameter cannot be null for publication.");
 		}
-		if (chapter != null) {
+		if (chapter != null && chapter.getContent() != null) {
 			Publication published = new Publication();
 			published.setChapter(chapter);
 			try {
@@ -115,6 +115,14 @@ public class ChapterManagerImpl implements ChapterManager {
 		return null;
 	}
 
+	public Publication getLastPublished(Long chapterId) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException();
+		}
+		Publication published = publicationDao.findLastRevision(chapterId);
+		return published;
+	}
+	
 	@Transactional(readOnly = false)
 	public void delete(Chapter chapter) {
 		if (chapter == null) {

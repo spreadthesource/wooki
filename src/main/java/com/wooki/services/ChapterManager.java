@@ -24,7 +24,7 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	Comment addComment(Chapter chapter, User author, String content,
+	Comment addComment(Long publicationId, User author, String content,
 			String domId);
 
 	/**
@@ -51,13 +51,21 @@ public interface ChapterManager {
 	void publishChapter(Long chapter);
 
 	/**
-	 * Find the last published chapter.
+	 * Find the last published chapter content.
 	 * 
 	 * @param chapterId
 	 * @return
 	 */
 	String getLastPublishedContent(Long chapterId);
 
+	/**
+	 * Get the last publication for a given chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	Publication getLastPublished(Long chapterId);
+	
 	/**
 	 * When a chapter content is update then all its related comments must be
 	 * re-organized for the sake of consistency.

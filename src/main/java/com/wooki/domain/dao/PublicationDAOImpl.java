@@ -21,6 +21,7 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long>
 		try {
 			Criteria crit = getSession().createCriteria(Publication.class);
 			crit.addOrder(Order.desc("revisionDate"));
+			crit.setMaxResults(1);
 			crit.add(Restrictions.eq("chapter.id", chapterId));
 			List<Publication> published = crit.list();
 			if (published != null && published.size() > 0) {

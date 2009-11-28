@@ -21,16 +21,16 @@ public class CommentManagerImpl implements CommentManager {
 		if (bookId == null) {
 			throw new IllegalArgumentException("BookId cannot be null");
 		}
-		return commentDao.listForBook(bookId);
-	}
-
-	public List<Comment> listOpenForBook(Long bookId) {
-		// TODO Auto-generated method stub
+		// TODO Aggregate for all publication.
 		return null;
 	}
 
-	public List<Comment> listOpenForChapter(Long chapterId) {
-		return commentDao.listOpenForChapter(chapterId);
+	public List<Comment> listOpenForPublication(Long chapterId) {
+		return commentDao.listOpenForPublication(chapterId);
+	}
+
+	public List<Object[]> listCommentInfos(Long publicationId) {
+		return commentDao.listCommentsInforForPublication(publicationId);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)

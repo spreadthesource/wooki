@@ -1,11 +1,7 @@
 package com.wooki.domain.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -49,8 +44,7 @@ public class Chapter {
 	private String slugTitle;
 
 	/** Last editing date */
-	@Temporal(TemporalType.DATE)
-	private Date lastModifed;
+	private Date lastModified;
 
 	/** Creation date */
 	@Temporal(TemporalType.DATE)
@@ -58,18 +52,24 @@ public class Chapter {
 
 	/** Content of the book */
 	@Lob
-	@Basic(fetch = FetchType.LAZY)
-	private String content;
+	private byte[] content;
 
-	/** The list of comment associated to the chapter */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "chapter", fetch = FetchType.LAZY)
-	private List<Comment> comments;
+	/**
+	 * Constructor used to retrieve only required information for chapters
+	 * display.
+	 * 
+	 * @param id
+	 * @param title
+	 * @param lastModified
+	 */
+	public Chapter(long id, String title, Date lastModified) {
+		this.id = id;
+		this.title = title;
+		this.lastModified = lastModified;
+	}
 
-	public void addComment(Comment com) {
-		if (this.comments == null) {
-			this.comments = new ArrayList<Comment>();
-		}
-		this.comments.add(com);
+	public Chapter() {
+
 	}
 
 	public Long getId() {
@@ -96,12 +96,12 @@ public class Chapter {
 		this.slugTitle = titleSlug;
 	}
 
-	public Date getLastModifed() {
-		return lastModifed;
+	public Date getLastModified() {
+		return lastModified;
 	}
 
-	public void setLastModifed(Date lastModifed) {
-		this.lastModifed = lastModifed;
+	public void setLastModified(Date lastModifed) {
+		this.lastModified = lastModifed;
 	}
 
 	public Date getCreationDate() {
@@ -112,20 +112,12 @@ public class Chapter {
 		this.creationDate = creationDate;
 	}
 
-	public String getContent() {
+	public byte[] getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(byte[] content) {
 		this.content = content;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
 	}
 
 	public Book getBook() {

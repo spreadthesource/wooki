@@ -9,4 +9,8 @@ public class BookLayout extends WookiBase {
 	@Parameter(defaultPrefix = "literal")
 	@Property
 	private String title;
+
+	@Property
+	@Parameter
+	private Long bookId;
 }

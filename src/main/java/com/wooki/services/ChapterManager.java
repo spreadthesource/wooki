@@ -24,9 +24,16 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	Comment addComment(Chapter chapter, User author, String content,
+	Comment addComment(Long publicationId, User author, String content,
 			String domId);
 
+	/**
+	 * Load a chapter.
+	 *
+	 * @return
+	 */
+	Chapter findById(Long chapterId);
+	
 	/**
 	 * Retrieve the content for a given chapter. Content is lazy loaded for the
 	 * sake of performance.
@@ -38,18 +45,26 @@ public interface ChapterManager {
 
 	/**
 	 * Publish chapter content
-	 *
+	 * 
 	 * @param chapterId
 	 */
 	void publishChapter(Long chapter);
 
 	/**
-	 * Find the last published chapter.
+	 * Find the last published chapter content.
+	 * 
+	 * @param chapterId
+	 * @return
+	 */
+	String getLastPublishedContent(Long chapterId);
+
+	/**
+	 * Get the last publication for a given chapter.
 	 *
 	 * @param chapterId
 	 * @return
 	 */
-	Publication getLastPublishedContent(Long chapterId);
+	Publication getLastPublished(Long chapterId);
 	
 	/**
 	 * When a chapter content is update then all its related comments must be
@@ -74,4 +89,14 @@ public interface ChapterManager {
 	 * @return
 	 */
 	List<Chapter> listChapters(Long bookId);
+
+	/**
+	 * List the chapters for a given book, the book abstract chapter is exclude
+	 * from this list.
+	 * 
+	 * @param bookId
+	 * @return
+	 */
+	List<Chapter> listChaptersInfo(Long bookId);
+
 }

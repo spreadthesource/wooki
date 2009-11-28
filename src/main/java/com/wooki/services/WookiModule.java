@@ -13,6 +13,7 @@ import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.AssetSource;
 import org.springframework.security.providers.AuthenticationProvider;
@@ -20,10 +21,12 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
+
+@SubModule(TapestryOverrideModule.class)
 public class WookiModule {
-	
+
 	public static final String SALT = "wookiwooki";
-	
+
 	public static void bind(ServiceBinder binder) {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);

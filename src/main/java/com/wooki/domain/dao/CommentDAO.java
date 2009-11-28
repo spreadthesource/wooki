@@ -13,25 +13,18 @@ import com.wooki.domain.model.Comment;
 public interface CommentDAO extends GenericDAO<Comment, Long> {
 
 	/**
-	 * List all the comments for a given chapter.
-	 *
-	 * @return
-	 */
-	List<Comment> listForChapter(Long chapterId);
-
-	/**
 	 * Get the list of open issues for a chapter.
 	 * 
 	 * @param chapterId
 	 * @return
 	 */
-	public List<Comment> listOpenForChapter(Long chapterId);
+	public List<Comment> listOpenForPublication(Long chapterId);
 
 	/**
-	 * List the comments by book
-	 * 
+	 * List the comments number by block for a given publication.
+	 *
 	 * @return
 	 */
-	List<Comment> listForBook(Long book);
-
+	public List<Object[]> listCommentsInforForPublication(Long publicationId);
+	
 }

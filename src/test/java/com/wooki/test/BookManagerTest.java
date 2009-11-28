@@ -73,7 +73,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Chapter chapterOne = bookManager.addChapter(productBook,
 				"Requirements", john.getUsername());
 		chapterManager.updateContent(chapterOne.getId(),
-				"<p>You will need ...</p>");
+				"<p>You will need Žˆ ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook,
 				"Installation", john.getUsername());
@@ -158,8 +158,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		Assert
-				.assertEquals(chapterOne.getContent(),
-						"<p>You will need ...</p>");
+				.assertEquals(new String(chapterOne.getContent()),
+						"<p>You will need Žˆ ...</p>");
 	}
 
 	@Test
@@ -175,8 +175,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		Assert.assertTrue(chapterOne.getContent().contains(
-				"<p>You will need ...</p>"));
+		Assert.assertTrue(new String(chapterOne.getContent()).contains(
+				"<p>You will need Žˆ ...</p>"));
 	}
 
 	/**
@@ -239,14 +239,25 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
 		User john = userManager.findByUsername("john");
-		Comment com = chapterManager.addComment(chapters.get(0), john,
-				"This paragraph doesn't make sense.", "0");
-		List<Comment> openComs = commentManager.listOpenForChapter(chapters
-				.get(0).getId());
+		Long chapterId = chapters.get(1).getId();
+		
+		chapterManager.publishChapter(chapterId);
+		Publication published = chapterManager.getLastPublished(chapterId);
+		Assert.assertNotNull(published);
+		
+		Comment com = chapterManager.addComment(published.getId(), john,
+				"This paragraph doesn't make sense.", "c0");
+		List<Comment> openComs = commentManager.listOpenForPublication(published.getId());
 
 		Assert.assertNotNull(openComs);
 		Assert.assertEquals(openComs.size(), 1,
 				"There is at least one open comment.");
+		
+		List<Object[]> comInfos = commentManager.listCommentInfos(published.getId());
+		Assert.assertNotNull(comInfos);
+		Assert.assertEquals(1, comInfos.size());
+		Assert.assertEquals("c0", comInfos.get(0)[0]);
+		Assert.assertEquals(new Long(1), comInfos.get(0)[1]);
 	}
 
 	/**
@@ -264,7 +275,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(chapters, "Chapters are missing.");
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
-		Publication published = chapterManager.getLastPublishedContent(chapters
+		String published = chapterManager.getLastPublishedContent(chapters
 				.get(0).getId());
 		Assert.assertNull(published, "No revision has been published.");
 
@@ -275,9 +286,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
 		Assert.assertNotNull(published, "No revision has been published.");
-		Assert.assertNotNull(published.getContent());
-		Assert.assertEquals(published.getContent(),
-				"<p id=\"0\">Tapestry is totally amazing</p>");
+		Assert.assertEquals(published,
+				"<p id=\"b0\" class=\"commentable\">Tapestry is totally amazing</p>");
 
 	}
 }

@@ -1,6 +1,7 @@
 package com.wooki.pages.book;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.RenderSupport;
@@ -11,13 +12,21 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;
+import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
+import com.wooki.services.CommentManager;
 import com.wooki.services.utils.DateUtils;
 
+/**
+ * This page displays a book with its table of contents.
+ * 
+ * @author ccordenier
+ * 
+ */
 public class Index {
 
 	@Inject
@@ -25,6 +34,9 @@ public class Index {
 
 	@Inject
 	private ChapterManager chapterManager;
+
+	@Inject
+	private CommentManager commentManager;
 
 	@Inject
 	private RenderSupport support;
@@ -36,7 +48,7 @@ public class Index {
 	private Book book;
 
 	@Property
-	private com.wooki.domain.model.Chapter bookAbstract;
+	private Long bookAbstractId;
 
 	@Property
 	private User currentUser;
@@ -50,6 +62,21 @@ public class Index {
 	@Property
 	private String abstractContent;
 
+	@Property
+	private List<User> authors;
+
+	@Property
+	private List<Chapter> chaptersInfo;
+
+	@Property
+	private List<Object[]> commentsInfos;
+
+	@Property
+	private Object[] currentComInfo;
+
+	@Property
+	private Chapter currentChapter;
+
 	private Long bookId;
 
 	/**
@@ -60,14 +87,29 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void setupBook(Long bookId) {
 		this.bookId = bookId;
-		book = bookManager.findById(bookId);
-		Publication published = chapterManager
-				.getLastPublishedContent(bookManager.getBookAbstract(book)
-						.getId());
-		if (published != null) {
-			abstractContent = published.getContent();
+
+		// Get book related information
+		this.book = bookManager.findById(bookId);
+		this.authors = book.getAuthors();
+
+		// List chapter infos
+		List<Chapter> chapters = chapterManager.listChaptersInfo(bookId);
+		this.bookAbstractId = chapters.get(0).getId();
+
+		if (chapters.size() > 0) {
+			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
-		bookAbstract = bookManager.getBookAbstract(book);
+
+		Publication published = this.chapterManager
+				.getLastPublished(this.bookAbstractId);
+		if (published != null) {
+			// Get abstract content to display
+			this.abstractContent = this.chapterManager
+					.getLastPublishedContent(this.bookAbstractId);
+			this.commentsInfos = this.commentManager.listCommentInfos(published
+					.getId());
+		}
+
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -76,12 +118,29 @@ public class Index {
 	}
 
 	/**
-	 * Get edit context for chapter 
-	 *
+	 * Get edit context for chapter
+	 * 
 	 * @return
 	 */
 	public Object[] getEditCtx() {
-		return new Object[] { this.bookId, this.bookAbstract.getId() };
+		return new Object[] { this.bookId, this.bookAbstractId };
+	}
+
+	/**
+	 * Get id to link to chapter display
+	 * 
+	 * @return
+	 */
+	public Object[] getChapterCtx() {
+		return new Object[] { this.bookId, this.currentChapter.getId() };
+	}
+
+	public String getCurrentCommDomId() {
+		return (String) currentComInfo[0];
+	}
+
+	public Long getCurrentCommNb() {
+		return (Long) currentComInfo[1];
 	}
 
 	@AfterRender
@@ -103,7 +162,7 @@ public class Index {
 	 * @return
 	 */
 	public boolean isNotLastAuthor() {
-		if (loopIdx == this.book.getAuthors().size()) {
+		if (loopIdx < this.authors.size() - 1) {
 			return true;
 		}
 		return false;

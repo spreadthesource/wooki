@@ -31,7 +31,7 @@ public class Comment {
 	private String title;
 
 	@ManyToOne
-	private Chapter chapter;
+	private Publication publication;
 
 	@OneToOne
 	private CommentLabel label;
@@ -67,12 +67,12 @@ public class Comment {
 		this.title = title;
 	}
 
-	public Chapter getChapter() {
-		return chapter;
+	public Publication getPublication() {
+		return publication;
 	}
 
-	public void setChapter(Chapter chapter) {
-		this.chapter = chapter;
+	public void setPublication(Publication chapter) {
+		this.publication = chapter;
 	}
 
 	public CommentLabel getLabel() {

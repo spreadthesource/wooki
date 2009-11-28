@@ -125,7 +125,7 @@ public class Index {
 		index.setBookId(created.getId());
 		return index;
 	}
-	
+
 	public Block getUserCtx() {
 		if (this.username == null) {
 			return presBlock;

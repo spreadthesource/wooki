@@ -2,6 +2,8 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -23,16 +25,28 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		}
 
 		try {
-			String result = (String) getSession().getNamedQuery(
+			byte[] result = (byte []) getSession().getNamedQuery(
 					"com.wooki.domain.model.chapter.getContent").setParameter(
 					"id", chapter.getId()).uniqueResult();
-			return result;
+			if(result == null) {
+				return "";
+			}
+			return new String(result);			
 		} catch (RuntimeException ex) {
 			logger.error(String.format(
 					"Error while getting content content for chapter %s",
 					chapter), ex);
 			return null;
 		}
+	}
+
+	public List<Chapter> listChapterInfo(Long bookId) {
+		if(bookId == null) {
+			throw new IllegalArgumentException("Book id should not be null while lis chapters informations");
+		}
+		Query query = entityManager.createQuery(String.format("select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book", Chapter.class.getName(), Chapter.class.getName()));
+		query.setParameter("book", bookId);
+		return query.getResultList();
 	}
 
 	public List<Chapter> listChapters(Long idBook) {

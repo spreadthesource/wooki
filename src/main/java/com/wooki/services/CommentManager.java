@@ -26,16 +26,14 @@ public interface CommentManager {
 	 * 
 	 * @return
 	 */
-	List<Comment> listOpenForChapter(Long chapterId);
+	List<Comment> listOpenForPublication(Long chapterId);
 
 	/**
-	 * List all the open issues for a book. It does not include chapters related
-	 * comments.
 	 * 
-	 * @param bookId
+	 * @param chapterId
 	 * @return
 	 */
-	List<Comment> listOpenForBook(Long bookId);
+	List<Object[]> listCommentInfos(Long chapterId);
 
 	/**
 	 * Can change the state of a comment to solved.

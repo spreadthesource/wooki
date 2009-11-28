@@ -29,6 +29,14 @@ public interface ChapterDAO extends GenericDAO<Chapter, Long> {
 	List<Chapter> listChapters(Long bookId);
 
 	/**
+	 * List information chapter, do not load chapter content.
+	 *
+	 * @param bookId
+	 * @return
+	 */
+	List<Chapter> listChapterInfo(Long bookId);
+	
+	/**
 	 * List the last modified elements.
 	 *
 	 * @param id The id of the book

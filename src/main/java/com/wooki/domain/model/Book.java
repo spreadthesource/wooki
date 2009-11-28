@@ -34,8 +34,8 @@ public class Book {
 	@Column(name = "id_book", unique = true, nullable = false)
 	private Long id;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns = { @JoinColumn(name = "surname") })
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private List<User> users;
 
 	/**

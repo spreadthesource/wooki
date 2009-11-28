@@ -1,6 +1,6 @@
 package com.wooki.services;
 
-import java.sql.Timestamp;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -9,13 +9,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.PublicationDAO;
-import com.wooki.domain.model.User;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.User;
 import com.wooki.services.parsers.DOMManager;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -32,24 +33,31 @@ public class ChapterManagerImpl implements ChapterManager {
 	private DOMManager domManager;
 
 	@Transactional(readOnly = false)
-	public Comment addComment(Chapter chapter, User author, String content,
+	public Comment addComment(Long publicationId, User author, String content,
 			String domId) {
-		if (chapter == null || content == null) {
+		if (publicationId == null || content == null) {
 			throw new IllegalArgumentException(
 					"Chapter and comment cannot be null for addition.");
 		}
 
-		Chapter toUpdate = chapterDao.findById(chapter.getId());
+		Publication toUpdate = publicationDao.findById(publicationId);
 		Comment comment = new Comment();
 		comment.setState(CommentState.OPEN);
 		comment.setCreationDate(new Date());
 		comment.setDomId(domId);
 		comment.setUser(author);
 		comment.setContent(content);
-		comment.setChapter(chapter);
+		comment.setPublication(toUpdate);
 		toUpdate.addComment(comment);
 
 		return comment;
+	}
+
+	public Chapter findById(Long chapterId) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException("Chapter id cannot be null.");
+		}
+		return this.chapterDao.findById(chapterId);
 	}
 
 	public String getContent(Long chapterId) {
@@ -64,8 +72,8 @@ public class ChapterManagerImpl implements ChapterManager {
 	public void updateContent(Long chapterId, String content) {
 		Chapter chapter = chapterDao.findById(chapterId);
 		if (chapter != null) {
-			chapter.setContent(content);
-			chapter.setLastModifed(new Date());
+			chapter.setContent(content.getBytes());
+			chapter.setLastModified(Calendar.getInstance().getTime());
 			chapterDao.update(chapter);
 		}
 	}
@@ -77,19 +85,44 @@ public class ChapterManagerImpl implements ChapterManager {
 			throw new IllegalArgumentException(
 					"Chapter parameter cannot be null for publication.");
 		}
-		if (chapter != null) {
+		if (chapter != null && chapter.getContent() != null) {
 			Publication published = new Publication();
 			published.setChapter(chapter);
-			published.setContent(domManager.adaptContent(chapter.getContent()));
-			published.setRevisionDate(new Timestamp(System.currentTimeMillis()));
+			try {
+				published.setContent(domManager.adaptContent(
+						new String(chapter.getContent())).getBytes("UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			published.setRevisionDate(Calendar.getInstance().getTime());
 			publicationDao.create(published);
 		}
 	}
 
-	public Publication getLastPublishedContent(Long chapterId) {
-		return publicationDao.findLastRevision(chapterId);
+	public String getLastPublishedContent(Long chapterId) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException();
+		}
+		Publication published = publicationDao.findLastRevision(chapterId);
+		if (published != null && published.getContent() != null) {
+			try {
+				return new String(published.getContent(), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
+	public Publication getLastPublished(Long chapterId) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException();
+		}
+		Publication published = publicationDao.findLastRevision(chapterId);
+		return published;
+	}
+	
 	@Transactional(readOnly = false)
 	public void delete(Chapter chapter) {
 		if (chapter == null) {
@@ -102,6 +135,10 @@ public class ChapterManagerImpl implements ChapterManager {
 
 	public List<Chapter> listChapters(Long bookId) {
 		return chapterDao.listChapters(bookId);
+	}
+
+	public List<Chapter> listChaptersInfo(Long bookId) {
+		return chapterDao.listChapterInfo(bookId);
 	}
 
 }

@@ -25,16 +25,16 @@ public class User implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
+	@Column(nullable = false, name = "id_user")
 	private Long id;
 
 	@Column(nullable = false, unique = true)
-	private String username; 
+	private String username;
 
 	@Column(nullable = false)
 	private String fullname;
-	
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "users")
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
 	private List<Book> books;
 
 	@Column(nullable = false)

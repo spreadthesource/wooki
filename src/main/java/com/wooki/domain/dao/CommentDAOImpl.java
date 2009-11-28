@@ -2,6 +2,8 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -17,30 +19,13 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 
 	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
 
-	public List<Comment> listForChapter(Long chapterId) {
+	public List<Comment> listOpenForPublication(Long chapterId) {
 		if (chapterId == null) {
 			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
 		try {
 			Criteria criteria = getSession().createCriteria(Comment.class);
-			criteria.add(Restrictions.eq("chapter.id", chapterId));
-			List<Comment> list = (List<Comment>) criteria.list();
-			return list;
-		} catch (Exception ex) {
-			logger.error(String.format(
-					"Error while listing comments for chapter %d", chapterId),
-					ex);
-			return null;
-		}
-	}
-
-	public List<Comment> listOpenForChapter(Long chapterId) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException("Chapter id cannot be null.");
-		}
-		try {
-			Criteria criteria = getSession().createCriteria(Comment.class);
-			criteria.add(Restrictions.eq("chapter.id", chapterId));
+			criteria.add(Restrictions.eq("publication.id", chapterId));
 			criteria.add(Restrictions.eq("state", CommentState.OPEN));
 
 			List<Comment> list = (List<Comment>) criteria.list();
@@ -54,20 +39,17 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		}
 	}
 
-	public List<Comment> listForBook(Long book) {
-		if (book == null) {
-			throw new IllegalArgumentException("Book id cannot be null.");
+	public List<Object[]> listCommentsInforForPublication(Long publicationId) {
+		if (publicationId == null) {
+			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
-		try {
-			Criteria criteria = getSession().createCriteria(Comment.class);
-			criteria.add(Restrictions.eq("chapter.book.id", book));
-			List<Comment> list = (List<Comment>) criteria.list();
-			return list;
-		} catch (RuntimeException ex) {
-			logger.error(String.format(
-					"Error while listing comments for book %d", book), ex);
-			return null;
-		}
+		String queryStr = String
+				.format(
+						"select c.domId, count(c.domId) from %s c where c.publication.id=:id group by c.domId",
+						Comment.class.getName());
+		Query query = entityManager.createQuery(queryStr);
+		query.setParameter("id", publicationId);
+		return query.getResultList();
 	}
 
 }

@@ -41,4 +41,8 @@ public class DialogLink implements ClientElement {
 		}
 		return this.clientId;
 	}
+	
+	protected String getDialog() {
+		return this.dialog;
+	}
 }

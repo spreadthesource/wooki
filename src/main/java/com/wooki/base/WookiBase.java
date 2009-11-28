@@ -8,11 +8,20 @@ public class WookiBase {
 
 	@Property
 	private String username;
+	
+	private boolean logged;
 
 	@PageAttached
 	private void setupUsername() {
 		username = SecurityContextHolder.getContext().getAuthentication()
 				.getName();
+		
+		if (!"anonymous".equals(username))
+			this.logged = true;
+	}
+
+	public boolean isLogged() {
+		return logged;
 	}
 
 }

@@ -8,12 +8,16 @@
 </head>
 <body>
 <div id="top">
-	<div class="body">
+	<div class="body" style="position: relative;">
 			<hgroup id="wooki"><t:pagelink t:page="index" class="button-link">
 				<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
 				<h2>Collaborative Writing</h2>
 				</t:pagelink>
 			</hgroup>
+			
+			<div id="login-dialog-form">
+			Poum dklsq dsjfsd flksd jflkqsd fl
+			</div>
 			
 			<nav id="quick-nav">
 				<ul>
@@ -21,7 +25,7 @@
 					<t:security.ifLoggedIn>
 						<li>${username} <a href="#" t:type="actionlink" t:id="logout">Logout</a></li>
 						<p:else>
-							<li>Have an account? <a href="#" t:type="pagelink" t:page="signin">Login</a></li>
+							<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="login-link">Login</a></li>
 						</p:else>
 					</t:security.ifLoggedIn>
 					<li><a href="#">FAQ</a></li>

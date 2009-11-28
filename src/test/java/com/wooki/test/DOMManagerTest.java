@@ -157,7 +157,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 				.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>");
 		Assert
 				.assertTrue(result
-						.contains("<h2 id=\"0\">SubTitle</h2><p id=\"1\">Lorem ipsum</p><h3 id=\"2\">SubTitle2</h3><p id=\"3\">Lorem ipsum</p>"));
+						.contains("<h2 id=\"b0\" class=\"commentable\">SubTitle</h2><p id=\"b1\" class=\"commentable\">Lorem ipsum</p><h3 id=\"b2\" class=\"commentable\">SubTitle2</h3><p id=\"b3\" class=\"commentable\">Lorem ipsum</p>"));
 	}
 
 	/**

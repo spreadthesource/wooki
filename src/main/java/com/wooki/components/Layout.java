@@ -57,7 +57,8 @@ public class Layout extends WookiBase {
 			
 			System.out.println(data);
 			
-			support.addInit("initLoginDialog", data);
+			// this is WIP
+			//support.addInit("initLoginDialog", data);
 		}
 	}
 

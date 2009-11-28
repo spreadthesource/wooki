@@ -28,7 +28,7 @@
 					<a t:type="linksubmit" class="radied-box active-button">Signup</a>
 				</div>
 				
-				<div class="form-footer">By clicking submit your confirm that you accept Wooki <a href="#">terms of service</a></div>
+				<div class="form-footer">By submitting this form your confirm that you accept Wooki <a href="#">terms of service</a></div>
 			</div>
     	</form>
     </section>

@@ -40,7 +40,7 @@ public class CommentDialog implements ClientElement {
 
 		// default wooki dialog settings
 		JSONObject data = new JSONObject();
-		data.put("elt", resources.getId());
+		data.put("elt", getClientId());
 		JSONObject params = new JSONObject();
 		params.put("modal", true);
 		params.put("width", 780);
@@ -48,7 +48,6 @@ public class CommentDialog implements ClientElement {
 		params.put("autoOpen", false);
 		data.put("params", params);
 		support.addInit("initJQueryDialog", data);
-
 	}
 
 	public String getClientId() {

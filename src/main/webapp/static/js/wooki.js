@@ -35,12 +35,50 @@ jQuery.extend(Wooki, {
 
 jQuery.extend(Tapestry.Initializer,{
 	/**
+     * Convert a form or link into a trigger of an Ajax update that
+     * updates the indicated Zone.
+     * @param element id or instance of <form> or <a> element
+     * @param zoneId id of the element to update when link clicked or form submitted
+     * @param url absolute component event request URL
+     */
+	openJQueryAjaxDialogOnClick : function(element, zoneId, dialogId, url)
+    {
+        element = $(element);
+
+        $T(element).zoneId = zoneId;
+        
+        element.observe("click", function(event)
+        {
+            Event.stop(event);
+
+            var zoneObject = Tapestry.findZoneManager(element);
+
+            if (!zoneObject) return;
+
+            jQuery('#'+dialogId).dialog('open');
+            zoneObject.updateFromURL(url);
+        });
+    },
+	
+	/**
 	 * Initialize jquery dialog popup on click of a elt.
 	 */
 	openJQueryDialogOnClick : function(triggerId, dialogId) { 
 		jQuery('#'+triggerId).click(function() {
 			jQuery('#'+dialogId).dialog('open');
 		});
+	},
+	
+	/**
+	 * Initialize Login Dialog Box
+	 *
+	 */
+	initLoginDialog : function(data) {
+		Tapestry.debug("bottom: " + jQuery("#login-link").offset().bottom);
+		Tapestry.debug("left: " + jQuery("#login-link").offset().left);
+		
+		
+		jQuery('#'+data.elt).dialog(data.params);
 	},
 
 	/**

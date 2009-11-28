@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.PageAttached;
@@ -66,6 +67,8 @@ public class Index {
 	@Property
 	@Validate("required")
 	private String bookTitle;
+	
+	private boolean logged;
 
 	@PageAttached
 	private void setupServices() {
@@ -114,6 +117,7 @@ public class Index {
 				.getBean("activityManager");
 		freshStuffs = activityManager.listFreshStuff(10);
 	}
+
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
 	public Object createBook() {

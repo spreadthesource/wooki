@@ -41,9 +41,9 @@
 	</ol>
 	
 	<div id="comments">
-	<a href="#1" id="c1" class="comment-accessor"><div class="no-comment"></div></a>
-	<a href="#2" id="c2" class="comment-accessor"><div class="no-comment"></div></a>
-	<a href="#2" id="c3" class="comment-accessor"><div class="commented">3</div></a>
+		<t:loop t:source="commentsInfos" t:value="currentComInfo">
+			<a href="#2" id="${CurrentCommDomId}" class="comment-accessor"><div class="commented">${CurrentCommNb}</div></a>
+		</t:loop>
 	</div>
 	
 	<div class="clearer"  />

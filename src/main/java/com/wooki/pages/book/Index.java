@@ -13,17 +13,19 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookManager;
 import com.wooki.services.ChapterManager;
+import com.wooki.services.CommentManager;
 import com.wooki.services.utils.DateUtils;
 
 /**
- * This page displays a book with its table of contents. 
- *
+ * This page displays a book with its table of contents.
+ * 
  * @author ccordenier
- *
+ * 
  */
 public class Index {
 
@@ -32,6 +34,9 @@ public class Index {
 
 	@Inject
 	private ChapterManager chapterManager;
+
+	@Inject
+	private CommentManager commentManager;
 
 	@Inject
 	private RenderSupport support;
@@ -64,6 +69,12 @@ public class Index {
 	private List<Chapter> chaptersInfo;
 
 	@Property
+	private List<Object[]> commentsInfos;
+
+	@Property
+	private Object[] currentComInfo;
+
+	@Property
 	private Chapter currentChapter;
 
 	private Long bookId;
@@ -89,8 +100,15 @@ public class Index {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
 
-		// Get abstract content to display
-		this.abstractContent = this.chapterManager.getLastPublishedContent(this.bookAbstractId);
+		Publication published = this.chapterManager
+				.getLastPublished(this.bookAbstractId);
+		if (published != null) {
+			// Get abstract content to display
+			this.abstractContent = this.chapterManager
+					.getLastPublishedContent(this.bookAbstractId);
+			this.commentsInfos = this.commentManager.listCommentInfos(published
+					.getId());
+		}
 
 	}
 
@@ -115,6 +133,14 @@ public class Index {
 	 */
 	public Object[] getChapterCtx() {
 		return new Object[] { this.bookId, this.currentChapter.getId() };
+	}
+
+	public String getCurrentCommDomId() {
+		return (String) currentComInfo[0];
+	}
+
+	public Long getCurrentCommNb() {
+		return (Long) currentComInfo[1];
 	}
 
 	@AfterRender

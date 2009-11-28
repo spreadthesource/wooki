@@ -43,6 +43,8 @@ public class CommentDialog implements ClientElement {
 		data.put("elt", getClientId());
 		JSONObject params = new JSONObject();
 		params.put("modal", true);
+		params.put("resizable", false);
+		params.put("draggable", false);
 		params.put("width", 780);
 		params.put("minHeight", 30);
 		params.put("autoOpen", false);

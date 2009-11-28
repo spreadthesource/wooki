@@ -15,6 +15,28 @@
 				</t:pagelink>
 			</hgroup>
 			
+			<div id="login-dialog-form">
+			<form id="loginForm" action="${loginCheckUrl}" method="POST">
+			<h1>Sign on Wooki</h1>
+    		<fieldset>
+    			<ol>
+    				<li>
+    					<label class="username" for="j_username">Username</label>
+						<input class="username" name="j_username" type="text" size="10" maxlength="30" /></li>
+					<li>
+						<label class="password" for="j_password">Password</label>
+						<input class="password" name="j_password" type="password" size="10" maxlength="30" /><small><a href="#">Forgot</a></small>
+					</li>
+    			</ol>
+			</fieldset>
+			<fieldset class="rememberMe">
+				<input type="checkbox" id="rememberMe"/><small>Remember me</small>
+			</fieldset>
+			<fieldset>
+				<input id="submit" class="submit" type="submit" value="log in"/>
+			</fieldset>
+			</form>
+			</div>
 			
 			<nav id="quick-nav">
 				<ul>

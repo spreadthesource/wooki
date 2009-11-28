@@ -38,7 +38,7 @@ public class StartupServiceImpl implements StartupService {
 
 		// Create books
 		Book productBook = bookManager.create(
-				"Tapestry 5 : When art meets Development", "john");
+				"Tapestry 5 : When development meets Art", "john");
 		Book cacheBook = bookManager.create("My Cache Product Book", "john");
 
 		// Create new chapters and modify its content

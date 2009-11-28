@@ -35,12 +35,17 @@ jQuery.extend(Wooki, {
 
 jQuery.extend(Tapestry.Initializer,{
 	/**
-     * Convert a form or link into a trigger of an Ajax update that
-     * updates the indicated Zone.
-     * @param element id or instance of <form> or <a> element
-     * @param zoneId id of the element to update when link clicked or form submitted
-     * @param url absolute component event request URL
-     */
+	 * Convert a form or link into a trigger of an Ajax update that updates the
+	 * indicated Zone.
+	 * 
+	 * @param element
+	 *            id or instance of <form> or <a> element
+	 * @param zoneId
+	 *            id of the element to update when link clicked or form
+	 *            submitted
+	 * @param url
+	 *            absolute component event request URL
+	 */
 	openJQueryAjaxDialogOnClick : function(element, zoneId, dialogId, url)
     {
         element = $(element);
@@ -71,19 +76,35 @@ jQuery.extend(Tapestry.Initializer,{
 	
 	/**
 	 * Initialize Login Dialog Box
-	 *
+	 * 
 	 */
 	initLoginDialog : function(data) {
-		Tapestry.debug("bottom: " + jQuery("#login-link").offset().bottom);
-		Tapestry.debug("left: " + jQuery("#login-link").offset().left);
+		link = jQuery("#login-link");
+		dialog = jQuery('#login-dialog-form')
+
+		x = link.position().left + link.width() + (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
+		y = link.position().top + link.height() + parseInt(link.css('padding-bottom'));
 		
-		
-		jQuery('#'+data.elt).dialog(data.params);
+		link.toggle(
+			function () {
+				link.addClass('login-link-active');
+				dialog.css({
+					'top': y + 'px',
+					'left': x + 'px',
+					'display': 'block'
+				});
+			},
+			function () {
+				link.removeClass('login-link-active');
+				dialog.css('display', 'none');
+			});
+			       
+			
 	},
 
 	/**
 	 * Build a JQuery Dialog box.
-	 *
+	 * 
 	 */
 	initJQueryDialog : function(data) {
 		jQuery('#'+data.elt).dialog(data.params);
@@ -91,7 +112,7 @@ jQuery.extend(Tapestry.Initializer,{
 
 	/**
 	 * Transform a textarea object into a wymeditor instance.
-	 *
+	 * 
 	 */
 	initWymEdit : function(data) {
 		jQuery('#'+data.elt).wymeditor(data.params);

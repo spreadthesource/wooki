@@ -56,7 +56,7 @@ public interface ChapterManager {
 	 * @param chapterId
 	 * @return
 	 */
-	Publication getLastPublishedContent(Long chapterId);
+	String getLastPublishedContent(Long chapterId);
 
 	/**
 	 * When a chapter content is update then all its related comments must be

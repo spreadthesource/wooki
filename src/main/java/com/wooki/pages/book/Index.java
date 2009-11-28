@@ -1,6 +1,5 @@
 package com.wooki.pages.book;
 
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
-import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookManager;
@@ -92,17 +90,7 @@ public class Index {
 		}
 
 		// Get abstract content to display
-		Publication published = chapterManager
-				.getLastPublishedContent(this.bookAbstractId);
-		if (published != null) {
-			try {
-				this.abstractContent = new String(published.getContent(),
-						"UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		this.abstractContent = this.chapterManager.getLastPublishedContent(this.bookAbstractId);
 
 	}
 

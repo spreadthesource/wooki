@@ -1,7 +1,6 @@
 package com.wooki.domain.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -23,20 +22,18 @@ import javax.persistence.OneToOne;
  * 
  */
 @Entity
-public class Publication {
+public class Publication extends WookiEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long id;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Chapter chapter;
 
 	@Lob
 	private byte[] content;
-
-	private Date revisionDate;
 
 	/** The list of comment associated to the current publication */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
@@ -64,14 +61,6 @@ public class Publication {
 
 	public void setContent(byte[] content) {
 		this.content = content;
-	}
-
-	public Date getRevisionDate() {
-		return revisionDate;
-	}
-
-	public void setRevisionDate(Date revisionDate) {
-		this.revisionDate = revisionDate;
 	}
 
 	public void addComment(Comment com) {

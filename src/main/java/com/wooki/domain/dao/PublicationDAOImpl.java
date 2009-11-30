@@ -2,9 +2,8 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.Query;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -18,21 +17,13 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long>
 	private Logger logger = LoggerFactory.getLogger(PublicationDAO.class);
 
 	public Publication findLastRevision(Long chapterId) {
-		try {
-			Criteria crit = getSession().createCriteria(Publication.class);
-			crit.addOrder(Order.desc("revisionDate"));
-			crit.setMaxResults(1);
-			crit.add(Restrictions.eq("chapter.id", chapterId));
-			List<Publication> published = crit.list();
-			if (published != null && published.size() > 0) {
-				return published.get(0);
-			} else {
-				return null;
-			}
-		} catch (RuntimeException re) {
-			logger.error(String.format(
-					"Error while searching for last revision of %d chapter",
-					chapterId), re);
+		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id order by p.creationDate desc");
+		query.setParameter("id", chapterId);
+		query.setMaxResults(1);
+		List<Publication> published = query.getResultList();
+		if (published != null && published.size() > 0) {
+			return published.get(0);
+		} else {
 			return null;
 		}
 	}

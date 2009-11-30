@@ -6,7 +6,6 @@ import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.RequestExceptionHandler;
 
-import com.wooki.services.WookiRequestExceptionHandler;
 
 
 /**

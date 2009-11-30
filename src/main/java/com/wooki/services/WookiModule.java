@@ -21,9 +21,12 @@ import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 import org.springframework.security.userdetails.UserDetailsService;
 
+import com.wooki.services.internal.TapestryOverrideModule;
+import com.wooki.services.internal.UserDetailsServiceImpl;
+
 
 @SubModule(TapestryOverrideModule.class)
-public class WookiModule {
+public class WookiModule<T> {
 
 	public static final String SALT = "wookiwooki";
 

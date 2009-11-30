@@ -14,6 +14,10 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.biz.CommentManager;
+import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
@@ -21,10 +25,6 @@ import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
-import com.wooki.services.BookManager;
-import com.wooki.services.ChapterManager;
-import com.wooki.services.CommentManager;
-import com.wooki.services.UserManager;
 
 /**
  * Test case for WookiManager service.
@@ -114,7 +114,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		try {
 			bookManager.addChapter(myProduct, "My New Chapter", "robink");
 			// Robin is not an author of the book
-			Assert.fail();
+			Assert.fail("Robink should not be authorized to add a new chapter to 'my first product' book");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -125,7 +125,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	 */
 	@Test
 	public void testListBooksByTitle() {
-		List<Book> books = bookManager.listByTitle("Product");
+		List<Book> books = bookManager.listByTitle("%Product%");
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has one book");
 	}

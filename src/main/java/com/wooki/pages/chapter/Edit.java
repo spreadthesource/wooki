@@ -26,7 +26,7 @@ public class Edit {
 	private Long bookId;
 
 	private Long chapterId;
-	
+
 	@Property
 	private String data;
 
@@ -36,6 +36,10 @@ public class Edit {
 	public void onActivate(Long bookId, Long chapterId) {
 		this.bookId = bookId;
 		this.chapterId = chapterId;
+	}
+
+	@OnEvent(value = EventConstants.PREPARE_FOR_RENDER)
+	public void prepareFormData() {
 		this.data = chapterManager.getContent(chapterId);
 	}
 

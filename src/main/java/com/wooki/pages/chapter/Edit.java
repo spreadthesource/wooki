@@ -6,8 +6,8 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.ChapterManager;
 import com.wooki.pages.book.Index;
-import com.wooki.services.ChapterManager;
 
 /**
  * This page is used to update/publish a chapter of a given book.

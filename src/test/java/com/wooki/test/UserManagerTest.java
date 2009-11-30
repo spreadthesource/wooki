@@ -7,9 +7,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
-import com.wooki.services.UserManager;
 
 /**
  * Verify authoring management.

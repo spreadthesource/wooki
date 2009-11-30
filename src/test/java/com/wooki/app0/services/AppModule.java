@@ -15,7 +15,7 @@ import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.mockito.Mockito;
 
-import com.wooki.services.TapestryOverrideModule;
+import com.wooki.services.internal.TapestryOverrideModule;
 
 /**
  * Test application module.

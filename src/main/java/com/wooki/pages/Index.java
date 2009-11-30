@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.PageAttached;
@@ -16,10 +15,10 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.springframework.context.ApplicationContext;
 
+import com.wooki.domain.biz.ActivityManager;
+import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.FreshStuff;
-import com.wooki.services.ActivityManager;
-import com.wooki.services.BookManager;
 
 /**
  * Display an index page for wooki application. If no user logged in or

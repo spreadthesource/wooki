@@ -28,7 +28,7 @@
 	    				<td><input class="password" name="j_password" type="password" size="10" maxlength="30" /><small><a href="#">Forgot</a></small></td>
 	    			</tr>
 	    			<tr>
-	    				<th>&nbsp;</th>
+	    				<th></th>
 	    				<td><input type="checkbox" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
 	    			</tr>
 	    		</table>	

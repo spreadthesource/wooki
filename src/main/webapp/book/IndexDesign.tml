@@ -51,13 +51,8 @@
 		
 	</ol>
 	
-	<div id="comments">
-	<a href="#1" id="c1" class="comment-accessor"><div class="no-comment"></div></a>
-	<a href="#2" id="c2" class="comment-accessor"><div class="no-comment"></div></a>
-	<a href="#2" id="c3" class="comment-accessor"><div class="commented">3</div></a>
-	</div>
-	
 	<div class="clearer"  />
+
 </div>
 
 </html>

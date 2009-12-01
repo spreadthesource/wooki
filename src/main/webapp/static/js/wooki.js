@@ -1,31 +1,7 @@
 if(!Wooki) var Wooki = {};
 
 jQuery.extend(Wooki, {
-	bubbles :  {
-		init : function() {
-			jQuery('.commentable').each(function(i) {
-				
-				comment = jQuery('#' +jQuery(this).attr('id').replace('b','c'));
-				comment.css({
-					'top': (jQuery(this).offset().top + 10) + 'px',
-					'left': (jQuery(this).offset().left - 50)  + 'px',
-					'height' : jQuery(this).height() + 'px',
-				});
-				
-				comment.css('visibility','visible');
-				
-				jQuery(this).bind("mouseenter mouseleave", function(e){
-					jQuery(".comment-accessor .no-comment").css('visibility','hidden');
-							    
-				    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
-				});
-			});
-			
-			jQuery('#book').bind("mouseleave", function(e){
-				jQuery(".comment-accessor .no-comment").css('visibility','hidden');
-			});
-		}
-	}
+	
 });
 
 
@@ -116,5 +92,59 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initWymEdit : function(data) {
 		jQuery('#'+data.elt).wymeditor(data.params);
-	},	
+	},
+	
+	/**
+	 * Init bubble when a chapter is displayed on screen
+	 * 
+	 * data parameter contains the list of blocks that has comments and their number.
+	 */
+	initBubbles : function(data) {
+
+		// Append comments div
+		var bubbleDiv = jQuery("<div/>").attr("id", "comments");
+		jQuery(".entry-content").append(bubbleDiv);
+		
+		// Iterate through commentable block to create corresponding comment elt
+		jQuery('.commentable').each(function(i) {
+		
+			// Add element
+			blockId = jQuery(this).attr('id');
+			comId = jQuery(this).attr('id').replace('b','c');
+			
+			// Add comment entry
+			comment = jQuery("<a/>").attr("id", comId).attr("class", "comment-accessor");
+			jQuery("#comments").append(comment);
+
+			jQuery("#comments").append(comment);
+			
+			jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
+			
+			comment.css({
+				'top': (jQuery(this).offset().top + 10) + 'px',
+				'left': (jQuery(this).offset().left - 50)  + 'px',
+				'height' : jQuery(this).height() + 'px',
+			});
+			
+			comment.css('visibility','visible');
+			
+			jQuery(this).bind("mouseenter mouseleave", function(e){
+				jQuery(".comment-accessor .no-comment").css('visibility','hidden');
+						    
+			    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
+			});
+			
+		});
+		
+		// Set all the node that has comments
+		jQuery.each(data, function(i, val) {
+			comId = i.replace('b','c');
+			jQuery("#" + comId + " div").attr("class", "commented").css('visibility', 'visible').append(document.createTextNode(val));
+		});
+		
+		
+		jQuery('#book').bind("mouseleave", function(e){
+			jQuery(".comment-accessor .no-comment").css('visibility','hidden');
+		});
+	}
 });

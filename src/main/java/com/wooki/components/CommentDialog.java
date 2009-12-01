@@ -17,6 +17,7 @@ import org.apache.tapestry5.json.JSONObject;
  */
 @IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.2.custom.min.js")
 public class CommentDialog implements ClientElement {
+
 	@Inject
 	private RenderSupport support;
 

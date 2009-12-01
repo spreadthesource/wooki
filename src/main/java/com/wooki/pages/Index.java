@@ -66,7 +66,7 @@ public class Index {
 	@Property
 	@Validate("required")
 	private String bookTitle;
-	
+
 	private boolean logged;
 
 	@PageAttached
@@ -116,7 +116,6 @@ public class Index {
 				.getBean("activityManager");
 		freshStuffs = activityManager.listFreshStuff(10);
 	}
-
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
 	public Object createBook() {

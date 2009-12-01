@@ -40,12 +40,6 @@
 		</t:loop>
 	</ol>
 	
-	<div id="comments">
-		<t:loop t:source="commentsInfos" t:value="currentComInfo">
-			<a href="#2" id="${CurrentCommDomId}" class="comment-accessor"><div class="commented">${CurrentCommNb}</div></a>
-		</t:loop>
-	</div>
-	
 	<div class="clearer"  />
 </div>
 

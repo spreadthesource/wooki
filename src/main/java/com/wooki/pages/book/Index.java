@@ -10,6 +10,7 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
@@ -136,17 +137,15 @@ public class Index {
 		return new Object[] { this.bookId, this.currentChapter.getId() };
 	}
 
-	public String getCurrentCommDomId() {
-		return (String) currentComInfo[0];
-	}
-
-	public Long getCurrentCommNb() {
-		return (Long) currentComInfo[1];
-	}
-
 	@AfterRender
 	void addScript() {
-		support.addScript("Wooki.bubbles.init();");
+		JSONObject bubble = new JSONObject();
+		if (this.commentsInfos != null) {
+			for (Object[] obj : this.commentsInfos) {
+				bubble.put((String) obj[0], ((Long) (obj[1])).toString());
+			}
+		}
+		support.addInit("initBubbles", bubble);
 	}
 
 	public Long getBookId() {

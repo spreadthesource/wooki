@@ -74,9 +74,6 @@ public class StartupServiceImpl implements StartupService {
 				"c0");
 		chapterManager.addComment(published.getId(), john,
 				"I agree but ... :)", "c0");
-		
-		chapterManager.addComment(published.getId(), robink,
-				"mmm... Interesting", "c1");
 
 	}
 

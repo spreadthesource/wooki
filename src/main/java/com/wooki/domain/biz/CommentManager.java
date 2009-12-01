@@ -1,4 +1,4 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import java.util.List;
 

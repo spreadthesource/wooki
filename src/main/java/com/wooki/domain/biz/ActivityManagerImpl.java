@@ -1,4 +1,4 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import com.wooki.domain.model.FreshStuff;
 import com.wooki.services.utils.LastActivityMessage;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("activityManager")
+@Component("activityManager")
 public class ActivityManagerImpl implements ActivityManager {
 
 	private final static Messages MESSAGES = MessagesImpl
@@ -36,7 +36,7 @@ public class ActivityManagerImpl implements ActivityManager {
 			FreshStuff stuff = new FreshStuff();
 			stuff.setBookTitle(activity.getBookTitle());
 			stuff.setUsername(activity.getUsername());
-			stuff.setPeriod(LastActivityMessage.getActivityPeriod(activity.getEventDate().getTime()));
+			stuff.setPeriod(LastActivityMessage.getActivityPeriod(activity.getCreationDate().getTime()));
 			switch (activity.getType()) {
 			case CREATE:
 				stuff.setAction(MESSAGES.get("element-created"));

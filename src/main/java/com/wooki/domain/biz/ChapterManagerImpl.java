@@ -1,11 +1,11 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,7 @@ import com.wooki.domain.model.User;
 import com.wooki.services.parsers.DOMManager;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("chapterManager")
+@Component("chapterManager")
 public class ChapterManagerImpl implements ChapterManager {
 
 	@Autowired
@@ -61,11 +61,7 @@ public class ChapterManagerImpl implements ChapterManager {
 	}
 
 	public String getContent(Long chapterId) {
-		Chapter chapter = chapterDao.findById(chapterId);
-		if (chapter == null) {
-			return null;
-		}
-		return chapterDao.getContent(chapter);
+		return chapterDao.getContent(chapterId);
 	}
 
 	@Transactional(readOnly = false)
@@ -95,7 +91,7 @@ public class ChapterManagerImpl implements ChapterManager {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			published.setRevisionDate(Calendar.getInstance().getTime());
+			published.setCreationDate(Calendar.getInstance().getTime());
 			publicationDao.create(published);
 		}
 	}

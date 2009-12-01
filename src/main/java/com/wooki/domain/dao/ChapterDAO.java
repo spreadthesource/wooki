@@ -18,7 +18,7 @@ public interface ChapterDAO extends GenericDAO<Chapter, Long> {
 	 * @param id
 	 * @return
 	 */
-	String getContent(Chapter chapter);
+	String getContent(Long chapterId);
 
 	/**
 	 * List existing chapter for a given book.

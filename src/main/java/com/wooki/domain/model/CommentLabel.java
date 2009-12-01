@@ -13,7 +13,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class CommentLabel {
+public class CommentLabel extends WookiEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

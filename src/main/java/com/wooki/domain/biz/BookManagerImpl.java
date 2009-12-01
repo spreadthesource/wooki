@@ -1,16 +1,17 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.BookDAO;
+import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Activity;
@@ -27,7 +28,7 @@ import com.wooki.services.utils.SlugBuilder;
  * 
  */
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("bookManager")
+@Component("bookManager")
 public class BookManagerImpl implements BookManager {
 
 	@Autowired
@@ -38,6 +39,9 @@ public class BookManagerImpl implements BookManager {
 
 	@Autowired
 	private ActivityDAO activityDao;
+	
+	@Autowired
+	private ChapterDAO chapterDao;
 
 	@Transactional(readOnly = false)
 	public void addAuthor(Book book, String username) {
@@ -52,9 +56,8 @@ public class BookManagerImpl implements BookManager {
 			return;
 		}
 
-		Book toUpdate = bookDao.findById(book.getId());
-		toUpdate.addUser(toAdd);
-		bookDao.update(toUpdate);
+		book.addUser(toAdd);
+		bookDao.update(book);
 	}
 
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
@@ -66,7 +69,7 @@ public class BookManagerImpl implements BookManager {
 		}
 
 		if (!bookDao.verifyBookOwner(book.getId(), username)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException(username + " is not an author of " + book.getTitle());
 		}
 
 		// Create the new Chapter
@@ -78,16 +81,17 @@ public class BookManagerImpl implements BookManager {
 		chapter.setLastModified(creationDate);
 
 		// Get managed entity to update
-		Book toUpdate = bookDao.findById(book.getId());
-		toUpdate.addChapter(chapter);
-		chapter.setBook(toUpdate);
-
+		book = bookDao.findById(book.getId());
+		book.addChapter(chapter);
+		chapter.setBook(book);
+		this.chapterDao.create(chapter);
+		
 		// Add activity event
 		Activity activity = new Activity();
 		activity.setUsername(username);
-		activity.setBookId(toUpdate.getId());
+		activity.setBookId(book.getId());
 		activity.setChapterId(chapter.getId());
-		activity.setEventDate(creationDate);
+		activity.setCreationDate(creationDate);
 		activity.setType(EventType.UPDATE);
 		activity.setBookTitle(book.getTitle());
 		activityDao.create(activity);
@@ -108,6 +112,7 @@ public class BookManagerImpl implements BookManager {
 
 		// Add abstract
 		Chapter bookAbstract = new Chapter();
+		bookAbstract.setCreationDate(creationDate);
 		bookAbstract.setTitle("Abstract");
 		bookAbstract.setSlugTitle("Abstract");
 		book.addChapter(bookAbstract);
@@ -120,7 +125,7 @@ public class BookManagerImpl implements BookManager {
 		Activity activity = new Activity();
 		activity.setUsername(author);
 		activity.setBookId(book.getId());
-		activity.setEventDate(creationDate);
+		activity.setCreationDate(creationDate);
 		activity.setType(EventType.CREATE);
 		activity.setBookTitle(book.getTitle());
 		activityDao.create(activity);
@@ -161,18 +166,6 @@ public class BookManagerImpl implements BookManager {
 			return bookDao.listByAuthor(author.getId());
 		}
 		return null;
-	}
-
-	public void setBookDao(BookDAO bookDao) {
-		this.bookDao = bookDao;
-	}
-
-	public void setAuthorDao(UserDAO authorDao) {
-		this.authorDao = authorDao;
-	}
-
-	public void setActivityDao(ActivityDAO activityDao) {
-		this.activityDao = activityDao;
 	}
 
 }

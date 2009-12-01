@@ -1,10 +1,11 @@
-package com.wooki.services;
+package com.wooki.services.internal;
 
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.RequestExceptionHandler;
+
 
 
 /**

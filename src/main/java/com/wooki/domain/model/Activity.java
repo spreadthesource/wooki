@@ -1,7 +1,5 @@
 package com.wooki.domain.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,7 +15,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Activity {
+public class Activity extends WookiEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +29,6 @@ public class Activity {
 	private Long chapterId;
 
 	private Long bookId;
-
-	@Column(nullable = false)
-	private Date eventDate;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -77,14 +72,6 @@ public class Activity {
 
 	public void setBookId(Long bookId) {
 		this.bookId = bookId;
-	}
-
-	public Date getEventDate() {
-		return eventDate;
-	}
-
-	public void setEventDate(Date eventDate) {
-		this.eventDate = eventDate;
 	}
 
 	public EventType getType() {

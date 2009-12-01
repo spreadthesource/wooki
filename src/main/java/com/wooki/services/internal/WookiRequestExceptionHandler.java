@@ -1,4 +1,4 @@
-package com.wooki.services;
+package com.wooki.services.internal;
 
 import java.io.IOException;
 import java.util.Map;

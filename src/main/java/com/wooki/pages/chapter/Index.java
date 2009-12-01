@@ -5,10 +5,10 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
-import com.wooki.services.BookManager;
-import com.wooki.services.ChapterManager;
 
 /**
  * Display a chapter and provide link to version/revision if needed.

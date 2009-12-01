@@ -12,9 +12,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
+import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
-import com.wooki.services.UserManager;
 
 /**
  * Signup page for new authors.

@@ -2,6 +2,9 @@ package com.wooki.services;
 
 import org.springframework.context.ApplicationContext;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Publication;

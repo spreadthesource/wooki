@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -23,20 +21,11 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		if (chapterId == null) {
 			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
-		try {
-			Criteria criteria = getSession().createCriteria(Comment.class);
-			criteria.add(Restrictions.eq("publication.id", chapterId));
-			criteria.add(Restrictions.eq("state", CommentState.OPEN));
-
-			List<Comment> list = (List<Comment>) criteria.list();
-			return list;
-		} catch (RuntimeException ex) {
-			logger.error(
-					String.format(
-							"Error while list open comments for chapter %d",
-							chapterId), ex);
-			return null;
-		}
+		Query query = this.entityManager.createQuery("from " + getEntityType()
+				+ " c where c.publication.id=:pubId and c.state=:st");
+		query.setParameter("pubId", chapterId);
+		query.setParameter("st", CommentState.OPEN);
+		return query.getResultList();
 	}
 
 	public List<Object[]> listCommentsInforForPublication(Long publicationId) {
@@ -47,7 +36,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 				.format(
 						"select c.domId, count(c.domId) from %s c where c.publication.id=:id group by c.domId",
 						Comment.class.getName());
-		Query query = entityManager.createQuery(queryStr);
+		Query query = this.entityManager.createQuery(queryStr);
 		query.setParameter("id", publicationId);
 		return query.getResultList();
 	}

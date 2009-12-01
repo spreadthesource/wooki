@@ -6,8 +6,8 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.ChapterManager;
 import com.wooki.pages.book.Index;
-import com.wooki.services.ChapterManager;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -26,7 +26,7 @@ public class Edit {
 	private Long bookId;
 
 	private Long chapterId;
-	
+
 	@Property
 	private String data;
 
@@ -36,6 +36,10 @@ public class Edit {
 	public void onActivate(Long bookId, Long chapterId) {
 		this.bookId = bookId;
 		this.chapterId = chapterId;
+	}
+
+	@OnEvent(value = EventConstants.PREPARE_FOR_RENDER)
+	public void prepareFormData() {
 		this.data = chapterManager.getContent(chapterId);
 	}
 

@@ -1,18 +1,19 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
+import com.wooki.services.WookiModule;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("userManager")
+@Component("userManager")
 public class UserManagerImpl implements UserManager {
 
 	@Autowired

@@ -1,7 +1,5 @@
 package com.wooki.domain.model;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,12 +14,12 @@ import javax.persistence.OneToOne;
 
 /**
  * User added comment on existing book.
- * 
+ *
  * @author ccordenier
  * 
  */
 @Entity
-public class Comment {
+public class Comment extends WookiEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,8 +46,6 @@ public class Comment {
 	private String domId;
 
 	private String content;
-
-	private Date creationDate;
 
 	public Long getId() {
 		return id;
@@ -97,14 +93,6 @@ public class Comment {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
 	}
 
 	public User getUser() {

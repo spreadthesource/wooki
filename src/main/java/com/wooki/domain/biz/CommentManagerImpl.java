@@ -1,9 +1,9 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +11,7 @@ import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.model.Comment;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Service("commentManager")
+@Component("commentManager")
 public class CommentManagerImpl implements CommentManager {
 
 	@Autowired

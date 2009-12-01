@@ -1,7 +1,6 @@
 package com.wooki.domain.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,20 +13,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * Represents a book with its relation to other elements.
  */
 @Entity
-@NamedQueries( {
-		@NamedQuery(name = "com.wooki.domain.model.book.findBySlugTitle", query = "select b from Book b where b.slugTitle=:st"),
-		@NamedQuery(name = "com.wooki.domain.model.book.verifyBookOwner", query = "select b from Book b join b.users as u where b.id=:id and u.username=:un") })
-public class Book {
+public class Book extends WookiEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,12 +40,6 @@ public class Book {
 
 	@Column(unique = true)
 	private String slugTitle;
-
-	@Temporal(TemporalType.DATE)
-	private Date creationDate;
-
-	@Temporal(TemporalType.DATE)
-	private Date lastModified;
 
 	public void addUser(User user) {
 		if (this.users == null) {
@@ -110,22 +96,6 @@ public class Book {
 
 	public void setSlugTitle(String titleSlug) {
 		this.slugTitle = titleSlug;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Date getLastModified() {
-		return lastModified;
-	}
-
-	public void setLastModified(Date lastModified) {
-		this.lastModified = lastModified;
 	}
 
 }

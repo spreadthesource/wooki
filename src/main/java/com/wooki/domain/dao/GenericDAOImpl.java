@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.hibernate.Session;
 
@@ -23,35 +24,43 @@ public class GenericDAOImpl<T, PK extends Serializable> implements
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	private Class<T> type;
+	private Class<T> entityType;
 
 	public GenericDAOImpl() {
-		this.type = (Class<T>) ((ParameterizedType) getClass()
+		this.entityType = (Class<T>) ((ParameterizedType) getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
-	public PK create(T o) {
-		return (PK) getSession().save(o);
+	public void create(T o) {
+		this.entityManager.persist(o);
 	}
 
-	public void update(T o) {
-		getSession().update(o);
+	public T update(T o) {
+		final T result = this.entityManager.merge(o);
+		return result;
 	}
 
 	public void delete(T o) {
-		getSession().delete(o);
+		this.entityManager.remove(o);
 	}
 
 	public T findById(PK id) {
-		return (T) getSession().load(type, id);
+		return entityManager.find(entityType, id);
 	}
 
 	public List<T> listAll() {
-		return getSession().createCriteria(type).list();
+		Query query = this.entityManager.createQuery("from "
+				+ this.getEntityType());
+		List<T> resultList = (List<T>) query.getResultList();
+		return resultList;
 	}
 
 	protected Session getSession() {
 		return (Session) entityManager.getDelegate();
+	}
+
+	public String getEntityType() {
+		return entityType.getName();
 	}
 
 }

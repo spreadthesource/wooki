@@ -1,7 +1,7 @@
 package com.wooki.domain.dao;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
+import javax.persistence.Query;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -14,13 +14,15 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO {
 	private Logger logger = LoggerFactory.getLogger(UserDAO.class);
 
 	public User findByUsername(String username) {
+		if(username == null) {
+			throw new IllegalArgumentException("Username should not be null to find it by name.");
+		}
+		Query query = this.entityManager.createQuery("from "
+				+ this.getEntityType() + " u where lower(u.username)=:un");
+		query.setParameter("un", username.toLowerCase());
 		try {
-			Criteria crit = getSession().createCriteria(User.class);
-			crit.add(Restrictions.ilike("username", username));
-			return (User) crit.uniqueResult();
-		} catch (RuntimeException daEx) {
-			logger.error(String.format("Error while searching for user %s",
-					username));
+			return (User) query.getSingleResult();
+		} catch (RuntimeException re) {
 			return null;
 		}
 	}

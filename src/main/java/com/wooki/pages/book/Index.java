@@ -11,14 +11,14 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
-import com.wooki.services.BookManager;
-import com.wooki.services.ChapterManager;
-import com.wooki.services.CommentManager;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -86,6 +86,7 @@ public class Index {
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public void setupBook(Long bookId) {
+
 		this.bookId = bookId;
 
 		// Get book related information

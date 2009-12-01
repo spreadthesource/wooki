@@ -1,4 +1,4 @@
-package com.wooki.services;
+package com.wooki.domain.biz;
 
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;

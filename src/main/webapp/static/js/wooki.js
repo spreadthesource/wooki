@@ -110,19 +110,18 @@ jQuery.extend(Tapestry.Initializer,{
 		
 			// Add element
 			blockId = jQuery(this).attr('id');
-			comId = jQuery(this).attr('id').replace('b','c');
+			comId = blockId.replace('b','c');
 			
 			// Add comment entry
-			comment = jQuery("<a/>").attr("id", comId).attr("class", "comment-accessor");
-			jQuery("#comments").append(comment);
+			comment = jQuery("<a/>").attr({"id": comId, "class":"comment-accessor"});
 
 			jQuery("#comments").append(comment);
 			
 			jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
 			
 			comment.css({
-				'top': (jQuery(this).offset().top + 10) + 'px',
-				'left': (jQuery(this).offset().left - 50)  + 'px',
+				'top': (jQuery(this).position().top + 10) + 'px',
+				'left': (jQuery(this).position().left - 50)  + 'px',
 				'height' : jQuery(this).height() + 'px',
 			});
 			

@@ -16,7 +16,7 @@
 			</hgroup>
 			
 			<section id="login-dialog-form">
-				<form id="loginForm" action="${loginCheckUrl}" method="POST">
+				<form id="loginForm" action="/wooki/j_spring_security_check" method="POST">
 				<h1>Sign on Wooki</h1>
 	    		<table>
 	    			<tr>
@@ -42,9 +42,10 @@
 				<ul>
 					<li>Tour</li>
 					<t:security.ifLoggedIn>
-						<li>${username} <a href="#" t:type="actionlink" t:id="logout">Logout</a></li>
+						<li>${username} <a href="/wooki/j_spring_security_logout">Logout</a></li>
 						<p:else>
-							<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="login-link">Login</a></li>
+							<li>Have an account? <a href="#" id="login-link">Signin</a></li>
+							<li>Have not ? <a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 						</p:else>
 					</t:security.ifLoggedIn>
 					<li><a href="#">FAQ</a></li>

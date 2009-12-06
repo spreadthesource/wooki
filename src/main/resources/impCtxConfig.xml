@@ -10,7 +10,7 @@
            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
 	<bean id="xhtmlToFOConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
-		<property name="xslStylesheet" value="classpath:Xhtml2fo.xsl" />
+		<property name="xslStylesheet" value="classpath:com/wooki/services/parsers/Xhtml2fo.xsl" />
 		<property name="httpClient">
 			<ref bean="httpClient" />
 		</property>
@@ -19,7 +19,7 @@
 	</bean>
 	
 	<bean id="xhtmlToAPTConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
-		<property name="xslStylesheet" value="classpath:xhtml2apt.xsl" />
+		<property name="xslStylesheet" value="classpath:com/wooki/services/parsers/xhtml2apt.xsl" />
 		<property name="httpClient">
 			<ref bean="httpClient" />
 		</property>

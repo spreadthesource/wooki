@@ -1,62 +1,80 @@
 package com.wooki.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
-import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
-import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.AssetSource;
-import org.springframework.security.providers.AuthenticationProvider;
-import org.springframework.security.providers.encoding.PasswordEncoder;
-import org.springframework.security.providers.encoding.ShaPasswordEncoder;
+import org.apache.tapestry5.services.Cookies;
+import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.PageRenderRequestHandler;
+import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.apache.tapestry5.services.RequestGlobals;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.services.internal.TapestryOverrideModule;
-
+import com.wooki.services.security.UserDetailsServiceImpl;
 
 @SubModule(TapestryOverrideModule.class)
 public class WookiModule<T> {
 
+	/**
+	 * Used to stored the last view page in session.
+	 * 
+	 */
+	public static final String VIEW_REFERER = "tapestry-view.referer";
+
+	/**
+	 * Use to encrypt the user password
+	 */
 	public static final String SALT = "wookiwooki";
+
+	public void contributeApplicationDefaults(
+			MappedConfiguration<String, String> conf) {
+		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+		conf.add(SymbolConstants.PRODUCTION_MODE, "false");
+	}
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 	}
 
-	public static void contributeApplicationDefaults(
-			MappedConfiguration<String, String> configuration) {
-		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		configuration.add(SymbolConstants.PRODUCTION_MODE, "false");
-		configuration.add(SymbolConstants.APPLICATION_VERSION, "1.0-SNAPSHOT");
-		configuration.add("spring-security.failure.url", "/index/failed");
-		configuration.add("spring-security.accessDenied.url", "/index");
-		configuration.add("spring-security.target.url", "/index");
-		configuration.add("spring-security.password.salt", SALT);
-		configuration.add("spring-security.afterlogout.url", "/signin");
-	}
-
-	public static void contributeProviderManager(
-			OrderedConfiguration<AuthenticationProvider> configuration,
-			@InjectService("DaoAuthenticationProvider") AuthenticationProvider daoAuthenticationProvider) {
-		configuration.add("daoAuthenticationProvider",
-				daoAuthenticationProvider);
-	}
-
-	public static void contributeAlias(
-			Configuration<AliasContribution<PasswordEncoder>> configuration) {
-		configuration.add(AliasContribution.create(PasswordEncoder.class,
-				new ShaPasswordEncoder()));
+	/**
+	 * Store the last view page in session.
+	 * 
+	 */
+	public static void contributePageRenderRequestHandler(
+			OrderedConfiguration<PageRenderRequestFilter> filters,
+			final Cookies cookies, final RequestGlobals request) {
+		filters.add("wookiReferer", new PageRenderRequestFilter() {
+			public void handle(PageRenderRequestParameters parameters,
+					PageRenderRequestHandler handler) throws IOException {
+				try {
+					if ("signin".equalsIgnoreCase(parameters
+							.getLogicalPageName())
+							|| "signup".equalsIgnoreCase(parameters
+									.getLogicalPageName())) {
+						return;
+					}
+					cookies
+							.writeCookieValue(VIEW_REFERER, request
+									.getHTTPServletRequest().getRequestURL()
+									.toString());
+				} finally {
+					handler.handle(parameters);
+				}
+			}
+		});
 	}
 
 	/**

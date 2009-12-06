@@ -59,13 +59,13 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 			throw new IllegalArgumentException("Cache " + cacheName
 					+ " does not exist");
 		}
-		putInCache("/xhtml1-strict.dtd",
+		putInCache("xhtml1-strict.dtd",
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
-		putInCache("/xhtml-lat1.ent",
+		putInCache("xhtml-lat1.ent",
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent");
-		putInCache("/xhtml-symbol.ent",
+		putInCache("xhtml-symbol.ent",
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent");
-		putInCache("/xhtml-special.ent",
+		putInCache("xhtml-special.ent",
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent");
 
 		tFactory.setURIResolver(this);

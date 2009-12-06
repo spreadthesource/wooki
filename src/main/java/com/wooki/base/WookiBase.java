@@ -4,9 +4,9 @@ import java.security.Principal;
 
 import org.apache.tapestry5.annotations.PageAttached;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.RequestGlobals;
-import org.springframework.security.context.SecurityContextHolder;
 
 public class WookiBase {
 
@@ -18,13 +18,12 @@ public class WookiBase {
 
 	private boolean logged;
 
-	@PageAttached
+	@SetupRender
 	private void setupUsername() {
-		username = SecurityContextHolder.getContext().getAuthentication()
-				.getName();
 		Principal principal = requestGlobals.getHTTPServletRequest()
 				.getUserPrincipal();
 		this.logged = principal != null && principal.getName() != "";
+		this.username = principal != null ? principal.getName() : null;
 	}
 
 	public boolean isLogged() {

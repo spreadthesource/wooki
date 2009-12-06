@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+
+	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl">
+		<property name="bookDAO" ref="bookDao" />
+		<property name="commentDao" ref="commentDao" />
+		<property name="userDao" ref="userDao" />
+	</bean>
+
+	<bean id="ciUrlMatcher" class="org.springframework.security.util.RegexUrlPathMatcher">
+		<property name="requiresLowerCaseUrl" value="true" />
+	</bean>
+
+	<bean id="springSecurityFilterChain" class="org.springframework.security.util.FilterChainProxy">
+		<property name="filterInvocationDefinitionSource">
+			<value>
+				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+				PATTERN_TYPE_APACHE_ANT
+				/assets/**=httpSessionContextIntegrationFilter
+				/**/*edit*/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,exceptionTranslationFilter,filterSecurityInterceptor
+				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter
+			</value>
+		</property>
+		<property name="matcher" ref="ciUrlMatcher" />
+	</bean>
+
+	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
+		<constructor-arg ref="userManager" />
+	</bean>
+
+	<bean id="defaultTargetUrlResolver" class="org.springframework.security.ui.TargetUrlResolverImpl" />
+
+	<bean id="viewBasedTargetUrlResolver" class="com.wooki.services.security.WookiTargetUrlResolver">
+		<constructor-arg ref="defaultTargetUrlResolver" />
+	</bean>
+
+	<security:authentication-provider
+		user-service-ref="wookiUserDetailsService">
+		<security:password-encoder hash="sha">
+			<security:salt-source system-wide="wookiwooki" />
+		</security:password-encoder>
+	</security:authentication-provider>
+
+	<security:authentication-manager alias="authenticationManager" />
+
+	<bean id="authenticationProcessingFilter"
+		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
+		<security:custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
+		<property name="defaultTargetUrl" value="/index" />
+		<property name="authenticationFailureUrl" value="/index/failed" />
+		<property name="allowSessionCreation" value="true" />
+		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="targetUrlResolver" ref="viewBasedTargetUrlResolver" />
+		<property name="filterProcessesUrl" value="/j_spring_security_check" />
+	</bean>
+
+	<bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
+		<security:custom-filter position="LOGOUT_FILTER" />
+		<constructor-arg value="/index" />
+		<constructor-arg>
+			<list>
+				<bean
+					class="org.springframework.security.ui.logout.SecurityContextLogoutHandler" />
+			</list>
+		</constructor-arg>
+		<property name="filterProcessesUrl" value="/j_spring_security_logout" />
+	</bean>
+
+	<bean id="httpSessionContextIntegrationFilter"
+		class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+	</bean>
+
+	<!--
+		Securisation des URLs
+	-->
+	<bean id="filterSecurityInterceptor"
+		class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+		<property name="authenticationManager">
+			<ref bean="authenticationManager" />
+		</property>
+		<property name="accessDecisionManager">
+			<ref bean="accessDecisionManager" />
+		</property>
+		<property name="objectDefinitionSource">
+			<value>
+				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+				PATTERN_TYPE_REGEX
+				/.*edit.*=ROLE_Author
+			</value>
+		</property>
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
+		<property name="decisionVoters">
+			<list>
+				<ref bean="roleVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="roleVoter" class="org.springframework.security.vote.RoleVoter">
+		<property name="rolePrefix">
+			<value>ROLE_</value>
+		</property>
+	</bean>
+
+	<!-- Exception handler -->
+	<bean id="exceptionTranslationFilter"
+		class="org.springframework.security.ui.ExceptionTranslationFilter">
+		<property name="authenticationEntryPoint">
+			<ref bean="formLoginAuthenticationEntryPoint" />
+		</property>
+	</bean>
+
+	<bean id="formLoginAuthenticationEntryPoint"
+		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		<property name="loginFormUrl">
+			<value>/signin</value>
+		</property>
+		<property name="forceHttps">
+			<value>false</value>
+		</property>
+	</bean>
+
+	<!-- Servlet API aware filter -->
+	<bean id="securityContextHolderAwareRequestFilter"
+		class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter">
+	</bean>
+
+</beans>

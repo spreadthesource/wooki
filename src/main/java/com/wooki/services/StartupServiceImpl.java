@@ -1,6 +1,5 @@
 package com.wooki.services;
 
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.context.ApplicationContext;
 
 import com.wooki.domain.biz.BookManager;
@@ -76,9 +75,9 @@ public class StartupServiceImpl implements StartupService {
 		securityCtx.log(john);
 		Publication published = chapterManager.getLastPublished(bookAbstract
 				.getId());
-		chapterManager.addComment(published.getId(), "Yes it's true !!!", "b0");
+		chapterManager.addComment(published.getId(), "Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!! Yes it's true !!!Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!", "b0");
 		chapterManager
-				.addComment(published.getId(), "I agree but ... :)", "b0");
+				.addComment(published.getId(), "I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) v I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)", "b0");
 
 	}
 

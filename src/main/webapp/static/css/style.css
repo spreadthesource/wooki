@@ -613,3 +613,33 @@ div.t-error-popup span {
 .dialog-container {
 	display:none;
 }
+
+/** Comment details related CSS */
+.comment-row {
+	clear: both;
+	border: thin solid;
+	border-color: black;
+	margin-bottom: 10px;
+}
+
+.add-comment-link {
+	margin-left: 10px;
+}
+
+.delete-comment-link  {
+	
+}
+
+.comment-content {
+	margin-bottom: 10px;
+}
+
+.comment-row p {
+	color: black;
+}
+
+.comment-row em {
+	text-align: right;
+	color: #6E6D65;
+	margin-bottom: 10px;
+}

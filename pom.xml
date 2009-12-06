@@ -187,11 +187,6 @@
 			<version>1.0</version>
 		</dependency>
 		<dependency>
-			<groupId>nu.localhost.tapestry</groupId>
-			<artifactId>tapestry-spring-security</artifactId>
-			<version>2.0.0</version>
-		</dependency>
-		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
@@ -200,6 +195,11 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>2.0.4</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -307,11 +307,6 @@
 		<repository>
 			<id>fop</id>
 			<url>http://repo1.maven.org/maven2/org/apache/xmlgraphics/fop</url>
-		</repository>
-
-		<repository>
-			<id>localhost.nu</id>
-			<url>http://www.localhost.nu/java/mvn</url>
 		</repository>
 
 	</repositories>

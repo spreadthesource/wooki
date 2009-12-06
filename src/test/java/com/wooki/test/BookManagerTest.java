@@ -7,6 +7,8 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.security.context.SecurityContextHolder;
+import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
@@ -25,6 +27,7 @@ import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Test case for WookiManager service.
@@ -45,8 +48,11 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	private CommentManager commentManager;
 
 	@Autowired
-	private DataSource ds;
+	private WookiSecurityContext securityCtx;
 	
+	@Autowired
+	private DataSource ds;
+
 	@BeforeMethod
 	public void initDb() throws UserAlreadyException, AuthorizationException {
 
@@ -54,7 +60,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		ClassPathResource script = new ClassPathResource("reset.sql");
 		SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
 		SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-		
+
 		// Add author to the book
 		User john = new User();
 		john.setEmail("john.doe@gmail.com");
@@ -63,20 +69,20 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		john.setPassword("password");
 		userManager.addUser(john);
 
+		securityCtx.log(john);
+		
 		// Create books
-		Book productBook = bookManager.create("My First Product Book", john
-				.getUsername());
-		Book cacheBook = bookManager.create("My Cache Product Book", john
-				.getUsername());
+		Book productBook = bookManager.create("My First Product Book");
+		Book cacheBook = bookManager.create("My Cache Product Book");
 
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook,
-				"Requirements", john.getUsername());
+				"Requirements");
 		chapterManager.updateContent(chapterOne.getId(),
 				"<p>You will need Žˆ ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook,
-				"Installation", john.getUsername());
+				"Installation");
 		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
 
@@ -106,15 +112,18 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		robink.setFullname("Robin Komiwes");
 		userManager.addUser(robink);
 
+		securityCtx.log(robink);
+		
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct,
 				"'my-first-product-book' is not available.");
 
 		try {
-			bookManager.addChapter(myProduct, "My New Chapter", "robink");
+			bookManager.addChapter(myProduct, "My New Chapter");
 			// Robin is not an author of the book
-			Assert.fail("Robink should not be authorized to add a new chapter to 'my first product' book");
+			Assert
+					.fail("Robink should not be authorized to add a new chapter to 'my first product' book");
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -157,9 +166,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		Assert
-				.assertEquals(new String(chapterOne.getContent()),
-						"<p>You will need Žˆ ...</p>");
+		Assert.assertEquals(new String(chapterOne.getContent()),
+				"<p>You will need Žˆ ...</p>");
 	}
 
 	@Test
@@ -175,8 +183,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		Assert.assertTrue(new String(chapterOne.getContent()).contains(
-				"<p>You will need Žˆ ...</p>"));
+		Assert.assertTrue(new String(chapterOne.getContent())
+				.contains("<p>You will need Žˆ ...</p>"));
 	}
 
 	/**
@@ -191,6 +199,10 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	public void testChapterAdd() throws UserAlreadyException,
 			AuthorizationException {
 
+		User john = userManager.findByUsername("john");
+		Assert.assertNotNull(john, "John exists...");
+		securityCtx.log(john);
+		
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct,
@@ -202,7 +214,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Add a chapter and do search again
 		Chapter chapterThree = bookManager.addChapter(myProduct,
-				"Chapter Tree", "john");
+				"Chapter Tree");
 		chapterManager.updateContent(chapterThree.getId(),
 				"<p>Sample Chapter Three Content</p>");
 
@@ -240,20 +252,24 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		User john = userManager.findByUsername("john");
 		Long chapterId = chapters.get(1).getId();
-		
+
 		chapterManager.publishChapter(chapterId);
 		Publication published = chapterManager.getLastPublished(chapterId);
 		Assert.assertNotNull(published);
-		
-		Comment com = chapterManager.addComment(published.getId(), john,
+
+		securityCtx.log(john);
+
+		Comment com = chapterManager.addComment(published.getId(),
 				"This paragraph doesn't make sense.", "c0");
-		List<Comment> openComs = commentManager.listOpenForPublication(published.getId());
+		List<Comment> openComs = commentManager
+				.listOpenForPublication(published.getId());
 
 		Assert.assertNotNull(openComs);
 		Assert.assertEquals(openComs.size(), 1,
 				"There is at least one open comment.");
-		
-		List<Object[]> comInfos = commentManager.listCommentInfos(published.getId());
+
+		List<Object[]> comInfos = commentManager.listCommentInfos(published
+				.getId());
 		Assert.assertNotNull(comInfos);
 		Assert.assertEquals(1, comInfos.size());
 		Assert.assertEquals("c0", comInfos.get(0)[0]);
@@ -275,8 +291,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNotNull(chapters, "Chapters are missing.");
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
-		String published = chapterManager.getLastPublishedContent(chapters
-				.get(0).getId());
+		String published = chapterManager.getLastPublishedContent(chapters.get(
+				0).getId());
 		Assert.assertNull(published, "No revision has been published.");
 
 		// Update content and publish
@@ -286,8 +302,9 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
 		Assert.assertNotNull(published, "No revision has been published.");
-		Assert.assertEquals(published,
-				"<p id=\"b0\" class=\"commentable\">Tapestry is totally amazing</p>");
+		Assert
+				.assertEquals(published,
+						"<p id=\"b0\" class=\"commentable\">Tapestry is totally amazing</p>");
 
 	}
 }

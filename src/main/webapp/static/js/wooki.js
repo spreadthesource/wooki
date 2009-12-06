@@ -4,12 +4,27 @@ jQuery.extend(Wooki, {
 	
 });
 
+Tapestry.ElementEffect.none = function(element) {
+	// Do nothing
+}
 
 /**
  * Add initialization method to Tapestry.Initializer object
  */
 
 jQuery.extend(Tapestry.Initializer,{
+	
+	/**
+	 * This method overrides the update method to insert new content instead
+	 * of replacing current content. 
+	 *
+	 */
+	appendToZone : function(zoneId) {
+		$(zoneId).update = function(content) {
+			this.insert(content);
+		}
+	},
+	
 	/**
 	 * Convert a form or link into a trigger of an Ajax update that updates the
 	 * indicated Zone.
@@ -118,6 +133,8 @@ jQuery.extend(Tapestry.Initializer,{
 			jQuery("#comments").append(comment);
 			
 			jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
+			
+			Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
 			
 			comment.css({
 				'top': (jQuery(this).position().top + 10) + 'px',

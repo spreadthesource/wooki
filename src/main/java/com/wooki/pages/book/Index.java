@@ -3,14 +3,14 @@ package com.wooki.pages.book;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.tapestry5.Block;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.json.JSONObject;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
@@ -41,6 +41,9 @@ public class Index {
 
 	@Inject
 	private RenderSupport support;
+	
+	@Inject
+	private ComponentResources resources;
 
 	@InjectPage
 	private Edit editChapter;
@@ -70,14 +73,8 @@ public class Index {
 	private List<Chapter> chaptersInfo;
 
 	@Property
-	private List<Object[]> commentsInfos;
-
-	@Property
-	private Object[] currentComInfo;
-
-	@Property
 	private Chapter currentChapter;
-
+	
 	private Long bookId;
 
 	/**
@@ -108,8 +105,6 @@ public class Index {
 			// Get abstract content to display
 			this.abstractContent = this.chapterManager
 					.getLastPublishedContent(this.bookAbstractId);
-			this.commentsInfos = this.commentManager.listCommentInfos(published
-					.getId());
 		}
 
 	}
@@ -135,17 +130,6 @@ public class Index {
 	 */
 	public Object[] getChapterCtx() {
 		return new Object[] { this.bookId, this.currentChapter.getId() };
-	}
-
-	@AfterRender
-	void addScript() {
-		JSONObject bubble = new JSONObject();
-		if (this.commentsInfos != null) {
-			for (Object[] obj : this.commentsInfos) {
-				bubble.put((String) obj[0], ((Long) (obj[1])).toString());
-			}
-		}
-		support.addInit("initBubbles", bubble);
 	}
 
 	public Long getBookId() {

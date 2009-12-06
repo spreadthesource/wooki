@@ -39,7 +39,7 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 		return (List<Book>) query.getResultList();
 	}
 
-	public boolean verifyBookOwner(Long bookId, String username) {
+	public boolean isOwner(Long bookId, String username) {
 		if (bookId == null) {
 			throw new IllegalArgumentException("Book cannot be null");
 		}

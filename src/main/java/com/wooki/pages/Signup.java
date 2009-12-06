@@ -1,5 +1,8 @@
 package com.wooki.pages;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -8,13 +11,13 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.context.SecurityContextHolder;
-import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
+import org.apache.tapestry5.services.Cookies;
 
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
+import com.wooki.services.WookiModule;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Signup page for new authors.
@@ -25,9 +28,13 @@ public class Signup {
 	private Form signupForm;
 
 	@Inject
-	private ApplicationContext context;
-
 	private UserManager userManager;
+
+	@Inject
+	private WookiSecurityContext securityCtx;
+
+	@Inject
+	private Cookies cookies;
 
 	@InjectPage
 	private Index successPage;
@@ -48,11 +55,6 @@ public class Signup {
 	@Validate("required,email")
 	private String email;
 
-	@OnEvent(value = EventConstants.PREPARE, component = "signupForm")
-	public void prepareSubmit() {
-		userManager = (UserManager) context.getBean("userManager");
-	}
-
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
 	public void onValidate() {
 		// Do a first check
@@ -72,12 +74,22 @@ public class Signup {
 			user.setFullname(this.fullname);
 			userManager.addUser(user);
 
-			// Alert spring security that an author has logged in
-			SecurityContextHolder.getContext().setAuthentication(
-					new UsernamePasswordAuthenticationToken(user, user
-							.getAuthorities()));
+			securityCtx.log(user);
+
+			String referer = cookies.readCookieValue(WookiModule.VIEW_REFERER);
+			if (referer != null) {
+				try {
+					return new URL(referer);
+				} catch (MalformedURLException e) {
+					// Alert spring security that an author has logged in
+					successPage.setUsername(username);
+					return successPage;
+				}
+			}
+
 			successPage.setUsername(username);
 			return successPage;
+			
 		} catch (UserAlreadyException uaeEx) {
 			signupForm.recordError("User already exists");
 			return this;

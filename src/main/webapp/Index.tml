@@ -16,6 +16,7 @@
     <t:delegate to="userCtx" />
     
     <t:block id="userBlock">
+    
         <section id="author-feed" class="radied-box">
             <h1>${username}'s books :</h1>
             <ol>

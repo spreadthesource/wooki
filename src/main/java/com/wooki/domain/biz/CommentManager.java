@@ -36,6 +36,13 @@ public interface CommentManager {
 	List<Object[]> listCommentInfos(Long chapterId);
 
 	/**
+	 * 
+	 * @param chapterId
+	 * @return
+	 */
+	List<Comment> listOpenForPublicationAndDomId(Long chapterId, String domId);
+	
+	/**
 	 * Can change the state of a comment to solved.
 	 */
 	void refuseComment(Comment comment);

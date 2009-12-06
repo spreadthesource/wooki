@@ -1,36 +1,25 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    <section id="signin-form" class="wookiForm">
-    
-    	<form id="loginForm" action="${loginCheckUrl}" method="POST">
-    		<h1>Sign on Wooki</h1>
-    		<t:if test="failed">
-    			<p class="wooki-form-error">Username and/or password was wrong!</p>
-    		</t:if>
-    		<fieldset>
-    			<ol>
-    				<li>
-    					<label class="username" for="j_username">Username</label>
-						<input class="username" name="j_username" type="text" size="10" maxlength="30" /></li>
-					<li>
-						<label class="password" for="j_password">Password</label>
-						<input class="password" name="j_password" type="password" size="10" maxlength="30" /><small><a href="#">Forgot</a></small>
-					</li>
-    			</ol>
-			</fieldset>
-			<fieldset class="rememberMe">
-				<input type="checkbox" id="rememberMe"/><small>Remember me</small>
-			</fieldset>
-			<fieldset>
-				<input id="submit" class="submit" type="submit" value="log in"/>
-			</fieldset>
+    <section id="signin-form" class="full-content">
+    	<form name="loginForm" id="loginForm" action="/wooki/j_spring_security_check" method="POST">
+    		<h1>Log on wooki</h1>
+    		<div class="radied-box basic-content">
+	    		<table>
+	    			<tr>
+	    				<th><label class="username" for="j_username">Username</label></th>
+	    				<td><input class="username" name="j_username" type="text" maxlength="30" /></td>
+	    			</tr>
+	    			<tr>
+	    				<th><label class="password" for="j_password">Password</label></th>
+	    				<td><input class="password" name="j_password" type="password" maxlength="30" /><small><a href="#">Forgot</a></small></td>
+	    			</tr>
+	    		</table>
+				<div id="submit">
+					<a href="javascript:$('loginForm').submit();" class="radied-box active-button">Signin</a>
+				</div>
+				<div class="form-footer"></div>
+			</div>
     	</form>
     </section>
-    
-    <section id="signin-signup">
-    	<p>Create your account</p>
-    	<p id="signup">
-    		<a t:type="pagelink" t:page="signup">Signup</a>
-    	</p>
-    </section>
+
 </html>

@@ -1,24 +1,22 @@
 package com.wooki.pages;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
-import org.apache.tapestry5.annotations.PageAttached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.RequestGlobals;
-import org.springframework.context.ApplicationContext;
 
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.FreshStuff;
+import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Display an index page for wooki application. If no user logged in or
@@ -31,15 +29,14 @@ import com.wooki.domain.model.FreshStuff;
 public class Index {
 
 	@Inject
-	private ApplicationContext applicationContext;
-
 	private ActivityManager activityManager;
 
+	@Inject
 	private BookManager bookManager;
 
 	@Inject
-	private RequestGlobals requestGlobals;
-
+	private WookiSecurityContext securityCtx;
+	
 	@Inject
 	private Block presBlock;
 
@@ -69,12 +66,6 @@ public class Index {
 
 	private boolean logged;
 
-	@PageAttached
-	private void setupServices() {
-		this.bookManager = (BookManager) applicationContext
-				.getBean("bookManager");
-	}
-
 	/**
 	 * Set current user if someone has logged in.
 	 * 
@@ -82,13 +73,13 @@ public class Index {
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupListBook() {
-		Principal principal = requestGlobals.getHTTPServletRequest()
-				.getUserPrincipal();
-		if (principal != null && principal.getName() != "") {
-			this.username = principal.getName();
+		if(securityCtx.isLoggedIn()) {
+			User user = securityCtx.getAuthor();
+			this.username = user.getUsername();
 			this.userBooks = bookManager.listByUser(username);
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -112,14 +103,12 @@ public class Index {
 
 	@SetupRender
 	public void setupFreshStuff() {
-		activityManager = (ActivityManager) applicationContext
-				.getBean("activityManager");
 		freshStuffs = activityManager.listFreshStuff(10);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
 	public Object createBook() {
-		Book created = bookManager.create(bookTitle, username);
+		Book created = bookManager.create(bookTitle);
 		index.setBookId(created.getId());
 		return index;
 	}

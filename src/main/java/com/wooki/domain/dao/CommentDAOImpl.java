@@ -17,6 +17,18 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 
 	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
 
+	public boolean isOwner(Long commId, String username) {
+		if (commId == null) {
+			throw new IllegalArgumentException("Comment id cannot be null");
+		}
+		Query query = this.entityManager.createQuery("select count(c) from "
+				+ this.getEntityType()
+				+ " c join c.users as u where c.id=:id and u.username=:un");
+		Long result = (Long) query.setParameter("un", username).setParameter(
+				"id", commId).getSingleResult();
+		return result > 0;
+	}
+
 	public List<Comment> listOpenForPublication(Long chapterId) {
 		if (chapterId == null) {
 			throw new IllegalArgumentException("Chapter id cannot be null.");
@@ -25,6 +37,22 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 				+ " c where c.publication.id=:pubId and c.state=:st");
 		query.setParameter("pubId", chapterId);
 		query.setParameter("st", CommentState.OPEN);
+		return query.getResultList();
+	}
+
+	public List<Comment> listOpenForPublicationAndDomId(Long publicationId,
+			String domId) {
+		if (publicationId == null) {
+			throw new IllegalArgumentException("Publication id cannot be null.");
+		}
+		Query query = this.entityManager
+				.createQuery("from "
+						+ getEntityType()
+						+ " c where c.publication.id=:pubId and c.state=:st and c.domId=:cid");
+		query.setParameter("pubId", publicationId);
+		query.setParameter("st", CommentState.OPEN);
+		query.setParameter("cid", domId);
+
 		return query.getResultList();
 	}
 

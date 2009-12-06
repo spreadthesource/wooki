@@ -2,7 +2,6 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
-import com.wooki.domain.model.User;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
@@ -24,7 +23,7 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	Comment addComment(Long publicationId, User author, String content,
+	Comment addComment(Long publicationId, String content,
 			String domId);
 
 	/**

@@ -40,5 +40,5 @@ public interface BookDAO extends GenericDAO<Book, Long>{
 	 *
 	 * @return
 	 */
-	boolean verifyBookOwner(Long bookId, String username);
+	boolean isOwner(Long bookId, String username);
 }

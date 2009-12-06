@@ -19,11 +19,9 @@ public interface BookManager {
 	 * 
 	 * @param title
 	 *            The title of the book
-	 * @param author
-	 *            Author must exist before a call to this method.
 	 * @return
 	 */
-	Book create(String title, String author);
+	Book create(String title);
 
 	/**
 	 * Add an author to a given book, author must exist before calling this
@@ -48,7 +46,7 @@ public interface BookManager {
 	 * @param username
 	 *            TODO
 	 */
-	Chapter addChapter(Book book, String title, String username) throws AuthorizationException;
+	Chapter addChapter(Book book, String title) throws AuthorizationException;
 
 	/**
 	 * Get the book abstract chapter (first item in the list)

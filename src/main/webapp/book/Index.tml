@@ -4,12 +4,14 @@
 
 <header>
 
-	<p id="book-admin">
-		<ul>
-			<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
-		</ul>
-	</p>
-
+	<t:security.ifAuthorOfBook t:bookId="bookId">
+		<p id="book-admin">
+			<ul>
+				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
+			</ul>
+		</p>
+	</t:security.ifAuthorOfBook>
+	
 	<p id="authors">
 		<t:loop source="authors" value="currentUser" index="loopIdx">
 			${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
@@ -42,5 +44,7 @@
 	
 	<div class="clearer"  />
 </div>
+
+<t:commentBubbles t:publicationId="bookAbstractId" />
 
 </html>

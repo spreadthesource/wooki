@@ -33,6 +33,11 @@ public class CommentManagerImpl implements CommentManager {
 		return commentDao.listCommentsInforForPublication(publicationId);
 	}
 
+	public List<Comment> listOpenForPublicationAndDomId(Long publicationId,
+			String domId) {
+		return commentDao.listOpenForPublicationAndDomId(publicationId, domId);
+	}
+
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void refuseComment(Comment comment) {
 		// TODO Auto-generated method stub

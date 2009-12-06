@@ -19,6 +19,7 @@ import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.EventType;
 import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
 /**
@@ -43,6 +44,9 @@ public class BookManagerImpl implements BookManager {
 	@Autowired
 	private ChapterDAO chapterDao;
 
+	@Autowired
+	private WookiSecurityContext securityCtx;
+	
 	@Transactional(readOnly = false)
 	public void addAuthor(Book book, String username) {
 		if (book == null || username == null) {
@@ -61,17 +65,19 @@ public class BookManagerImpl implements BookManager {
 	}
 
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
-	public Chapter addChapter(Book book, String title, String username)
+	public Chapter addChapter(Book book, String title)
 			throws AuthorizationException {
-		if (book == null || title == null || username == null) {
+		if (book == null || title == null) {
 			throw new IllegalArgumentException(
 					"Book and chapter title cannot be null for addition.");
 		}
 
-		if (!bookDao.verifyBookOwner(book.getId(), username)) {
-			throw new AuthorizationException(username + " is not an author of " + book.getTitle());
+		if (!securityCtx.isAuthorOfBook(book.getId())) {
+			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
 		}
 
+		User author = securityCtx.getAuthor();
+		
 		// Create the new Chapter
 		Chapter chapter = new Chapter();
 		chapter.setTitle(title);
@@ -88,7 +94,7 @@ public class BookManagerImpl implements BookManager {
 		
 		// Add activity event
 		Activity activity = new Activity();
-		activity.setUsername(username);
+		activity.setUsername(author.getUsername());
 		activity.setBookId(book.getId());
 		activity.setChapterId(chapter.getId());
 		activity.setCreationDate(creationDate);
@@ -100,7 +106,14 @@ public class BookManagerImpl implements BookManager {
 	}
 
 	@Transactional(readOnly = false)
-	public Book create(String title, String author) {
+	public Book create(String title) {
+		
+		User author = securityCtx.getAuthor();
+		
+		if(author == null) {
+			throw new AuthorizationException();
+		}
+		
 		Book book = new Book();
 
 		// Set basic properties
@@ -116,14 +129,14 @@ public class BookManagerImpl implements BookManager {
 		bookAbstract.setTitle("Abstract");
 		bookAbstract.setSlugTitle("Abstract");
 		book.addChapter(bookAbstract);
-		book.addUser(authorDao.findByUsername(author));
+		book.addUser(author);
 		bookAbstract.setBook(book);
 
 		bookDao.create(book);
 
 		// Add activity event
 		Activity activity = new Activity();
-		activity.setUsername(author);
+		activity.setUsername(author.getUsername());
 		activity.setBookId(book.getId());
 		activity.setCreationDate(creationDate);
 		activity.setType(EventType.CREATE);

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,12 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.PublicationDAO;
+import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.services.parsers.DOMManager;
+import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("chapterManager")
@@ -32,9 +35,19 @@ public class ChapterManagerImpl implements ChapterManager {
 	@Autowired
 	private DOMManager domManager;
 
+	@Autowired
+	private WookiSecurityContext securityCtx;
+	
 	@Transactional(readOnly = false)
-	public Comment addComment(Long publicationId, User author, String content,
+	public Comment addComment(Long publicationId, String content,
 			String domId) {
+		
+		// Check security
+		if(!securityCtx.isLoggedIn()) {
+			throw new AuthorizationException("You must be logged in to add a comment.");
+		}
+		User author = securityCtx.getAuthor();
+		
 		if (publicationId == null || content == null) {
 			throw new IllegalArgumentException(
 					"Chapter and comment cannot be null for addition.");

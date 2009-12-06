@@ -23,7 +23,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		}
 		Query query = this.entityManager.createQuery("select count(c) from "
 				+ this.getEntityType()
-				+ " c join c.users as u where c.id=:id and u.username=:un");
+				+ " c join c.user as u where c.id=:id and u.username=:un");
 		Long result = (Long) query.setParameter("un", username).setParameter(
 				"id", commId).getSingleResult();
 		return result > 0;

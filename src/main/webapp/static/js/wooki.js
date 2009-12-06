@@ -15,9 +15,9 @@ Tapestry.ElementEffect.none = function(element) {
 jQuery.extend(Tapestry.Initializer,{
 	
 	/**
-	 * This method overrides the update method to insert new content instead
-	 * of replacing current content. 
-	 *
+	 * This method overrides the update method to insert new content instead of
+	 * replacing current content.
+	 * 
 	 */
 	appendToZone : function(zoneId) {
 		$(zoneId).update = function(content) {
@@ -110,9 +110,26 @@ jQuery.extend(Tapestry.Initializer,{
 	},
 	
 	/**
+	 * Init a link to launch an event if the resulting JSON contains true then
+	 * the elt is removed on the client side.
+	 * 
+	 */
+	initClickAndRemove : function(data) {
+		$(data.elt).observe('click', function(e) {
+			jQuery.getJSON(data.url, function(result) {
+				if(result.result) {
+					jQuery('#'+data.toRemove).remove();
+				}
+			});
+			e.stop();
+		});
+	},
+	
+	/**
 	 * Init bubble when a chapter is displayed on screen
 	 * 
-	 * data parameter contains the list of blocks that has comments and their number.
+	 * data parameter contains the list of blocks that has comments and their
+	 * number.
 	 */
 	initBubbles : function(data) {
 

@@ -15,6 +15,7 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.beaneditor.Width;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
@@ -51,10 +52,10 @@ public class CommentBubbles {
 	private Block commentsBlock;
 
 	@Inject
-	private Block commentDetails;
+	private Block lstCommentDetails;
 
 	@Inject
-	private Block myCommentDetails;
+	private Block commentDetails;
 	
 	@InjectComponent
 	private Zone updateZone;
@@ -70,6 +71,7 @@ public class CommentBubbles {
 
 	@Property
 	@Validate("required")
+	@Width(80)
 	private String content;
 
 	@Persist
@@ -99,9 +101,14 @@ public class CommentBubbles {
 		this.currentComment = chapterManager.addComment(publicationId, content, this.domId);
 		this.comments = commentManager.listOpenForPublicationAndDomId(
 				publicationId, domId);
-		return this.myCommentDetails;
+		return this.commentDetails;
 	}
 
+	@OnEvent(value = "remove")
+	public void removeComment(){
+		// TODO Remove comment
+	}
+	
 	public String getZoneId() {
 		return updateZone.getClientId();
 	}

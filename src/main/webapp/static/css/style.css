@@ -291,7 +291,7 @@ a {
 	padding-bottom:10px;
 }
 
-#book h1, #signup-form h1 {
+#book h1, #signup-form h1, #signin-form h1 {
 	font-family: Georgia;
 	font-size: 30px;
 	margin-bottom: 20px;
@@ -466,6 +466,58 @@ div.t-error-popup span {
 	border: 1px solid #FF7351;
 }
 
+/*** Signup elements */
+
+#signin-form h2 {
+	font-size:20px;
+}
+
+#signin-form table {
+	width:100%;
+	margin:20px;
+}
+
+#signin-form th {
+	text-align:right;
+	padding-right:10px;
+	width:200px;
+	font-size:18px;
+	font-weight: normal;
+	color:#6E6D65;
+	height:40px;
+}
+
+#signin-form td {
+}
+
+#signin-form small {
+	margin-left: 10px;
+}
+
+#signin-form #submit {
+	margin-left:220px;
+	width:220px;
+	border:none;
+}
+
+#signin-form input {
+	font-size:18px;
+	padding:8px;
+	border:1px solid #6E6D65;
+	width:240px;
+	font-family: Helvetica;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+}
+
+#signin-form input:focus {
+	border: 1px solid #FF7351;
+}
+
+
+/** Generic form class : should be implemented */
+
 .wookiForm #submit {
 	background: #FF7351;
 	margin: 20px;
@@ -502,45 +554,6 @@ div.t-error-popup span {
 	margin-bottom: 10px;
 	padding: 10px;
 	text-align: center;
-}
-
-#signin-signup {
-	background: #2F2F32;
-	color: white;
-	font-family: Georgia;
-	font-size: 24px;
-	width: 300px;
-	float: right;
-	margin: 10px 8px 20px 10px;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-}
-
-#signin-signup p {
-	padding: 20px;
-	font-weight: normal;
-}
-
-#signin-signup #signup {
-	background: #FF7351;
-	margin: 20px;
-	text-align: center;
-	font-size: 28px;
-	font-family: Helvetica;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-}
-
-#signin-signup #signup a {
-	color: #FFD8A1;
-	text-decoration: none;
-}
-
-#signin-signup #signup em {
-	font-size: 20px;
-	font-style: normal;
 }
 
 /*** dialog */

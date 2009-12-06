@@ -1,0 +1,35 @@
+<div class="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	
+	<!-- Block used to display comment details -->
+	<t:block t:id="commentDetails">
+		<t:loop t:source="comments" t:value="currentComment">
+			<p>
+				${currentComment.content}
+			</p>
+		</t:loop>
+	</t:block>
+	
+	<t:block t:id="myCommentDetails">
+		<p>
+			${currentComment.content}
+		</p>
+	</t:block>
+	
+	<!-- Block used to display the comments window associated to a bubble -->
+	<t:block t:id="commentsBlock">
+		<div t:type="zone" t:id="updateZone" t:mixins="appendToZone" t:show="none" t:update="none">
+			<t:delegate to="block:commentDetails" />
+		</div>
+		<form t:type="form" t:id="createCommentForm" t:zone="prop:zoneId">
+			<input t:type="textarea" t:value="content" />
+			<a t:type="linksubmit">Add</a>
+		</form>
+	</t:block>
+
+	<!-- Single dialog window refreshed via Ajax on bubble clicks -->   	
+   	<t:commentdialog t:id="commentDialog">
+   		<t:zone t:id="myZone" t:show="none" t:update="none">
+   		</t:zone>
+   	</t:commentdialog>
+
+</div>

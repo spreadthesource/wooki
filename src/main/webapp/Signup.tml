@@ -1,7 +1,7 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    <section id="signup-form" class="full-content">
-    	<form t:type="form" t:id="signupForm">
+
+    	<form t:type="form" class="full-content big-form" t:id="signupForm">
     		<h1>Create your account</h1>
     		<div class="radied-box basic-content">
 	    		<h2>Start getting active on Wooki</h2>
@@ -31,6 +31,5 @@
 				<div class="form-footer">By submitting this form your confirm that you accept Wooki <a href="#">terms of service</a></div>
 			</div>
     	</form>
-    </section>
 
 </html>

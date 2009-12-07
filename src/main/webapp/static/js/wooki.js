@@ -73,7 +73,7 @@ jQuery.extend(Tapestry.Initializer,{
 		link = jQuery("#login-link");
 		dialog = jQuery('#login-dialog-form')
 
-		x = link.position().left + link.width() + (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
+		x = link.position().left + link.width() - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
 		y = link.position().top + link.height() + parseInt(link.css('padding-bottom'));
 		
 		link.toggle(

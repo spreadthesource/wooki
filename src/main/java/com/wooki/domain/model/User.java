@@ -19,7 +19,7 @@ import org.springframework.security.userdetails.UserDetails;
  * Wooki basic user. Can post comment, write book etc.
  */
 @Entity
-public class User implements UserDetails {
+public class User extends WookiEntity implements UserDetails {
 
 	private static final long serialVersionUID = 4060967693790504175L;
 

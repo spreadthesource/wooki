@@ -17,7 +17,7 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long>
 	private Logger logger = LoggerFactory.getLogger(PublicationDAO.class);
 
 	public Publication findLastRevision(Long chapterId) {
-		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id order by p.creationDate desc");
+		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("id", chapterId);
 		query.setMaxResults(1);
 		List<Publication> published = query.getResultList();

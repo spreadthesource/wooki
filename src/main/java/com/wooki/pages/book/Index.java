@@ -3,23 +3,17 @@ package com.wooki.pages.book;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import org.apache.tapestry5.Block;
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
-import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
-import com.wooki.pages.chapter.Edit;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -35,18 +29,6 @@ public class Index {
 
 	@Inject
 	private ChapterManager chapterManager;
-
-	@Inject
-	private CommentManager commentManager;
-
-	@Inject
-	private RenderSupport support;
-	
-	@Inject
-	private ComponentResources resources;
-
-	@InjectPage
-	private Edit editChapter;
 
 	@Property
 	private Book book;
@@ -74,7 +56,7 @@ public class Index {
 
 	@Property
 	private Chapter currentChapter;
-	
+
 	private Long bookId;
 
 	/**
@@ -83,7 +65,11 @@ public class Index {
 	 * @param bookId
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public void setupBook(Long bookId) {
+	public Object setupBook(Long bookId) {
+
+		if (bookId == null) {
+			return com.wooki.pages.Index.class;
+		}
 
 		this.bookId = bookId;
 
@@ -107,6 +93,7 @@ public class Index {
 					.getLastPublishedContent(this.bookAbstractId);
 		}
 
+		return null;
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)

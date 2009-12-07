@@ -48,6 +48,12 @@ public class CommentBubbles {
 	@Inject
 	private CommentManager commentManager;
 
+	@InjectComponent
+	private Zone commentList;
+	
+	@InjectComponent
+	private CommentDialog commentDialog;
+	
 	@Inject
 	private Block commentsBlock;
 
@@ -56,7 +62,7 @@ public class CommentBubbles {
 
 	@Inject
 	private Block commentDetails;
-	
+
 	@InjectComponent
 	private Zone updateZone;
 
@@ -98,17 +104,18 @@ public class CommentBubbles {
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createCommentForm")
 	public Object addComment() {
-		this.currentComment = chapterManager.addComment(publicationId, content, this.domId);
+		this.currentComment = chapterManager.addComment(publicationId, content,
+				this.domId);
 		this.comments = commentManager.listOpenForPublicationAndDomId(
 				publicationId, domId);
 		return this.commentDetails;
 	}
 
 	@OnEvent(value = "remove")
-	public void removeComment(){
-		// TODO Remove comment
+	public void removeComment(Long comId){
+		this.commentManager.removeComment(comId);
 	}
-	
+
 	public String getZoneId() {
 		return updateZone.getClientId();
 	}
@@ -122,8 +129,8 @@ public class CommentBubbles {
 		Link lnk = resources.createEventLink("displayComment",
 				this.publicationId, "blockId");
 		bubble.put("url", lnk.toRedirectURI());
-		bubble.put("zoneId", "myZone");
-		bubble.put("dialogId", "commentDialog");
+		bubble.put("zoneId", commentList.getClientId());
+		bubble.put("dialogId", commentDialog.getClientId());
 		if (this.commentsInfos != null) {
 			for (Object[] obj : this.commentsInfos) {
 				bubble.put((String) obj[0], ((Long) (obj[1])).toString());

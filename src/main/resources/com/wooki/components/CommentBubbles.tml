@@ -2,15 +2,20 @@
 	
 	<t:block t:id="commentDetails">
 		<div class="comment-row radied-box" id="ent-${currentComment.id}">
-				<p class="comment-content">
+			<div class="comment-meta">
+            	<span>
+              		<b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b>
+              		<em class="date"> <t:lastModifiedFormatter t:time="currentComment.creationDate.time" /></em>
+              		<t:security.ifAuthorOfComment t:commentId="currentComment.id">
+						| <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
+					</t:security.ifAuthorOfComment>              
+            	</span>
+          	</div>
+          	<div class="comment-body">
+				<pre>
 					${currentComment.content}
-				</p>
-				<em>
-					by John - 14/12/2009 
-					<t:security.ifAuthorOfComment t:commentId="${currentComment.id}">
-						- <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
-					</t:security.ifAuthorOfComment>
-				</em>
+				</pre>
+			</div>
 		</div>
 	</t:block>
 	
@@ -28,17 +33,15 @@
 		</div>
 		<t:security.ifLoggedIn>
 			<form t:type="form" t:id="createCommentForm" t:zone="prop:zoneId" class="add-comment-form">
-				<fieldset>
-					<input t:type="textarea" t:value="content" />
-					<a t:type="linksubmit" class="add-comment-link">Add</a>
-				</fieldset>
+				<p><input t:type="textarea" t:value="content" /></p>
+				<p class="add-comment-link"><a t:type="linksubmit">Add Comment</a></p>
 			</form>
 		</t:security.ifLoggedIn>
 	</t:block>
 
 	<!-- Single dialog window refreshed via Ajax on bubble clicks -->   	
    	<t:commentdialog t:id="commentDialog">
-   		<t:zone t:id="myZone" t:show="none" t:update="none">
+   		<t:zone t:id="commentList" t:show="none" t:update="none">
    		</t:zone>
    	</t:commentdialog>
 

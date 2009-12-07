@@ -2,6 +2,7 @@ package com.wooki.domain.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.Session;
+
+import com.wooki.domain.model.WookiEntity;
 
 /**
  * This generic implementation of DAO will be the base for all wooki's DAO.
@@ -18,7 +21,7 @@ import org.hibernate.Session;
  * @param <T>
  * @param <PK>
  */
-public class GenericDAOImpl<T, PK extends Serializable> implements
+public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements
 		GenericDAO<T, PK> {
 
 	@PersistenceContext
@@ -41,7 +44,8 @@ public class GenericDAOImpl<T, PK extends Serializable> implements
 	}
 
 	public void delete(T o) {
-		this.entityManager.remove(o);
+		o.setDeletionDate(new Date());
+		this.entityManager.merge(o);
 	}
 
 	public T findById(PK id) {

@@ -1,5 +1,7 @@
 package com.wooki.domain.biz;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -27,6 +29,7 @@ public class UserManagerImpl implements UserManager {
 		// Encode password into database
 		PasswordEncoder encoder = new ShaPasswordEncoder();
 		String pass = author.getPassword();
+		author.setCreationDate(new Date());
 		author.setPassword(encoder.encodePassword(pass, WookiModule.SALT));
 		authorDao.create(author);
 	}

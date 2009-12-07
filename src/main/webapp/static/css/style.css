@@ -21,6 +21,10 @@ a {
 	color: #FF7351
 }
 
+.hard-link {
+	color: #6E6D65;
+}
+
 /*** header */
 #top {
 	background: url('../img/top_bg.png') #C9BB9B repeat-x;
@@ -62,6 +66,10 @@ a {
 #quick-nav {
 	padding-top: 10px;
 	float: right;
+}
+
+#quick-nav strong{
+	color: #2F2F32;
 }
 
 #quick-nav ul {

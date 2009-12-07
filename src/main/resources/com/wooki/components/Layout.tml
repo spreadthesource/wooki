@@ -15,8 +15,8 @@
 				</t:pagelink>
 			</hgroup>
 			
-			<section id="login-dialog-form">
-				<form id="loginForm" action="/wooki/j_spring_security_check" method="POST">
+			
+			<form name="loginForm" id="login-dialog-form" action="/wooki/j_spring_security_check" method="POST">
 				<h1>Sign on Wooki</h1>
 	    		<table>
 	    			<tr>
@@ -25,7 +25,7 @@
 	    			</tr>
 	    			<tr>
 	    				<th><label for="j_password">Password</label></th>
-	    				<td><input class="password" name="j_password" type="password" size="10" maxlength="30" /><small><a href="#">Forgot</a></small></td>
+	    				<td><input class="password" name="j_password" type="password" /></td>
 	    			</tr>
 	    			<tr>
 	    				<th></th>
@@ -33,10 +33,10 @@
 	    			</tr>
 	    		</table>	
 				<div id="submit">
-					<input id="submit" class="submit" type="submit" value="log in"/>
+					<input id="submit" class="submit" type="submit" value="log in"/> <small><a href="#">Forgot password?</a></small>
 				</div>
-				</form>
-			</section>
+			</form>
+			
 			
 			<nav id="quick-nav">
 				<ul>

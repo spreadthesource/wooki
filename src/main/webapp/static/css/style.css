@@ -101,13 +101,40 @@ a {
 	background: #2F2F32;
 	color: white;
 	text-decoration:none;
-	width:300px;
+	width:250px;
 	padding:10px;
 	position:absolute;
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
 	display:none;
+}
+
+#login-dialog-form table { 
+	color: white;
+}
+
+input[type="checkbox"] {width:auto !important; }
+
+#login-dialog-form th {
+	text-align:right;
+	padding-right:10px;
+	font-weight: normal;
+}
+
+#login-dialog-form td {
+	padding-top:10px;
+}
+
+#login-dialog-form input {
+	font-size:14px;
+	padding:6px;
+	border:1px solid #6E6D65;
+	width:150px;
+	font-family: Helvetica;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #search-box {

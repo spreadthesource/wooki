@@ -41,9 +41,15 @@
 			
 			<nav id="quick-nav">
 				<ul>
-					<li>Tour</li>
 					<t:security.ifLoggedIn>
-						<li>${username} <a href="/wooki/j_spring_security_logout">Logout</a></li>
+						<li><strong>${username}</strong></li>
+						<li><a href="#">Dashboard</a></li>
+						<li><a href="#">Profile</a></li>
+						<li><a href="/wooki/j_spring_security_logout" class="hard-link">Logout</a></li>
+					</t:security.ifLoggedIn>
+					<li><a href="#">Tour</a></li>
+					<t:security.ifLoggedIn>
+						
 						<p:else>
 							<li>Have an account? <a href="#" id="login-link">Signin</a></li>
 							<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>

@@ -28,12 +28,13 @@
 	    				<td><input class="password" name="j_password" type="password" /></td>
 	    			</tr>
 	    			<tr>
-	    				<th></th>
+	    				<th> </th>
 	    				<td><input type="checkbox" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
 	    			</tr>
 	    		</table>	
-				<div id="submit">
-					<input id="submit" class="submit" type="submit" value="log in"/> <small><a href="#">Forgot password?</a></small>
+				<div>
+					<a href="javascript:$('login-dialog-form').submit();" class="radied-box small-active-button">Signin</a>
+					 <small><a href="#">Forgot password?</a></small>
 				</div>
 			</form>
 			

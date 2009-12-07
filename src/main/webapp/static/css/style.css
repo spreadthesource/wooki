@@ -101,7 +101,7 @@ a {
 	background: #2F2F32;
 	color: white;
 	text-decoration:none;
-	width:250px;
+	width:240px;
 	padding:10px;
 	position:absolute;
 	border-radius: 10px;
@@ -135,6 +135,23 @@ input[type="checkbox"] {width:auto !important; }
 	border-radius: 10px;
 	-moz-border-radius: 10px;
 	-webkit-border-radius: 10px;
+}
+
+#login-dialog-form input:focus {
+	border: 1px solid #FF7351;
+}
+
+#login-dialog-form div {
+	text-align:right;
+}
+
+#login-dialog-form small {
+	font-size: 10px;
+	font-style: italic;
+}
+
+#login-dialog-form a {
+	text-decoration: none;
 }
 
 #search-box {
@@ -236,6 +253,16 @@ input[type="checkbox"] {width:auto !important; }
 	text-decoration: none;
 }
 
+.small-active-button {
+	background: #FF7351;
+	color: #FFD8A1;
+	display:block;
+	margin: 10px;
+	text-align: center;
+	font-size: 14px;
+	font-family: Helvetica;
+	text-decoration: none;
+}
 
 .active-button em {
 	font-size: 20px;

@@ -291,7 +291,7 @@ a {
 	padding-bottom:10px;
 }
 
-#book h1, #signup-form h1, #signin-form h1 {
+#book h1, .big-form h1 {
 	font-family: Georgia;
 	font-size: 30px;
 	margin-bottom: 20px;
@@ -410,74 +410,26 @@ a {
 	text-align:center;
 }
 
-/*** Signup elements */
+/*** big form elements */
 .basic-content {
 	background:white;
 	border: 1px solid #C9BB9B;
 } 
 
-#signup-form h2 {
-	font-size:20px;
-}
-
-#signup-form table {
-	width:100%;
-	margin:20px;
-}
-
-#signup-form th {
-	text-align:right;
-	padding-right:10px;
-	width:200px;
-	font-size:18px;
-	font-weight: normal;
-	color:#6E6D65;
-	height:40px;
-}
-
-#signup-form td {
-}
-
-#signup-form #submit {
-	margin-left:220px;
-	width:220px;
-	border:none;
-}
-
-
 div.t-error-popup span {
 	font-size:18px;
 }
 
-
-#signup-form input {
-	font-size:18px;
-	padding:8px;
-	border:1px solid #6E6D65;
-	width:240px;
-	font-family: Helvetica;
-	border-radius: 10px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-
-}
-
-#signup-form input:focus {
-	border: 1px solid #FF7351;
-}
-
-/*** Signup elements */
-
-#signin-form h2 {
+.big-form h2 {
 	font-size:20px;
 }
 
-#signin-form table {
+.big-form table {
 	width:100%;
 	margin:20px;
 }
 
-#signin-form th {
+.big-form th {
 	text-align:right;
 	padding-right:10px;
 	width:200px;
@@ -487,20 +439,20 @@ div.t-error-popup span {
 	height:40px;
 }
 
-#signin-form td {
+.big-form td {
 }
 
-#signin-form small {
+.big-form small {
 	margin-left: 10px;
 }
 
-#signin-form #submit {
+.big-form #submit {
 	margin-left:220px;
 	width:220px;
 	border:none;
 }
 
-#signin-form input {
+.big-form input {
 	font-size:18px;
 	padding:8px;
 	border:1px solid #6E6D65;
@@ -511,7 +463,7 @@ div.t-error-popup span {
 	-webkit-border-radius: 10px;
 }
 
-#signin-form input:focus {
+.big-form input:focus {
 	border: 1px solid #FF7351;
 }
 

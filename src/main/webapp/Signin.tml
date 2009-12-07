@@ -1,7 +1,6 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    <section id="signin-form" class="full-content">
-    	<form name="loginForm" id="loginForm" action="/wooki/j_spring_security_check" method="POST">
+    	<form name="loginForm" class="full-content big-form" id="loginForm" action="/wooki/j_spring_security_check" method="POST">
     		<h1>Log on wooki</h1>
     		<div class="radied-box basic-content">
 	    		<table>
@@ -20,6 +19,6 @@
 				<div class="form-footer"></div>
 			</div>
     	</form>
-    </section>
+
 
 </html>

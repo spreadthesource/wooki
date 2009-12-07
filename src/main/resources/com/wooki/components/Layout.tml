@@ -45,7 +45,7 @@
 						<li>${username} <a href="/wooki/j_spring_security_logout">Logout</a></li>
 						<p:else>
 							<li>Have an account? <a href="#" id="login-link">Signin</a></li>
-							<li>Have not ? <a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
+							<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 						</p:else>
 					</t:security.ifLoggedIn>
 					<li><a href="#">FAQ</a></li>

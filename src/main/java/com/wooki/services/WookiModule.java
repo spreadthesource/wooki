@@ -42,6 +42,7 @@ public class WookiModule<T> {
 			MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 		conf.add(SymbolConstants.PRODUCTION_MODE, "false");
+		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
 	}
 
 	public static void bind(ServiceBinder binder) {

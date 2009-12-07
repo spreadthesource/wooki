@@ -11,6 +11,13 @@ import com.wooki.domain.model.Comment;
  * 
  */
 public interface CommentManager {
+
+	/**
+	 * Remove a comment.
+	 *
+	 * @param commId
+	 */
+	void removeComment(Long commId);
 	
 	/**
 	 * List all the comment for a book including comments associated to

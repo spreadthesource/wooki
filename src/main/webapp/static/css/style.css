@@ -594,19 +594,29 @@ div.t-error-popup span {
 }
 
 /** Comment details related CSS */
+#commentList form textarea {
+	width: 100%;
+	height: 5em;
+}
+
+#commentList form p {
+	margin-top: 10px;
+}
+
 .comment-row {
 	clear: both;
-	border: thin solid;
-	border-color: black;
 	margin-bottom: 10px;
+	background-color: #F5F5F5;
+	overflow: hidden;
 }
 
-.add-comment-link {
-	margin-left: 10px;
+.comment-body {
+	clear: both;
+	margin-top: 10px;
 }
 
-.delete-comment-link  {
-	
+.comment-body pre {
+	font-family: Helvetica;
 }
 
 .comment-content {

@@ -38,7 +38,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		Query query = entityManager
 				.createQuery(String
 						.format(
-								"select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book",
+								"select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book and c.deletionDate is null",
 								getEntityType(), getEntityType()));
 		query.setParameter("book", bookId);
 		return query.getResultList();
@@ -49,7 +49,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 			throw new IllegalArgumentException("Book id cannot.");
 		}
 		Query query = this.entityManager.createQuery("from " + getEntityType()
-				+ " c where c.book.id=:book");
+				+ " c where c.book.id=:book and c.deletionDate is null");
 		List<Chapter> result = (List<Chapter>) query.setParameter("book",
 				idBook).getResultList();
 		return result;
@@ -61,7 +61,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		}
 		Query query = this.entityManager.createQuery("from "
 				+ this.getEntityType()
-				+ " c where c.book.id=:booId order by c.lastModified desc");
+				+ " c where c.book.id=:booId and c.deletionDate is null order by c.lastModified desc");
 		query.setParameter("bookId", id);
 		return query.getResultList();
 	}

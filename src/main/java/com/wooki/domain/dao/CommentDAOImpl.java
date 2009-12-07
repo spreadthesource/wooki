@@ -23,7 +23,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		}
 		Query query = this.entityManager.createQuery("select count(c) from "
 				+ this.getEntityType()
-				+ " c join c.user as u where c.id=:id and u.username=:un");
+				+ " c join c.user as u where c.id=:id and u.username=:un and c.deletionDate is null");
 		Long result = (Long) query.setParameter("un", username).setParameter(
 				"id", commId).getSingleResult();
 		return result > 0;
@@ -34,7 +34,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
 		Query query = this.entityManager.createQuery("from " + getEntityType()
-				+ " c where c.publication.id=:pubId and c.state=:st");
+				+ " c where c.publication.id=:pubId and c.state=:st and c.deletionDate is null");
 		query.setParameter("pubId", chapterId);
 		query.setParameter("st", CommentState.OPEN);
 		return query.getResultList();
@@ -48,7 +48,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		Query query = this.entityManager
 				.createQuery("from "
 						+ getEntityType()
-						+ " c where c.publication.id=:pubId and c.state=:st and c.domId=:cid");
+						+ " c where c.publication.id=:pubId and c.state=:st and c.domId=:cid and c.deletionDate is null");
 		query.setParameter("pubId", publicationId);
 		query.setParameter("st", CommentState.OPEN);
 		query.setParameter("cid", domId);
@@ -62,7 +62,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		}
 		String queryStr = String
 				.format(
-						"select c.domId, count(c.domId) from %s c where c.publication.id=:id group by c.domId",
+						"select c.domId, count(c.domId) from %s c where c.publication.id=:id and c.deletionDate is null group by c.domId",
 						Comment.class.getName());
 		Query query = this.entityManager.createQuery(queryStr);
 		query.setParameter("id", publicationId);

@@ -3,9 +3,13 @@ package com.wooki.pages.book;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.corelib.components.Delegate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.biz.BookManager;
@@ -14,13 +18,11 @@ import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.DateUtils;
 
 /**
  * This page displays a book with its table of contents.
- * 
- * @author ccordenier
- * 
  */
 public class Index {
 
@@ -29,6 +31,9 @@ public class Index {
 
 	@Inject
 	private ChapterManager chapterManager;
+
+	@Inject
+	private WookiSecurityContext securityContext;
 
 	@Property
 	private Book book;
@@ -56,6 +61,24 @@ public class Index {
 
 	@Property
 	private Chapter currentChapter;
+
+	/**
+	 * Will be set if the author tries to add a new chapter
+	 */
+	@Property
+	private String chapterName;
+
+	@Property
+	private Block addChapterToggle;
+
+	@Inject
+	private Block addChapterLink;
+
+	@Inject
+	private Block addChapterForm;
+	
+	@Component
+	private Delegate addChapterDelegate;
 
 	private Long bookId;
 
@@ -93,12 +116,24 @@ public class Index {
 					.getLastPublishedContent(this.bookAbstractId);
 		}
 
+		if (securityContext.isAuthorOfBook(bookId)) {
+			this.addChapterToggle = this.addChapterLink;
+			
+		}
+		
+
 		return null;
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Long retrieveBookId() {
 		return bookId;
+	}
+
+	@OnEvent(value = EventConstants.ACTION, component = "showAddChapterField")
+	public Object toggleAddChapter() {
+		this.addChapterToggle = addChapterForm;
+		return addChapterDelegate;
 	}
 
 	/**

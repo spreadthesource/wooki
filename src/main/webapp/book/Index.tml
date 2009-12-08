@@ -4,13 +4,6 @@
 
 <header>
 
-	<t:security.ifAuthorOfBook t:bookId="bookId">
-		<p id="book-admin">
-			<ul>
-				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
-			</ul>
-		</p>
-	</t:security.ifAuthorOfBook>
 	
 	<p id="authors">
 		<t:loop source="authors" value="currentUser" index="loopIdx">
@@ -22,6 +15,17 @@
 	<p id="published">
 		<t:output value="prop:book?.creationDate" t:format="prop:format" /> Edition
 	</p>
+	
+	
+	<t:security.ifAuthorOfBook t:bookId="bookId">
+		<nav id="book-actions">
+			<ul>
+				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
+				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:editCtx">Settings</a></li>
+			</ul>
+		</nav>
+		<div class="clearer" />
+	</t:security.ifAuthorOfBook>
 	
 	<section class="abstract">
 		<t:outputRaw value="abstractContent" />
@@ -40,6 +44,33 @@
 				<p><t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" /></p>
 			</li>
 		</t:loop>
+		
+		
+		<t:security.ifAuthorOfBook t:bookId="bookId">
+			<li>
+				<t:zone id="addChapterZone" t:update="none">
+					<t:delegate t:to="addChapterToggle" t:id="addChapterDelegate" />
+				</t:zone>
+			</li>
+			
+			<t:block id="addChapterLink">
+				<h3 class="active">
+					<t:actionlink t:id="showAddChapterField" t:zone="addChapterZone">Add a chapter</t:actionlink>
+				</h3>
+			</t:block>
+			
+			<t:block id="addChapterForm">
+				<t:form t:id="addChapterForm" class="big-form">
+					<h3>
+						<t:textfield t:value="chapterName"  />
+					</h3>
+					<p>
+						<t:linksubmit>Add</t:linksubmit> or <t:linkSubmit>Cancel</t:linkSubmit>
+					</p>
+				</t:form>
+			</t:block>
+				
+		</t:security.ifAuthorOfBook>
 	</ol>
 	
 	<div class="clearer"  />

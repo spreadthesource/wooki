@@ -12,9 +12,9 @@
             	</span>
           	</div>
           	<div class="comment-body">
-				<pre>
+				<p>
 					${currentComment.content}
-				</pre>
+				</p>
 			</div>
 		</div>
 	</t:block>

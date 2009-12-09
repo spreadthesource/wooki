@@ -38,4 +38,8 @@ public class UserManagerImpl implements UserManager {
 		return authorDao.findByUsername(username);
 	}
 
+	public String[] listUserNames(String prefix) {
+		return authorDao.listUserNames(prefix);
+	}
+
 }

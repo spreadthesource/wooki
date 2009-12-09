@@ -14,6 +14,8 @@ import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.UserAlreadyOwnerException;
+import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Activity;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
@@ -40,15 +42,16 @@ public class BookManagerImpl implements BookManager {
 
 	@Autowired
 	private ActivityDAO activityDao;
-	
+
 	@Autowired
 	private ChapterDAO chapterDao;
 
 	@Autowired
 	private WookiSecurityContext securityCtx;
-	
+
 	@Transactional(readOnly = false)
-	public void addAuthor(Book book, String username) {
+	public User addAuthor(Book book, String username)
+			throws UserNotFoundException, UserAlreadyOwnerException {
 		if (book == null || username == null) {
 			throw new IllegalArgumentException(
 					"Book and chapter title cannot be null for addition.");
@@ -57,11 +60,51 @@ public class BookManagerImpl implements BookManager {
 		User toAdd = authorDao.findByUsername(username);
 
 		if (toAdd == null) {
-			return;
+			throw new UserNotFoundException(username + " does not exist.");
+		}
+
+		if (bookDao.isOwner(book.getId(), username)) {
+			throw new UserAlreadyOwnerException(username
+					+ "is already an author the book");
 		}
 
 		book.addUser(toAdd);
 		bookDao.update(book);
+		return toAdd;
+	}
+
+	@Transactional(readOnly = false)
+	public void removeAuthor(Book book, Long authorId) {
+		if (book == null || authorId == null) {
+			throw new IllegalArgumentException(
+					"Book and chapter title cannot be null for addition.");
+		}
+		User user = authorDao.findById(authorId);
+		user.getBooks().remove(book);
+		book.getAuthors().remove(user);
+		bookDao.update(book);
+	}
+
+	@Transactional(readOnly = false)
+	public Book updateTitle(Book book) {
+		if (book == null) {
+			throw new IllegalArgumentException(
+					"Book and chapter title cannot be null for addition.");
+		}
+		// Create slug title
+		String slug = SlugBuilder.buildSlug(book.getTitle());
+		if (!book.getSlugTitle().equals(slug)) {
+			book.setSlugTitle(slug);
+		}
+		return bookDao.update(book);
+	}
+
+	public boolean isAuthor(Book book, String username) {
+		if (book == null || username == null) {
+			throw new IllegalArgumentException(
+					"Book and chapter title cannot be null for addition.");
+		}
+		return bookDao.isOwner(book.getId(), username);
 	}
 
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
@@ -73,11 +116,12 @@ public class BookManagerImpl implements BookManager {
 		}
 
 		if (!securityCtx.isAuthorOfBook(book.getId())) {
-			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
+			throw new AuthorizationException(
+					"Current user is not an author of " + book.getTitle());
 		}
 
 		User author = securityCtx.getAuthor();
-		
+
 		// Create the new Chapter
 		Chapter chapter = new Chapter();
 		chapter.setTitle(title);
@@ -91,7 +135,7 @@ public class BookManagerImpl implements BookManager {
 		book.addChapter(chapter);
 		chapter.setBook(book);
 		this.chapterDao.create(chapter);
-		
+
 		// Add activity event
 		Activity activity = new Activity();
 		activity.setUsername(author.getUsername());
@@ -107,13 +151,13 @@ public class BookManagerImpl implements BookManager {
 
 	@Transactional(readOnly = false)
 	public Book create(String title) {
-		
+
 		User author = securityCtx.getAuthor();
-		
-		if(author == null) {
+
+		if (author == null) {
 			throw new AuthorizationException();
 		}
-		
+
 		Book book = new Book();
 
 		// Set basic properties

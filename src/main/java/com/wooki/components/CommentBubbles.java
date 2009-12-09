@@ -16,10 +16,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.beaneditor.Width;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 
+import com.wooki.WookiEventConstants;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Comment;
@@ -49,22 +51,19 @@ public class CommentBubbles {
 	private CommentManager commentManager;
 
 	@InjectComponent
+	private Form createCommentForm;
+
+	@InjectComponent
 	private Zone commentList;
-	
+
 	@InjectComponent
 	private CommentDialog commentDialog;
-	
+
 	@Inject
 	private Block commentsBlock;
 
 	@Inject
-	private Block lstCommentDetails;
-
-	@Inject
 	private Block commentDetails;
-
-	@InjectComponent
-	private Zone updateZone;
 
 	@Property
 	private List<Object[]> commentsInfos;
@@ -99,6 +98,7 @@ public class CommentBubbles {
 		this.domId = domId;
 		this.comments = commentManager.listOpenForPublicationAndDomId(
 				publicationId, domId);
+		createCommentForm.clearErrors();
 		return commentsBlock;
 	}
 
@@ -111,13 +111,9 @@ public class CommentBubbles {
 		return this.commentDetails;
 	}
 
-	@OnEvent(value = "remove")
-	public void removeComment(Long comId){
+	@OnEvent(value = WookiEventConstants.REMOVE)
+	public void removeComment(Long comId) {
 		this.commentManager.removeComment(comId);
-	}
-
-	public String getZoneId() {
-		return updateZone.getClientId();
 	}
 
 	@AfterRender

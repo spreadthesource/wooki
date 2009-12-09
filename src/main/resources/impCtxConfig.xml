@@ -56,4 +56,12 @@
 		<property name="shared" value="false" />
 	</bean>
 
+	<bean id="exportService" class="com.wooki.services.ExportServiceImpl">
+		<property name="bookManager" ref="bookManager" />
+		<property name="chapterManager" ref="chapterManager" />
+		<property name="toFOConvertor" ref="xhtmlToFOConvertor" />
+		<property name="toPDFConvertor" ref="FOToPDFConvertor" />
+		<property name="toXHTMLConvertor" ref="documentToXHTMLConvertor" />
+	</bean>
+
 </beans>

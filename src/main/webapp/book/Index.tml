@@ -17,15 +17,19 @@
 	</p>
 	
 	
-	<t:security.ifAuthorOfBook t:bookId="bookId">
-		<nav id="book-actions">
-			<ul>
+	<nav id="book-actions">
+		<ul>
+			<t:security.ifAuthorOfBook t:bookId="bookId">
 				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
 				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:editCtx">Settings</a></li>
-			</ul>
-		</nav>
-		<div class="clearer" />
-	</t:security.ifAuthorOfBook>
+			</t:security.ifAuthorOfBook>
+		
+			<li><a t:type="eventlink" t:event="print">Print</a></li>
+
+		</ul>
+	</nav>
+	<div class="clearer" />
+
 	
 	<section class="abstract">
 		<t:outputRaw value="abstractContent" />
@@ -76,6 +80,6 @@
 	<div class="clearer"  />
 </div>
 
-<t:commentBubbles t:publicationId="bookAbstractId" />
+<t:commentBubbles t:publicationId="publicationId" />
 
 </html>

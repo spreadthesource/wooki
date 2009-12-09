@@ -19,7 +19,7 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long>
 	public Publication findLastRevision(Long chapterId) {
 		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("id", chapterId);
-		query.setMaxResults(1);
+		query.setMaxResults(10);
 		List<Publication> published = query.getResultList();
 		if (published != null && published.size() > 0) {
 			return published.get(0);

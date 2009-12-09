@@ -25,6 +25,8 @@ public class ExportServiceImpl implements ExportService {
 
 	private Convertor toXHTMLConvertor;
 
+	private Convertor toImprovedXHTMLConvertor;
+
 	public InputStream exportPdf(Long bookId) {
 		if (bookId == null) {
 			throw new IllegalArgumentException(
@@ -53,8 +55,9 @@ public class ExportServiceImpl implements ExportService {
 		/** Generate PDF */
 		Resource resource = new ByteArrayResource(buffer.toString().getBytes());
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
+		InputStream improvedXhtml = toImprovedXHTMLConvertor.performTransformation(new InputStreamResource(xhtml));
 		InputStream fo = toFOConvertor
-				.performTransformation(new InputStreamResource(xhtml));
+				.performTransformation(new InputStreamResource(improvedXhtml));
 		InputStream pdf = toPDFConvertor
 				.performTransformation(new InputStreamResource(fo));
 		return pdf;
@@ -98,6 +101,14 @@ public class ExportServiceImpl implements ExportService {
 
 	public void setToXHTMLConvertor(Convertor toXHTMLConvertor) {
 		this.toXHTMLConvertor = toXHTMLConvertor;
+	}
+
+	public Convertor getToImprovedXHTMLConvertor() {
+		return toImprovedXHTMLConvertor;
+	}
+
+	public void setToImprovedXHTMLConvertor(Convertor toXHTMLConvertor) {
+		this.toImprovedXHTMLConvertor = toXHTMLConvertor;
 	}
 
 }

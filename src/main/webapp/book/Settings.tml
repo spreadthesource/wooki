@@ -1,13 +1,35 @@
-<html t:type="booklayout"
+<html t:type="layout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter">
-<section id="content" class="body">
-<h2>Settings</h2>
-<nav>
-<ul id="settings-list">
-	<li>book authors : Christophe, Robin. <a href="#">edit</a></li>
-	<li><a href="#">delete this book</a></li>
-</ul>
-</nav>
-</section>
+	<section id="book-settings">
+		<h1>Book Settings of <a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
+		<div id="book-info" class="radied-box">
+			<h2>General Settings</h2>
+			<form t:type="form" t:id="bookInfoForm">
+				<ol>
+					<li>
+						<label t:type="label" t:for="title"></label><input t:type="textfield" t:id="title" t:value="book.title" class="form-field" size="40"/>
+					</li>
+				</ol>
+				<p><input t:type="submit" /></p>
+			</form>
+		</div>
+		<div id="authors-settings" class="radied-box">
+			<h2>Author List</h2>
+			<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authorsList" t:position="top">
+				<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete"/>
+				<span><a href="#" t:type="linksubmit">Add author</a></span>
+			</form>
+			<t:block id="authorRow">
+				<li id="ent-${currentAuthor.id}">
+					<span>${currentAuthor.username}</span><a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
+				</li>
+			</t:block>
+			<ul id="authorsList">
+				<t:loop source="authors" value="currentAuthor">
+					<t:delegate t:to="block:authorRow" />
+				</t:loop>
+			</ul>
+		</div>
+	</section>
 </html>

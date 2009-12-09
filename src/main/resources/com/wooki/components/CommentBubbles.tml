@@ -19,21 +19,16 @@
 		</div>
 	</t:block>
 	
-	<!-- Block used to display comment details -->
-	<t:block t:id="lstCommentDetails">
-		<t:loop t:source="comments" t:value="currentComment">
-			<t:delegate t:to="block:commentDetails" />
-		</t:loop>
-	</t:block>
-	
 	<!-- Block used to display the comments window associated to a bubble -->
 	<t:block t:id="commentsBlock">
-		<div t:type="zone" class="comment-details" t:id="updateZone" t:mixins="appendToZone" t:show="none" t:update="none">
-			<t:delegate to="block:lstCommentDetails" />
+		<div class="comment-details" id="comment-details">
+			<t:loop t:source="comments" t:value="currentComment">
+				<t:delegate t:to="block:commentDetails" />
+			</t:loop>
 		</div>
 		<t:security.ifLoggedIn>
-			<form t:type="form" t:id="createCommentForm" t:zone="prop:zoneId" class="add-comment-form">
-				<p><input t:type="textarea" t:value="content" /></p>
+			<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="add-comment-form">
+				<p><input t:type="textarea" t:value="content" t:id="content" /></p>
 				<p class="add-comment-link"><a t:type="linksubmit">Add Comment</a></p>
 			</form>
 		</t:security.ifLoggedIn>

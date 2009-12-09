@@ -6,7 +6,71 @@ jQuery.extend(Wooki, {
 
 Tapestry.ElementEffect.none = function(element) {
 	// Do nothing
-}
+};
+
+/**
+ * Submit the current for via Ajax and insert result into an element in
+ * the page.
+ *
+ */
+Tapestry.Append = Class.create({
+	
+	/**
+	 * Initialize the form to submit via Ajax and add the corresponding
+	 * insertion mechanism in response.
+	 *
+	 */
+	initialize: function(url, element, to, position) {
+	
+		this.element = $(element);
+		
+		this.to = $(to);
+		
+		this.position = position;
+		
+		this.element.insert({'top': "<div class='append-errors'/>"});
+		
+		// Turn normal form submission off.
+	
+	    this.element.getFormEventManager().preventSubmission = true;
+	
+	    // After the form is validated and prepared, this code will
+	    // process the form submission via an Ajax call.  The original submit event
+	    // will have been cancelled.
+	
+	    this.element.observe(Tapestry.FORM_PROCESS_SUBMIT_EVENT, function() {
+	        var successHandler = function(transport) {
+	            this.processReply(transport.responseJSON, this.position);
+	        }.bind(this);
+	
+	        this.element.sendAjaxRequest(url, {
+	            onSuccess : successHandler
+	        });
+	    }.bind(this));
+	
+	},
+	
+	/** 
+	 * Execute script and load result content in the target element.
+	 */
+	processReply : function(reply, position) {
+		if (reply.errors != undefined) {
+			var errorDiv = this.element.down('.append-errors');
+			errorDiv.update(reply.errors);
+			errorDiv.show();
+			errorDiv.fade({duration : 5.0});
+		} else {
+			Tapestry.loadScriptsInReply(reply, function() {
+				if(position == 'bottom') {
+					Element.insert(this.to, {'bottom' : reply.content});
+				}else{
+					Element.insert(this.to, {'top' : reply.content});
+				}
+	        }.bind(this));
+		}
+	}
+	
+});
 
 /**
  * Add initialization method to Tapestry.Initializer object
@@ -19,10 +83,8 @@ jQuery.extend(Tapestry.Initializer,{
 	 * replacing current content.
 	 * 
 	 */
-	appendToZone : function(zoneId) {
-		$(zoneId).update = function(content) {
-			this.insert(content);
-		}
+	appendToZone : function(url, element, to, position) {
+		new Tapestry.Append(url, element, to, position);
 	},
 	
 	/**

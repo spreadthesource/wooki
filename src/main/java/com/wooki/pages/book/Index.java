@@ -12,6 +12,7 @@ import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Delegate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Response;
 

@@ -8,3 +8,5 @@ target/
 *.tmp_*
 tidyErrors.txt
 *.origin
+*.orig
+

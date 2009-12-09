@@ -3,8 +3,11 @@ package com.wooki.domain.biz;
 import java.util.List;
 
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.UserAlreadyOwnerException;
+import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.User;
 
 /**
  * Manager interface to manipulate DAO Interaction.
@@ -24,6 +27,14 @@ public interface BookManager {
 	Book create(String title);
 
 	/**
+	 * Update book.
+	 *
+	 * @param book
+	 * @return
+	 */
+	Book updateTitle(Book book);
+
+	/**
 	 * Add an author to a given book, author must exist before calling this
 	 * method.
 	 * 
@@ -33,9 +44,24 @@ public interface BookManager {
 	 *            The tile for the new chapter.
 	 * @param username
 	 *            TODO
+	 * @return TODO
 	 */
-	void addAuthor(Book book, String username);
+	User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException ;
+	
+	/**
+	 * Remove an author from a book.
+	 */
+	void removeAuthor(Book book, Long authorId);
 
+	/**
+	 * Check if the user is author of a book.
+	 *
+	 * @param book
+	 * @param username
+	 * @return
+	 */
+	boolean isAuthor(Book book, String username);
+	
 	/**
 	 * Add a chapter to a given book.
 	 * 

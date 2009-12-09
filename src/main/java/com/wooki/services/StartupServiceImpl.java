@@ -7,6 +7,7 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
@@ -54,7 +55,12 @@ public class StartupServiceImpl implements StartupService {
 				"<p>You will need ...</p>");
 
 		// Add robin to author's list
-		bookManager.addAuthor(productBook, "robink");
+		try {
+			bookManager.addAuthor(productBook, "robink");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		securityCtx.log(robink);
 		Chapter chapterTwo = bookManager.addChapter(productBook,

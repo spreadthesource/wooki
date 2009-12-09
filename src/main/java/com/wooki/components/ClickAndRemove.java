@@ -1,7 +1,6 @@
 package com.wooki.components;
 
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.ComponentEventCallback;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
@@ -10,9 +9,10 @@ import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
-import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+
+import com.wooki.WookiEventConstants;
 
 /**
  * This component send a request to the server and remove an element on the
@@ -66,7 +66,7 @@ public class ClickAndRemove extends AbstractLink {
 	public Object clickAndRemove(Long entityId) {
 		final JSONObject data = new JSONObject();
 		try {
-			resources.triggerEvent("remove", new Object[] { entityId }, null);
+			resources.triggerEvent(WookiEventConstants.REMOVE, new Object[] { entityId }, null);
 			data.put("result", true);
 		} catch (Exception ex) {
 			data.put("result", false);

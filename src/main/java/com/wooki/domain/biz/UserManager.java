@@ -1,5 +1,7 @@
 package com.wooki.domain.biz;
 
+import java.util.List;
+
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 
@@ -26,4 +28,12 @@ public interface UserManager {
 	 */
 	User findByUsername(String username);
 
+	/**
+	 * Get the list of user whos name starts with prefix.
+	 *
+	 * @param prefix
+	 * @return
+	 */
+	String[] listUserNames(String prefix);
+	
 }

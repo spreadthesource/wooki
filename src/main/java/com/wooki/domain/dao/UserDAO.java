@@ -18,4 +18,12 @@ public interface UserDAO extends GenericDAO<User, Long>{
 	 */
 	User findByUsername(String username);
 	
+	/**
+	 * List usernames
+	 *
+	 * @param prefix
+	 * @return
+	 */
+	String[] listUserNames(String prefix);
+	
 }

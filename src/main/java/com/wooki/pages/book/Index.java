@@ -1,16 +1,19 @@
 package com.wooki.pages.book;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.Component;
+import org.apache.tapestry5.EventContext;
+import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
-import org.apache.tapestry5.corelib.components.Delegate;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Response;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
@@ -19,6 +22,7 @@ import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.ExportService;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -35,12 +39,18 @@ public class Index {
 	@Inject
 	private WookiSecurityContext securityContext;
 
+	@Inject
+	private ExportService exportService;
+	
 	@Property
 	private Book book;
 
 	@Property
 	private Long bookAbstractId;
 
+	@Property
+	private Long publicationId;
+	
 	@Property
 	private User currentUser;
 
@@ -88,14 +98,15 @@ public class Index {
 	 * @param bookId
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBook(Long bookId) {
-
-		if (bookId == null) {
+	public Object setupBook(EventContext ctx) {
+		
+		// Check parameter numbers
+		if(ctx.getCount() == 0) {
 			return com.wooki.pages.Index.class;
 		}
-
-		this.bookId = bookId;
-
+		
+		this.bookId = ctx.get(Long.class, 0);
+		
 		// Get book related information
 		this.book = bookManager.findById(bookId);
 		this.authors = book.getAuthors();
@@ -111,6 +122,7 @@ public class Index {
 		Publication published = this.chapterManager
 				.getLastPublished(this.bookAbstractId);
 		if (published != null) {
+			this.publicationId = published.getId();
 			// Get abstract content to display
 			this.abstractContent = this.chapterManager
 					.getLastPublishedContent(this.bookAbstractId);
@@ -136,6 +148,31 @@ public class Index {
 		return addChapterDelegate;
 	}
 
+	/**
+	 * Simply export to PDF.
+	 *
+	 * @return
+	 */
+	@OnEvent(value = "print")
+	public StreamResponse exportPdf(){
+		return new StreamResponse() {
+			
+			public void prepareResponse(Response response) {
+				response.setHeader("Cache-Control", "no-cache");
+				response.setHeader("Expires", "max-age=0");
+				response.setHeader("Content-Disposition", "attachment; filename="+book.getSlugTitle()+".pdf");
+			}
+			
+			public InputStream getStream() throws IOException {
+				return exportService.exportPdf(bookId);
+			}
+			
+			public String getContentType() {
+				return "application/pdf";
+			}
+		};
+	}
+	
 	/**
 	 * Get edit context for chapter
 	 * 

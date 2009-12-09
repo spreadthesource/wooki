@@ -48,6 +48,7 @@ public class WookiModule<T> {
 	public static void bind(ServiceBinder binder) {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
+		binder.bind(LoginUrlSource.class, LoginUrlSourceImpl.class);
 	}
 
 	/**

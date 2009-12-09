@@ -54,7 +54,7 @@
 		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
 		<security:custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
 		<property name="defaultTargetUrl" value="/index" />
-		<property name="authenticationFailureUrl" value="/index/failed" />
+		<property name="authenticationFailureUrl" value="/signin/failed" />
 		<property name="allowSessionCreation" value="true" />
 		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="targetUrlResolver" ref="viewBasedTargetUrlResolver" />

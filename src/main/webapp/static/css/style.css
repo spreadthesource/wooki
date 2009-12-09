@@ -674,3 +674,121 @@ div.t-error-popup span {
 	color: #6E6D65;
 	margin-bottom: 10px;
 }
+
+/** Append Mixin */
+.append-errors ul li {
+	background: #F5F5F5;
+	color: black;
+	padding: 10px;
+}
+
+/** Book settings */
+#book-settings .append-errors {
+	clear: both;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+}
+
+#book-settings .form-field {
+	font-family:Helvetica;
+	font-size:14px;
+}
+
+#authors-settings {
+	background-color: white;
+	float: right;
+	width: 300px;
+	margin: 10px;
+	border: 1px solid #C9BB9B;
+}
+
+#authors-settings form {
+	border-bottom: 1px solid #C9BB9B;
+	margin-bottom: 10px;
+	padding: 10px;
+}
+
+#authors-settings li {
+	margin-bottom: 10px;
+}
+
+#authors-settings form span {
+	margin-left: 10px;
+}
+
+#authors-settings li span {
+	float: left;
+	width: 100px;
+}
+
+#book-settings h1 {
+	padding: 10px;
+	font-size: 20px;
+	font-family: Georgia;
+}
+
+#book-settings a {
+	text-decoration: none;
+}
+
+#book-settings a {
+	margin-left: 10px;
+}
+
+#book-info {
+	background-color: white;
+	float: left;
+	width: 400px;
+	margin: 10px;
+	border: 1px solid #C9BB9B;
+}
+
+#book-info h2 {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #C9BB9B;
+	padding-bottom: 10px;
+}
+
+#book-info form label {
+	float: left;
+	width: 50px;
+	padding: 5px;
+}
+
+#book-info form p {
+	padding: 10px;
+	width: 95%;
+}
+
+#book-info form a {
+	float: right;
+}
+
+/** Tapestry overrides */
+div.t-autocomplete-menu {
+    z-index: 9999;
+}
+
+div.t-autocomplete-menu UL {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+	border-right: 1px solid black;
+    background-color: white;
+    padding: 4px 6px;
+    overflow: auto;
+}
+
+div.t-autocomplete-menu LI {
+    color: black;
+    list-style-type: none;
+    padding: 2px;
+    border-bottom: 1px solid #C9BB9B;
+    cursor: pointer;
+}
+
+DIV.t-autocomplete-menu LI.selected {
+    color: #FF7351;
+    font-weight: bold;
+}

@@ -10,7 +10,18 @@
            http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
 	<bean id="xhtmlToFOConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
-		<property name="xslStylesheet" value="classpath:com/wooki/services/parsers/Xhtml2fo.xsl" />
+		<!--property name="xslStylesheet" value="classpath:com/wooki/services/parsers/Xhtml2fo.xsl" /-->
+		<property name="xslStylesheet" value="classpath:com/wooki/services/parsers/Xhtml2XslFo.xsl" />
+		<!--property name="xslStylesheet" value="classpath:com/wooki/services/parsers/html.xsl" /-->
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
+
+	<bean id="documentToImprovedXHTMLConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet" value="classpath:com/wooki/services/parsers/identity.xsl" />
 		<property name="httpClient">
 			<ref bean="httpClient" />
 		</property>
@@ -62,6 +73,7 @@
 		<property name="toFOConvertor" ref="xhtmlToFOConvertor" />
 		<property name="toPDFConvertor" ref="FOToPDFConvertor" />
 		<property name="toXHTMLConvertor" ref="documentToXHTMLConvertor" />
+		<property name="toImprovedXHTMLConvertor" ref="documentToImprovedXHTMLConvertor" />
 	</bean>
 
 </beans>

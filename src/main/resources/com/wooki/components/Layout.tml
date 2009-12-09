@@ -16,7 +16,7 @@
 			</hgroup>
 			
 			
-			<form name="loginForm" id="login-dialog-form" action="/wooki/j_spring_security_check" method="POST">
+			<form name="loginForm" id="login-dialog-form" action="${loginUrl}" method="POST">
 				<h1>Sign on Wooki</h1>
 	    		<table>
 	    			<tr>

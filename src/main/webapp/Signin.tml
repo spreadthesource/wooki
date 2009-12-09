@@ -1,8 +1,11 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    	<form name="loginForm" class="full-content big-form" id="loginForm" action="/wooki/j_spring_security_check" method="POST">
+    	<form name="loginForm" class="full-content big-form" id="loginForm" action="${loginUrl}" method="POST">
     		<h1>Log on wooki</h1>
     		<div class="radied-box basic-content">
+	    		<t:if test="failed">
+	    			<div class="wooki-form-error">Wrong username or password</div>
+	    		</t:if>
 	    		<table>
 	    			<tr>
 	    				<th><label class="username" for="j_username">Username</label></th>

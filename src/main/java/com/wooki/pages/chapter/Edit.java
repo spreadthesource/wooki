@@ -4,7 +4,9 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.validator.Required;
 
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.pages.book.Index;
@@ -28,6 +30,7 @@ public class Edit {
 	private Long chapterId;
 
 	@Property
+	@Validate("required")
 	private String data;
 
 	private boolean publish;

@@ -60,16 +60,16 @@ public class DOMManagerImpl implements DOMManager {
 		}
 	}
 
-	public String adaptContent(String content) {
+	public String adaptContent(String content, Long prefix) {
 		StringBuffer result = new StringBuffer();
 		result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(
 				ID_START).append("=\"0\">");
 		result.append(content);
 		result.append("</").append(CHAPTER_ROOT_NODE).append(">");
-		return addIds(result.toString());
+		return addIds(result.toString(), prefix);
 	}
 
-	public String addIds(String document) {
+	private String addIds(String document, Long prefix) {
 
 		// Parse document
 		Document doc = parseContent(document);
@@ -85,7 +85,7 @@ public class DOMManagerImpl implements DOMManager {
 		IdAllocator allocator = new IdAllocator(idx);
 
 		for (Element elt : (List<Element>) doc.getRootElement().getChildren()) {
-			buildIds(allocator, elt);
+			buildIds(allocator, elt, prefix);
 		}
 
 		// Set the new value for
@@ -178,14 +178,19 @@ public class DOMManagerImpl implements DOMManager {
 	 * 
 	 * @param elt
 	 */
-	private void buildIds(IdAllocator allocator, Element elt) {
+	private void buildIds(IdAllocator allocator, Element elt, Long prefix) {
 		if (COMMENTABLE.contains(elt.getName())
 				&& elt.getAttribute("id") == null) {
-			elt.setAttribute("id", "b" + allocator.next());
+			if (prefix != null) {
+				elt.setAttribute("id", "b" + prefix.toString()
+						+ allocator.next());
+			} else {
+				elt.setAttribute("id", "b" + allocator.next());
+			}
 			elt.setAttribute("class", COMMENTABLE_CLASS);
 		}
 		for (Element child : (List<Element>) elt.getChildren()) {
-			buildIds(allocator, child);
+			buildIds(allocator, child, prefix);
 		}
 	}
 

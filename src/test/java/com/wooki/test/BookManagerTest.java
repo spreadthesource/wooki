@@ -299,10 +299,11 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
+		Publication publication = chapterManager.getLastPublished(chapters.get(0).getId());
 		Assert.assertNotNull(published, "No revision has been published.");
 		Assert
 				.assertEquals(published,
-						"<p id=\"b0\" class=\"commentable\">Tapestry is totally amazing</p>");
+						"<p id=\"b"+publication.getId()+"0\" class=\"commentable\">Tapestry is totally amazing</p>");
 
 	}
 }

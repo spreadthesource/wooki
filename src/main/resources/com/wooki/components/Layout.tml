@@ -61,7 +61,7 @@
 			
 			<div id="search-box">
 				<form action="#">
-					<p><label for="search-field">Looking for a document? </label><input type="text" name="search-field" id="search-field" class="form-field" /><a class="form-field" id="submit-search" href="#">Search</a></p>
+					<p><label for="search-field">Looking for a document? </label><input type="text" name="search-field" id="search-field" class="form-field insidefield-field" /><a class="form-field insidefield-button" id="submit-search" href="#">Search</a></p>
 				</form>
 			</div>	
 	</div>

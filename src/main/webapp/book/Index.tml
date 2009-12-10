@@ -66,10 +66,10 @@
 			<t:block id="addChapterForm">
 				<t:form t:id="addChapterForm" class="big-form">
 					<h3>
-						<t:textfield t:value="chapterName"  />
+						<t:textfield t:value="chapterName" class="long-field" t:validate="required" /><t:linksubmit class="radied-box active-button inline-form-button">Add</t:linksubmit>
 					</h3>
 					<p>
-						<t:linksubmit>Add</t:linksubmit> or <t:linkSubmit>Cancel</t:linkSubmit>
+						 <t:linkSubmit class="active-button radied-box inline-form-button">Cancel</t:linkSubmit>
 					</p>
 				</t:form>
 			</t:block>

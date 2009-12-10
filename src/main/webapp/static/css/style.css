@@ -28,6 +28,8 @@ a {
 .active {
 	color: #FF7351;
 }
+
+
 /*** header */
 #top {
 	background: url('../img/top_bg.png') #C9BB9B repeat-x;
@@ -180,12 +182,6 @@ input[type="checkbox"] {width:auto !important; }
 
 #search-box #search-field {
 	width: 300px;
-	border-top-left-radius: 10px;
-	-moz-border-radius-topleft: 10px;
-	-webkit-border-top-left-radius: 10px;
-	border-bottom-left-radius: 10px;
-	-moz-border-radius-bottomleft: 10px;
-	-webkit-border-bottom-left-radius: 10px;
 }
 
 #search-box #search-field:focus {
@@ -204,7 +200,7 @@ input[type="checkbox"] {width:auto !important; }
 	-webkit-border-bottom-right-radius: 10px;
 }
 
-#search-box .form-field {
+.form-field {
 	font-family: Helvetica;
 	font-size: 18px;
 	padding: 8px;
@@ -397,20 +393,21 @@ input[type="checkbox"] {width:auto !important; }
 #book #chapters-list li {
 	padding: 10px 0px;
 	clear: both;
+	line-height: 40px;
 }
 
 #book #chapters-list h3 {
 	width: 500px;
 	float: left;
-	padding-left: 20px;
-	line-height:25px;
+	padding: 0px 0px 0px 20px;
+	line-height:40px;
 }
 
 #book #chapters-list p {
 	text-align: right;
 	color: #6E6D65;
 	padding:0px;
-	line-height:25px;
+	line-height:40px;
 }
 
 #book p {
@@ -479,6 +476,10 @@ input[type="checkbox"] {width:auto !important; }
 	text-align:center;
 }
 
+#book .long-field {
+	width:400px;
+}
+
 /*** big form elements */
 .basic-content {
 	background:white;
@@ -502,10 +503,14 @@ div.t-error-popup span {
 	text-align:right;
 	padding-right:10px;
 	width:200px;
+}
+
+.big-form label {
 	font-size:18px;
 	font-weight: normal;
 	color:#6E6D65;
 	height:40px;
+	line-height:40px;
 }
 
 .big-form td {
@@ -536,8 +541,32 @@ div.t-error-popup span {
 	border: 1px solid #FF7351;
 }
 
+.inline-form-button {
+	display:inline !important;
+	font-size:18px;
+	color:#FFD8A1 !important;
+	font-weight: normal !important;
+}
+
 
 /** Generic form class : should be implemented */
+.insidefield-field {
+	border-radius:10px 0px 0px 10px !important;
+	-moz-border-radius: 10px 0px 0px 10px !important;
+	-webkit-border-radius: 10px 0px 0px 10px !important;
+}
+
+
+.insidefield-button {
+	text-decoration: none;
+	background: #6E6D65;
+	color: #FFD8A1;
+	border-radius: 0px 10px 10px 0px;
+	-moz-border-radius: 0px 10px 10px 0px;
+	-webkit-border-radius: 0px 10px 10px 0px;
+
+}
+
 
 .wookiForm #submit {
 	background: #FF7351;
@@ -691,10 +720,12 @@ div.t-error-popup span {
 	width: 100%;
 }
 
+/*
+TODO: RKS: check what i've deleted :o)
 #book-settings .form-field {
 	font-family:Helvetica;
 	font-size:14px;
-}
+}*/
 
 #authors-settings {
 	background-color: white;

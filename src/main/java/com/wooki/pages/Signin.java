@@ -4,7 +4,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.services.LoginUrlSource;
+import com.wooki.services.SecurityUrlSource;
 
 /**
  * Login form.
@@ -15,7 +15,7 @@ import com.wooki.services.LoginUrlSource;
 public class Signin {
 
 	@Inject
-	private LoginUrlSource source;
+	private SecurityUrlSource source;
 
 	@Property
 	private String loginUrl;

@@ -186,7 +186,7 @@ jQuery.extend(Tapestry.Initializer,{
 			e.stop();
 		});
 	},
-	
+
 	/**
 	 * Init bubble when a chapter is displayed on screen
 	 * 
@@ -237,9 +237,16 @@ jQuery.extend(Tapestry.Initializer,{
 			jQuery("#" + comId + " div").attr("class", "commented").css('visibility', 'visible').append(document.createTextNode(val));
 		});
 		
-		
 		jQuery('#book').bind("mouseleave", function(e){
 			jQuery(".comment-accessor .no-comment").css('visibility','hidden');
 		});
+	
+	},
+	
+	/**
+	 * Update the bubble when the dialog is closed. 
+	 */
+	initCommentDialogClose: function(domId) {
+		alert(domId);
 	}
 });

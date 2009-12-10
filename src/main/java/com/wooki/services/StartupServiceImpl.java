@@ -81,9 +81,9 @@ public class StartupServiceImpl implements StartupService {
 		securityCtx.log(john);
 		Publication published = chapterManager.getLastPublished(bookAbstract
 				.getId());
-		chapterManager.addComment(published.getId(), "Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!! Yes it's true !!!Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!", "b0");
+		chapterManager.addComment(published.getId(), "Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!!Yes it's true !!! Yes it's true !!!Yes it's true !!! Yes it's true !!! Yes it's true !!!Yes it's true !!!", "b10");
 		chapterManager
-				.addComment(published.getId(), "I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) v I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)", "b0");
+				.addComment(published.getId(), "I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) v I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :) I agree but ... :)", "b10");
 
 	}
 

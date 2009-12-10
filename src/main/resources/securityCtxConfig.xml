@@ -8,6 +8,20 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
 		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
 
+	<bean id="security-properties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>
+					classpath*:com/wooki/services/security/WookiSecurityContext.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
 	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl">
 		<property name="bookDAO" ref="bookDao" />
 		<property name="commentDao" ref="commentDao" />
@@ -53,24 +67,24 @@
 	<bean id="authenticationProcessingFilter"
 		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
 		<security:custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
-		<property name="defaultTargetUrl" value="/index" />
-		<property name="authenticationFailureUrl" value="/signin/failed" />
+		<property name="defaultTargetUrl" value="${defaultTargetUrl}" />
+		<property name="authenticationFailureUrl" value="${authenticationFailureUrl}" />
 		<property name="allowSessionCreation" value="true" />
 		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="targetUrlResolver" ref="viewBasedTargetUrlResolver" />
-		<property name="filterProcessesUrl" value="/j_spring_security_check" />
+		<property name="filterProcessesUrl" value="${loginFilterProcessesUrl}" />
 	</bean>
 
 	<bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
 		<security:custom-filter position="LOGOUT_FILTER" />
-		<constructor-arg value="/index" />
+		<constructor-arg value="${logoutTargetUrl}" />
 		<constructor-arg>
 			<list>
 				<bean
 					class="org.springframework.security.ui.logout.SecurityContextLogoutHandler" />
 			</list>
 		</constructor-arg>
-		<property name="filterProcessesUrl" value="/j_spring_security_logout" />
+		<property name="filterProcessesUrl" value="${logoutFilterProcessUrl}" />
 	</bean>
 
 	<bean id="httpSessionContextIntegrationFilter"
@@ -122,7 +136,7 @@
 	<bean id="formLoginAuthenticationEntryPoint"
 		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
 		<property name="loginFormUrl">
-			<value>/signin</value>
+			<value>${loginFormUrl}</value>
 		</property>
 		<property name="forceHttps">
 			<value>false</value>

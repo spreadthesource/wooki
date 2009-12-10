@@ -6,7 +6,7 @@ package com.wooki.services;
  * @author ccordenier
  *
  */
-public interface LoginUrlSource {
+public interface SecurityUrlSource {
 
 	/**
 	 * Obtain the login URL.
@@ -14,4 +14,11 @@ public interface LoginUrlSource {
 	 * @return
 	 */
 	String getLoginUrl();
+	
+	/**
+	 * Return the logout URL.
+	 *
+	 * @return
+	 */
+	String getLogoutUrl();
 }

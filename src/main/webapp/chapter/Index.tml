@@ -13,6 +13,6 @@
 		</ol>
 		</nav>
 	</header> 
-	${content}
+	<t:outputRaw value="content" />
 </div>
 </html>

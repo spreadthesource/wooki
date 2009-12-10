@@ -18,9 +18,10 @@ public interface DOMManager {
 	 * Will suround all the content and generate ids.
 	 *
 	 * @param content
+	 * @param prefix TODO
 	 * @return
 	 */
-	public String adaptContent(String content);
+	public String adaptContent(String content, Long prefix);
 
 	/**
 	 * Used to re-assign comment ids.

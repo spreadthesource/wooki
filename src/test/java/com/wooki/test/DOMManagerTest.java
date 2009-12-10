@@ -154,7 +154,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Test
 	public void testAddIds() {
 		String result = generator
-				.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>");
+				.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>", null);
 		Assert
 				.assertTrue(result
 						.contains("<h2 id=\"b0\" class=\"commentable\">SubTitle</h2><p id=\"b1\" class=\"commentable\">Lorem ipsum</p><h3 id=\"b2\" class=\"commentable\">SubTitle2</h3><p id=\"b3\" class=\"commentable\">Lorem ipsum</p>"));

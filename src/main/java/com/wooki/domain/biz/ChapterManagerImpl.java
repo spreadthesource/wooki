@@ -96,15 +96,16 @@ public class ChapterManagerImpl implements ChapterManager {
 		if (chapter != null && chapter.getContent() != null) {
 			Publication published = new Publication();
 			published.setChapter(chapter);
+			published.setCreationDate(Calendar.getInstance().getTime());
+			publicationDao.create(published);
 			try {
 				published.setContent(domManager.adaptContent(
-						new String(chapter.getContent())).getBytes("UTF-8"));
+						new String(chapter.getContent()), published.getId()).getBytes("UTF-8"));
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			published.setCreationDate(Calendar.getInstance().getTime());
-			publicationDao.create(published);
+			publicationDao.update(published);
 		}
 	}
 

@@ -782,13 +782,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING O
                      </fo:block>
                 </xsl:if>
                 <!-- Table of content --> 
-                <xsl:message>
-            <xsl:text>Need toc vaut </xsl:text>
-            <xsl:value-of select="$need-toc"/>
-          </xsl:message>
                 <xsl:if test="$need-toc = '1' or $need-toc = 'true'">
-         
-                    <fo:block xsl:use-attribute-sets="body" break-before="page">
+                  <fo:block xsl:use-attribute-sets="body" break-before="page">
                         <fo:block text-align="left" font-weight="bold" font-size="12pt"  padding-top="10pt" padding-bottom="10pt">
                             <xsl:apply-templates  select="/html:html/html:body/html:div[@class='pdftoc']" mode="pdftoc" />
                         </fo:block>

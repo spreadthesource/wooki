@@ -1,6 +1,7 @@
 package com.wooki.services;
 
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.core.io.ByteArrayResource;
@@ -11,6 +12,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.User;
 import com.wooki.services.parsers.Convertor;
 
 public class ExportServiceImpl implements ExportService {
@@ -39,6 +41,14 @@ public class ExportServiceImpl implements ExportService {
 		buffer.append("<html><head><title>").append(b.getTitle()).append(
 				"</title></head>");
 		buffer.append("<body>");
+		Iterator<User> authors = b.getAuthors().iterator();
+		User currentAuthor = null;
+		while (authors.hasNext()) {
+			currentAuthor = authors.next();
+			buffer.append("<link rev=\"MADE\" title=\""
+					+ currentAuthor.getFullname() + "\" href=\"mailto:"
+					+ currentAuthor.getEmail() + "\">");
+		}
 		List<Chapter> chapters = chapterManager.listChapters(bookId);
 		if (chapters != null) {
 			for (Chapter c : chapters) {

@@ -240,13 +240,30 @@ jQuery.extend(Tapestry.Initializer,{
 		jQuery('#book').bind("mouseleave", function(e){
 			jQuery(".comment-accessor .no-comment").css('visibility','hidden');
 		});
+
+		// On dialog close update all the bubbles
+		jQuery('#'+data.dialogId).bind('dialogclose', function(e, ui) {
+			jQuery.getJSON(data.updateUrl, function(result) {
+				jQuery('.commentable').each(function(i) {
+					blockId = jQuery(this).attr('id');
+					comId = blockId.replace('b','c');
+					nb = eval('result.' + blockId);
+					if(nb != undefined) {
+						jQuery("#" + comId + " div").attr("class", "commented").css('visibility', 'visible').text(nb);
+					}else {
+						jQuery("#" + comId + " div").attr("class", "no-comment");
+					}
+				});
+			});
+		});
 	
 	},
 	
 	/**
-	 * Update the bubble when the dialog is closed. 
+	 * Init the block reminder in the comment dialog
 	 */
-	initCommentDialogClose: function(domId) {
-		alert(domId);
+	initBlockReminder: function(domId) {
+		jQuery('#reminder-'+domId).append(jQuery('#'+domId).html());
 	}
+	
 });

@@ -704,6 +704,12 @@ div.t-error-popup span {
 	margin-bottom: 10px;
 }
 
+.block-reminder {
+	font-style: italic;
+	background-color: #FFD8A1;
+	margin-bottom: 10px;
+}
+
 /** Append Mixin */
 .append-errors ul li {
 	background: #F5F5F5;

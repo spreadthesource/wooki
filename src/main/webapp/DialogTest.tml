@@ -4,7 +4,7 @@
    <p><t:ajaxDialogLink t:zone="literal:myZone" t:dialog="literal:test" t:id="myLink">Open dialog with some AJAX!</t:ajaxDialogLink></p>
    
    <t:block t:id="myBlock">this popup has been refreshed : ${count} </t:block>
-   <t:commentdialog t:id="test"><t:zone t:id="myZone">Blablabla</t:zone></t:commentdialog>
+   <t:dialog t:id="test"><t:zone t:id="myZone">Blablabla</t:zone></t:dialog>
    
    
    

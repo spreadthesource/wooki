@@ -16,7 +16,7 @@ import org.apache.tapestry5.json.JSONObject;
  * is to let users add comments to a block of some published content
  */
 @IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.2.custom.min.js")
-public class CommentDialog implements ClientElement {
+public class Dialog implements ClientElement {
 
 	@Inject
 	private RenderSupport support;

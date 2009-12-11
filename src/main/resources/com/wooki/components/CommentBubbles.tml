@@ -1,43 +1,14 @@
 <div class="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	
-	<t:block t:id="commentDetails">
-		<div class="comment-row radied-box" id="ent-${currentComment.id}">
-			<div class="comment-meta">
-            	<span>
-              		<b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b>
-              		<em class="date"> <t:lastModifiedFormatter t:time="currentComment.creationDate.time" /></em>
-              		<t:security.ifAuthorOfComment t:commentId="currentComment.id">
-						| <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
-					</t:security.ifAuthorOfComment>              
-            	</span>
-          	</div>
-          	<div class="comment-body">
-				<p>
-					${currentComment.content}
-				</p>
-			</div>
-		</div>
-	</t:block>
-	
 	<!-- Block used to display the comments window associated to a bubble -->
 	<t:block t:id="commentsBlock">
-		<div class="comment-details" id="comment-details">
-			<t:loop t:source="comments" t:value="currentComment">
-				<t:delegate t:to="block:commentDetails" />
-			</t:loop>
-		</div>
-		<t:security.ifLoggedIn>
-			<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="add-comment-form">
-				<p><input t:type="textarea" t:value="content" t:id="content" /></p>
-				<p class="add-comment-link"><a t:type="linksubmit">Add Comment</a></p>
-			</form>
-		</t:security.ifLoggedIn>
+		<t:commentDialogContent t:publicationId="inherit:publicationId" t:domId="domId" />
 	</t:block>
 
 	<!-- Single dialog window refreshed via Ajax on bubble clicks -->   	
-   	<t:commentdialog t:id="commentDialog">
+   	<t:dialog t:id="commentDialog">
    		<t:zone t:id="commentList" t:show="none" t:update="none">
    		</t:zone>
-   	</t:commentdialog>
+   	</t:dialog>
 
 </div>

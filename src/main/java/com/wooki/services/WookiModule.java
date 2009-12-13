@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdvice;
@@ -49,6 +50,7 @@ public class WookiModule<T> {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
+		binder.bind(WookiViewRefererFilter.class);
 	}
 
 	/**
@@ -56,29 +58,22 @@ public class WookiModule<T> {
 	 * 
 	 */
 	public static void contributePageRenderRequestHandler(
-			OrderedConfiguration<PageRenderRequestFilter> filters,
-			final Cookies cookies, final RequestGlobals request) {
-		filters.add("wookiReferer", new PageRenderRequestFilter() {
-			public void handle(PageRenderRequestParameters parameters,
-					PageRenderRequestHandler handler) throws IOException {
-				try {
-					if ("signin".equalsIgnoreCase(parameters
-							.getLogicalPageName())
-							|| "signup".equalsIgnoreCase(parameters
-									.getLogicalPageName())) {
-						return;
-					}
-					cookies
-							.writeCookieValue(VIEW_REFERER, request
-									.getHTTPServletRequest().getRequestURL()
-									.toString());
-				} finally {
-					handler.handle(parameters);
-				}
-			}
-		});
+			OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
+		filters.add("ViewRefererFilter", vrFilter);
 	}
 
+	/**
+	 * Add request that shouldn't generate a referer.
+	 *
+	 * @param excludePattern
+	 */
+	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
+		excludePattern.add("signin");
+		excludePattern.add("signup");
+		excludePattern.add(".*settings.*");
+		excludePattern.add(".*edit.*");
+	}
+	
 	/**
 	 * Add jQuery in no conflict mode to default JavaScript Stack
 	 * 

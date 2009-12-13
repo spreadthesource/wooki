@@ -14,6 +14,7 @@ import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Activity;
@@ -86,13 +87,22 @@ public class BookManagerImpl implements BookManager {
 	}
 
 	@Transactional(readOnly = false)
-	public Book updateTitle(Book book) {
+	public Book updateTitle(Book book) throws TitleAlreadyInUseException {
 		if (book == null) {
 			throw new IllegalArgumentException(
 					"Book and chapter title cannot be null for addition.");
 		}
 		// Create slug title
 		String slug = SlugBuilder.buildSlug(book.getTitle());
+		
+		// If book has changed of title
+		if(book.getSlugTitle() != null && !book.getSlugTitle().equalsIgnoreCase(slug)) {
+			Book result = bookDao.findBookBySlugTitle(slug);
+			if(result != null) {
+				throw new TitleAlreadyInUseException();
+			}
+		}
+		
 		if (!book.getSlugTitle().equals(slug)) {
 			book.setSlugTitle(slug);
 		}

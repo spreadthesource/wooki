@@ -45,7 +45,7 @@
 						<li><strong>${username}</strong></li>
 						<li><a href="#">Dashboard</a></li>
 						<li><a href="#">Profile</a></li>
-						<li><a href="/wooki/j_spring_security_logout" class="hard-link">Logout</a></li>
+						<li><a href="${logoutUrl}" class="hard-link">Logout</a></li>
 					</t:security.ifLoggedIn>
 					<li><a href="#">Tour</a></li>
 					<t:security.ifLoggedIn>

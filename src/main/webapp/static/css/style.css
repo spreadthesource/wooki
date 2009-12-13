@@ -747,27 +747,48 @@ TODO: RKS: check what i've deleted :o)
 	padding: 10px;
 }
 
-#authors-settings li {
-	margin-bottom: 10px;
-}
-
 #authors-settings form span {
 	margin-left: 10px;
 }
 
-#authors-settings li span {
+#authors-settings h2 {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #C9BB9B;
+	padding-bottom: 10px;
+}
+
+#authors-list li {
+	margin: 10px 10px 10px 0;
+	padding: 10px;
+	background-color: #EEE;
+}
+
+#authors-list li span {
 	float: left;
-	width: 100px;
+	width: 200px;
+}
+
+#book-settings {
+	padding: 10px;
+}
+
+#book-settings .form-field {
+	font-family: Helvetica;
+	font-size: 14px;
+	padding: 4px;
+	border: 1px solid #6E6D65;
 }
 
 #book-settings h1 {
-	padding: 10px;
-	font-size: 20px;
 	font-family: Georgia;
+	font-size: 30px;
+	margin-bottom: 20px;
+	color: black;
 }
 
-#book-settings a {
+#book-settings h1 a {
 	text-decoration: none;
+	color: black;
 }
 
 #book-settings a {
@@ -777,7 +798,7 @@ TODO: RKS: check what i've deleted :o)
 #book-info {
 	background-color: white;
 	float: left;
-	width: 400px;
+	width: 390px;
 	margin: 10px;
 	border: 1px solid #C9BB9B;
 }
@@ -796,7 +817,7 @@ TODO: RKS: check what i've deleted :o)
 
 #book-info form p {
 	padding: 10px;
-	width: 95%;
+	width: 90%;
 }
 
 #book-info form a {

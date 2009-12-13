@@ -18,7 +18,11 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 	public Book findBookBySlugTitle(String title) {
 		Query query = this.entityManager.createQuery("select b from "
 				+ getEntityType() + " b where b.slugTitle=:st");
-		return (Book) query.setParameter("st", title).getSingleResult();
+		List<Book> results = query.setParameter("st", title).getResultList();
+		if (results != null && results.size() > 0) {
+			return results.get(0);
+		}
+		return null;
 	}
 
 	public List<Book> listByAuthor(Long id) {
@@ -26,8 +30,10 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 			throw new IllegalArgumentException(
 					"Author id cannot be null while listing book.");
 		}
-		Query query = entityManager.createQuery("select b from "
-				+ getEntityType() + " b join b.users u where u.id=:uid and b.deletionDate is null");
+		Query query = entityManager
+				.createQuery("select b from "
+						+ getEntityType()
+						+ " b join b.users u where u.id=:uid and b.deletionDate is null");
 		query.setParameter("uid", id);
 		return (List<Book>) query.getResultList();
 	}

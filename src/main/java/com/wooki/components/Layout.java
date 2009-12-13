@@ -21,10 +21,14 @@ public class Layout extends WookiBase {
 
 	@Property
 	private String loginUrl;
+
+	@Property
+	private String logoutUrl;
 	
 	@SetupRender
 	private void setup(){
 		this.loginUrl = source.getLoginUrl();
+		this.logoutUrl = source.getLogoutUrl();
 	}
 	
 	@AfterRender

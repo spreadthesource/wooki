@@ -3,6 +3,7 @@ package com.wooki.domain.biz;
 import java.util.List;
 
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
@@ -32,7 +33,7 @@ public interface BookManager {
 	 * @param book
 	 * @return
 	 */
-	Book updateTitle(Book book);
+	Book updateTitle(Book book) throws TitleAlreadyInUseException;
 
 	/**
 	 * Add an author to a given book, author must exist before calling this

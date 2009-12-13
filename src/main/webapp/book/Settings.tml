@@ -2,13 +2,14 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter">
 	<section id="book-settings">
-		<h1>Book Settings of <a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
+		<h1><a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
 		<div id="book-info" class="radied-box">
 			<h2>General Settings</h2>
 			<form t:type="form" t:id="bookInfoForm">
+				<t:errors />
 				<ol>
 					<li>
-						<label t:type="label" t:for="title"></label><input t:type="textfield" t:id="title" t:value="book.title" class="form-field" size="40"/>
+						<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title" class="form-field" size="35"/>
 					</li>
 				</ol>
 				<p><input t:type="submit" /></p>
@@ -16,17 +17,23 @@
 		</div>
 		<div id="authors-settings" class="radied-box">
 			<h2>Author List</h2>
-			<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authorsList" t:position="top">
-				<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete"/>
+			<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top">
+				<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete" class="form-field" size="15"/>
 				<span><a href="#" t:type="linksubmit">Add author</a></span>
 			</form>
 			<t:block id="authorRow">
 				<li id="ent-${currentAuthor.id}">
-					<span>${currentAuthor.username}</span><a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
+					<t:if test="!loggedAuthor">
+						<span><a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})</span>
+						<a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
+						<p:else>
+						<a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})
+						</p:else>
+					</t:if>
 				</li>
 			</t:block>
-			<ul id="authorsList">
-				<t:loop source="authors" value="currentAuthor">
+			<ul id="authors-list">
+				<t:loop source="authors" value="currentAuthor" index="rowIndex">
 					<t:delegate t:to="block:authorRow" />
 				</t:loop>
 			</ul>

@@ -19,6 +19,7 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
@@ -47,7 +48,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	private WookiSecurityContext securityCtx;
-	
+
 	@Autowired
 	private DataSource ds;
 
@@ -68,19 +69,19 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		userManager.addUser(john);
 
 		securityCtx.log(john);
-		
+
 		// Create books
 		Book productBook = bookManager.create("My First Product Book");
 		Book cacheBook = bookManager.create("My Cache Product Book");
 
 		// Create new chapters and modify its content
-		Chapter chapterOne = bookManager.addChapter(productBook,
-				"Requirements");
+		Chapter chapterOne = bookManager
+				.addChapter(productBook, "Requirements");
 		chapterManager.updateContent(chapterOne.getId(),
 				"<p>You will need Žˆ ...</p>");
 
-		Chapter chapterTwo = bookManager.addChapter(productBook,
-				"Installation");
+		Chapter chapterTwo = bookManager
+				.addChapter(productBook, "Installation");
 		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
 
@@ -111,7 +112,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		userManager.addUser(robink);
 
 		securityCtx.log(robink);
-		
+
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct,
@@ -146,6 +147,35 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		List<Book> books = bookManager.list();
 		Assert.assertNotNull(books);
 		Assert.assertEquals(books.size(), 2, "There is at two two books");
+	}
+
+	/**
+	 * Verify that a title already in use generate an exception.
+	 */
+	@Test
+	public void testChangeTitle() {
+
+		Book myProduct = bookManager
+				.findBookBySlugTitle("my-first-product-book");
+		Assert.assertNotNull(myProduct,
+				"'my-first-product-book' is not available.");
+
+		try {
+			myProduct.setTitle("My Cache Product Book");
+			bookManager.updateTitle(myProduct);
+			Assert.fail("Title should not be changed since it is already used.");
+		} catch (TitleAlreadyInUseException taiuEx) {
+			taiuEx.printStackTrace();
+		}
+
+		try {
+			myProduct.setTitle("My new title");
+			bookManager.updateTitle(myProduct);
+		} catch (TitleAlreadyInUseException taiuEx) {
+			Assert.fail("Title should be changed.");
+			taiuEx.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -200,7 +230,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		User john = userManager.findByUsername("john");
 		Assert.assertNotNull(john, "John exists...");
 		securityCtx.log(john);
-		
+
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct,
@@ -211,8 +241,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
 		// Add a chapter and do search again
-		Chapter chapterThree = bookManager.addChapter(myProduct,
-				"Chapter Tree");
+		Chapter chapterThree = bookManager
+				.addChapter(myProduct, "Chapter Tree");
 		chapterManager.updateContent(chapterThree.getId(),
 				"<p>Sample Chapter Three Content</p>");
 
@@ -299,11 +329,11 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
-		Publication publication = chapterManager.getLastPublished(chapters.get(0).getId());
+		Publication publication = chapterManager.getLastPublished(chapters.get(
+				0).getId());
 		Assert.assertNotNull(published, "No revision has been published.");
-		Assert
-				.assertEquals(published,
-						"<p id=\"b"+publication.getId()+"0\" class=\"commentable\">Tapestry is totally amazing</p>");
+		Assert.assertEquals(published, "<p id=\"b" + publication.getId()
+				+ "0\" class=\"commentable\">Tapestry is totally amazing</p>");
 
 	}
 }

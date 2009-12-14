@@ -13,11 +13,27 @@ import com.wooki.domain.model.Comment;
 public interface CommentManager {
 
 	/**
+	 * Update the comment
+	 *
+	 * @param comment
+	 * @return
+	 */
+	Comment update(Comment comment);
+	
+	/**
 	 * Remove a comment.
 	 *
 	 * @param commId
 	 */
 	void removeComment(Long commId);
+	
+	/**
+	 * Find a comment by id.
+	 *
+	 * @param commId
+	 * @return
+	 */
+	Comment findById(Long commId);
 	
 	/**
 	 * List all the comment for a book including comments associated to
@@ -47,7 +63,7 @@ public interface CommentManager {
 	 * @param chapterId
 	 * @return
 	 */
-	List<Comment> listOpenForPublicationAndDomId(Long chapterId, String domId);
+	List<Comment> listForPublicationAndDomId(Long chapterId, String domId);
 	
 	/**
 	 * Can change the state of a comment to solved.

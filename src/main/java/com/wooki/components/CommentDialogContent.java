@@ -16,6 +16,7 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.beaneditor.Width;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.WookiEventConstants;
@@ -34,6 +35,9 @@ public class CommentDialogContent {
 	@Parameter
 	private Long publicationId;
 
+	@Parameter
+	private Long bookId;
+
 	@Property
 	@Parameter(defaultPrefix = BindingConstants.PROP)
 	private String domId;
@@ -50,11 +54,15 @@ public class CommentDialogContent {
 	@Inject
 	private CommentManager commentManager;
 
+	@Inject
+	private Block commentDetails;
+
 	@InjectComponent
 	private Form createCommentForm;
 
-	@Inject
-	private Block commentDetails;
+	@InjectComponent
+	@Property
+	private Zone updateStateZone;
 
 	@Property
 	private List<Comment> comments;
@@ -72,9 +80,19 @@ public class CommentDialogContent {
 		if (!resources.isBound("publicationId") || publicationId == null) {
 			return false;
 		}
-		this.comments = commentManager.listOpenForPublicationAndDomId(
+		this.comments = commentManager.listForPublicationAndDomId(
 				publicationId, domId);
 		return true;
+	}
+
+	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT, component = "updateStateForm")
+	public void prepareUpdateComment(Long commId) {
+		this.currentComment = commentManager.findById(commId);
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component = "updateStateForm")
+	public void updateState() {
+		commentManager.update(currentComment);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createCommentForm")
@@ -91,7 +109,7 @@ public class CommentDialogContent {
 
 	/**
 	 * Initialize the reminder in the comment dialog.
-	 *
+	 * 
 	 */
 	@AfterRender
 	public void initReminder() {

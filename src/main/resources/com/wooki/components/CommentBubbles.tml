@@ -2,7 +2,7 @@
 	
 	<!-- Block used to display the comments window associated to a bubble -->
 	<t:block t:id="commentsBlock">
-		<t:commentDialogContent t:publicationId="inherit:publicationId" t:domId="domId" />
+		<t:commentDialogContent t:publicationId="inherit:publicationId" t:domId="domId" t:bookId="inherit:bookId" />
 	</t:block>
 
 	<!-- Single dialog window refreshed via Ajax on bubble clicks -->   	

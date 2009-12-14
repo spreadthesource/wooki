@@ -22,6 +22,10 @@ public class CommentManagerImpl implements CommentManager {
 	@Autowired
 	private WookiSecurityContext securityCtx;
 
+	public Comment findById(Long commId) {
+		return commentDao.findById(commId);
+	}
+
 	public List<Comment> listAll(Long bookId) {
 		if (bookId == null) {
 			throw new IllegalArgumentException("BookId cannot be null");
@@ -31,16 +35,16 @@ public class CommentManagerImpl implements CommentManager {
 	}
 
 	public List<Comment> listOpenForPublication(Long chapterId) {
-		return commentDao.listOpenForPublication(chapterId);
+		return commentDao.listForPublication(chapterId);
 	}
 
 	public List<Object[]> listCommentInfos(Long publicationId) {
 		return commentDao.listCommentsInforForPublication(publicationId);
 	}
 
-	public List<Comment> listOpenForPublicationAndDomId(Long publicationId,
+	public List<Comment> listForPublicationAndDomId(Long publicationId,
 			String domId) {
-		return commentDao.listOpenForPublicationAndDomId(publicationId, domId);
+		return commentDao.listForPublicationAndDomId(publicationId, domId);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
@@ -68,6 +72,14 @@ public class CommentManagerImpl implements CommentManager {
 					+ "' cannot be found");
 		}
 		this.commentDao.delete(c);
+	}
+
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public Comment update(Comment comment) {
+		if(comment == null) {
+			throw new IllegalArgumentException("Comment not found");
+		}
+		return commentDao.update(comment);
 	}
 
 	public void setCommentDao(CommentDAO commentDao) {

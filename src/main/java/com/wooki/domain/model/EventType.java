@@ -14,8 +14,7 @@ public enum EventType {
 	
 	@Override
 	public String toString() {
-		return super.toString();
+		return MESSAGES.get(super.toString());
 	}
-	
 	
 }

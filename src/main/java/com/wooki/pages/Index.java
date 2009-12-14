@@ -13,8 +13,8 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.model.Activity;
 import com.wooki.domain.model.Book;
-import com.wooki.domain.model.FreshStuff;
 import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
 
@@ -47,10 +47,10 @@ public class Index {
 	private com.wooki.pages.book.Index index;
 
 	@Property
-	private List<FreshStuff> freshStuffs;
+	private List<Activity> freshStuffs;
 
 	@Property
-	private FreshStuff current;
+	private Activity current;
 
 	@Property
 	private List<Book> userBooks;
@@ -103,7 +103,7 @@ public class Index {
 
 	@SetupRender
 	public void setupFreshStuff() {
-		freshStuffs = activityManager.listFreshStuff(10);
+		freshStuffs = activityManager.listAll(10);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")

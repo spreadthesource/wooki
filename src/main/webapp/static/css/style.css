@@ -29,6 +29,10 @@ a {
 	color: #FF7351;
 }
 
+abbr {
+	color: #6E6D65;
+	margin-left: 4px;
+}
 
 /*** header */
 #top {
@@ -307,10 +311,6 @@ input[type="checkbox"] {width:auto !important; }
 
 .activity-feed li {
 	margin: 10px 0px;
-}
-
-.activity-feed em {
-	color: #6E6D65
 }
 
 /*** bottom */
@@ -674,6 +674,14 @@ div.t-error-popup span {
 	margin-top: 10px;
 }
 
+#commentList div .t-zone {
+	display: inline;
+}
+
+#commentList div .t-zone form {
+	display: inline;
+}
+
 .comment-row {
 	clear: both;
 	margin-bottom: 10px;
@@ -698,10 +706,18 @@ div.t-error-popup span {
 	color: black;
 }
 
+.comment-row .comment-meta span {
+	margin-left: 4px;
+}
+
 .comment-row em {
 	text-align: right;
 	color: #6E6D65;
 	margin-bottom: 10px;
+}
+
+.comment-state {
+	color: #6E6D65;
 }
 
 .block-reminder {

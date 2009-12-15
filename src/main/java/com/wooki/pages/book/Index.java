@@ -174,7 +174,7 @@ public class Index {
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Expires", "max-age=0");
 				response.setHeader("Content-Disposition",
-						"attachment; filename=" + book.getSlugTitle() + ".pdf");
+						"inline; filename=" + book.getSlugTitle() + ".pdf");
 			}
 
 			public InputStream getStream() throws IOException {

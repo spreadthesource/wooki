@@ -149,6 +149,20 @@ jQuery.extend(Tapestry.Initializer,{
 	},
 	
 	/**
+	 * Open a link url in a new window.
+	 *
+	 */
+	initOpenInWindow : function(param) {
+		if(param == undefined) {
+			return;
+		}
+		$(param.elt).observe('click', function(event) {
+			Event.stop(event);
+			window.open(param.url, param.name, param.options);
+		});
+	},
+	
+	/**
 	 * Initialize Login Dialog Box
 	 * 
 	 */
@@ -235,7 +249,6 @@ jQuery.extend(Tapestry.Initializer,{
 			jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
 			
 			Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
-			
 			comment.css({
 				'top': (jQuery(this).position().top + 10) + 'px',
 				'left': (jQuery(this).position().left - 50)  + 'px',

@@ -32,6 +32,9 @@ public class CommentBubbles {
 	@Parameter
 	private Long publicationId;
 
+	@Parameter
+	private Long bookId;
+	
 	@Inject
 	private ComponentResources resources;
 

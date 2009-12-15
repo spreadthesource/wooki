@@ -29,6 +29,10 @@ a {
 	color: #FF7351 !important;
 }
 
+abbr {
+	color: #6E6D65;
+	margin-left: 4px;
+}
 
 /*** header */
 #top {
@@ -307,10 +311,6 @@ input[type="checkbox"] {width:auto !important; }
 
 .activity-feed li {
 	margin: 10px 0px;
-}
-
-.activity-feed em {
-	color: #6E6D65
 }
 
 /*** bottom */
@@ -674,6 +674,14 @@ div.t-error-popup span {
 	margin-top: 10px;
 }
 
+#commentList div .t-zone {
+	display: inline;
+}
+
+#commentList div .t-zone form {
+	display: inline;
+}
+
 .comment-row {
 	clear: both;
 	margin-bottom: 10px;
@@ -698,10 +706,18 @@ div.t-error-popup span {
 	color: black;
 }
 
+.comment-row .comment-meta span {
+	margin-left: 4px;
+}
+
 .comment-row em {
 	text-align: right;
 	color: #6E6D65;
 	margin-bottom: 10px;
+}
+
+.comment-state {
+	color: #6E6D65;
 }
 
 .block-reminder {
@@ -747,27 +763,48 @@ TODO: RKS: check what i've deleted :o)
 	padding: 10px;
 }
 
-#authors-settings li {
-	margin-bottom: 10px;
-}
-
 #authors-settings form span {
 	margin-left: 10px;
 }
 
-#authors-settings li span {
+#authors-settings h2 {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #C9BB9B;
+	padding-bottom: 10px;
+}
+
+#authors-list li {
+	margin: 10px 10px 10px 0;
+	padding: 10px;
+	background-color: #EEE;
+}
+
+#authors-list li span {
 	float: left;
-	width: 100px;
+	width: 200px;
+}
+
+#book-settings {
+	padding: 10px;
+}
+
+#book-settings .form-field {
+	font-family: Helvetica;
+	font-size: 14px;
+	padding: 4px;
+	border: 1px solid #6E6D65;
 }
 
 #book-settings h1 {
-	padding: 10px;
-	font-size: 20px;
 	font-family: Georgia;
+	font-size: 30px;
+	margin-bottom: 20px;
+	color: black;
 }
 
-#book-settings a {
+#book-settings h1 a {
 	text-decoration: none;
+	color: black;
 }
 
 #book-settings a {
@@ -777,7 +814,7 @@ TODO: RKS: check what i've deleted :o)
 #book-info {
 	background-color: white;
 	float: left;
-	width: 400px;
+	width: 390px;
 	margin: 10px;
 	border: 1px solid #C9BB9B;
 }
@@ -796,7 +833,7 @@ TODO: RKS: check what i've deleted :o)
 
 #book-info form p {
 	padding: 10px;
-	width: 95%;
+	width: 90%;
 }
 
 #book-info form a {

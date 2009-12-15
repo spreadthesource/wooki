@@ -3,7 +3,6 @@ package com.wooki.domain.biz;
 import java.util.List;
 
 import com.wooki.domain.model.Activity;
-import com.wooki.domain.model.FreshStuff;
 
 /**
  * Use to handle activities on wikies element to follow history.
@@ -14,7 +13,5 @@ import com.wooki.domain.model.FreshStuff;
 public interface ActivityManager {
 
 	List<Activity> listAll(int nbElts);
-
-	List<FreshStuff> listFreshStuff(int nbElts);
 
 }

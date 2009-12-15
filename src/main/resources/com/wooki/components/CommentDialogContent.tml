@@ -5,9 +5,23 @@
 			<div class="comment-meta">
             	<span>
               		<b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b>
-              		<em class="date"> <t:lastModifiedFormatter t:time="currentComment.creationDate.time" /></em>
+              		<t:lastModifiedFormatter t:time="currentComment.creationDate.time" />
               		<t:security.ifAuthorOfComment t:commentId="currentComment.id">
-						| <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
+						|<span class="comment-state">${currentComment.state}</span> | <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
+						<p:else>
+							<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
+								<t:zone t:id="updateStateZone">
+									<span class="t-zone-update">
+									</span>
+									<form t:type="form" t:id="updateStateForm" t:context="currentComment.id" t:zone="prop:updateStateZone?.clientId">
+										<input t:blankOption="NEVER" t:type="select" t:value="currentComment.state" t:mixins="submitFormOnChange" />
+									</form>
+								</t:zone>
+								<p:else>
+									|<span class="comment-state">${currentComment.state}</span>
+								</p:else>
+							</t:security.ifAuthorOfBook>
+						</p:else>
 					</t:security.ifAuthorOfComment>              
             	</span>
           	</div>

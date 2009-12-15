@@ -27,7 +27,7 @@ public interface CommentDAO extends GenericDAO<Comment, Long> {
 	 * @param chapterId
 	 * @return
 	 */
-	List<Comment> listOpenForPublication(Long chapterId);
+	List<Comment> listForPublication(Long chapterId);
 
 	/**
 	 * List the comments number by block for a given publication.
@@ -43,6 +43,6 @@ public interface CommentDAO extends GenericDAO<Comment, Long> {
 	 * @param domId
 	 * @return
 	 */
-	List<Comment> listOpenForPublicationAndDomId(Long publicationId,
+	List<Comment> listForPublicationAndDomId(Long publicationId,
 			String domId);
 }

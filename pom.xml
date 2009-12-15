@@ -6,7 +6,7 @@
 	<artifactId>wooki</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>tibook Tapestry 5 Application</name>
+	<name>Wooki : Collaborative Writing</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>

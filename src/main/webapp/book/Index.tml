@@ -44,7 +44,16 @@
 	<ol id="chapters-list">
 		<t:loop t:source="chaptersInfo" t:value="currentChapter">
 			<li>
-				<h3><t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink></h3>
+				<h3>
+					<t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink>
+					
+					<t:if t:test="showWorkingCopyLink">
+						<t:security.ifAuthorOfBook t:bookId="bookId">
+							<t:pagelink t:page="chapter/index" t:context="chapterCtx"><em>Working copy</em></t:pagelink>
+						</t:security.ifAuthorOfBook>
+					</t:if>
+		
+				</h3>
 				<p><t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" /></p>
 			</li>
 		</t:loop>
@@ -58,8 +67,8 @@
 			</li>
 			
 			<t:block id="addChapterLink">
-				<h3 class="active">
-					<t:actionlink t:id="showAddChapterField" t:zone="addChapterZone">Add a chapter</t:actionlink>
+				<h3>
+					<t:actionlink class="active" t:id="showAddChapterField" t:zone="addChapterZone">Add a chapter</t:actionlink>
 				</h3>
 			</t:block>
 			

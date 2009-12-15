@@ -98,6 +98,10 @@ public class Index {
 
 	private Long bookId;
 
+	private boolean showWorkingCopyLink;
+	
+	private boolean bookAuthor;
+
 	/**
 	 * Setup all the data to display in the book index page.
 	 * 
@@ -134,7 +138,8 @@ public class Index {
 					.getLastPublishedContent(this.bookAbstractId);
 		}
 
-		if (securityContext.isAuthorOfBook(bookId)) {
+		bookAuthor = securityContext.isAuthorOfBook(bookId);
+		if (bookAuthor) {
 			this.addChapterToggle = this.addChapterLink;
 
 		}
@@ -185,6 +190,10 @@ public class Index {
 				return "application/pdf";
 			}
 		};
+	}
+	
+	public boolean isShowWorkingCopyLink() {
+		return bookAuthor && this.chapterManager.
 	}
 
 	/**

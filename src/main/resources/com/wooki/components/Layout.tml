@@ -48,8 +48,8 @@
 						<li><a href="/wooki/j_spring_security_logout" class="hard-link">Logout</a></li>
 					</t:security.ifLoggedIn>
 					<li><a href="#">Tour</a></li>
-					<t:security.ifLoggedIn>
-						
+					
+					<t:security.ifLoggedIn>	
 						<p:else>
 							<li>Have an account? <a href="#" id="login-link">Signin</a></li>
 							<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>

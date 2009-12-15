@@ -45,6 +45,7 @@ public class Dialog implements ClientElement {
 		params.put("width", 780);
 		params.put("minHeight", 30);
 		params.put("autoOpen", false);
+		params.put("position", "top");
 		data.put("params", params);
 		support.addInit("initJQueryDialog", data);
 	}

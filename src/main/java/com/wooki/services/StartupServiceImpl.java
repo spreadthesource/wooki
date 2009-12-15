@@ -7,7 +7,6 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
-import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;

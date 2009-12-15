@@ -77,6 +77,27 @@ Tapestry.Append = Class.create({
  */
 
 jQuery.extend(Tapestry.Initializer,{
+
+	/**
+	 * This method overrides the update method to insert new content instead of
+	 * replacing current content.
+	 * 
+	 */
+	submitFormOnChange : function(inputId, formId) {
+		$(inputId).observe('change', function(event) {
+			
+			Event.stop(event);
+			
+			var onsubmit = $(formId).onsubmit;
+
+	        if (onsubmit == undefined || onsubmit.call(window.document, event)) {
+	        	$(formId).submit();
+	        }
+	        
+	        return false;
+			
+		});
+	},
 	
 	/**
 	 * This method overrides the update method to insert new content instead of

@@ -7,6 +7,7 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
@@ -15,16 +16,21 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.WookiEventConstants;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
 /**
  * Update settings of a given book
  */
 public class Settings {
+
+	@Inject
+	private WookiSecurityContext securityCtx;
 
 	@Inject
 	private BookManager bookManager;
@@ -37,6 +43,9 @@ public class Settings {
 
 	@InjectComponent
 	private Form addAuthorForm;
+
+	@InjectComponent
+	private Form bookInfoForm;
 
 	@Property
 	private User currentAuthor;
@@ -55,8 +64,10 @@ public class Settings {
 	private String newAuthor;
 
 	@Property
-	@Validate("required")
-	private String title;
+	@Persist
+	private int rowIndex;
+
+	private User loggedAuthor;
 
 	/**
 	 * Setup all the data to display in the book index page.
@@ -81,6 +92,8 @@ public class Settings {
 		}
 
 		this.authors = this.book.getAuthors();
+		this.rowIndex = 0;
+		this.loggedAuthor = securityCtx.getAuthor();
 
 		return null;
 	}
@@ -114,9 +127,24 @@ public class Settings {
 		return authorRow;
 	}
 
+	@OnEvent(value = EventConstants.VALIDATE, component = "title")
+	public void checkTitle(String title) {
+		if (!book.getSlugTitle().equalsIgnoreCase(SlugBuilder.buildSlug(title))) {
+			Book result = bookManager.findBookBySlugTitle(SlugBuilder
+					.buildSlug(title));
+			if (result != null) {
+				bookInfoForm.recordError("Title is already in use");
+			}
+		}
+	}
+
 	@OnEvent(value = EventConstants.SUCCESS, component = "bookInfoForm")
 	public void updateBook() {
-		this.book = bookManager.updateTitle(book);
+		try {
+			this.book = bookManager.updateTitle(book);
+		} catch (TitleAlreadyInUseException taiuEx) {
+			bookInfoForm.recordError("Title is already in use");
+		}
 	}
 
 	@OnEvent(value = WookiEventConstants.REMOVE)
@@ -127,6 +155,11 @@ public class Settings {
 	@OnEvent(value = EventConstants.PROVIDE_COMPLETIONS)
 	public String[] provideAuthorList(String prefix) {
 		return userManager.listUserNames(prefix);
+	}
+
+	public boolean isLoggedAuthor() {
+		return this.currentAuthor.getUsername().equalsIgnoreCase(
+				this.loggedAuthor.getUsername());
 	}
 
 }

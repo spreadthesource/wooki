@@ -33,7 +33,21 @@ public class StartupServiceImpl implements StartupService {
 		john.setPassword("password");
 		john.setFullname("John Doe");
 		userManager.addUser(john);
+		
+		User ccordenier = new User();
+		ccordenier.setEmail("christophe@gmail.com");
+		ccordenier.setUsername("ccordenier");
+		ccordenier.setPassword("password");
+		ccordenier.setFullname("Christophe C.");
+		userManager.addUser(ccordenier);
 
+		User gounthar = new User();
+		gounthar.setEmail("gounthar@gmail.com");
+		gounthar.setUsername("gounthar");
+		gounthar.setPassword("password");
+		gounthar.setFullname("Bruno V.");
+		userManager.addUser(gounthar);
+		
 		User robink = new User();
 		robink.setEmail("robin@gmail.com");
 		robink.setUsername("robink");

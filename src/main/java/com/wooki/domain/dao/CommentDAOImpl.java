@@ -29,18 +29,18 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		return result > 0;
 	}
 
-	public List<Comment> listOpenForPublication(Long chapterId) {
+	public List<Comment> listForPublication(Long chapterId) {
 		if (chapterId == null) {
 			throw new IllegalArgumentException("Chapter id cannot be null.");
 		}
 		Query query = this.entityManager.createQuery("from " + getEntityType()
-				+ " c where c.publication.id=:pubId and c.state=:st and c.deletionDate is null");
+				+ " c where c.publication.id=:pubId and c.state!=:st and c.deletionDate is null");
 		query.setParameter("pubId", chapterId);
-		query.setParameter("st", CommentState.OPEN);
+		query.setParameter("st", CommentState.REJECTED);
 		return query.getResultList();
 	}
 
-	public List<Comment> listOpenForPublicationAndDomId(Long publicationId,
+	public List<Comment> listForPublicationAndDomId(Long publicationId,
 			String domId) {
 		if (publicationId == null) {
 			throw new IllegalArgumentException("Publication id cannot be null.");
@@ -48,9 +48,9 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements
 		Query query = this.entityManager
 				.createQuery("from "
 						+ getEntityType()
-						+ " c where c.publication.id=:pubId and c.state=:st and c.domId=:cid and c.deletionDate is null");
+						+ " c where c.publication.id=:pubId and c.state!=:st and c.domId=:cid and c.deletionDate is null");
 		query.setParameter("pubId", publicationId);
-		query.setParameter("st", CommentState.OPEN);
+		query.setParameter("st", CommentState.REJECTED);
 		query.setParameter("cid", domId);
 
 		return query.getResultList();

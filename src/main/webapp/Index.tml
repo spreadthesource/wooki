@@ -51,7 +51,7 @@
         <ol>
         	<t:loop source="freshStuffs" value="current">
         	<li>
-                ${current.bookTitle} <em>${current.action} </em> <a href="#" t:type="pagelink" t:page="Index" t:context="current.username">${current.username}</a> <em> ${current.period}</em>
+                ${current.bookTitle} <em>${current.type} </em> <a href="#" t:type="pagelink" t:page="Index" t:context="current.username">${current.username}</a> <t:lastModifiedFormatter t:time="current.creationDate?.time" />
             </li>
             </t:loop>
         </ol>

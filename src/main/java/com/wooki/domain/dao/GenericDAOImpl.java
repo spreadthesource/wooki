@@ -15,14 +15,10 @@ import com.wooki.domain.model.WookiEntity;
 
 /**
  * This generic implementation of DAO will be the base for all wooki's DAO.
- * 
- * @author ccordenier
- * 
  * @param <T>
  * @param <PK>
  */
-public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements
-		GenericDAO<T, PK> {
+public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements GenericDAO<T, PK> {
 
 	@PersistenceContext
 	protected EntityManager entityManager;
@@ -30,8 +26,7 @@ public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> impl
 	private Class<T> entityType;
 
 	public GenericDAOImpl() {
-		this.entityType = (Class<T>) ((ParameterizedType) getClass()
-				.getGenericSuperclass()).getActualTypeArguments()[0];
+		this.entityType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	public void create(T o) {
@@ -49,12 +44,14 @@ public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> impl
 	}
 
 	public T findById(PK id) {
+		if (id == null)
+			throw new IllegalArgumentException("Id for " + entityType.getCanonicalName() + " cannot be null.");
+
 		return entityManager.find(entityType, id);
 	}
 
 	public List<T> listAll() {
-		Query query = this.entityManager.createQuery("from "
-				+ this.getEntityType());
+		Query query = this.entityManager.createQuery("from " + this.getEntityType());
 		List<T> resultList = (List<T>) query.getResultList();
 		return resultList;
 	}

@@ -29,6 +29,10 @@ a {
 	color: #FF7351 !important;
 }
 
+.inactive {
+	color: #6E6D65 !important;
+}
+
 abbr {
 	color: #6E6D65;
 	margin-left: 4px;
@@ -402,6 +406,11 @@ input[type="checkbox"] {width:auto !important; }
 	padding: 0px 0px 0px 20px;
 	line-height:40px;
 }
+
+#book #chapters-list h3 em {
+	font-size: 15px;
+}
+
 
 #book #chapters-list p {
 	text-align: right;

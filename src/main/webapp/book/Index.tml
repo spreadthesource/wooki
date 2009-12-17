@@ -45,7 +45,11 @@
 		<t:loop t:source="chaptersInfo" t:value="currentChapter">
 			<li>
 				<h3>
-					<t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink>
+					<t:if t:test="published">
+						<t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink>
+						<p:else><span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+						</p:else>
+					</t:if>
 					
 					<t:if t:test="showWorkingCopyLink">
 						<t:security.ifAuthorOfBook t:bookId="bookId">

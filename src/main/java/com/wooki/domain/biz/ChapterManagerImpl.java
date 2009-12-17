@@ -1,6 +1,5 @@
 package com.wooki.domain.biz;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +22,7 @@ import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("chapterManager")
-public class ChapterManagerImpl implements ChapterManager {
+public class ChapterManagerImpl extends AbstractManager implements ChapterManager {
 
 	@Autowired
 	private ChapterDAO chapterDao;
@@ -32,24 +31,23 @@ public class ChapterManagerImpl implements ChapterManager {
 	private PublicationDAO publicationDao;
 
 	@Autowired
+	// TODO : to delete?
 	private DOMManager domManager;
 
 	@Autowired
 	private WookiSecurityContext securityCtx;
-	
+
 	@Transactional(readOnly = false)
-	public Comment addComment(Long publicationId, String content,
-			String domId) {
-		
+	public Comment addComment(Long publicationId, String content, String domId) {
+
 		// Check security
-		if(!securityCtx.isLoggedIn()) {
+		if (!securityCtx.isLoggedIn()) {
 			throw new AuthorizationException("You must be logged in to add a comment.");
 		}
 		User author = securityCtx.getAuthor();
-		
+
 		if (publicationId == null || content == null) {
-			throw new IllegalArgumentException(
-					"Chapter and comment cannot be null for addition.");
+			throw new IllegalArgumentException("Chapter and comment cannot be null for addition.");
 		}
 
 		Publication toUpdate = publicationDao.findById(publicationId);
@@ -66,78 +64,89 @@ public class ChapterManagerImpl implements ChapterManager {
 	}
 
 	public Chapter findById(Long chapterId) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException("Chapter id cannot be null.");
-		}
 		return this.chapterDao.findById(chapterId);
 	}
 
-	public String getContent(Long chapterId) {
-		return chapterDao.getContent(chapterId);
+	public Publication getLastPublication(Long chapterId) {
+		protectionNotNull(chapterId);
+
+		return publicationDao.findLastRevision(chapterId);
 	}
 
-	@Transactional(readOnly = false)
-	public void updateContent(Long chapterId, String content) {
-		Chapter chapter = chapterDao.findById(chapterId);
-		if (chapter != null) {
-			chapter.setContent(content.getBytes());
-			chapter.setLastModified(Calendar.getInstance().getTime());
-			chapterDao.update(chapter);
+	public String getLastContent(Long chapterId) {
+		Publication publication = getLastPublication(chapterId);
+
+		if (publication != null && publication.getContent() != null) {
+			return toStringWithCharset(publication.getContent(), "UTF-8");
 		}
+
+		return null;
+	}
+
+	public Publication getLastPublishedPublication(Long chapterId) {
+		protectionNotNull(chapterId);
+
+		return publicationDao.findLastPublishedRevision(chapterId);
+	}
+
+	public String getLastPublishedContent(Long chapterId) {
+		Publication published = getLastPublishedPublication(chapterId);
+
+		if (published != null && published.getContent() != null) {
+			return toStringWithCharset(published.getContent(), "UTF-8");
+		}
+
+		return null;
 	}
 
 	@Transactional(readOnly = false)
 	public void publishChapter(Long chapterId) {
-		Chapter chapter = chapterDao.findById(chapterId);
-		if (chapter == null) {
-			throw new IllegalArgumentException(
-					"Chapter parameter cannot be null for publication.");
-		}
-		if (chapter != null && chapter.getContent() != null) {
-			Publication published = new Publication();
-			published.setChapter(chapter);
-			published.setCreationDate(Calendar.getInstance().getTime());
-			publicationDao.create(published);
-			try {
-				published.setContent(domManager.adaptContent(
-						new String(chapter.getContent()), published.getId()).getBytes("UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			publicationDao.update(published);
-		}
+		protectionNotNull(chapterId);
+
+		Publication published = publicationDao.findLastRevision(chapterId);
+
+		published.setLastModified(Calendar.getInstance().getTime());
+		published.setPublished(true);
+
+		publicationDao.update(published);
 	}
 
-	public String getLastPublishedContent(Long chapterId) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException();
+	@Transactional(readOnly = false)
+	public void updateContent(Long chapterId, String content) {
+		protectionNotNull(chapterId);
+
+		Publication publication = publicationDao.findLastRevision(chapterId);
+
+		// we check the published flag. If set, then this Publication must
+		// be considered as "locked" and we must create a new publication as
+		// the new working copy
+		if (publication == null || (publication != null && publication.isPublished())) {
+			publication = new Publication();
+
+			Chapter chapter = chapterDao.findById(chapterId);
+			publication.setChapter(chapter);
+
+			publication.setCreationDate(Calendar.getInstance().getTime());
+			publicationDao.create(publication);
 		}
-		Publication published = publicationDao.findLastRevision(chapterId);
-		if (published != null && published.getContent() != null) {
-			try {
-				return new String(published.getContent(), "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
+
+		publication.setContent(content.getBytes());
+		publication.setLastModified(Calendar.getInstance().getTime());
+		
+		publicationDao.update(publication);
+
 	}
 
-	public Publication getLastPublished(Long chapterId) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException();
-		}
-		Publication published = publicationDao.findLastRevision(chapterId);
-		return published;
+	@Transactional(readOnly = false)
+	public void updateAndPublishContent(Long chapterId, String content) {
+		updateContent(chapterId, content);
+		publishChapter(chapterId);
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void delete(Chapter chapter) {
-		if (chapter == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter cannot be null");
-		}
+		protectionNotNull(chapter);
+
 		Chapter toDelete = chapterDao.findById(chapter.getId());
 		chapterDao.delete(toDelete);
 	}

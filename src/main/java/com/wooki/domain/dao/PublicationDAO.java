@@ -18,4 +18,12 @@ public interface PublicationDAO extends GenericDAO<Publication, Long>{
 	 */
 	Publication findLastRevision(Long chapterId);
 	
+	/**
+	 * Used to retrieve the last published revision of a chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	Publication findLastPublishedRevision(Long chapterId);
+	
 }

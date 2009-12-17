@@ -383,6 +383,7 @@ input[type="checkbox"] {width:auto !important; }
 
 #book article {
 	background: white;
+	min-height: 100px;
 }
 
 #book #authors,#book #published {
@@ -408,7 +409,8 @@ input[type="checkbox"] {width:auto !important; }
 }
 
 #book #chapters-list h3 em {
-	font-size: 15px;
+	font-size: 14px;
+	font-style: normal;
 }
 
 

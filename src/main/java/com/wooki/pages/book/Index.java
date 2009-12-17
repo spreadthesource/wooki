@@ -92,7 +92,7 @@ public class Index {
 
 	@Component
 	private Delegate addChapterDelegate;
-	
+
 	@InjectPage
 	private Edit editChapter;
 
@@ -176,8 +176,7 @@ public class Index {
 			public void prepareResponse(Response response) {
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Expires", "max-age=0");
-				response.setHeader("Content-Disposition",
-						"inline; filename=" + book.getSlugTitle() + ".pdf");
+				response.setHeader("Content-Disposition", "inline; filename=" + book.getSlugTitle() + ".pdf");
 			}
 
 			public InputStream getStream() throws IOException {
@@ -224,6 +223,10 @@ public class Index {
 	 */
 	public Object[] getChapterCtx() {
 		return new Object[] { this.bookId, this.currentChapter.getId() };
+	}
+
+	public Object[] getChapterWorkingCopyCtx() {
+		return new Object[] { this.bookId, this.currentChapter.getId(), "workingcopy" };
 	}
 
 	public Long getBookId() {

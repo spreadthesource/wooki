@@ -53,7 +53,7 @@
 					
 					<t:if t:test="showWorkingCopyLink">
 						<t:security.ifAuthorOfBook t:bookId="bookId">
-							<t:pagelink t:page="chapter/index" t:context="chapterCtx"><em>Working copy</em></t:pagelink>
+							<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx"><em>Working copy</em></t:pagelink>
 						</t:security.ifAuthorOfBook>
 					</t:if>
 		

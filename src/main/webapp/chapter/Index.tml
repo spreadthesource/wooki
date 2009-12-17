@@ -13,6 +13,15 @@
 		</ol>
 		</nav>
 	</header> 
-	<t:outputRaw value="content" />
+	<div class="clearer" />
+	<t:if t:test="viewingRevision">
+		<p class="info">You are currently viewing the revision "${revision}" of this chapter.</p>
+	</t:if>
+	<t:if t:test="availableContent">
+		<t:outputRaw value="content" />
+		<p:else>
+		This chapter is still empty. Please come back later to see if the author have written something.
+		</p:else>
+	</t:if>
 </div>
 </html>

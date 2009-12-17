@@ -2,7 +2,6 @@ package com.wooki.base;
 
 import java.security.Principal;
 
-import org.apache.tapestry5.annotations.PageAttached;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;

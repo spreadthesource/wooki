@@ -68,9 +68,9 @@ public class Index {
 
 		if (ctx.getCount() > 2) {
 			this.revision = ctx.get(String.class, 2);
-
-			if (!securityContext.isLoggedIn() || !securityContext.isAuthorOfBook(bookId) || this.revision != "workingcopy")
-				redirectToBookIndex();
+			
+			if (!securityContext.isLoggedIn() || !securityContext.isAuthorOfBook(bookId) || !this.revision.equals("workingcopy"))
+				return redirectToBookIndex();
 
 			this.viewingRevision = true;
 		}

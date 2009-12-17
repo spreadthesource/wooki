@@ -20,6 +20,9 @@
 	<nav id="book-actions">
 		<ul>
 			<t:security.ifAuthorOfBook t:bookId="bookId">
+				<t:if t:test="abstractHasWorkingCopy">
+					<li><a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a></li>
+				</t:if>
 				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
 				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:editCtx">Settings</a></li>
 			</t:security.ifAuthorOfBook>

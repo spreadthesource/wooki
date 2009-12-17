@@ -102,6 +102,12 @@ public class Index {
 
 	private boolean bookAuthor;
 
+	@Property
+	private String revision;
+
+	@Property
+	private boolean viewingRevision;
+
 	/**
 	 * Setup all the data to display in the book index page.
 	 * 
@@ -111,11 +117,20 @@ public class Index {
 	public Object setupBook(EventContext ctx) {
 
 		// Check parameter numbers
-		if (ctx.getCount() == 0) {
+		if (ctx.getCount() < 1) {
 			return com.wooki.pages.Index.class;
 		}
 
 		this.bookId = ctx.get(Long.class, 0);
+
+		if (ctx.getCount() > 1) {
+			this.revision = ctx.get(String.class, 1);
+
+			if (!securityContext.isLoggedIn() || !securityContext.isAuthorOfBook(bookId) || !this.revision.equals("workingcopy"))
+				return com.wooki.pages.Index.class;
+
+			this.viewingRevision = true;
+		}
 
 		// Get book related information
 		this.book = bookManager.findById(bookId);
@@ -129,12 +144,9 @@ public class Index {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
 
-		Publication published = this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
-
-		if (published != null) {
-			this.publicationId = published.getId();
-			this.abstractContent = this.chapterManager.getLastPublishedContent(this.bookAbstractId);
-		}
+		System.out.println(this.revision);
+		this.abstractContent = (this.revision != null) ? this.chapterManager.getLastContent(this.bookAbstractId) : this.chapterManager
+				.getLastPublishedContent(this.bookAbstractId);
 
 		bookAuthor = securityContext.isAuthorOfBook(bookId);
 		if (bookAuthor) {
@@ -196,10 +208,18 @@ public class Index {
 
 		return (publication != null);
 	}
+	
+	public boolean isAbstractHasWorkingCopy() {
+		return hasWorkingCopy(this.bookAbstractId);
+	}
 
 	public boolean isShowWorkingCopyLink() {
 		long chapterId = currentChapter.getId();
+		return hasWorkingCopy(chapterId);
 
+	}
+
+	private final boolean hasWorkingCopy(long chapterId) {
 		Publication publication = this.chapterManager.getLastPublication(chapterId);
 
 		boolean workingCopy = !publication.isPublished();
@@ -216,6 +236,10 @@ public class Index {
 		return new Object[] { this.bookId, this.bookAbstractId };
 	}
 
+	public Object[] getAbstractWorkingCopyCtx() {
+		return new Object[] { this.bookId, "workingcopy" };
+	}
+	
 	/**
 	 * Get id to link to chapter display
 	 * 

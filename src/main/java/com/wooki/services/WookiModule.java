@@ -1,6 +1,5 @@
 package com.wooki.services;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
@@ -15,11 +14,7 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.services.AssetSource;
-import org.apache.tapestry5.services.Cookies;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
-import org.apache.tapestry5.services.PageRenderRequestHandler;
-import org.apache.tapestry5.services.PageRenderRequestParameters;
-import org.apache.tapestry5.services.RequestGlobals;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.services.internal.TapestryOverrideModule;

@@ -12,9 +12,6 @@ import org.apache.tapestry5.json.JSONObject;
 
 /**
  * Integrate wymeditor as a mixin to be used with textarea.
- * 
- * @author ccordenier
- * 
  */
 @IncludeJavaScriptLibrary("context:/static/js/wymeditor/jquery.wymeditor.pack.js")
 public class WymEditor {

@@ -17,9 +17,6 @@ import javax.persistence.OneToOne;
 /**
  * This class is used to publish chapter when an author has decided to publish
  * its work after comment validation.
- * 
- * @author ccordenier
- * 
  */
 @Entity
 public class Publication extends WookiEntity {
@@ -34,6 +31,8 @@ public class Publication extends WookiEntity {
 
 	@Lob
 	private byte[] content;
+
+	private boolean published;
 
 	/** The list of comment associated to the current publication */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
@@ -76,5 +75,13 @@ public class Publication extends WookiEntity {
 
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+
+	public boolean isPublished() {
+		return published;
 	}
 }

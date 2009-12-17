@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Activity;
@@ -13,9 +11,7 @@ import com.wooki.domain.model.Activity;
 @Repository("activityDao")
 public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements
 		ActivityDAO {
-
-	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
-
+	
 	public List<Activity> list(int nbElements) {
 		Query query = entityManager.createQuery("from " + getEntityType()
 				+ " a where a.deletionDate is null order by a.creationDate desc");

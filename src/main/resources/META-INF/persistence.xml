@@ -5,6 +5,7 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
 			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.query.substitutions" value="true 1, false 0" />
 		</properties>
 	</persistence-unit>
 </persistence>

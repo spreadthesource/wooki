@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Chapter;
@@ -13,22 +11,6 @@ import com.wooki.domain.model.Chapter;
 @Repository("chapterDao")
 public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		ChapterDAO {
-
-	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
-
-	public String getContent(Long chapterId) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException("Book id cannot.");
-		}
-		Query query = this.entityManager.createQuery("select c.content from "
-				+ getEntityType() + " c where c.id=:id");
-		query.setParameter("id", chapterId);
-		byte[] result = (byte[]) query.getSingleResult();
-		if (result == null) {
-			return "";
-		}
-		return new String(result);
-	}
 
 	public List<Chapter> listChapterInfo(Long bookId) {
 		if (bookId == null) {
@@ -59,9 +41,10 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements
 		if (id == null) {
 			throw new IllegalArgumentException("Book id cannot.");
 		}
-		Query query = this.entityManager.createQuery("from "
-				+ this.getEntityType()
-				+ " c where c.book.id=:booId and c.deletionDate is null order by c.lastModified desc");
+		Query query = this.entityManager
+				.createQuery("from "
+						+ this.getEntityType()
+						+ " c where c.book.id=:booId and c.deletionDate is null order by c.lastModified desc");
 		query.setParameter("bookId", id);
 		return query.getResultList();
 	}

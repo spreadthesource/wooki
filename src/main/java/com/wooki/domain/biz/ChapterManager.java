@@ -9,9 +9,6 @@ import com.wooki.domain.model.Publication;
 /**
  * Interface used to access to chapter related information from the wooki
  * application.
- * 
- * @author ccordenier
- * 
  */
 public interface ChapterManager {
 
@@ -23,34 +20,42 @@ public interface ChapterManager {
 	 * @param domId
 	 *            TODO
 	 */
-	Comment addComment(Long publicationId, String content,
-			String domId);
+	Comment addComment(Long publicationId, String content, String domId);
 
 	/**
 	 * Load a chapter.
-	 *
+	 * 
 	 * @return
 	 */
 	Chapter findById(Long chapterId);
-	
+
 	/**
 	 * Retrieve the content for a given chapter. Content is lazy loaded for the
-	 * sake of performance.
+	 * sake of performance. TODO:
 	 * 
 	 * @param chapter
 	 * @return
 	 */
-	String getContent(Long chapterId);
+	String getLastContent(Long chapterId);
 
 	/**
-	 * Publish chapter content
+	 * Retrieve the content for a given chapter. Content is lazy loaded for the
+	 * sake of performance. TODO:
+	 * 
+	 * @param chapter
+	 * @return
+	 */
+	Publication getLastPublication(Long chapterId);
+
+	/**
+	 * Publish chapter content TODO:
 	 * 
 	 * @param chapterId
 	 */
 	void publishChapter(Long chapter);
 
 	/**
-	 * Find the last published chapter content.
+	 * Find the last published chapter content. TODO:
 	 * 
 	 * @param chapterId
 	 * @return
@@ -58,20 +63,28 @@ public interface ChapterManager {
 	String getLastPublishedContent(Long chapterId);
 
 	/**
-	 * Get the last publication for a given chapter.
-	 *
+	 * Get the last publication for a given chapter. TODO:
+	 * 
 	 * @param chapterId
 	 * @return
 	 */
-	Publication getLastPublished(Long chapterId);
-	
+	Publication getLastPublishedPublication(Long chapterId);
+
 	/**
-	 * When a chapter content is update then all its related comments must be
+	 * When a chapter content is updated then all its related comments must be
 	 * re-organized for the sake of consistency.
 	 * 
 	 * @param chapter
 	 */
 	void updateContent(Long chapterId, String content);
+
+	/**
+	 * Update and publish a chapter content. When a chapter content is updated then all
+	 * its related comments must be re-organized for the sake of consistency.
+	 * 
+	 * @param chapter
+	 */
+	void updateAndPublishContent(Long chapterId, String content);
 
 	/**
 	 * Remove chapter from book.

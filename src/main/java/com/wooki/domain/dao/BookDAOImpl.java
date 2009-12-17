@@ -4,16 +4,12 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
 
 @Repository("bookDao")
 public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
-
-	private Logger logger = LoggerFactory.getLogger(ActivityDAO.class);
 
 	public Book findBookBySlugTitle(String title) {
 		Query query = this.entityManager.createQuery("select b from "

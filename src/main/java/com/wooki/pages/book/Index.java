@@ -92,14 +92,14 @@ public class Index {
 
 	@Component
 	private Delegate addChapterDelegate;
-	
+
 	@InjectPage
 	private Edit editChapter;
 
 	private Long bookId;
 
 	private boolean showWorkingCopyLink;
-	
+
 	private boolean bookAuthor;
 
 	/**
@@ -129,13 +129,11 @@ public class Index {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
 
-		Publication published = this.chapterManager
-				.getLastPublished(this.bookAbstractId);
+		Publication published = this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
+
 		if (published != null) {
 			this.publicationId = published.getId();
-			// Get abstract content to display
-			this.abstractContent = this.chapterManager
-					.getLastPublishedContent(this.bookAbstractId);
+			this.abstractContent = this.chapterManager.getLastPublishedContent(this.bookAbstractId);
 		}
 
 		bookAuthor = securityContext.isAuthorOfBook(bookId);
@@ -146,13 +144,13 @@ public class Index {
 
 		return null;
 	}
-	
+
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
 	public Object addNewChapter() {
 		Chapter chapter = bookManager.addChapter(book, chapterName);
 		editChapter.setBookId(bookId);
 		editChapter.setChapterId(chapter.getId());
-		return editChapter; 
+		return editChapter;
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -178,8 +176,7 @@ public class Index {
 			public void prepareResponse(Response response) {
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Expires", "max-age=0");
-				response.setHeader("Content-Disposition",
-						"attachment; filename=" + book.getSlugTitle() + ".pdf");
+				response.setHeader("Content-Disposition", "attachment; filename=" + book.getSlugTitle() + ".pdf");
 			}
 
 			public InputStream getStream() throws IOException {
@@ -191,9 +188,23 @@ public class Index {
 			}
 		};
 	}
-	
+
+	public boolean isPublished() {
+		long chapterId = currentChapter.getId();
+
+		Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+
+		return (publication != null);
+	}
+
 	public boolean isShowWorkingCopyLink() {
-		return bookAuthor && this.chapterManager.
+		long chapterId = currentChapter.getId();
+
+		Publication publication = this.chapterManager.getLastPublication(chapterId);
+
+		boolean workingCopy = !publication.isPublished();
+
+		return bookAuthor && workingCopy;
 	}
 
 	/**

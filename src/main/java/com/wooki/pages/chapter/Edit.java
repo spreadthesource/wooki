@@ -43,7 +43,7 @@ public class Edit {
 
 	@OnEvent(value = EventConstants.PREPARE_FOR_RENDER)
 	public void prepareFormData() {
-		this.data = chapterManager.getContent(chapterId);
+		this.data = chapterManager.getLastContent(chapterId);
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)

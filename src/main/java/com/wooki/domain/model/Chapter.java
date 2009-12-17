@@ -9,14 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 
 /**
  * Represents a chapter of the book.
- * 
- * @author ccordenier
- * 
  */
 @Entity
 public class Chapter extends WookiEntity {
@@ -36,9 +32,6 @@ public class Chapter extends WookiEntity {
 	/** Identifier title */
 	private String slugTitle;
 
-	/** Content of the book */
-	@Lob
-	private byte[] content;
 
 	/**
 	 * Constructor used to retrieve only required information for chapters
@@ -80,14 +73,6 @@ public class Chapter extends WookiEntity {
 
 	public void setSlugTitle(String titleSlug) {
 		this.slugTitle = titleSlug;
-	}
-
-	public byte[] getContent() {
-		return content;
-	}
-
-	public void setContent(byte[] content) {
-		this.content = content;
 	}
 
 	public Book getBook() {

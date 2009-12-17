@@ -182,6 +182,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 	 * Verify initial chapter list size.
 	 */
 	@Test
+	// TODO : this test needs to be updated as a chapter does not contains content anymore
 	public void testChapterValues() {
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -193,12 +194,13 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
 		// Verify chapter content
-		Chapter chapterOne = chapters.get(1);
-		Assert.assertEquals(new String(chapterOne.getContent()),
-				"<p>You will need Žˆ ...</p>");
+		//Chapter chapterOne = chapters.get(1);
+		//Assert.assertEquals(new String(chapterOne.getContent()),
+		//		"<p>You will need Žˆ ...</p>");
 	}
 
 	@Test
+	// TODO : this test needs to be updated as a chapter does not contains content anymore
 	public void testUpdateChapterContent() {
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -211,8 +213,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		Assert.assertTrue(new String(chapterOne.getContent())
-				.contains("<p>You will need Žˆ ...</p>"));
+		//Assert.assertTrue(new String(chapterOne.getContent())
+		//		.contains("<p>You will need Žˆ ...</p>"));
 	}
 
 	/**
@@ -282,7 +284,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Long chapterId = chapters.get(1).getId();
 
 		chapterManager.publishChapter(chapterId);
-		Publication published = chapterManager.getLastPublished(chapterId);
+		Publication published = chapterManager.getLastPublishedPublication(chapterId);
 		Assert.assertNotNull(published);
 
 		securityCtx.log(john);
@@ -329,7 +331,7 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
-		Publication publication = chapterManager.getLastPublished(chapters.get(
+		Publication publication = chapterManager.getLastPublishedPublication(chapters.get(
 				0).getId());
 		Assert.assertNotNull(published, "No revision has been published.");
 		Assert.assertEquals(published, "<p id=\"b" + publication.getId()

@@ -11,15 +11,6 @@ import com.wooki.domain.model.Chapter;
  *
  */
 public interface ChapterDAO extends GenericDAO<Chapter, Long> {
-
-	/**
-	 * Get the content of a book.
-	 *
-	 * @param id
-	 * @return
-	 */
-	String getContent(Long chapterId);
-
 	/**
 	 * List existing chapter for a given book.
 	 * 

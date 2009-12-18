@@ -14,6 +14,15 @@
     </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="html:title">
+    <xsl:copy>
+      <xsl:attribute name="class">
+        <xsl:text>pdftitle</xsl:text>
+      </xsl:attribute>
+      <xsl:apply-templates select="@* | node()" />
+    </xsl:copy>
+  </xsl:template>
+
 <xsl:template match="html:body">
   <xsl:copy>
       <xsl:apply-templates select="@*" />

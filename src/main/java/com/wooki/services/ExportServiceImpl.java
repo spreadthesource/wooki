@@ -29,6 +29,10 @@ public class ExportServiceImpl implements ExportService {
 
 	private Convertor toImprovedXHTMLConvertor;
 
+	private Convertor toImprovedXHTML4LatexConvertor;
+
+	private Convertor toLatexConvertor;
+
 	public InputStream exportPdf(Long bookId) {
 		if (bookId == null) {
 			throw new IllegalArgumentException(
@@ -65,12 +69,56 @@ public class ExportServiceImpl implements ExportService {
 		/** Generate PDF */
 		Resource resource = new ByteArrayResource(buffer.toString().getBytes());
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
-		InputStream improvedXhtml = toImprovedXHTMLConvertor.performTransformation(new InputStreamResource(xhtml));
+		InputStream improvedXhtml = toImprovedXHTMLConvertor
+				.performTransformation(new InputStreamResource(xhtml));
 		InputStream fo = toFOConvertor
 				.performTransformation(new InputStreamResource(improvedXhtml));
 		InputStream pdf = toPDFConvertor
 				.performTransformation(new InputStreamResource(fo));
 		return pdf;
+	}
+
+	public InputStream exportLatex(Long bookId) {
+		if (bookId == null) {
+			throw new IllegalArgumentException(
+					"Book id cannot be null to export.");
+		}
+
+		/** Generate XHTML from book */
+		Book b = bookManager.findById(bookId);
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("<html><head><title>").append(b.getTitle()).append(
+				"</title></head>");
+		buffer.append("<body>");
+		Iterator<User> authors = b.getAuthors().iterator();
+		User currentAuthor = null;
+		while (authors.hasNext()) {
+			currentAuthor = authors.next();
+			buffer.append("<link rev=\"MADE\" title=\""
+					+ currentAuthor.getFullname() + "\" href=\"mailto:"
+					+ currentAuthor.getEmail() + "\">");
+		}
+		List<Chapter> chapters = chapterManager.listChapters(bookId);
+		if (chapters != null) {
+			for (Chapter c : chapters) {
+				buffer.append("<h1>").append(c.getTitle()).append("</h1>");
+				String content = chapterManager.getLastPublishedContent(c
+						.getId());
+				if (content != null) {
+					buffer.append(content);
+				}
+			}
+		}
+		buffer.append("</body></html>");
+
+		/** Generate Latex */
+		Resource resource = new ByteArrayResource(buffer.toString().getBytes());
+		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
+		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor
+				.performTransformation(new InputStreamResource(xhtml));
+		InputStream latex = toLatexConvertor
+				.performTransformation(new InputStreamResource(improvedXhtml));
+		return latex;
 	}
 
 	public BookManager getBookManager() {
@@ -119,6 +167,23 @@ public class ExportServiceImpl implements ExportService {
 
 	public void setToImprovedXHTMLConvertor(Convertor toXHTMLConvertor) {
 		this.toImprovedXHTMLConvertor = toXHTMLConvertor;
+	}
+
+	public Convertor getToImprovedXHTML4LatexConvertor() {
+		return toImprovedXHTML4LatexConvertor;
+	}
+
+	public void setToImprovedXHTML4LatexConvertor(
+			Convertor toImprovedXHTML4LatexConvertor) {
+		this.toImprovedXHTML4LatexConvertor = toImprovedXHTML4LatexConvertor;
+	}
+
+	public Convertor getToLatexConvertor() {
+		return toLatexConvertor;
+	}
+
+	public void setToLatexConvertor(Convertor toLatexConvertor) {
+		this.toLatexConvertor = toLatexConvertor;
 	}
 
 }

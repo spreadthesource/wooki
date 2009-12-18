@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.xml.transform.Source;
@@ -40,6 +41,8 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 	private TransformerFactory tFactory = TransformerFactory.newInstance();
 	private Transformer transformer;
 	private Resource xslStylesheet;
+	private Map stylesheetParameters;
+	
 	private HttpClient httpClient;
 	// Cache management
 	private CacheManager cacheManager;
@@ -69,7 +72,13 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 				"http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent");
 
 		tFactory.setURIResolver(this);
-		logger.debug("Init of " + cacheName + " is finished!");
+		logger.debug("Init of " + cacheName + " is finished for xslt "/*
+																	 * +
+																	 * xslStylesheet
+																	 * .
+																	 * getDescription
+																	 * ()
+																	 */);
 	}
 
 	private void putInCache(String fileLocation, String systemId) {
@@ -128,6 +137,14 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 	public void setXslStylesheet(Resource xslStylesheet) {
 		this.xslStylesheet = xslStylesheet;
 	}
+	
+	public Map getStylesheetParameters() {
+		return stylesheetParameters;
+	}
+
+	public void setStylesheetParameters(Map stylesheetParameters) {
+		this.stylesheetParameters = stylesheetParameters;
+	}
 
 	public InputStream performTransformation(Resource xmlDocument) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -164,6 +181,8 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 			// XML document (foo.xml) and write the output to a file.
 			transformer.transform(new SAXSource(reader, new InputSource(
 					xmlDocument.getInputStream())), toReturn);
+			 String result = new String(baos.toByteArray());
+			 System.out.println(result);
 			return new ByteArrayInputStream(baos.toByteArray());
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();

@@ -1,0 +1,42 @@
+/* $Id: article.css,v 1.2 2006/04/17 18:08:55 connolly Exp $ */
+/* CSS stylesheet that makes the markup
+   used in xh2latex.xsl and xh2bib.xsl
+   visible while editing/browsing
+ */
+
+.subtitle {font-weight: bold; font-style: italic}
+div.abstract p {font-style: italic}
+
+.eqn-display {text-align: center}
+
+/* We center tables */
+.table {margin-left:auto; margin-right:auto;}
+
+.example {
+ margin-left:auto;
+ margin-right:auto;
+ padding-top:0.5em;
+ padding-bottom:0.5em;
+ width:75%;
+ border-top:thin dashed black;
+ border-bottom:thin dashed black;
+}
+
+dl.bib span.author {text-decoration: underline}
+.type {text-decoration: underline}
+.month {text-decoration: underline}
+.year {text-decoration: underline}
+.institution {text-decoration: underline}
+.booktitle {text-decoration: underline}
+.journal {text-decoration: underline}
+.pages {text-decoration: underline}
+.chapter {text-decoration: underline}
+.address {text-decoration: underline}
+.volume {text-decoration: underline}
+.number {text-decoration: underline}
+.series {text-decoration: underline}
+.publisher {text-decoration: underline}
+.howpublished {text-decoration: underline}
+.url {text-decoration: underline}
+
+.online {background-color: #C1FFE9; color: #000000}

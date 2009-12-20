@@ -1,0 +1,13 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<div class="activity-row">
+		<div class="activity-meta">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em>has ${activity.type} a comment</em> <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
+		</div>
+		<div class="activity-body">
+			In Book <a href="#" t:type="pagelink" t:page="book/Index" t:context="activity?.comment?.publication?.chapter?.book?.id">${activity?.comment?.publication?.chapter?.book?.title}</a> on <a href="#" t:type="pagelink" t:page="chapter/Index" t:context="chapterCtx">${activity?.comment?.publication?.chapter?.title}</a>
+			<p class="activity-comment-body">
+				${activity?.comment?.content}
+			</p> 
+		</div>
+	</div>
+</t:container>

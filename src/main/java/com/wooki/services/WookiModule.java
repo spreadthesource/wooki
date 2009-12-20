@@ -13,10 +13,13 @@ import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.userdetails.UserDetailsService;
 
+import com.wooki.ActivityType;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.UserDetailsServiceImpl;
 
@@ -53,22 +56,38 @@ public class WookiModule<T> {
 	 * 
 	 */
 	public static void contributePageRenderRequestHandler(
-			OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
+			OrderedConfiguration<PageRenderRequestFilter> filters,
+			WookiViewRefererFilter vrFilter) {
 		filters.add("ViewRefererFilter", vrFilter);
 	}
 
 	/**
 	 * Add request that shouldn't generate a referer.
-	 *
+	 * 
 	 * @param excludePattern
 	 */
-	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
+	public static void contributeWookiViewRefererFilter(
+			Configuration<String> excludePattern) {
 		excludePattern.add("signin");
 		excludePattern.add("signup");
 		excludePattern.add(".*settings.*");
 		excludePattern.add(".*edit.*");
+		excludePattern.add(".*dashboard.*");
 	}
-	
+
+	/**
+	 * Add coercion tuple for paramter types...
+	 *
+	 * @param configuration
+	 */
+	public static void contributeTypeCoercer(
+			Configuration<CoercionTuple> configuration) {
+		CoercionTuple<String, ActivityType> tuple = new CoercionTuple<String, ActivityType>(
+				String.class, ActivityType.class, StringToEnumCoercion
+						.create(ActivityType.class));
+		configuration.add(tuple);
+	}
+
 	/**
 	 * Add jQuery in no conflict mode to default JavaScript Stack
 	 * 

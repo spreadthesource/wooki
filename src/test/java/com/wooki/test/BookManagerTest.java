@@ -9,11 +9,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
@@ -21,18 +23,22 @@ import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.exception.UserAlreadyOwnerException;
+import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.Activity;
+import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Test case for WookiManager service.
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-public class BookManagerTest extends AbstractTestNGSpringContextTests {
+public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTests {
 
 	@Autowired
 	private BookManager bookManager;
@@ -51,6 +57,9 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 	@Autowired
 	private DataSource ds;
+
+	@Autowired
+	private ActivityManager activityManager;
 
 	@BeforeMethod
 	public void initDb() throws UserAlreadyException, AuthorizationException {
@@ -84,6 +93,65 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 				.addChapter(productBook, "Installation");
 		chapterManager.updateContent(chapterTwo.getId(),
 				"<p>First you have to set environment variables...</p>");
+
+	}
+
+	@Test
+	public void testActivity() throws UserAlreadyException,
+			UserNotFoundException, UserAlreadyOwnerException {
+		User robink = new User();
+		robink.setEmail("robink@gmail.com");
+		robink.setUsername("robink");
+		robink.setPassword("password");
+		robink.setFullname("Robin Komiwes");
+		userManager.addUser(robink);
+
+		Book myProduct = bookManager
+				.findBookBySlugTitle("my-first-product-book");
+		Assert.assertNotNull(myProduct,
+				"'my-first-product-book' is not available.");
+
+		bookManager.addAuthor(myProduct, "robink");
+
+		securityCtx.log(robink);
+
+		Chapter chapter = bookManager.addChapter(myProduct, "Robin Book");
+		chapterManager.updateAndPublishContent(chapter.getId(),
+				"<p>Hello world from unit test cases...</p>");
+		Publication published = chapterManager.getLastPublication(chapter
+				.getId());
+		Assert.assertNotNull(published);
+		chapterManager.addComment(published.getId(), "Yes", "b1");
+
+		Book robinsBook = bookManager.create("Robink book");
+
+		// Verify users activites on john books
+		User john = userManager.findByUsername("john");
+		securityCtx.log(robink);
+
+		List<Activity> activities = activityManager.listActivityOnUserBooks(10,
+				john.getId());
+		Assert.assertNotNull(activities);
+		Assert.assertTrue(activities.size() > 0);
+		for(Activity a : activities) {
+			Assert.assertTrue(john.getId() != a.getUser().getId());
+		}
+		
+		// Verify john activity on its book
+		activities = activityManager.listActivityOnBook(10, john.getId());
+		Assert.assertNotNull(activities);
+		Assert.assertTrue(activities.size() > 0);
+		for(Activity a : activities) {
+			Assert.assertTrue(john.getId() == a.getUser().getId());
+		}
+		
+		// Verify book creation activity
+		activities = activityManager.listBookCreationActivity(10);
+		Assert.assertNotNull(activities);
+		Assert.assertEquals(activities.size(), 3);
+		for(Activity a : activities) {
+			Assert.assertTrue(a instanceof BookActivity);
+		}
 
 	}
 
@@ -163,7 +231,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		try {
 			myProduct.setTitle("My Cache Product Book");
 			bookManager.updateTitle(myProduct);
-			Assert.fail("Title should not be changed since it is already used.");
+			Assert
+					.fail("Title should not be changed since it is already used.");
 		} catch (TitleAlreadyInUseException taiuEx) {
 			taiuEx.printStackTrace();
 		}
@@ -175,14 +244,15 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 			Assert.fail("Title should be changed.");
 			taiuEx.printStackTrace();
 		}
-		
+
 	}
 
 	/**
 	 * Verify initial chapter list size.
 	 */
 	@Test
-	// TODO : this test needs to be updated as a chapter does not contains content anymore
+	// TODO : this test needs to be updated as a chapter does not contains
+	// content anymore
 	public void testChapterValues() {
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -194,13 +264,14 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
 
 		// Verify chapter content
-		//Chapter chapterOne = chapters.get(1);
-		//Assert.assertEquals(new String(chapterOne.getContent()),
-		//		"<p>You will need Žˆ ...</p>");
+		// Chapter chapterOne = chapters.get(1);
+		// Assert.assertEquals(new String(chapterOne.getContent()),
+		// "<p>You will need Žˆ ...</p>");
 	}
 
 	@Test
-	// TODO : this test needs to be updated as a chapter does not contains content anymore
+	// TODO : this test needs to be updated as a chapter does not contains
+	// content anymore
 	public void testUpdateChapterContent() {
 		Book myProduct = bookManager
 				.findBookBySlugTitle("my-first-product-book");
@@ -213,8 +284,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
-		//Assert.assertTrue(new String(chapterOne.getContent())
-		//		.contains("<p>You will need Žˆ ...</p>"));
+		// Assert.assertTrue(new String(chapterOne.getContent())
+		// .contains("<p>You will need Žˆ ...</p>"));
 	}
 
 	/**
@@ -284,7 +355,8 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Long chapterId = chapters.get(1).getId();
 
 		chapterManager.publishChapter(chapterId);
-		Publication published = chapterManager.getLastPublishedPublication(chapterId);
+		Publication published = chapterManager
+				.getLastPublishedPublication(chapterId);
 		Assert.assertNotNull(published);
 
 		securityCtx.log(john);
@@ -326,13 +398,13 @@ public class BookManagerTest extends AbstractTestNGSpringContextTests {
 		Assert.assertNull(published, "No revision has been published.");
 
 		// Update content and publish
-		chapterManager.updateContent(chapters.get(0).getId(),
+		chapterManager.updateAndPublishContent(chapters.get(0).getId(),
 				"<p>Tapestry is totally amazing</p>");
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0)
 				.getId());
-		Publication publication = chapterManager.getLastPublishedPublication(chapters.get(
-				0).getId());
+		Publication publication = chapterManager
+				.getLastPublishedPublication(chapters.get(0).getId());
 		Assert.assertNotNull(published, "No revision has been published.");
 		Assert.assertEquals(published, "<p id=\"b" + publication.getId()
 				+ "0\" class=\"commentable\">Tapestry is totally amazing</p>");

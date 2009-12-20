@@ -29,6 +29,7 @@ public class Comment extends WookiEntity {
 	private String title;
 
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	private Publication publication;
 
 	@OneToOne

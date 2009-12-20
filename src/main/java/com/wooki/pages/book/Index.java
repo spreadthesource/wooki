@@ -126,7 +126,9 @@ public class Index {
 		if (ctx.getCount() > 1) {
 			this.revision = ctx.get(String.class, 1);
 
-			if (!securityContext.isLoggedIn() || !securityContext.isAuthorOfBook(bookId) || !this.revision.equals("workingcopy"))
+			if (!securityContext.isLoggedIn()
+					|| !securityContext.isAuthorOfBook(bookId)
+					|| !this.revision.equals("workingcopy"))
 				return com.wooki.pages.Index.class;
 
 			this.viewingRevision = true;
@@ -144,9 +146,20 @@ public class Index {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
 
-		System.out.println(this.revision);
-		this.abstractContent = (this.revision != null) ? this.chapterManager.getLastContent(this.bookAbstractId) : this.chapterManager
-				.getLastPublishedContent(this.bookAbstractId);
+		if(this.revision != null) {
+			Publication pub = this.chapterManager
+			.getLastPublication(this.bookAbstractId);
+			if(pub != null) {
+				this.abstractContent = pub.getStingContent();
+			}
+		}else{
+			Publication pub = this.chapterManager
+			.getLastPublishedPublication(this.bookAbstractId);
+			if(pub != null) {
+				this.publicationId = pub.getId();
+				this.abstractContent = pub.getStingContent();
+			}
+		}
 
 		bookAuthor = securityContext.isAuthorOfBook(bookId);
 		if (bookAuthor) {
@@ -188,7 +201,8 @@ public class Index {
 			public void prepareResponse(Response response) {
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Expires", "max-age=0");
-				response.setHeader("Content-Disposition", "inline; filename=" + book.getSlugTitle() + ".pdf");
+				response.setHeader("Content-Disposition", "inline; filename="
+						+ book.getSlugTitle() + ".pdf");
 			}
 
 			public InputStream getStream() throws IOException {
@@ -204,11 +218,12 @@ public class Index {
 	public boolean isPublished() {
 		long chapterId = currentChapter.getId();
 
-		Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+		Publication publication = this.chapterManager
+				.getLastPublishedPublication(chapterId);
 
 		return (publication != null);
 	}
-	
+
 	public boolean isAbstractHasWorkingCopy() {
 		return hasWorkingCopy(this.bookAbstractId);
 	}
@@ -220,11 +235,13 @@ public class Index {
 	}
 
 	private final boolean hasWorkingCopy(long chapterId) {
-		Publication publication = this.chapterManager.getLastPublication(chapterId);
-
-		boolean workingCopy = !publication.isPublished();
-
-		return bookAuthor && workingCopy;
+		Publication publication = this.chapterManager
+				.getLastPublication(chapterId);
+		if (publication != null) {
+			boolean workingCopy = !publication.isPublished();
+			return bookAuthor && workingCopy;
+		}
+		return false;
 	}
 
 	/**
@@ -239,7 +256,7 @@ public class Index {
 	public Object[] getAbstractWorkingCopyCtx() {
 		return new Object[] { this.bookId, "workingcopy" };
 	}
-	
+
 	/**
 	 * Get id to link to chapter display
 	 * 
@@ -250,7 +267,8 @@ public class Index {
 	}
 
 	public Object[] getChapterWorkingCopyCtx() {
-		return new Object[] { this.bookId, this.currentChapter.getId(), "workingcopy" };
+		return new Object[] { this.bookId, this.currentChapter.getId(),
+				"workingcopy" };
 	}
 
 	public Long getBookId() {

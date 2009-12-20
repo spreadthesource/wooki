@@ -1,0 +1,10 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<div class="activity-row">
+		<div class="activity-meta">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em>has ${activity.type} a book</em> <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
+		</div>
+		<div class="activity-body">
+			<a href="#" t:type="pagelink" t:page="book/index" t:context="activity?.book?.id">${activity?.book?.title}</a> 
+		</div>
+	</div>
+</t:container>

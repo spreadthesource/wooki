@@ -247,7 +247,7 @@ input[type="checkbox"] {width:auto !important; }
 	color: white;
 	font-family: Georgia;
 	font-size: 24px;
-	width: 380px;
+	width: 370px;
 	float: left;
 	margin: 10px 8px 20px 10px;
 }
@@ -287,14 +287,18 @@ input[type="checkbox"] {width:auto !important; }
 #author-feed {
 	background: white;
 	margin: 10px;
-	width: 340px;
-	height: 300px;
+	width: 360px;
 	float: left;
 	border: 1px solid #C9BB9B;
 }
 
 #author-feed h1 {
 	font-size: 18px;
+}
+
+#author-feed ol {
+	margin-top: 10px;
+	border-top: 1px solid #C9BB9B;
 }
 
 #author-feed li {
@@ -304,7 +308,7 @@ input[type="checkbox"] {width:auto !important; }
 .activity-feed {
 	background: white;
 	margin: 10px;
-	width: 340px;
+	width: 350px;
 	float: right;
 	border: 1px solid #C9BB9B;
 }
@@ -313,8 +317,78 @@ input[type="checkbox"] {width:auto !important; }
 	font-size: 18px;
 }
 
+.activity-feed h1 a {
+	text-decoration: none;
+	padding: 5px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+.activity-feed h1 a.inactive {
+	text-decoration: underline;
+}
+
+.activity-row {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #C9BB9B;
+}
+
+.activity-row em {
+	margin-left: 2px;
+	margin-right: 3px;
+}
+
+.activity-meta {
+	padding-bottom: 8px;
+}
+
+.activity-body {
+	padding-bottom: 8px;
+}
+
+.activity-comment-body {
+	margin-top: 10px;
+	font-style: italic;
+	color: #6E6D65;
+}
+
 .activity-feed li {
 	margin: 10px 0px;
+}
+
+#author-info {
+	background: white;
+	margin: 10px;
+	width: 360px;
+	float: left;
+	border: 1px solid #C9BB9B;
+}
+
+#author-info h1 {
+	font-size: 18px;
+}
+
+#author-info em {
+	color: #6E6D65;
+	font-style: normal;
+}
+
+#author-info p {
+	padding: 5px;
+}
+
+#author-info .label {
+	float: left;
+	width: 120px;
+	color: #6E6D65;
+}
+
+#author-description {
+	padding-top: 10px;
+	margin-top: 10px;
+	border-top: 1px solid #C9BB9B;
 }
 
 /*** bottom */
@@ -850,6 +924,27 @@ TODO: RKS: check what i've deleted :o)
 #book-info form a {
 	float: right;
 }
+
+/** Dashboard */
+#author-feed form {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #C9BB9B;
+}
+
+#author-feed form .label {
+	margin-bottom: 5px;
+}
+
+#author-feed form input {
+	width: 250px;
+}
+
+#createBookForm a {
+	text-decoration: none;
+	margin-left: 5px;
+}
+
 
 /** Tapestry overrides */
 div.t-autocomplete-menu {

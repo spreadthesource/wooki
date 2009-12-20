@@ -64,14 +64,5 @@ public interface CommentManager {
 	 * @return
 	 */
 	List<Comment> listForPublicationAndDomId(Long chapterId, String domId);
-	
-	/**
-	 * Can change the state of a comment to solved.
-	 */
-	void refuseComment(Comment comment);
 
-	/**
-	 * Can change the state of a comment to solved.
-	 */
-	void solveComment(Comment comment);
 }

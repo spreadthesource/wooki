@@ -1,5 +1,6 @@
 package com.wooki.domain.model;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +11,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  * This class is used to publish chapter when an author has decided to publish
@@ -27,6 +30,7 @@ public class Publication extends WookiEntity {
 	private Long id;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_chapter", nullable = false)
 	private Chapter chapter;
 
 	@Lob
@@ -84,4 +88,17 @@ public class Publication extends WookiEntity {
 	public boolean isPublished() {
 		return published;
 	}
+
+	@Transient
+	public String getStingContent() {
+		if(content != null) {
+			try {
+				return new String(this.content, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				return new String(this.content);
+			}
+		}
+		return "";
+	}
+
 }

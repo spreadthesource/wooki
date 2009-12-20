@@ -9,10 +9,11 @@
 <body>
 <div id="top">
 	<div class="body" style="position: relative;">
-			<hgroup id="wooki"><t:pagelink t:page="index" class="button-link">
-				<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
-				<h2>Collaborative Writing</h2>
-				</t:pagelink>
+			<hgroup id="wooki">
+				<a href="${indexPage}" class="button-link">
+					<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
+					<h2>Collaborative Writing</h2>
+				</a>
 			</hgroup>
 			
 			
@@ -42,9 +43,8 @@
 			<nav id="quick-nav">
 				<ul>
 					<t:security.ifLoggedIn>
-						<li><strong>${username}</strong></li>
-						<li><a href="#">Dashboard</a></li>
-						<li><a href="#">Profile</a></li>
+						<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
+						<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
 						<li><a href="${logoutUrl}" class="hard-link">Logout</a></li>
 					</t:security.ifLoggedIn>
 					<li><a href="#">Tour</a></li>

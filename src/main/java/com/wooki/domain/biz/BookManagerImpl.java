@@ -17,11 +17,13 @@ import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
-import com.wooki.domain.model.Activity;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
-import com.wooki.domain.model.EventType;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.BookActivity;
+import com.wooki.domain.model.activity.ChapterActivity;
+import com.wooki.domain.model.activity.BookEventType;
+import com.wooki.domain.model.activity.ChapterEventType;
 import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
@@ -94,15 +96,16 @@ public class BookManagerImpl implements BookManager {
 		}
 		// Create slug title
 		String slug = SlugBuilder.buildSlug(book.getTitle());
-		
+
 		// If book has changed of title
-		if(book.getSlugTitle() != null && !book.getSlugTitle().equalsIgnoreCase(slug)) {
+		if (book.getSlugTitle() != null
+				&& !book.getSlugTitle().equalsIgnoreCase(slug)) {
 			Book result = bookDao.findBookBySlugTitle(slug);
-			if(result != null) {
+			if (result != null) {
 				throw new TitleAlreadyInUseException();
 			}
 		}
-		
+
 		if (!book.getSlugTitle().equals(slug)) {
 			book.setSlugTitle(slug);
 		}
@@ -147,13 +150,11 @@ public class BookManagerImpl implements BookManager {
 		this.chapterDao.create(chapter);
 
 		// Add activity event
-		Activity activity = new Activity();
-		activity.setUsername(author.getUsername());
-		activity.setBookId(book.getId());
-		activity.setChapterId(chapter.getId());
+		ChapterActivity activity = new ChapterActivity();
+		activity.setUser(author);
 		activity.setCreationDate(creationDate);
-		activity.setType(EventType.UPDATE);
-		activity.setBookTitle(book.getTitle());
+		activity.setType(ChapterEventType.CREATE);
+		activity.setChapter(chapter);
 		activityDao.create(activity);
 
 		return chapter;
@@ -189,12 +190,11 @@ public class BookManagerImpl implements BookManager {
 		bookDao.create(book);
 
 		// Add activity event
-		Activity activity = new Activity();
-		activity.setUsername(author.getUsername());
-		activity.setBookId(book.getId());
+		BookActivity activity = new BookActivity();
+		activity.setUser(author);
+		activity.setBook(book);
 		activity.setCreationDate(creationDate);
-		activity.setType(EventType.CREATE);
-		activity.setBookTitle(book.getTitle());
+		activity.setType(BookEventType.CREATE);
 		activityDao.create(activity);
 
 		return book;

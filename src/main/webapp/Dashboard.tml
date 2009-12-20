@@ -1,0 +1,45 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+	<section id="author-feed" class="activity-feed radied-box">
+		<h1>${user.username}'s books</h1>
+		<div>
+			<form t:type="form" t:id="createBookForm">
+				<p class="label">
+					<t:label t:for="bookTitle" />
+				</p>
+				<p>
+					<input t:type="textfield" t:id="bookTitle" /><a t:type="linkSubmit">Create book</a>
+				</p>
+			</form>
+		</div>
+        <ol>
+			<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
+            	<li>
+                	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+         		</li>
+         	</t:loop>
+       	</ol>
+    </section>
+
+	<t:block t:id="titleBlock">
+		<h1>
+			<a t:type="eventlink" t:event="showCoAuthors" class="${coAuthorsClass}">News Feeds</a>
+			<a t:type="eventlink" t:event="showUser" class="${userClass}">Your Actions</a>
+		</h1>
+	</t:block>
+
+	<t:delegate to="feed" />
+
+	<t:block id="coAuthor">
+		<t:activity.feed t:type="co_author" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
+	</t:block>
+
+	<t:block id="yourActivity">
+		<t:activity.feed t:type="user" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
+	</t:block>
+
+	<t:block id="noBooks">
+    	<li>No books available</li>
+    </t:block>
+
+</html>

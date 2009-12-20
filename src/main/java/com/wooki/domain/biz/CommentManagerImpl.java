@@ -48,18 +48,6 @@ public class CommentManagerImpl implements CommentManager {
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void refuseComment(Comment comment) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void solveComment(Comment comment) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void removeComment(Long commId) {
 		if (!securityCtx.isAuthorOfComment(commId)) {
 			throw new AuthorizationException(

@@ -1,0 +1,27 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+	<section id="${clientId}" class="activity-feed radied-box">
+		<t:if test="displayBlock">
+			<t:delegate to="titleBlock" />
+			<p:else>
+				<h1>${title}</h1>
+			</p:else>
+		</t:if>
+        <t:loop source="activities" value="current">
+    		<t:delegate to="activityBlock" />
+		</t:loop>
+    </section>
+
+	<t:block id="bookActivity">
+		<t:activity.book t:activity="current" />
+	</t:block>
+
+	<t:block id="chapterActivity">
+		<t:activity.chapter t:activity="current" />
+	</t:block>
+	
+	<t:block id="commentActivity">
+		<t:activity.comment t:activity="current" />
+	</t:block>
+
+</t:container>

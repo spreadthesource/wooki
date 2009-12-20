@@ -134,8 +134,9 @@ jQuery.extend(Tapestry.Initializer,{
 
             if (!zoneObject) return;
 
-            jQuery('#'+dialogId).dialog('open');
             zoneObject.updateFromURL(url);
+            
+            jQuery('#'+dialogId).dialog('open');
         });
     },
 	

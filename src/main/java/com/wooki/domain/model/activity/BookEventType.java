@@ -1,11 +1,11 @@
-package com.wooki.domain.model;
+package com.wooki.domain.model.activity;
 
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 
 import com.wooki.services.utils.LastActivityMessage;
 
-public enum EventType {
+public enum BookEventType {
 	
 	CREATE, UPDATE, DELETE;
 	

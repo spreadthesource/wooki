@@ -81,13 +81,10 @@ public class Signup {
 				try {
 					return new URL(referer);
 				} catch (MalformedURLException e) {
-					// Alert spring security that an author has logged in
-					successPage.setUsername(username);
 					return successPage;
 				}
 			}
 
-			successPage.setUsername(username);
 			return successPage;
 			
 		} catch (UserAlreadyException uaeEx) {

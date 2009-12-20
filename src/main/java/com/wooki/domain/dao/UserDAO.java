@@ -1,5 +1,7 @@
 package com.wooki.domain.dao;
 
+import java.util.List;
+
 import com.wooki.domain.model.User;
 
 /**
@@ -25,5 +27,5 @@ public interface UserDAO extends GenericDAO<User, Long>{
 	 * @return
 	 */
 	String[] listUserNames(String prefix);
-	
+
 }

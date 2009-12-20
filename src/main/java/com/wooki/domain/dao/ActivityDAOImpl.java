@@ -6,31 +6,92 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.wooki.domain.model.Activity;
+import com.wooki.domain.model.Book;
+import com.wooki.domain.model.activity.Activity;
+import com.wooki.domain.model.activity.BookActivity;
+import com.wooki.domain.model.activity.BookEventType;
+import com.wooki.domain.model.activity.ChapterActivity;
+import com.wooki.domain.model.activity.ChapterEventType;
+import com.wooki.domain.model.activity.CommentActivity;
 
 @Repository("activityDao")
 public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements
 		ActivityDAO {
-	
+
 	public List<Activity> list(int nbElements) {
-		Query query = entityManager.createQuery("from " + getEntityType()
-				+ " a where a.deletionDate is null order by a.creationDate desc");
+		Query query = entityManager
+				.createQuery("from "
+						+ getEntityType()
+						+ " a where a.deletionDate is null order by a.creationDate desc");
 		query.setMaxResults(nbElements);
 		return query.getResultList();
 	}
 
-	public List<Activity> listForBook(Long bookId, int nbElements) {
-		Query query = entityManager.createQuery("from " + getEntityType()
-				+ " a where a.bookId=:id and a.deletionDate is null order by a.creationDate desc");
-		query.setMaxResults(nbElements);
-		query.setParameter("id", bookId);
+	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
+		if (userId == null) {
+			throw new IllegalArgumentException(
+					"User id cannot be null to find its activities");
+		}
+		Query query = entityManager
+				.createQuery("select distinct a from "
+						+ Activity.class.getName()
+						+ " a, "
+						+ ChapterActivity.class.getName()
+						+ " ca, "
+						+ CommentActivity.class.getName()
+						+ " coa, "
+						+ BookActivity.class.getName()
+						+ " ba, "
+						+ Book.class.getName()
+						+ " b join b.users u where ( (b.id=coa.comment.publication.chapter.book.id and coa.id=a.id) or (b.id=ca.chapter.book.id and ca.id=a.id) or (b.id=ba.book.id and ba.id=a.id)) and u.id=:uid and a.user.id!=:uid order by a.creationDate desc");
+		query.setParameter("uid", userId);
+		query.setMaxResults(nbElts);
 		return query.getResultList();
 	}
 
-	public List<Activity> listByChapter(Long chapterId) {
-		Query query = entityManager.createQuery("from " + getEntityType()
-				+ " a where a.chapterId=:id and a.deletionDate is null order by a.creationDate desc");
-		query.setParameter("id", chapterId);
+	public List<Activity> listUserActivity(int nbElts, Long userId) {
+		if (userId == null) {
+			throw new IllegalArgumentException(
+					"User id cannot be null to find its activities");
+		}
+		Query query = entityManager
+				.createQuery("select a from "
+						+ getEntityType()
+						+ " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
+		query.setParameter("uid", userId);
+		query.setMaxResults(nbElts);
+		return query.getResultList();
+	}
+
+	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
+		if (userId == null) {
+			throw new IllegalArgumentException(
+					"User id cannot be null to find its activities");
+		}
+		Query query = entityManager
+				.createQuery("select distinct a from "
+						+ Activity.class.getName()
+						+ " a, "
+						+ ChapterActivity.class.getName()
+						+ " ca, "
+						+ CommentActivity.class.getName()
+						+ " coa, "
+						+ BookActivity.class.getName()
+						+ " ba, "
+						+ Book.class.getName()
+						+ " b join b.users u where ( (b.id=coa.comment.publication.chapter.book.id and coa.id=a.id) or (b.id=ca.chapter.book.id and ca.id=a.id) or (b.id=ba.book.id and ba.id=a.id)) and u.id=:uid and a.user.id=:uid order by a.creationDate desc");
+		query.setParameter("uid", userId);
+		query.setMaxResults(nbElements);
+		return query.getResultList();
+	}
+
+	public List<Activity> listBookCreationActivity(int nbElements) {
+		Query query = entityManager
+				.createQuery("from "
+						+ BookActivity.class.getName()
+						+ " a where a.deletionDate is null and a.type=:type order by a.creationDate desc");
+		query.setParameter("type", BookEventType.CREATE);
+		query.setMaxResults(nbElements);
 		return query.getResultList();
 	}
 

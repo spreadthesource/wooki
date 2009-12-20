@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    	http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
 <xsl:stylesheet version="1.0" 
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -673,7 +691,7 @@
            </xsl:if>
          </xsl:otherwise>
        </xsl:choose>
-       <!--¤     <xsl:if test="@align='Center'">¤       <xsl:attribute name="display-align">¤         <xsl:text>center</xsl:text>¤       </xsl:attribute>¤       <xsl:attribute name="text-align">¤         <xsl:text>center</xsl:text>¤       </xsl:attribute>¤        </xsl:if>¤-->
+       <!--ï¿½     <xsl:if test="@align='Center'">ï¿½       <xsl:attribute name="display-align">ï¿½         <xsl:text>center</xsl:text>ï¿½       </xsl:attribute>ï¿½       <xsl:attribute name="text-align">ï¿½         <xsl:text>center</xsl:text>ï¿½       </xsl:attribute>ï¿½        </xsl:if>ï¿½-->
        <!--xsl:attribute name="text-align">
           <xsl:value-of select="ancestor::*[@align][1]/@align"/>
         </xsl:attribute-->
@@ -683,7 +701,7 @@
               <xsl:value-of select="font/@size"/>
             </xsl:when>
             <xsl:otherwise>
-              <!-- xsl:message>           J'ai trouvé ça comme taille de fonte:           <xsl:value-of select="ancestor::html:font[1]/@size"/>         </xsl:message -->
+              <!-- xsl:message>           J'ai trouvï¿½ ï¿½a comme taille de fonte:           <xsl:value-of select="ancestor::html:font[1]/@size"/>         </xsl:message -->
               <xsl:value-of select="ancestor::html:font[1]/@size"/>
             </xsl:otherwise>
           </xsl:choose>
@@ -1690,7 +1708,7 @@
    <fo:block>
      <xsl:if test="ancestor::html:font[1]">
        <xsl:attribute name="font-size">
-         <!-- xsl:message>           J'ai trouvé ça comme taille de fonte:           <xsl:value-of select="ancestor::html:font[1]/@size"/>         </xsl:message -->
+         <!-- xsl:message>           J'ai trouvï¿½ ï¿½a comme taille de fonte:           <xsl:value-of select="ancestor::html:font[1]/@size"/>         </xsl:message -->
          <xsl:value-of select="ancestor::html:font[1]/@size"/>
        </xsl:attribute>
      </xsl:if>

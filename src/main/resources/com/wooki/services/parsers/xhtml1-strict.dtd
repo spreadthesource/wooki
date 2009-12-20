@@ -1,23 +1,18 @@
 <!--
-   Extensible HTML version 1.0 Strict DTD
 
-   This is the same as HTML 4 Strict except for
-   changes due to the differences between XML and SGML.
+    Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
 
-   Namespace = http://www.w3.org/1999/xhtml
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-   For further information, see: http://www.w3.org/TR/xhtml1
+    	http://www.apache.org/licenses/LICENSE-2.0
 
-   Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),
-   All Rights Reserved. 
-
-   This DTD module is identified by the PUBLIC and SYSTEM identifiers:
-
-   PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   SYSTEM "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
-
-   $Revision: 1.1 $
-   $Date: 2002/08/01 13:56:03 $
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 -->
 

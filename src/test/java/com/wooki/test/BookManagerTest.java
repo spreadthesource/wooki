@@ -1,3 +1,19 @@
+//
+// Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// 	http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
 package com.wooki.test;
 
 import java.util.List;
@@ -87,7 +103,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Chapter chapterOne = bookManager
 				.addChapter(productBook, "Requirements");
 		chapterManager.updateContent(chapterOne.getId(),
-				"<p>You will need Žˆ ...</p>");
+				"<p>You will need ï¿½ï¿½ ...</p>");
 
 		Chapter chapterTwo = bookManager
 				.addChapter(productBook, "Installation");
@@ -266,7 +282,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Verify chapter content
 		// Chapter chapterOne = chapters.get(1);
 		// Assert.assertEquals(new String(chapterOne.getContent()),
-		// "<p>You will need Žˆ ...</p>");
+		// "<p>You will need ï¿½ï¿½ ...</p>");
 	}
 
 	@Test
@@ -285,7 +301,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		// Assert.assertTrue(new String(chapterOne.getContent())
-		// .contains("<p>You will need Žˆ ...</p>"));
+		// .contains("<p>You will need ï¿½ï¿½ ...</p>"));
 	}
 
 	/**

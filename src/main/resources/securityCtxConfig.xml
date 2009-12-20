@@ -38,8 +38,7 @@
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_APACHE_ANT
 				/assets/**=httpSessionContextIntegrationFilter
-				/**/*edit*/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,exceptionTranslationFilter,filterSecurityInterceptor
-				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter
+				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,exceptionTranslationFilter,filterSecurityInterceptor
 			</value>
 		</property>
 		<property name="matcher" ref="ciUrlMatcher" />
@@ -107,6 +106,8 @@
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
 				PATTERN_TYPE_REGEX
 				/.*edit.*=ROLE_Author
+				/.*settings.*=ROLE_Author
+				/.*dashboard.*=ROLE_Author
 			</value>
 		</property>
 	</bean>

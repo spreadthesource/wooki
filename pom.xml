@@ -75,14 +75,14 @@
 			<artifactId>tapestry-spring</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
-		
+
 		<!-- Hibernate -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate-entitymanager-version}</version>
 		</dependency>
-		
+
 		<!-- Spring -->
 		<!-- Spring Framework -->
 		<dependency>
@@ -144,7 +144,7 @@
 			<artifactId>spring-test</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom</artifactId>
@@ -212,6 +212,34 @@
 					<source>1.5</source>
 					<target>1.5</target>
 					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<header>LICENSE.txt</header>
+					<excludes>
+						<exclude>src/main/webapp/static/js/jquery*</exclude>
+						<exclude>src/main/webapp/static/js/wymeditor/**</exclude>
+						<exclude>**/*.sql</exclude>
+						<exclude>**/*.txt</exclude>
+						<exclude>**/PLACEHOLDER</exclude>
+						<exclude>**/*.properties</exclude>
+						<exclude>**/web.xml</exclude>
+						<exclude>**/*.apt</exclude>
+						<exclude>**/*.tml</exclude>
+						<exclude>**/.*</exclude>
+						<exclude>**/*.ent</exclude>
+						<exclude>src/test/conf/**</exclude>
+					</excludes>
+					<useDefaultExcludes>true</useDefaultExcludes>
+					<mapping>
+						<java>DOUBLESLASH_STYLE</java>
+					</mapping>
+					<useDefaultMapping>true</useDefaultMapping>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
@@ -287,23 +315,23 @@
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
 		</repository>
-		
+
 		<repository>
 			<id>OpenQA_Release</id>
 			<name>OpenQA Release Repository</name>
 			<url>http://archiva.openqa.org/repository/releases/</url>
 		</repository>
-		
+
 		<repository>
 			<id>java.net</id>
 			<url>http://download.java.net/maven/2/</url>
 		</repository>
-		
+
 		<repository>
 			<id>jboss</id>
 			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
-		
+
 		<repository>
 			<id>fop</id>
 			<url>http://repo1.maven.org/maven2/org/apache/xmlgraphics/fop</url>

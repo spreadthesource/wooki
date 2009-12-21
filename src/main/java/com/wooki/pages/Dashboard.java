@@ -106,13 +106,15 @@ public class Dashboard {
 	}
 
 	@OnEvent(value = "showCoAuthors")
-	public void showCoAuthorsFeed() {
+	public Object showCoAuthorsFeed() {
 		this.showYours = false;
+		return this.coAuthor;
 	}
 
 	@OnEvent(value = "showUser")
-	public void showUserFeed() {
+	public Object showUserFeed() {
 		this.showYours = true;
+		return this.yourActivity;
 	}
 
 	public Object getFeed() {
@@ -124,16 +126,16 @@ public class Dashboard {
 
 	public String getCoAuthorsClass() {
 		if(this.showYours) {
-			return "active";
+			return "inactive";
 		}
-		return "inactive";
+		return "active";
 	}
 
 	public String getUserClass() {
 		if(this.showYours) {
-			return "inactive";
+			return "active";
 		}
-		return "active";
+		return "inactive";
 
 	}
 	

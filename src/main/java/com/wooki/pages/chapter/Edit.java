@@ -25,6 +25,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.validator.Required;
 
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
 
 /**
@@ -44,6 +45,9 @@ public class Edit {
 	private Long bookId;
 
 	private Long chapterId;
+	
+	@Property
+	private Chapter chapter;
 
 	@Property
 	@Validate("required")
@@ -55,6 +59,8 @@ public class Edit {
 	public void onActivate(Long bookId, Long chapterId) {
 		this.bookId = bookId;
 		this.chapterId = chapterId;
+		
+		this.chapter = chapterManager.findById(chapterId);
 	}
 
 	@OnEvent(value = EventConstants.PREPARE_FOR_RENDER)

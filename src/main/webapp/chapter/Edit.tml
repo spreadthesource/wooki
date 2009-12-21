@@ -1,7 +1,20 @@
-<html t:type="layout"
+<html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet Art">
 
+<div class="entry-content">
+	<header>
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+		<nav id="book-nav">
+			<ol>
+				<li id="nav-left">&lt; Table of Contents</li>
+				<li id="nav-right">Releases &gt;</li>
+			</ol>
+		</nav>
+	</header> 
+	
+	<div class="clearer" />
+	
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
 		<fieldset>
 			<label t:type="label" t:for="data" />
@@ -12,5 +25,6 @@
 			<input t:id="update"  t:type="submit" t:event="update" class="wymupdate" value="update" />
 		</fieldset>
 	</form>
+</div>
 
 </html>

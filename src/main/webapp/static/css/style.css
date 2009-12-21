@@ -958,7 +958,6 @@ TODO: RKS: check what i've deleted :o)
 
 #createBookForm a {
 	text-decoration: none;
-	margin-left: 5px;
 }
 
 #dashboard-feed-title {
@@ -969,21 +968,14 @@ TODO: RKS: check what i've deleted :o)
 #dashboard-feed-title a {
 	text-decoration: none;
 	padding: 5px;
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
-#dashboard-feed-title .active {
-	background-color: white;
-	border: 1px inset;
-	color: #2F2F32 !important;
+#dashboard-feed-title span {
+	text-decoration: none;
+	padding: 5px;
+	margin-right: 5px;
 }
-
-#dashboard-feed-title .inactive {
-	color: #FFD8A1 !important;
-	border: 1px outset white;
-	background-color: #6E6D65;	
-}
-
 
 /** Tapestry overrides */
 div.t-autocomplete-menu {

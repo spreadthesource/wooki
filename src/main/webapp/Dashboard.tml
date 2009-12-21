@@ -23,8 +23,14 @@
 
 	<t:block t:id="titleBlock">
 		<div class="radied-box" id="dashboard-feed-title">
-			<a t:type="eventlink" t:event="showCoAuthors" class="${coAuthorsClass}" t:zone="feedZone">News Feeds</a>
-			<a t:type="eventlink" t:event="showUser" class="${userClass}" t:zone="feedZone">Your Actions</a>
+			<t:if test="showYours">
+				<a t:type="eventlink" t:event="showCoAuthors" class=".active" t:zone="feedZone">News Feeds</a>
+				<span><strong>Your Actions</strong></span>
+				<p:else>
+					<span><strong>News Feeds</strong></span>
+					<a t:type="eventlink" t:event="showUser" class=".active" t:zone="feedZone">Your Actions</a>
+				</p:else>
+			</t:if>
 		</div>
 	</t:block>
 

@@ -961,6 +961,29 @@ TODO: RKS: check what i've deleted :o)
 	margin-left: 5px;
 }
 
+#dashboard-feed-title {
+	background-color: #FFD8A1;
+	padding: 15px;
+}
+
+#dashboard-feed-title a {
+	text-decoration: none;
+	padding: 5px;
+	margin-right: 10px;
+}
+
+#dashboard-feed-title .active {
+	background-color: white;
+	border: 1px inset;
+	color: #2F2F32 !important;
+}
+
+#dashboard-feed-title .inactive {
+	color: #FFD8A1 !important;
+	border: 1px outset white;
+	background-color: #6E6D65;	
+}
+
 
 /** Tapestry overrides */
 div.t-autocomplete-menu {

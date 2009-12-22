@@ -941,6 +941,34 @@ TODO: RKS: check what i've deleted :o)
 	float: right;
 }
 
+/** Search result page */
+#search-results {
+	background: white;
+	margin: 10px;
+	width: 800px;
+	float: left;
+	border: 1px solid #C9BB9B;
+}
+
+#search-results h1 {
+	font-size: 18px;
+}
+
+#search-results #results {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px solid #C9BB9B;
+}
+
+#search-results .result-row {
+	padding: 10px;
+}
+
+#search-results .result-row a {
+	text-decoration: none;
+}
+
+
 /** Dashboard */
 #author-feed form {
 	margin-top: 10px;
@@ -961,8 +989,9 @@ TODO: RKS: check what i've deleted :o)
 }
 
 #dashboard-feed-title {
-	background-color: #FFD8A1;
+	background-color: #F5F5F5;
 	padding: 15px;
+	font-size: 16px;
 }
 
 #dashboard-feed-title a {

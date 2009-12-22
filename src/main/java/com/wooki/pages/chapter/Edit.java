@@ -17,12 +17,13 @@
 package com.wooki.pages.chapter;
 
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.validator.Required;
 
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
@@ -45,7 +46,7 @@ public class Edit {
 	private Long bookId;
 
 	private Long chapterId;
-	
+
 	@Property
 	private Chapter chapter;
 
@@ -56,14 +57,27 @@ public class Edit {
 	private boolean publish;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public void onActivate(Long bookId, Long chapterId) {
+	public Object onActivate(EventContext ctx) {
+
+		if (ctx.getCount() != 2) {
+			return com.wooki.pages.Index.class;
+		}
+
+		try {
+			this.bookId = ctx.get(Long.class, 0);
+			this.chapterId = ctx.get(Long.class, 1);
+		} catch (RuntimeException re) {
+			return com.wooki.pages.Index.class;
+		}
+		
 		this.bookId = bookId;
 		this.chapterId = chapterId;
-		
+
 		this.chapter = chapterManager.findById(chapterId);
+		return null;
 	}
 
-	@OnEvent(value = EventConstants.PREPARE_FOR_RENDER)
+	@SetupRender
 	public void prepareFormData() {
 		this.data = chapterManager.getLastContent(chapterId);
 	}

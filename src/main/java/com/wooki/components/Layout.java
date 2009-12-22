@@ -16,10 +16,13 @@
 
 package com.wooki.components;
 
+import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.InjectPage;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -27,11 +30,15 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 
 import com.wooki.base.WookiBase;
 import com.wooki.pages.Index;
+import com.wooki.pages.SearchResult;
 import com.wooki.services.SecurityUrlSource;
 
 @IncludeStylesheet("context:static/css/style.css")
 public class Layout extends WookiBase {
 
+	@InjectPage
+	private SearchResult searchResult;
+	
 	@Inject
 	private RenderSupport support;
 
@@ -47,6 +54,9 @@ public class Layout extends WookiBase {
 	@Property
 	private String logoutUrl;
 
+	@Property
+	private String queryString;
+	
 	@SetupRender
 	private void setup() {
 		this.loginUrl = source.getLoginUrl();
@@ -58,6 +68,12 @@ public class Layout extends WookiBase {
 		if (!isLogged()) {
 			support.addInit("initLoginDialog");
 		}
+	}
+
+	@OnEvent(value = EventConstants.SUCCESS, component="searchForm")
+	private Object search() {
+		searchResult.search(queryString);
+		return searchResult;
 	}
 
 	/**

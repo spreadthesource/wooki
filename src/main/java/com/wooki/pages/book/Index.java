@@ -152,6 +152,11 @@ public class Index {
 
 		// Get book related information
 		this.book = bookManager.findById(bookId);
+		
+		if(this.book == null) {
+			return com.wooki.pages.Index.class;
+		}
+		
 		this.authors = book.getAuthors();
 
 		// List chapter infos

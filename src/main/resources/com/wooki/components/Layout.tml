@@ -60,8 +60,8 @@
 			</nav>
 			
 			<div id="search-box">
-				<form action="#">
-					<p><label for="search-field">Looking for a document? </label><input type="text" name="search-field" id="search-field" class="form-field insidefield-field" /><a class="form-field insidefield-button" id="submit-search" href="#">Search</a></p>
+				<form t:type="form" t:clientValidation="false" t:id="searchForm">
+					<p><label for="search-field">Looking for a document? </label><input t:type="textfield" t:value="queryString" t:id="searchField" name="search-field" id="search-field" class="form-field insidefield-field" /><a class="form-field insidefield-button" id="submit-search" href="#" t:type="linksubmit">Search</a></p>
 				</form>
 			</div>	
 	</div>

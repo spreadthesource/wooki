@@ -86,9 +86,6 @@ public class WookiModule<T> {
 			Configuration<String> excludePattern) {
 		excludePattern.add("signin");
 		excludePattern.add("signup");
-		excludePattern.add(".*settings.*");
-		excludePattern.add(".*edit.*");
-		excludePattern.add(".*dashboard.*");
 	}
 
 	/**

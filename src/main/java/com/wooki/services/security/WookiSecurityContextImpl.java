@@ -19,7 +19,6 @@ package com.wooki.services.security;
 import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
-import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.dao.UserDAO;

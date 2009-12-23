@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -75,6 +76,9 @@ public class Dashboard {
 	@Validate("required")
 	private String bookTitle;
 
+	@Persist(PersistenceConstants.FLASH)
+	private boolean firstAccess;
+	
 	/**
 	 * Set current user if someone has logged in.
 	 * 
@@ -138,5 +142,13 @@ public class Dashboard {
 		return "inactive";
 
 	}
-	
+
+	public boolean isFirstAccess() {
+		return firstAccess;
+	}
+
+	public void setFirstAccess(boolean firstAccess) {
+		this.firstAccess = firstAccess;
+	}
+
 }

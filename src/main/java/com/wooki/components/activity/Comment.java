@@ -35,9 +35,8 @@ public class Comment {
 
 	public Object[] getChapterCtx() {
 		return new Object[] {
-				activity.getComment().getPublication().getChapter().getId(),
 				activity.getComment().getPublication().getChapter().getBook()
-						.getId() };
+						.getId(), activity.getComment().getPublication().getChapter().getId() };
 	}
 
 }

@@ -31,11 +31,9 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.wooki.domain.model.Comment;
 
-@Service("domManager")
 public class DOMManagerImpl implements DOMManager {
 
 	private static final String COMMENTABLE_CLASS = "commentable";
@@ -53,6 +51,8 @@ public class DOMManagerImpl implements DOMManager {
 
 	private final Logger logger = LoggerFactory.getLogger(DOMManagerImpl.class);
 
+	private String characterEncoding = "UTF-8";
+	
 	/**
 	 * Used to allocate id on content.
 	 * 
@@ -222,7 +222,7 @@ public class DOMManagerImpl implements DOMManager {
 			builder.setValidation(false);
 			builder.setIgnoringElementContentWhitespace(true);
 			Document doc = builder.build(new StringInputStream(new String(
-					content.getBytes("UTF-8"))));
+					content.getBytes(getCharacterEncoding()))));
 			return doc;
 		} catch (JDOMException jdEx) {
 			logger.error("Error during document parsing", jdEx);
@@ -254,7 +254,7 @@ public class DOMManagerImpl implements DOMManager {
 				}
 			}
 			bos.flush();
-			return new String(bos.toByteArray(), "UTF-8");
+			return new String(bos.toByteArray(), getCharacterEncoding());
 		} catch (IOException ioEx) {
 			logger.error("Error during document serialization", ioEx);
 			return "";
@@ -267,38 +267,14 @@ public class DOMManagerImpl implements DOMManager {
 				}
 			}
 		}
-
-		// ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		//
-		// try {
-		//
-		// // Serialize document
-		// Transformer transformer;
-		//
-		// transformer = TransformerFactory.newInstance().newTransformer();
-		// JDOMSource source = new JDOMSource(doc);
-		// StreamResult result = new StreamResult(bos);
-		// transformer.transform(source, result);
-		//
-		// return new String(bos.toByteArray());
-		//
-		// } catch (TransformerConfigurationException e) {
-		// logger.error(e.getMessage());
-		// } catch (TransformerFactoryConfigurationError e) {
-		// logger.error(e.getMessage());
-		// } catch (TransformerException e) {
-		// logger.error(e.getMessage());
-		// } finally {
-		//
-		// // Close output stream
-		// if (bos != null) {
-		// try {
-		// bos.close();
-		// } catch (Exception ex) {
-		// logger.error(ex.getMessage());
-		// }
-		// }
-		// }
-		// return null;
 	}
+
+	public String getCharacterEncoding() {
+		return characterEncoding;
+	}
+
+	public void setCharacterEncoding(String characterEncoding) {
+		this.characterEncoding = characterEncoding;
+	}
+	
 }

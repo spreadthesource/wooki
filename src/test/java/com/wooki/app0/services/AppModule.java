@@ -21,6 +21,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.annotations.SubModule;
@@ -42,6 +43,13 @@ import com.wooki.services.internal.TapestryOverrideModule;
 @SubModule(TapestryOverrideModule.class)
 public class AppModule {
 
+	public void contributeApplicationDefaults(
+			MappedConfiguration<String, String> conf) {
+		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+		conf.add(SymbolConstants.PRODUCTION_MODE, "false");
+		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
+	}
+	
 	public void contributeWookiRequestExceptionHandler(
 			MappedConfiguration<Class, String> exceptionMap) {
 		exceptionMap.add(IllegalArgumentException.class, "IAEReport");

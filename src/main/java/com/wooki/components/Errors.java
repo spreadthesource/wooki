@@ -38,7 +38,7 @@ public class Errors {
 
 		if (!errors.isEmpty()) {
 
-			writer.element("div", "class", "wooki-form-error");
+			writer.element("div", "class", "wooki-form-error radied-box");
 
 			// Only write out the <UL> if it will contain <LI> elements. An
 			// empty <UL> is not

@@ -53,7 +53,7 @@ public class Signup {
 	private Cookies cookies;
 
 	@InjectPage
-	private Index successPage;
+	private Dashboard successPage;
 
 	@Property
 	@Validate("required")
@@ -92,15 +92,7 @@ public class Signup {
 
 			securityCtx.log(user);
 
-			String referer = cookies.readCookieValue(WookiModule.VIEW_REFERER);
-			if (referer != null) {
-				try {
-					return new URL(referer);
-				} catch (MalformedURLException e) {
-					return successPage;
-				}
-			}
-
+			successPage.setFirstAccess(true);
 			return successPage;
 			
 		} catch (UserAlreadyException uaeEx) {

@@ -302,7 +302,7 @@ jQuery.extend(Tapestry.Initializer,{
 					if(nb != undefined) {
 						jQuery("#" + comId + " div").attr("class", "commented").css('visibility', 'visible').text(nb);
 					}else {
-						jQuery("#" + comId + " div").attr("class", "no-comment");
+						jQuery("#" + comId + " div").attr("class", "no-comment").text("");
 					}
 				});
 			});

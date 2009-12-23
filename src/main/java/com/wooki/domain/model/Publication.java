@@ -50,7 +50,7 @@ public class Publication extends WookiEntity {
 	private Chapter chapter;
 
 	@Lob
-	private byte[] content;
+	private String content;
 
 	private boolean published;
 
@@ -74,11 +74,11 @@ public class Publication extends WookiEntity {
 		this.chapter = chapter;
 	}
 
-	public byte[] getContent() {
+	public String getContent() {
 		return content;
 	}
 
-	public void setContent(byte[] content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 
@@ -103,18 +103,6 @@ public class Publication extends WookiEntity {
 
 	public boolean isPublished() {
 		return published;
-	}
-
-	@Transient
-	public String getStingContent() {
-		if(content != null) {
-			try {
-				return new String(this.content, "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				return new String(this.content);
-			}
-		}
-		return "";
 	}
 
 }

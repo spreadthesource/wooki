@@ -969,6 +969,25 @@ TODO: RKS: check what i've deleted :o)
 	text-decoration: none;
 }
 
+/** Exception page */
+#exception-info {
+	background: #2F2F32;
+	color: white;
+	font-family: Georgia;
+	font-size: 18px;
+	width: 100%;
+	float: left;
+	margin: 10px 8px 20px 10px;
+}
+
+#exception-info p {
+	padding: 10px;
+}
+
+#exception-info a {
+	text-decoration: none;
+}
+
 
 /** Dashboard */
 #first-access {

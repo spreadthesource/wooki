@@ -3,12 +3,10 @@ package com.wooki.pages;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.apache.tapestry5.corelib.components.Loop;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.model.Book;

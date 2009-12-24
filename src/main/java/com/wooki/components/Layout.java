@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,56 +34,59 @@ import com.wooki.pages.SearchResult;
 import com.wooki.services.SecurityUrlSource;
 
 @IncludeStylesheet("context:static/css/style.css")
-public class Layout extends WookiBase {
+public class Layout extends WookiBase
+{
 
-	@InjectPage
-	private SearchResult searchResult;
-	
-	@Inject
-	private RenderSupport support;
+    @InjectPage
+    private SearchResult searchResult;
 
-	@Inject
-	private SecurityUrlSource source;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private PageRenderLinkSource linkSource;
+    @Inject
+    private SecurityUrlSource source;
 
-	@Property
-	private String loginUrl;
+    @Inject
+    private PageRenderLinkSource linkSource;
 
-	@Property
-	private String logoutUrl;
+    @Property
+    private String loginUrl;
 
-	@Property
-	private String queryString;
-	
-	@SetupRender
-	private void setup() {
-		this.loginUrl = source.getLoginUrl();
-		this.logoutUrl = source.getLogoutUrl();
+    @Property
+    private String logoutUrl;
+
+    @Property
+    private String queryString;
+
+    @SetupRender
+    private void setup()
+    {
+	this.loginUrl = source.getLoginUrl();
+	this.logoutUrl = source.getLogoutUrl();
+    }
+
+    @AfterRender
+    public void initLoginDialog()
+    {
+	if (!isLogged())
+	{
+	    support.addInit("initLoginDialog");
 	}
+    }
 
-	@AfterRender
-	public void initLoginDialog() {
-		if (!isLogged()) {
-			support.addInit("initLoginDialog");
-		}
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "searchForm")
+    private Object search()
+    {
+	searchResult.search(queryString);
+	return searchResult;
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component="searchForm")
-	private Object search() {
-		searchResult.search(queryString);
-		return searchResult;
-	}
-
-	/**
-	 * Return to page index without context.
-	 * 
-	 * @return
-	 */
-	public Link getIndexPage() {
-		return linkSource.createPageRenderLinkWithContext(Index.class,
-				new Object[0]);
-	}
+    /**
+     * Return to page index without context.
+     */
+    public Link getIndexPage()
+    {
+	return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+    }
 
 }

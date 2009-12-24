@@ -1,5 +1,16 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
+	<t:if t:test="firstAccess">
+		<section id="first-access" class="radied-box">
+			<h1>Thank you for creating your account on Wooki !</h1>
+			<p>
+				Welcome to Wooki, now you have created your account,
+				you will be able to create new Book and collaborate with other Wooki users.
+				Simply fill the 'Book Title' field and click on 'Create Book' to create your first book.
+			</p>
+		</section>
+	</t:if>
+
 	<section id="author-feed" class="activity-feed radied-box">
 		<h1>${user.username}'s books</h1>
 		<div>

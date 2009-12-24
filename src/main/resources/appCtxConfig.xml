@@ -79,4 +79,6 @@
 	
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
+	<bean id="domManager" class="com.wooki.services.parsers.DOMManagerImpl" />
+
 </beans>

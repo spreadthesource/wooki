@@ -16,9 +16,6 @@
 
 package com.wooki.pages;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -32,7 +29,6 @@ import org.apache.tapestry5.services.Cookies;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
-import com.wooki.services.WookiModule;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -53,7 +49,7 @@ public class Signup {
 	private Cookies cookies;
 
 	@InjectPage
-	private Index successPage;
+	private Dashboard successPage;
 
 	@Property
 	@Validate("required")
@@ -64,7 +60,7 @@ public class Signup {
 	private String fullname;
 
 	@Property
-	@Validate("required")
+	@Validate("required,minLength=6")
 	private String password;
 
 	@Property
@@ -73,6 +69,9 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
 	public void onValidate() {
+		if(username.trim().compareToIgnoreCase(password.trim()) == 0) {
+			signupForm.recordError("User password cannot be its username");
+		}
 		// Do a first check
 		if (userManager.findByUsername(username) != null) {
 			signupForm.recordError("User already exists");
@@ -92,15 +91,7 @@ public class Signup {
 
 			securityCtx.log(user);
 
-			String referer = cookies.readCookieValue(WookiModule.VIEW_REFERER);
-			if (referer != null) {
-				try {
-					return new URL(referer);
-				} catch (MalformedURLException e) {
-					return successPage;
-				}
-			}
-
+			successPage.setFirstAccess(true);
 			return successPage;
 			
 		} catch (UserAlreadyException uaeEx) {

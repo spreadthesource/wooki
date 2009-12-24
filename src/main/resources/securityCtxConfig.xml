@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
+	<!--
 
-    Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
+		Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+		Licensed under the Apache License, Version 2.0 (the "License"); you
+		may not use this file except in compliance with the License. You may
+		obtain a copy of the License at
 
-    	http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
@@ -133,9 +131,25 @@
 	<bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
 		<property name="decisionVoters">
 			<list>
+				<ref bean="tapestryResourceVoter" />
 				<ref bean="roleVoter" />
 			</list>
 		</property>
+	</bean>
+
+	<bean id="tapestryResourceVoter" class="com.wooki.services.security.TapestryResourceVoter">
+		<constructor-arg>
+			<map>
+				<entry key="chapter/edit" value-ref="isOwnerAccessController" />
+				<entry key="book/settings" value-ref="isOwnerAccessController" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="isOwnerAccessController" class="com.wooki.services.security.BookAuthorAccessController">
+		<constructor-arg>
+			<ref bean="wookiSecurityContext" />
+		</constructor-arg>
 	</bean>
 
 	<bean id="roleVoter" class="org.springframework.security.vote.RoleVoter">

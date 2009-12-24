@@ -30,9 +30,13 @@ import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
+import org.apache.tapestry5.services.ApplicationInitializer;
+import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
+import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.util.StringToEnumCoercion;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
@@ -86,14 +90,11 @@ public class WookiModule<T> {
 			Configuration<String> excludePattern) {
 		excludePattern.add("signin");
 		excludePattern.add("signup");
-		excludePattern.add(".*settings.*");
-		excludePattern.add(".*edit.*");
-		excludePattern.add(".*dashboard.*");
 	}
 
 	/**
 	 * Add coercion tuple for paramter types...
-	 *
+	 * 
 	 * @param configuration
 	 */
 	public static void contributeTypeCoercer(
@@ -102,6 +103,19 @@ public class WookiModule<T> {
 				String.class, ActivityType.class, StringToEnumCoercion
 						.create(ActivityType.class));
 		configuration.add(tuple);
+	}
+
+	public void contributeApplicationInitializer(
+			OrderedConfiguration<ApplicationInitializerFilter> configuration,
+			final ApplicationContext springContext) {
+		ApplicationInitializerFilter filter = new ApplicationInitializerFilter() {
+			public void initializeApplication(Context context,
+					ApplicationInitializer initializer) {
+				// initializer.initializeApplication(context);
+			}
+		};
+
+		configuration.add("WookiContextInitialization", filter);
 	}
 
 	/**

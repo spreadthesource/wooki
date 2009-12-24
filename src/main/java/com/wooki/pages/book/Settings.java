@@ -25,6 +25,7 @@ import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -37,6 +38,7 @@ import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
+import com.wooki.pages.Index;
 import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
@@ -100,17 +102,28 @@ public class Settings {
 
 		this.bookId = ctx.get(Long.class, 0);
 
+		return null;
+	}
+
+	@SetupRender
+	public Object prepareSettings() {
+		
+		return prepareCtx();
+		
+	}
+
+	private Object prepareCtx() {
 		// Get book related information
 		this.book = bookManager.findById(bookId);
 
 		if (this.book == null) {
-			throw new IllegalArgumentException("Book does not exist.");
+			return Index.class;
 		}
 
 		this.authors = this.book.getAuthors();
 		this.rowIndex = 0;
 		this.loggedAuthor = securityCtx.getAuthor();
-
+		
 		return null;
 	}
 
@@ -134,6 +147,11 @@ public class Settings {
 			}
 		}
 
+	}
+	
+	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT)
+	public void prepareAddAuthor()  {
+		this.prepareCtx();
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addAuthorForm")
@@ -165,12 +183,17 @@ public class Settings {
 
 	@OnEvent(value = WookiEventConstants.REMOVE)
 	public void removeAuthor(Long authorId) {
+		this.prepareCtx();
 		bookManager.removeAuthor(this.book, authorId);
 	}
 
 	@OnEvent(value = EventConstants.PROVIDE_COMPLETIONS)
 	public String[] provideAuthorList(String prefix) {
 		return userManager.listUserNames(prefix);
+	}
+	
+	public Object[] getRemoveAuthorCtx() {
+		return new Object[] {this.bookId, this.currentAuthor.getId()};
 	}
 
 	public boolean isLoggedAuthor() {

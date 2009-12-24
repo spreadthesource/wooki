@@ -1,0 +1,157 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<title>wooki - Collaborative Writing</title>
+		<link type="text/css" rel="stylesheet"
+			href="/wooki/assets/tapestry/5.1.0.5/default.css"></link>
+		<link type="text/css" rel="stylesheet"
+			href="/wooki/assets/blackbird/5.1.0.5/blackbird.css"></link>
+		<link type="text/css" rel="stylesheet"
+			href="/wooki/assets/ctx/0.1/static/css/style.css"></link>
+		<meta content="Apache Tapestry Framework (version 5.1.0.5)" name="generator"></meta>
+		<script src="/wooki/assets/scriptaculous/5.1.0.5/prototype.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/scriptaculous/5.1.0.5/scriptaculous.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/scriptaculous/5.1.0.5/effects.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/tapestry/5.1.0.5/tapestry.js" type="text/javascript"></script>
+		<script src="/wooki/assets/blackbird/5.1.0.5/blackbird.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/tapestry/5.1.0.5/tapestry-messages.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/ctx/0.1/static/js/jquery-1.3.2.min.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/ctx/0.1/static/js/jquery.noconflict.js"
+			type="text/javascript"></script>
+		<script src="/wooki/assets/ctx/0.1/static/js/wooki.js" type="text/javascript"></script>
+		<script
+			src="/wooki/assets/tapestry/5.1.0.5/corelib/components/linksubmit.js"
+			type="text/javascript"></script>
+	</head>
+	<body>
+		<div id="top">
+			<div style="position: relative;" class="body">
+				<hgroup id="wooki">
+					<a class="button-link" href="/wooki/">
+						<h1>
+							<img alt="wooki logo" src="/wooki/assets/ctx/0.1/static/img/logo.png" />
+							wooki
+						</h1>
+						<h2>Collaborative Writing</h2>
+					</a>
+				</hgroup>
+				<form method="POST" action="/wooki/j_spring_security_check" id="login-dialog-form"
+					name="loginForm">
+					<h1>Sign on Wooki</h1>
+					<table>
+						<tr>
+							<th>
+								<label for="j_username">Username</label>
+							</th>
+							<td>
+								<input type="text" name="j_username"></input>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="j_password">Password</label>
+							</th>
+							<td>
+								<input type="password" name="j_password" class="password"></input>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input id="rememberMe" type="checkbox"></input>
+								<label for="rememberMe">Remember me</label>
+							</td>
+						</tr>
+					</table>
+					<div>
+						<a class="radied-box small-active-button" href="javascript:$('login-dialog-form').submit();">Signin</a>
+						<small>
+							<a href="#">Forgot password?</a>
+						</small>
+					</div>
+				</form>
+				<nav id="quick-nav">
+					<ul>
+						<li>
+							<a href="#">Tour</a>
+						</li>
+						<li>
+							Have an account?
+							<a id="login-link" href="#">Signin</a>
+						</li>
+						<li>
+							<a id="singup-link" href="signup">Signup</a>
+						</li>
+						<li>
+							<a href="#">FAQ</a>
+						</li>
+					</ul>
+				</nav>
+				<div id="search-box">
+					<form action="index.layout.searchform" method="post" id="searchForm"
+						name="searchForm">
+						<div class="t-invisible">
+							<input
+								value="H4sIAAAAAAAAAFvzloG1XIpBwjMvJbXCKiexMr+0RK84NbEoOSMtMzUnpbiIwTS/KF0vsSAxOSNVrySxILW4pKjSVC85vyg1JzNJLymxOFXPMQkomJhc4gbSohKcWlJaoBp6mPuh6PE/TAyMPgzcyfl5JUX5OX6JuaklDEI+WYllifo5iXnp+sElRZl56dYVBSUM3BBrwWYQcJIjqU4KKMpPTi0uDi5Nys0sLs7Mzzu8LsUk7du8c0wMDBUF5ZIM4ii25WTmZReD1JYALXPBa1lyfm5Bfl5qXkmxng9QF9iGEkz7/DM7Jv2Tas8DBwdHck4mUIdnSiFDHQMjyO9cCBsBndMzm5IBAAA="
+								name="t:formdata" type="hidden"></input>
+						</div>
+						<p>
+							<label for="search-field">Looking for a document? </label>
+							<input class="form-field insidefield-field" id="searchField"
+								name="searchField" type="text"></input>
+							<a class="form-field insidefield-button" onclick="javascript:Tapestry.waitForPage(event);"
+								href="#" id="linksubmit">Search</a>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id="content">
+			<div class="body">
+				<div class="access-denied radied-box">
+					<h1>Access Denied</h1>
+				</div>
+			</div>
+			<div class="clearer"></div>
+		</div>
+		<div id="bottom">
+			<footer class="body">
+				<div id="footer-wooki" class="footer-nav">
+					<h1>Wooki</h1>
+					<ul>
+						<li>About</li>
+						<li>FAQ</li>
+						<li>Help</li>
+					</ul>
+				</div>
+				<div id="footer-dashboard" class="footer-nav">
+					<h1>Users</h1>
+					<ul>
+						<li>Dashboard</li>
+					</ul>
+				</div>
+				<div id="footer-legal" class="footer-nav">
+					<h1>Legal</h1>
+					<ul>
+						<li>Legal mentions</li>
+						<li>Data privacy</li>
+						<li>Licence</li>
+					</ul>
+				</div>
+			</footer>
+		</div>
+		<script type="text/javascript">Tapestry.DEBUG_ENABLED = true;
+			Tapestry.onDOMLoaded(function() {
+			$('searchField').activate();
+			Tapestry.init({"initLoginDialog":[[]],"linkSubmit":[["searchForm","linksubmit"]]});
+			});
+
+</script>
+	</body>
+</html>

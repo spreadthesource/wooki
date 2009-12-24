@@ -22,9 +22,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
-import com.wooki.domain.model.activity.CommentActivity;
 
 @Repository("userDao")
 public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO {

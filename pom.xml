@@ -262,6 +262,7 @@
 						-->
 						<append>true</append>
 					</requestLog>
+					<port>8081</port>
 				</configuration>
 			</plugin>
 

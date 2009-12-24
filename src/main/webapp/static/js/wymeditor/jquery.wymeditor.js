@@ -511,7 +511,7 @@ jQuery.fn.wymeditor = function(options) {
     dialogPreviewSelector: ".wym_dialog_preview",
     
     updateSelector:    ".wymupdate",
-    updateEvent:       "click",
+    updateEvent:       "mousedown",
     
     dialogFeatures:    "menubar=no,titlebar=no,toolbar=no,resizable=no"
                       + ",width=560,height=300,top=0,left=0",

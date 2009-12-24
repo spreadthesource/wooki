@@ -49,6 +49,14 @@ a {
 	color: #6E6D65 !important;
 }
 
+.left {
+	float:left;
+}
+
+.right {
+	float:right;
+}
+
 abbr {
 	color: #6E6D65;
 	margin-left: 4px;
@@ -707,6 +715,7 @@ div.t-error-popup span {
 	margin: 10px;
 	text-align: center;
 }
+
 
 /*** dialog */
 .ui-widget-overlay {

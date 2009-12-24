@@ -85,13 +85,6 @@
 			</ul>
 		</div>
 		
-		<div class="footer-nav" id="footer-dashboard">
-			<h1>Users</h1>
-			<ul>
-				<li>Dashboard</li>
-			</ul>
-		</div>
-		
 		<div class="footer-nav" id="footer-legal">
 			<h1>Legal</h1>
 			<ul>

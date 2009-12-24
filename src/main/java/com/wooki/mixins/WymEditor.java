@@ -34,6 +34,9 @@ public class WymEditor {
 
 	@Parameter(defaultPrefix = BindingConstants.ASSET)
 	private String wymStyle;
+	
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki")
+	private String wymSkin;
 
 	@InjectContainer
 	private TextArea container;
@@ -54,6 +57,8 @@ public class WymEditor {
 		if (wymStyle != null) {
 			params.put("stylesheet", wymStyle);
 		}
+		
+		params.put("skin", wymSkin);
 
 		data.put("params", params);
 		

@@ -237,6 +237,10 @@
 						<exclude>**/*.tml</exclude>
 						<exclude>**/.*</exclude>
 						<exclude>**/*.ent</exclude>
+						<exclude>**/*.xsl</exclude>
+						<exclude>**/*.xml</exclude>
+						<exclude>**/*.html</exclude>
+						<exclude>**/*.dtd</exclude> 
 						<exclude>src/test/conf/**</exclude>
 					</excludes>
 					<useDefaultExcludes>true</useDefaultExcludes>

@@ -27,6 +27,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -46,6 +47,7 @@ public class Index {
 	@Inject
 	private WookiSecurityContext securityContext;
 
+	@Property
 	private Long bookId;
 
 	private Long chapterId;
@@ -58,6 +60,9 @@ public class Index {
 
 	@Property
 	private String content;
+
+	@Property
+	private Long publicationId;
 
 	@Property
 	private String revision;
@@ -84,7 +89,7 @@ public class Index {
 
 		if (ctx.getCount() > 2) {
 			this.revision = ctx.get(String.class, 2);
-			
+
 			if (!securityContext.isLoggedIn() || !securityContext.isAuthorOfBook(bookId) || !this.revision.equals("workingcopy"))
 				return redirectToBookIndex();
 
@@ -94,7 +99,14 @@ public class Index {
 		// Get book related information
 		this.book = this.bookManager.findById(bookId);
 		this.chapter = this.chapterManager.findById(chapterId);
-		this.content = (this.revision != null) ? this.chapterManager.getLastContent(chapterId) : this.chapterManager.getLastPublishedContent(this.chapterId);
+
+		// Get the publication
+		Publication publication = (this.revision != null) ? this.chapterManager.getLastPublication(chapterId) : this.chapterManager
+				.getLastPublishedPublication(this.chapterId);
+		if (publication != null) {
+			this.content = publication.getContent();
+			this.publicationId = publication.getId();
+		}
 
 		if (this.content != null) {
 			availableContent = true;
@@ -105,6 +117,10 @@ public class Index {
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
+		return new Object[] { this.bookId, this.chapterId };
+	}
+
+	public Object[] getEditCtx() {
 		return new Object[] { this.bookId, this.chapterId };
 	}
 

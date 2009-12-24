@@ -152,6 +152,11 @@ public class Index {
 
 		// Get book related information
 		this.book = bookManager.findById(bookId);
+		
+		if(this.book == null) {
+			return com.wooki.pages.Index.class;
+		}
+		
 		this.authors = book.getAuthors();
 
 		// List chapter infos
@@ -166,14 +171,14 @@ public class Index {
 			Publication pub = this.chapterManager
 			.getLastPublication(this.bookAbstractId);
 			if(pub != null) {
-				this.abstractContent = pub.getStingContent();
+				this.abstractContent = pub.getContent();
 			}
 		}else{
 			Publication pub = this.chapterManager
 			.getLastPublishedPublication(this.bookAbstractId);
 			if(pub != null) {
 				this.publicationId = pub.getId();
-				this.abstractContent = pub.getStingContent();
+				this.abstractContent = pub.getContent();
 			}
 		}
 

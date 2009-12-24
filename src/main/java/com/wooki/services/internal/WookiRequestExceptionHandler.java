@@ -43,6 +43,8 @@ import org.slf4j.Logger;
  */
 public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 
+	private static final String WOOKI_EXCEPTION_REPORT = "WookiExceptionReport";
+
 	private Map<Class, String> exceptionMap;
 
 	private final RequestPageCache pageCache;
@@ -57,6 +59,8 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 
 	private final Response response;
 
+	private final boolean productionMode;
+	
 	public WookiRequestExceptionHandler(
 			Map<Class, String> exceptionMap,
 			RequestPageCache pageCache,
@@ -64,6 +68,7 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 			PageResponseRenderer renderer,
 			Logger logger,
 			@Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) String pageName,
+			@Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
 			Response response) {
 		this.exceptionMap = exceptionMap;
 		this.pageCache = pageCache;
@@ -72,11 +77,16 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 		this.pageName = pageName;
 		this.response = response;
 		this.classResolver = classResolver;
+		this.productionMode = productionMode;
 	}
 
 	public void handleRequestException(Throwable exception) throws IOException {
 
 		String exceptionPage = this.pageName;
+		
+		if(this.productionMode) {
+			exceptionPage = WOOKI_EXCEPTION_REPORT;
+		}
 		
 		logger.error("An exception has occured", exception);
 

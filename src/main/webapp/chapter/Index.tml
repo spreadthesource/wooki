@@ -3,9 +3,17 @@
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
 
-<div class="entry-content commentable">
+<div class="entry-content">
 	<header>
-	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+		<nav id="chapter-actions">
+			<ul>
+				<t:security.ifAuthorOfBook t:bookId="bookId">
+					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
+				</t:security.ifAuthorOfBook>
+			</ul>
+		</nav>
+		<div class="clearer" />
+		<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
 		<nav id="book-nav">
 		<ol>
 			<li id="nav-left">&lt; Table of Contents</li>
@@ -23,5 +31,11 @@
 		This chapter is still empty. Please come back later to see if the author have written something.
 		</p:else>
 	</t:if>
+
+	<!-- Attach bubble to content -->
+	<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
+
 </div>
+
+
 </html>

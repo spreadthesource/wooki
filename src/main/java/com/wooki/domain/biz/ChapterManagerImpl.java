@@ -16,7 +16,6 @@
 
 package com.wooki.domain.biz;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +55,7 @@ public class ChapterManagerImpl extends AbstractManager implements
 
 	@Autowired
 	private CommentDAO commentDao;
-	
+
 	@Autowired
 	private PublicationDAO publicationDao;
 
@@ -92,7 +91,7 @@ public class ChapterManagerImpl extends AbstractManager implements
 		comment.setPublication(toUpdate);
 		toUpdate.addComment(comment);
 		this.commentDao.create(comment);
-		
+
 		// Log activity
 		CommentActivity activity = new CommentActivity();
 		activity.setCreationDate(Calendar.getInstance().getTime());
@@ -116,11 +115,9 @@ public class ChapterManagerImpl extends AbstractManager implements
 
 	public String getLastContent(Long chapterId) {
 		Publication publication = getLastPublication(chapterId);
-
-		if (publication != null && publication.getContent() != null) {
-			return toStringWithCharset(publication.getContent(), "UTF-8");
+		if (publication != null) {
+			return publication.getContent();
 		}
-
 		return null;
 	}
 
@@ -132,11 +129,9 @@ public class ChapterManagerImpl extends AbstractManager implements
 
 	public String getLastPublishedContent(Long chapterId) {
 		Publication published = getLastPublishedPublication(chapterId);
-
-		if (published != null && published.getContent() != null) {
-			return toStringWithCharset(published.getContent(), "UTF-8");
+		if (published != null) {
+			return published.getContent();
 		}
-
 		return null;
 	}
 
@@ -149,34 +144,32 @@ public class ChapterManagerImpl extends AbstractManager implements
 			throw new AuthorizationException(
 					"You must be logged in to publish chapter.");
 		}
-		
+
 		Publication published = publicationDao.findLastRevision(chapterId);
 
 		// Check that the logged user is an author of the book
 		User author = securityCtx.getAuthor();
-		if(!securityCtx.isAuthorOfBook(published.getChapter().getBook().getId())) {
-			throw new AuthorizationException("You must be author to publish this chapter");
+		if (!securityCtx.isAuthorOfBook(published.getChapter().getBook()
+				.getId())) {
+			throw new AuthorizationException(
+					"You must be author to publish this chapter");
 		}
 
 		published.setLastModified(Calendar.getInstance().getTime());
-		try {
-			String content = domManager.adaptContent(new String(published
-					.getContent(), "UTF-8"), published.getId());
-			published.setContent(content.getBytes());
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		String content = domManager.adaptContent(published.getContent(),
+				published.getId());
+		published.setContent(content);
 		published.setPublished(true);
 
 		publicationDao.update(published);
-		
-		ChapterActivity ca =new ChapterActivity();
+
+		ChapterActivity ca = new ChapterActivity();
 		ca.setChapter(published.getChapter());
 		ca.setType(ChapterEventType.PUBLISHED);
 		ca.setCreationDate(Calendar.getInstance().getTime());
 		ca.setUser(author);
 		activityDao.create(ca);
-		
+
 	}
 
 	@Transactional(readOnly = false)
@@ -199,7 +192,7 @@ public class ChapterManagerImpl extends AbstractManager implements
 			publicationDao.create(publication);
 		}
 
-		publication.setContent(content.getBytes());
+		publication.setContent(content);
 		publication.setLastModified(Calendar.getInstance().getTime());
 
 		publicationDao.update(publication);

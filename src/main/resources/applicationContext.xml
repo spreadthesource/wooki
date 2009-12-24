@@ -30,5 +30,6 @@
 	<import resource="classpath:appCtxConfig.xml"/>
 	<import resource="classpath:impCtxConfig.xml"/>
 	<import resource="classpath:securityCtxConfig.xml" />
+	<import resource="classpath:searchEngine.xml" />
 
 </beans>

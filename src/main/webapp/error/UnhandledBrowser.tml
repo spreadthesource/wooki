@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+    <head>
+        <meta charset="utf-8" />
+        <title>wooki - Collaborative Writing</title>
+    </head>
+    <style>
+        /*
+         Theme inspired from kuler scheme : http://kuler.adobe.com/#themeID/617195
+         2F2F32	6E6D65 	C9BB9B	FFD8A1	FF7351
+         */
+        body {
+            background: #C9BB9B;
+            font-family: Helvetica;
+            font-size: 14px;
+            text-align: center
+        }
+        
+        #wrapper {
+            width: 700px;
+            margin: 0 auto;
+            text-align: left;
+        }
+        
+        a {
+            color: #FF7351;
+        }
+        
+        h1 {
+            color: #2F2F32;
+            font-size: 76px;
+            font-family: Georgia;
+            font-weight: normal;
+            text-align: center;
+            padding: 20px 0px;
+        }
+        
+        h2 {
+            color: #FF7351;
+            background: #2F2F32;
+            font-size: 30px;
+            font-family: Georgia;
+            font-weight: normal;
+            padding: 40px;
+        }
+        
+        h1 img {
+            vertical-align: middle;
+        }
+        
+        h1 a {
+            text-decoration: none;
+            color: #2F2F32;
+        }
+        
+        p {
+            margin: 20px;
+        }
+		
+		ul {
+			margin:20px;
+			list-style:disc;
+		}
+		
+		li {
+			margin: 0px 20px;
+		}
+    </style>
+    <body>
+        <div id="wrapper">
+            <h1><a href="${indexPage}"><img src="${asset:context:static/img/wooki_logo_C9BB9B.gif}" alt="wooki logo" />&nbsp;wooki</a></h1>
+            <div class="body">
+                <h2>We are really sorry, your browser is not supported by wooki.</h2>
+                <p>
+                    Some non-standard browsers, like Internet Explorer browsers family, are intrinsicaley oudated in terms of technical evolutions. 
+					Unfortunalety your browser is one of them, and Wooki still does not support it.
+					Supporting theses browsers would result in :
+				</p>
+				
+				<ul>
+					<li>reducing the global user experience quality to fit theses browsers requirement</li>
+					<li>having a work overload by integrating them, and fataly working less on improving existing features and creating new ones</li>
+				</ul>
+				<p>
+					Both consequences are not what we want for Wooki.
+				</p>
+				  
+                <p>
+                    You should use one of the following browsers: <a href="http://www.google.com/chrome">Chrome</a>, <a href="http://www.mozilla.com/firefox/">Firefox</a>
+                    or <a href="http://www.apple.com/safari/">Safari</a>.
+                </p>
+            </div>
+        </div>
+    </body>
+</html>

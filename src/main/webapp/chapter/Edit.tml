@@ -17,14 +17,15 @@
 	
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
 		<fieldset>
-			<label t:type="label" t:for="data" />
 			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
 		</fieldset>
 		<fieldset>
-			<input t:id="publish" t:type="submit" t:event="publish" class="wymupdate" value="publish" />
-			<input t:id="update"  t:type="submit" t:event="update" class="wymupdate" value="update" />
+			<div class="left"><t:submit t:id="update"  t:type="submit" t:event="update" class="wymupdate small-active-button radied-box" style="border:0px !important" value="update" /></div>
+			<div class="left"><t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate small-active-button radied-box" style="border:0px !important" value="publish" /></div>
+			
 		</fieldset>
 	</form>
+	
 </div>
 
 </html>

@@ -213,7 +213,7 @@ input[type="checkbox"] {width:auto !important; }
 }
 
 #search-box #search-field {
-	width: 300px;
+	width: 300px !important;
 }
 
 #search-box #search-field:focus {

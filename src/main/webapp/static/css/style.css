@@ -662,7 +662,10 @@ div.t-error-popup span {
 .insidefield-field {
 	border-radius:10px 0px 0px 10px !important;
 	-moz-border-radius: 10px 0px 0px 10px !important;
-	-webkit-border-radius: 10px 0px 0px 10px !important;
+	-webkit-border-bottom-left-radius: 10px !important;
+	-webkit-border-top-left-radius: 10px !important;
+	-webkit-border-bottom-right-radius: 0px !important;
+	-webkit-border-top-right-radius: 0px !important;
 }
 
 
@@ -672,8 +675,10 @@ div.t-error-popup span {
 	color: #FFD8A1;
 	border-radius: 0px 10px 10px 0px;
 	-moz-border-radius: 0px 10px 10px 0px;
-	-webkit-border-radius: 0px 10px 10px 0px;
-
+	-webkit-border-bottom-left-radius: 0px !important;
+	-webkit-border-top-left-radius: 0px !important;
+	-webkit-border-bottom-right-radius: 10px !important;
+	-webkit-border-top-right-radius: 10px !important;
 }
 
 

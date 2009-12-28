@@ -4,14 +4,34 @@
         "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
 	<display-name>Wooki Tapestry 5 Application</display-name>
+
+	<!-- Tapestry configuration -->
 	<context-param>
 		<param-name>tapestry.app-package</param-name>
 		<param-value>com.wooki</param-value>
 	</context-param>
 	<context-param>
+		<param-name>tapestry.combine-scripts</param-name>
+		<param-value>${tapestry.combine-scripts}</param-value>
+	</context-param>
+	<context-param>
+		<param-name>tapestry.file-check-interval</param-name>
+		<param-value>${tapestry.file-check-interval}</param-value>
+	</context-param>
+	<context-param>
+		<param-name>tapestry.gzip-compression-enabled</param-name>
+		<param-value>${tapestry.gzip-compression-enabled}</param-value>
+	</context-param>
+	<context-param>
+		<param-name>tapestry.production-mode</param-name>
+		<param-value>${tapestry.production-mode}</param-value>
+	</context-param>
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:applicationContext*.xml</param-value>
 	</context-param>
+	
+	
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>

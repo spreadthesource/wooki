@@ -201,14 +201,28 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>2.0.5.RELEASE</version>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-acl</artifactId>
-			<version>2.0.5.RELEASE</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<finalName>wooki</finalName>
+		<resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                <includes>
+                    <include>web.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -266,6 +280,7 @@
 						-->
 						<append>true</append>
 					</requestLog>
+					<webXml>${project.build.outputDirectory}/web.xml</webXml>
 					<port>8081</port>
 				</configuration>
 			</plugin>
@@ -279,9 +294,39 @@
 					</additionalClasspathElements>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webXml>${project.build.outputDirectory}/web.xml</webXml>
+                </configuration>
+            </plugin>
 
 		</plugins>
 	</build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/config/dev.properties</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <build>
+                <filters>
+                    <filter>${basedir}/src/main/config/prod.properties</filter>
+                </filters>
+            </build>
+        </profile>
+    </profiles>
+
 
 	<reporting>
 

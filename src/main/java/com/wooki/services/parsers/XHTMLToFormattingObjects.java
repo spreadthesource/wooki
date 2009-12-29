@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -42,8 +43,11 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
 import org.xml.sax.EntityResolver;
@@ -144,6 +148,9 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
+		HttpClientParams params = httpClient.getParams();
+		//params.
+		httpClient.setHttpConnectionManager(new MultiThreadedHttpConnectionManager());
 	}
 
 	public Resource getXslStylesheet() {
@@ -173,16 +180,31 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 		// a compiled Templates object.
 
 		try {
-			Element processedStylesheet = cache
-					.get(this.xslStylesheet.getURL());
+			URL url = this.xslStylesheet.getURL();
+			Element processedStylesheet = cache.get(url);
 			if (processedStylesheet == null) {
-				StreamSource input = new StreamSource(this.xslStylesheet
-						.getInputStream());
-				input.setSystemId(this.xslStylesheet.getFile());
-				transformer = tFactory.newTransformer(input);
-				transformer.setURIResolver(this);
-				processedStylesheet = new Element(this.xslStylesheet.getURL(),
-						transformer);
+
+				if (url.getProtocol().equals("http")) {
+					GetMethod method = new GetMethod(url.toString());
+					this.httpClient.executeMethod(method);
+					byte[] body = method.getResponseBody();
+					StreamSource input = new StreamSource(
+							new ByteArrayInputStream(body));
+					input.setSystemId(url.toString());
+					tFactory.setURIResolver(this);
+					transformer = tFactory.newTransformer(input);
+					transformer.setURIResolver(this);
+					processedStylesheet = new Element(this.xslStylesheet
+							.getURL(), transformer);
+				} else {
+					StreamSource input = new StreamSource(this.xslStylesheet
+							.getInputStream());
+					input.setSystemId(this.xslStylesheet.getFile());
+					transformer = tFactory.newTransformer(input);
+					transformer.setURIResolver(this);
+					processedStylesheet = new Element(this.xslStylesheet
+							.getURL(), transformer);
+				}
 				cache.put(processedStylesheet);
 			} else {
 				transformer = (Transformer) processedStylesheet
@@ -241,8 +263,32 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 				return null;
 			}
 		} else {
-			toReturn = new StreamSource(XHTMLToFormattingObjects.class
-					.getResourceAsStream(href));
+			if (base.contains("http://")) {
+				String newUrl = base.substring(0, base.lastIndexOf('/') + 1);
+				newUrl+=href;
+				HttpMethod get = new GetMethod(newUrl);
+				try {
+					httpClient.executeMethod(get);
+					byte[] body = get.getResponseBody();
+					//System.out.println(new String(body));
+					Element element = new Element(newUrl, body);
+					cache.put(element);
+					toReturn = new StreamSource(new BufferedInputStream(
+							new ByteArrayInputStream(body)));
+				} catch (HttpException e) {
+					e.printStackTrace();
+					logger.error(e.getLocalizedMessage());
+					return null;
+				} catch (IOException e) {
+					e.printStackTrace();
+					logger.error(e.getLocalizedMessage());
+					return null;
+				}
+				toReturn.setSystemId(newUrl);
+			} else {
+				toReturn = new StreamSource(XHTMLToFormattingObjects.class
+						.getResourceAsStream(href));
+			}
 		}
 		return toReturn;
 	}

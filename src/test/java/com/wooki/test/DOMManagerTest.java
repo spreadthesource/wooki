@@ -226,13 +226,13 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		}
 		logger.debug("Docbook to xhtml ok");
 		
-		SAXParserFactory fabrique = SAXParserFactory.newInstance();
+		SAXParserFactory factory = SAXParserFactory.newInstance();
 
 		// création d'un parseur SAX
-		SAXParser parseur;
+		SAXParser parser;
 		try {
-			parseur = fabrique.newSAXParser();
-			parseur.parse(new InputSource(new FileInputStream(htmlFile)), htmlParser);
+			parser = factory.newSAXParser();
+			parser.parse(new InputSource(new FileInputStream(htmlFile)), htmlParser);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			logger.error(e.getLocalizedMessage());

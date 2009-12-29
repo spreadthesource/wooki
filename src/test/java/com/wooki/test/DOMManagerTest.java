@@ -17,12 +17,16 @@
 package com.wooki.test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +38,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.wooki.domain.model.Book;
-import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
-import com.wooki.domain.model.User;
+import com.wooki.services.HTMLParser;
 import com.wooki.services.parsers.Convertor;
 import com.wooki.services.parsers.DOMManager;
 
@@ -83,6 +88,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("docbookToXhtmlConvertor")
 	private Convertor fromDocbookConvertor;
+	
+	@Autowired
+	@Qualifier("htmlParser")
+	private HTMLParser htmlParser;
 
 	public Convertor getFromDocbookConvertor() {
 		return fromDocbookConvertor;
@@ -196,7 +205,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		String result = "<book>	  <bookinfo>	    <title>An Example Book</title>	    	    <author>	      <firstname>Your first name</firstname>	      <surname>Your surname</surname>	      <affiliation>	        <address><email>foo@example.com</email></address>	      </affiliation>	    </author>		    <copyright>	      <year>2000</year>	      <holder>Copyright string here</holder>	    </copyright>		    <abstract>	      <para>If your book has an abstract then it should go here.</para>	    </abstract>	  </bookinfo>		  <preface>	    <title>Preface</title>		    <para>Your book may have a preface, in which case it should be placed	      here.</para>	  </preface>	      	  <chapter>	    <title>My First Chapter</title>		    <para>This is the first chapter in my book.</para>		    <sect1>	      <title>My First Section</title>		      <para>This is the first section in my book.</para>	    </sect1>	  </chapter>	</book>";
 		Resource resource = new ByteArrayResource(result.getBytes());
 		InputStream xhtml = fromDocbookConvertor.performTransformation(resource);
-		File htmlFile;
+		File htmlFile = null;
 		try {
 			htmlFile = File.createTempFile("wooki", ".html");
 			FileOutputStream fos = new FileOutputStream(htmlFile);
@@ -211,10 +220,32 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+			return;
 		}
 		logger.debug("Docbook to xhtml ok");
+		
+		SAXParserFactory fabrique = SAXParserFactory.newInstance();
+
+		// création d'un parseur SAX
+		SAXParser parseur;
+		try {
+			parseur = fabrique.newSAXParser();
+			parseur.parse(new InputSource(new FileInputStream(htmlFile)), htmlParser);
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		} catch (SAXException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		}
+
+		Book book = htmlParser.getBook();
+		logger.debug("The book title is " + book.getTitle());
 	}
 
 	@Test

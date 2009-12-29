@@ -79,6 +79,18 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("xhtmlToLatexConvertor")
 	private Convertor toLatexConvertor;
+	
+	@Autowired
+	@Qualifier("docbookToXhtmlConvertor")
+	private Convertor fromDocbookConvertor;
+
+	public Convertor getFromDocbookConvertor() {
+		return fromDocbookConvertor;
+	}
+
+	public void setFromDocbookConvertor(Convertor fromDocbookConvertor) {
+		this.fromDocbookConvertor = fromDocbookConvertor;
+	}
 
 	public Convertor getToFOConvertor() {
 		return toFOConvertor;
@@ -177,6 +189,32 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testDocbookConversion() {
+		String result = "<book>	  <bookinfo>	    <title>An Example Book</title>	    	    <author>	      <firstname>Your first name</firstname>	      <surname>Your surname</surname>	      <affiliation>	        <address><email>foo@example.com</email></address>	      </affiliation>	    </author>		    <copyright>	      <year>2000</year>	      <holder>Copyright string here</holder>	    </copyright>		    <abstract>	      <para>If your book has an abstract then it should go here.</para>	    </abstract>	  </bookinfo>		  <preface>	    <title>Preface</title>		    <para>Your book may have a preface, in which case it should be placed	      here.</para>	  </preface>	      	  <chapter>	    <title>My First Chapter</title>		    <para>This is the first chapter in my book.</para>		    <sect1>	      <title>My First Section</title>		      <para>This is the first section in my book.</para>	    </sect1>	  </chapter>	</book>";
+		Resource resource = new ByteArrayResource(result.getBytes());
+		InputStream xhtml = fromDocbookConvertor.performTransformation(resource);
+		File htmlFile;
+		try {
+			htmlFile = File.createTempFile("wooki", ".html");
+			FileOutputStream fos = new FileOutputStream(htmlFile);
+			logger.debug("HTML File is " + htmlFile.getAbsolutePath());
+			byte[] content = null;
+			int available = 0;
+			while ((available = xhtml.available()) > 0) {
+				content = new byte[available];
+				xhtml.read(content);
+				fos.write(content);
+			}
+			fos.flush();
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		logger.debug("Docbook to xhtml ok");
 	}
 
 	@Test

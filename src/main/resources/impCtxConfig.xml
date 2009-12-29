@@ -83,6 +83,44 @@
 		</property>
 	</bean>
 
+	<bean id="docbookToXhtmlConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<!--
+			property name="xslStylesheet"
+			value="classpath:com/wooki/services/parsers/Xhtml2fo.xsl" /
+		-->
+		<property name="xslStylesheet"
+			value="http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl" />
+		<!--
+			property name="xslStylesheet"
+			value="classpath:com/wooki/services/parsers/html.xsl" /
+		-->
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+		<!--property name="stylesheetParameters">
+			<map>
+				<entry>
+					<key><value>DocClass</value></key>
+					<value>llncs</value>
+				</entry>
+				<entry>
+					<key><value>Bib</value></key>
+					<value>Overview</value>
+				</entry>
+				<entry>
+					<key><value>BibStyle</value></key>
+					<value>splncs</value>
+				</entry>
+				<entry>
+					<key><value>Status</value></key>
+					<value>prepub</value>
+				</entry>
+			</map>
+		</property-->
+	</bean>
+
 	<bean id="documentToImprovedXHTMLConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
 		<property name="xslStylesheet"
 			value="classpath:com/wooki/services/parsers/identity.xsl" />
@@ -114,7 +152,7 @@
 	</bean>
 
 	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
-		<property name="proxyHostPlusPort" value="noproxy:3128" />
+		<property name="proxyHostPlusPort" value="proxy:3128" />
 	</bean>
 
 	<bean id="httpParams" class="org.apache.commons.httpclient.params.HttpClientParams">
@@ -150,7 +188,11 @@
 		<property name="toXHTMLConvertor" ref="documentToXHTMLConvertor" />
 		<property name="toImprovedXHTMLConvertor" ref="documentToImprovedXHTMLConvertor" />
 		<property name="toImprovedXHTML4LatexConvertor" ref="documentToImprovedXHTML4LatexConvertor" />
-		<property name="toLatexConvertor" ref="xhtmlToLatexConvertor" />
+		<property name="toLatexConvertor" ref="xhtmlToLatexConvertor" />	
+	</bean>
+	
+	<bean id="importService" class="com.wooki.services.ImportServiceImpl">
+		<property name="toHTMLConvertor" ref="docbookToXhtmlConvertor"/>
 	</bean>
 
 </beans>

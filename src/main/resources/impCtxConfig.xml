@@ -180,6 +180,10 @@
 		<property name="shared" value="false" />
 	</bean>
 
+	<bean id="htmlParser" class="com.wooki.services.HTMLParser">
+		<property name="entityResolver" ref="docbookToXhtmlConvertor"/>
+	</bean>
+
 	<bean id="exportService" class="com.wooki.services.ExportServiceImpl">
 		<property name="bookManager" ref="bookManager" />
 		<property name="chapterManager" ref="chapterManager" />

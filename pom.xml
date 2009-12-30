@@ -201,6 +201,11 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>2.0.5.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.doxia</groupId>
+			<artifactId>doxia-converter</artifactId>
+			<version>1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>wooki</finalName>

@@ -16,9 +16,9 @@
 
 package com.wooki.services;
 
-import java.io.InputStream;
-
 import org.springframework.core.io.Resource;
+
+import com.wooki.domain.model.Book;
 
 /**
  * Export book service, will provide different format, pdf...
@@ -34,6 +34,8 @@ public interface ImportService {
 	 * @param bookId
 	 * @return
 	 */
-	InputStream importDocbook(Resource docbook);
+	Book importDocbook(Resource docbook);
+	
+	Book importApt(Resource apt);
 	
 }

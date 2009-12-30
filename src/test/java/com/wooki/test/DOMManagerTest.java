@@ -16,6 +16,7 @@
 
 package com.wooki.test;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,9 +30,16 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
+import org.apache.maven.doxia.Converter;
+import org.apache.maven.doxia.ConverterException;
+import org.apache.maven.doxia.DefaultConverter;
+import org.apache.maven.doxia.UnsupportedFormatException;
+import org.apache.maven.doxia.wrapper.InputFileWrapper;
+import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
@@ -88,6 +96,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("docbookToXhtmlConvertor")
 	private Convertor fromDocbookConvertor;
+	
+	@Autowired
+	@Qualifier("APTHTMLToDocbookHTMLConvertor")
+	private Convertor fromAptToDocbook;
 	
 	@Autowired
 	@Qualifier("htmlParser")
@@ -200,6 +212,9 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		}
 	}
 	
+	
+	
+
 	@Test
 	public void testDocbookConversion() {
 		String result = "<book>	  <bookinfo>	    <title>An Example Book</title>	    	    <author>	      <firstname>Your first name</firstname>	      <surname>Your surname</surname>	      <affiliation>	        <address><email>foo@example.com</email></address>	      </affiliation>	    </author>		    <copyright>	      <year>2000</year>	      <holder>Copyright string here</holder>	    </copyright>		    <abstract>	      <para>If your book has an abstract then it should go here.</para>	    </abstract>	  </bookinfo>		  <preface>	    <title>Preface</title>		    <para>Your book may have a preface, in which case it should be placed	      here.</para>	  </preface>	      	  <chapter>	    <title>My First Chapter</title>		    <para>This is the first chapter in my book.</para>		    <sect1>	      <title>My First Section</title>		      <para>This is the first section in my book.</para>	    </sect1>	  </chapter>	</book>";
@@ -225,7 +240,6 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			return;
 		}
 		logger.debug("Docbook to xhtml ok");
-		
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 
 		// création d'un parseur SAX
@@ -233,6 +247,77 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		try {
 			parser = factory.newSAXParser();
 			parser.parse(new InputSource(new FileInputStream(htmlFile)), htmlParser);
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		} catch (SAXException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+			logger.error(e.getLocalizedMessage());
+		}
+
+		Book book = htmlParser.getBook();
+		logger.debug("The book title is " + book.getTitle());
+	
+	}
+	
+	@Test
+	public void testAptConversion() {
+		String result = "   ------\n            Title\n            ------\n            Author\n            ------\n             Date\n\n  Paragraph 1, line 1.\n  Paragraph 1, line 2.\n\n  Paragraph 2, line 1.\n  Paragraph 2, line 2.\n\nSection title\n\n* Sub-section title\n\n** Sub-sub-section title\n\n*** Sub-sub-sub-section title\n\n**** Sub-sub-sub-sub-section title\n\n      * List item 1.\n\n      * List item 2.\n\n        Paragraph contained in list item 2.\n\n            * Sub-list item 1.\n\n            * Sub-list item 2.\n\n      * List item 3.\n        Force end of list:\n\n      []\n\n+------------------------------------------+\nVerbatim text not contained in list item 3\n+------------------------------------------+\n\n      [[1]] Numbered item 1.\n\n                [[A]] Numbered item A.\n\n                [[B]] Numbered item B.\n\n      [[2]] Numbered item 2.\n\n  List numbering schemes: [[1]], [[a]], [[A]], [[i]], [[I]].\n\n      [Defined term 1] of definition list.\n\n      [Defined term 2] of definition list.\n\n+-------------------------------+\nVerbatim text\n                        in a box\n+-------------------------------+\n\n  --- instead of +-- suppresses the box around verbatim text.\n\n[Figure name] Figure caption\n\n*----------*--------------+----------------:\n| Centered | Left-aligned | Right-aligned  |\n| cell 1,1 | cell 1,2     | cell 1,3       |\n*----------*--------------+----------------:\n| cell 2,1 | cell 2,2     | cell 2,3       |\n*----------*--------------+----------------:\nTable caption\n\n  No grid, no caption:\n\n*-----*------*\n cell | cell\n*-----*------*\n cell | cell\n*-----*------*\n\n  Horizontal line:\n\n=======================================================================\n\n^L\n  New page.\n\n  <Italic> font. <<Bold>> font. <<<Monospaced>>> font.\n\n  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.\n  Link to {{{anchor}showing alternate text}}.\n  Link to {{{http://www.pixware.fr}Pixware home page}}.\n\n  Force line\\\n  break.\n\n  Non\\ breaking\\ space.\n\n  Escaped special characters: \\~, \\=, \\-, \\+, \\*, \\[, \\], \\<, \\>, \\{, \\}, \\\\.\n\n  Copyright symbol: \\251, \\xA9, \\u00a9.\n\n~~Commented out.";
+		File aptFile = null;
+		String from = "apt";
+		File out = null;
+		
+		try {
+			out = File.createTempFile("fromAptToXHTML", ".html");
+			InputStream apt = new ByteArrayInputStream(result.getBytes());
+			try {
+				aptFile = File.createTempFile("wooki", ".apt");
+				FileOutputStream fos = new FileOutputStream(aptFile);
+				logger.debug("APT File is " + aptFile.getAbsolutePath());
+				byte[] content = null;
+				int available = 0;
+				while ((available = apt.available()) > 0) {
+					content = new byte[available];
+					apt.read(content);
+					fos.write(content);
+				}
+				fos.flush();
+				fos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String to = "xhtml";
+			Converter converter = new DefaultConverter();
+			InputFileWrapper input = InputFileWrapper.valueOf(
+					aptFile.getAbsolutePath(), from, "ISO-8859-1", converter
+							.getInputFormats());
+
+			
+			OutputFileWrapper output = OutputFileWrapper.valueOf(out
+					.getAbsolutePath(), to, "UTF-8", converter
+					.getOutputFormats());
+
+			converter.convert(input, output);
+		} catch (UnsupportedFormatException e) {
+			e.printStackTrace();
+		} catch (ConverterException e) {
+			e.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		InputStream newHTML = fromAptToDocbook.performTransformation(new FileSystemResource(out));
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+
+		// création d'un parseur SAX
+		SAXParser parser;
+		try {
+			parser = factory.newSAXParser();
+			parser.parse(new InputSource(newHTML), htmlParser);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			logger.error(e.getLocalizedMessage());

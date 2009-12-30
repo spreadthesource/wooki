@@ -150,6 +150,16 @@
 		<property name="cacheManager" ref="cacheManager" />
 		<property name="cacheName" value="xhtmlToFOConvertorCache" />
 	</bean>
+	
+	<bean id="APTHTMLToDocbookHTMLConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
+		<property name="xslStylesheet"
+			value="classpath:com/wooki/services/parsers/aptHTMLToDocbookHtml.xslt" />
+		<property name="httpClient">
+			<ref bean="httpClient" />
+		</property>
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="xhtmlToFOConvertorCache" />
+	</bean>
 
 	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
 		<property name="proxyHostPlusPort" value="proxy:3128" />
@@ -197,6 +207,7 @@
 	
 	<bean id="importService" class="com.wooki.services.ImportServiceImpl">
 		<property name="toHTMLConvertor" ref="docbookToXhtmlConvertor"/>
+		<property name="fromAptToDocbook" ref="APTHTMLToDocbookHTMLConvertor"/>
 	</bean>
 
 </beans>

@@ -267,7 +267,7 @@ jQuery.extend(Tapestry.Initializer,{
 			
 			Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
 			comment.css({
-				'top': (jQuery(this).position().top + 10) + 'px',
+				'top': (jQuery(this).position().top) + 'px',
 				'left': (jQuery(this).position().left - 50)  + 'px',
 				'height' : jQuery(this).height() + 'px',
 			});

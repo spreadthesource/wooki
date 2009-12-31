@@ -27,6 +27,25 @@ import com.wooki.domain.model.Chapter;
  *
  */
 public interface ChapterDAO extends GenericDAO<Chapter, Long> {
+	
+	/**
+	 * Find previous and next chapter. 
+	 *
+	 * @param bookId
+	 * @param chapterId
+	 * @return
+	 */
+	List<Object[]> findNext(Long bookId, Long chapterId);
+
+	/**
+	 * Find previous publish chapter.
+	 *
+	 * @param bookId
+	 * @param chapterId
+	 * @return
+	 */
+	List<Object[]> findPrevious(Long bookId, Long chapterId);
+	
 	/**
 	 * List existing chapter for a given book.
 	 * 

@@ -44,8 +44,7 @@ import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("chapterManager")
-public class ChapterManagerImpl extends AbstractManager implements
-		ChapterManager {
+public class ChapterManagerImpl extends AbstractManager implements ChapterManager {
 
 	@Autowired
 	private ChapterDAO chapterDao;
@@ -71,14 +70,12 @@ public class ChapterManagerImpl extends AbstractManager implements
 
 		// Check security
 		if (!securityCtx.isLoggedIn()) {
-			throw new AuthorizationException(
-					"You must be logged in to add a comment.");
+			throw new AuthorizationException("You must be logged in to add a comment.");
 		}
 		User author = securityCtx.getAuthor();
 
 		if (publicationId == null || content == null) {
-			throw new IllegalArgumentException(
-					"Chapter and comment cannot be null for addition.");
+			throw new IllegalArgumentException("Chapter and comment cannot be null for addition.");
 		}
 
 		Publication toUpdate = publicationDao.findById(publicationId);
@@ -141,23 +138,19 @@ public class ChapterManagerImpl extends AbstractManager implements
 
 		// Check security
 		if (!securityCtx.isLoggedIn()) {
-			throw new AuthorizationException(
-					"You must be logged in to publish chapter.");
+			throw new AuthorizationException("You must be logged in to publish chapter.");
 		}
 
 		Publication published = publicationDao.findLastRevision(chapterId);
 
 		// Check that the logged user is an author of the book
 		User author = securityCtx.getAuthor();
-		if (!securityCtx.isAuthorOfBook(published.getChapter().getBook()
-				.getId())) {
-			throw new AuthorizationException(
-					"You must be author to publish this chapter");
+		if (!securityCtx.isAuthorOfBook(published.getChapter().getBook().getId())) {
+			throw new AuthorizationException("You must be author to publish this chapter");
 		}
 
 		published.setLastModified(Calendar.getInstance().getTime());
-		String content = domManager.adaptContent(published.getContent(),
-				published.getId());
+		String content = domManager.adaptContent(published.getContent(), published.getId());
 		published.setContent(content);
 		published.setPublished(true);
 
@@ -181,8 +174,7 @@ public class ChapterManagerImpl extends AbstractManager implements
 		// we check the published flag. If set, then this Publication must
 		// be considered as "locked" and we must create a new publication as
 		// the new working copy
-		if (publication == null
-				|| (publication != null && publication.isPublished())) {
+		if (publication == null || (publication != null && publication.isPublished())) {
 			publication = new Publication();
 
 			Chapter chapter = chapterDao.findById(chapterId);
@@ -213,6 +205,23 @@ public class ChapterManagerImpl extends AbstractManager implements
 		chapterDao.delete(toDelete);
 	}
 
+	public Object[] findPrevious(Long bookId, Long chapterId) {
+		List<Object[]> result = this.chapterDao.findPrevious(bookId, chapterId);
+		if (result != null && result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+
+	public Object[] findNext(Long bookId, Long chapterId) {
+		List<Object[]> result = this.chapterDao.findNext(bookId, chapterId);
+		if (result != null && result.size() > 0) {
+			return result.get(0);
+		}
+		return null;
+	}
+
+	
 	public List<Chapter> listChapters(Long bookId) {
 		return chapterDao.listChapters(bookId);
 	}

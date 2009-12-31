@@ -46,6 +46,24 @@ public interface ChapterManager {
 	Chapter findById(Long chapterId);
 
 	/**
+	 * Find next and previous chapter from a chapter id
+	 *
+	 * @param bookId
+	 * @param chapterId
+	 * @return
+	 */
+	Object[] findPrevious(Long bookId, Long chapterId);
+	
+	/**
+	 * Find the next published Chapter.
+	 *
+	 * @param bookId
+	 * @param chapterId
+	 * @return
+	 */
+	Object[] findNext(Long bookId, Long chapterId);
+	
+	/**
 	 * Retrieve the content for a given chapter. Content is lazy loaded for the
 	 * sake of performance. TODO:
 	 * 

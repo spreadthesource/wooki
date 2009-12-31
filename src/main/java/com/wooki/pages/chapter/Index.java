@@ -21,6 +21,7 @@ import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.biz.BookManager;
@@ -73,6 +74,18 @@ public class Index {
 	@Property
 	private boolean viewingRevision;
 
+	@Property
+	private Long previous;
+
+	@Property
+	private String previousTitle;
+
+	@Property
+	private Long next;
+
+	@Property
+	private String nextTitle;
+
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;
 
@@ -96,9 +109,27 @@ public class Index {
 			this.viewingRevision = true;
 		}
 
+		return null;
+	}
+
+	@SetupRender
+	public void setupDisplay() {
+
 		// Get book related information
 		this.book = this.bookManager.findById(bookId);
 		this.chapter = this.chapterManager.findById(chapterId);
+
+		Object[] data = this.chapterManager.findPrevious(this.bookId, this.chapterId);
+		if (data != null && data.length == 2) {
+			this.previous = (Long) data[0];
+			this.previousTitle = (String) data[1];
+		}
+
+		data = this.chapterManager.findNext(this.bookId, this.chapterId);
+		if (data != null && data.length == 2) {
+			this.next = (Long) data[0];
+			this.nextTitle = (String) data[1];
+		}
 
 		// Get the publication
 		Publication publication = (this.revision != null) ? this.chapterManager.getLastPublication(chapterId) : this.chapterManager
@@ -111,8 +142,6 @@ public class Index {
 		if (this.content != null) {
 			availableContent = true;
 		}
-
-		return null;
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -124,8 +153,30 @@ public class Index {
 		return new Object[] { this.bookId, this.chapterId };
 	}
 
+	public Object[] getPreviousCtx() {
+		if (this.viewingRevision) {
+			return new Object[] { this.bookId, this.previous, "workingcopy" };
+		}
+		return new Object[] { this.bookId, this.previous };
+	}
+
+	public Object[] getNextCtx() {
+		if (this.viewingRevision) {
+			return new Object[] { this.bookId, this.next, "workingcopy" };
+		}
+		return new Object[] { this.bookId, this.next };
+	}
+
 	private final Object redirectToBookIndex() {
 		bookIndex.setBookId(bookId);
 		return bookIndex;
+	}
+
+	public boolean isShowNext() {
+		return this.next != null;
+	}
+
+	public boolean isShowPrevious() {
+		return this.previous != null;
 	}
 }

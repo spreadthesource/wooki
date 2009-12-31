@@ -220,7 +220,6 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 			transformer.transform(new SAXSource(reader, new InputSource(
 					xmlDocument.getInputStream())), toReturn);
 			 String result = new String(baos.toByteArray());
-			 System.out.println(result);
 			return new ByteArrayInputStream(baos.toByteArray());
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();

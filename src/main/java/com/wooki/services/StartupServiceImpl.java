@@ -99,8 +99,6 @@ public class StartupServiceImpl implements StartupService {
 		securityCtx.log(john);
 		Publication published = chapterManager.getLastPublishedPublication(bookAbstract.getId());
 
-		System.out.println(chapterManager.getLastContent(bookAbstract.getId()));
-
 		chapterManager
 				.addComment(
 						published.getId(),

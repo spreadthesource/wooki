@@ -31,6 +31,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.IndexColumn;
+
 /**
  * Represents a book with its relation to other elements.
  */
@@ -49,7 +51,9 @@ public class Book extends WookiEntity {
 	/**
 	 * First element will always be the book abstract
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "book")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="id_book", nullable = false)
+	@IndexColumn(name = "CHAPTER_POSITION")
 	private List<Chapter> chapters;
 
 	private String title;

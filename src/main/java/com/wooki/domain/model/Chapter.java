@@ -20,12 +20,11 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 /**
  * Represents a chapter of the book.
@@ -38,8 +37,8 @@ public class Chapter extends WookiEntity {
 	@Column(nullable = false)
 	private Long id;
 
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_book", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "id_book", nullable = false, updatable = false, insertable = false)
 	private Book book;
 
 	/** User friendly title */
@@ -47,7 +46,6 @@ public class Chapter extends WookiEntity {
 
 	/** Identifier title */
 	private String slugTitle;
-
 
 	/**
 	 * Constructor used to retrieve only required information for chapters

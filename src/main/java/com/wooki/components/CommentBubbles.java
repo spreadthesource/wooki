@@ -91,6 +91,7 @@ public class CommentBubbles {
 
 	@OnEvent(value = "displayComment")
 	public Object commentsDisplay(Long publicationId, String domId) {
+		this.publicationId = publicationId;
 		this.domId = domId;
 		return commentsBlock;
 	}

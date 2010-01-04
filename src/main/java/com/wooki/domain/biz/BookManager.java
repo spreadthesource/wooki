@@ -44,6 +44,13 @@ public interface BookManager {
 	Book create(String title);
 
 	/**
+	 * Remove the book. 
+	 *
+	 * @param bookId
+	 */
+	void remove(Long bookId);
+	
+	/**
 	 * Update book.
 	 *
 	 * @param book

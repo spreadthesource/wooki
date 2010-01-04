@@ -51,7 +51,7 @@ import com.wooki.services.utils.SlugBuilder;
  */
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("bookManager")
-public class BookManagerImpl implements BookManager {
+public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	@Autowired
 	private BookDAO bookDao;
@@ -69,11 +69,9 @@ public class BookManagerImpl implements BookManager {
 	private WookiSecurityContext securityCtx;
 
 	@Transactional(readOnly = false)
-	public User addAuthor(Book book, String username)
-			throws UserNotFoundException, UserAlreadyOwnerException {
+	public User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException {
 		if (book == null || username == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter title cannot be null for addition.");
+			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
 		}
 
 		User toAdd = authorDao.findByUsername(username);
@@ -83,8 +81,7 @@ public class BookManagerImpl implements BookManager {
 		}
 
 		if (bookDao.isOwner(book.getId(), username)) {
-			throw new UserAlreadyOwnerException(username
-					+ "is already an author the book");
+			throw new UserAlreadyOwnerException(username + "is already an author the book");
 		}
 
 		book.addUser(toAdd);
@@ -93,10 +90,34 @@ public class BookManagerImpl implements BookManager {
 	}
 
 	@Transactional(readOnly = false)
+	public void remove(Long bookId) {
+		protectionNotNull(bookId);
+		if (!this.securityCtx.isLoggedIn()) {
+			throw new AuthorizationException("User not logged in.");
+		}
+
+		Book toRemove = this.bookDao.findById(bookId);
+		if (toRemove != null) {
+			if (!this.securityCtx.isAuthorOfBook(toRemove.getId())) {
+				throw new AuthorizationException("You are not owner of the book.");
+			}
+			this.bookDao.delete(toRemove);
+
+			BookActivity ba = new BookActivity();
+			ba.setCreationDate(Calendar.getInstance().getTime());
+			ba.setType(BookEventType.DELETE);
+			ba.setUser(this.securityCtx.getAuthor());
+			ba.setBook(toRemove);
+			this.activityDao.create(ba);
+
+		}
+
+	}
+
+	@Transactional(readOnly = false)
 	public void removeAuthor(Book book, Long authorId) {
 		if (book == null || authorId == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter title cannot be null for addition.");
+			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
 		}
 		User user = authorDao.findById(authorId);
 		user.getBooks().remove(book);
@@ -107,15 +128,13 @@ public class BookManagerImpl implements BookManager {
 	@Transactional(readOnly = false)
 	public Book updateTitle(Book book) throws TitleAlreadyInUseException {
 		if (book == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter title cannot be null for addition.");
+			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
 		}
 		// Create slug title
 		String slug = SlugBuilder.buildSlug(book.getTitle());
 
 		// If book has changed of title
-		if (book.getSlugTitle() != null
-				&& !book.getSlugTitle().equalsIgnoreCase(slug)) {
+		if (book.getSlugTitle() != null && !book.getSlugTitle().equalsIgnoreCase(slug)) {
 			Book result = bookDao.findBookBySlugTitle(slug);
 			if (result != null) {
 				throw new TitleAlreadyInUseException();
@@ -130,23 +149,19 @@ public class BookManagerImpl implements BookManager {
 
 	public boolean isAuthor(Book book, String username) {
 		if (book == null || username == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter title cannot be null for addition.");
+			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
 		}
 		return bookDao.isOwner(book.getId(), username);
 	}
 
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
-	public Chapter addChapter(Book book, String title)
-			throws AuthorizationException {
+	public Chapter addChapter(Book book, String title) throws AuthorizationException {
 		if (book == null || title == null) {
-			throw new IllegalArgumentException(
-					"Book and chapter title cannot be null for addition.");
+			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
 		}
 
 		if (!securityCtx.isAuthorOfBook(book.getId())) {
-			throw new AuthorizationException(
-					"Current user is not an author of " + book.getTitle());
+			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
 		}
 
 		User author = securityCtx.getAuthor();

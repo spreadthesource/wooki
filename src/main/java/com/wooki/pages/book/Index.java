@@ -222,7 +222,7 @@ public class Index {
 			public void prepareResponse(Response response) {
 				response.setHeader("Cache-Control", "no-cache");
 				response.setHeader("Expires", "max-age=0");
-				response.setHeader("Content-Disposition", "inline; filename="
+				response.setHeader("Content-Disposition", "attachment; filename="
 						+ book.getSlugTitle() + ".pdf");
 			}
 

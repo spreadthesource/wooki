@@ -335,3 +335,9 @@ jQuery.extend(Tapestry.Initializer,{
 		});
 	}	
 });
+
+// Do not not desactivate Zone after a link is clicked.
+Event.observe(window, "beforeunload", function()
+{
+    Tapestry.windowUnloaded = false;
+});

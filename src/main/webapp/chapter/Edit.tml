@@ -4,7 +4,7 @@
 
 <div class="entry-content">
 	<header>
-		<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
 	</header> 
 	
 	<div class="clearer" />

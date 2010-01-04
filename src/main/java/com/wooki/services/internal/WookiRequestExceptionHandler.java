@@ -34,17 +34,13 @@ import org.apache.tapestry5.services.RequestExceptionHandler;
 import org.apache.tapestry5.services.Response;
 import org.slf4j.Logger;
 
+import com.wooki.WookiSymbolsConstants;
+
 /**
  * Extends default exception handler to allow routing of exception. Default
  * exception page is the Tapestry's default one.
- * 
- * @author ccordenier
- * 
  */
 public class WookiRequestExceptionHandler implements RequestExceptionHandler {
-
-	private static final String WOOKI_EXCEPTION_REPORT = "WookiExceptionReport";
-
 	private Map<Class, String> exceptionMap;
 
 	private final RequestPageCache pageCache;
@@ -56,6 +52,8 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 	private final Logger logger;
 
 	private String pageName;
+	
+	private final String wookiErrorPage;
 
 	private final Response response;
 
@@ -69,6 +67,7 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 			Logger logger,
 			@Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) String pageName,
 			@Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
+			@Inject @Symbol(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT) String wookiErrorPage,
 			Response response) {
 		this.exceptionMap = exceptionMap;
 		this.pageCache = pageCache;
@@ -78,6 +77,7 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 		this.response = response;
 		this.classResolver = classResolver;
 		this.productionMode = productionMode;
+		this.wookiErrorPage =  wookiErrorPage;
 	}
 
 	public void handleRequestException(Throwable exception) throws IOException {
@@ -85,7 +85,7 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler {
 		String exceptionPage = this.pageName;
 		
 		if(this.productionMode) {
-			exceptionPage = WOOKI_EXCEPTION_REPORT;
+			exceptionPage = wookiErrorPage;
 		}
 		
 		logger.error("An exception has occured", exception);

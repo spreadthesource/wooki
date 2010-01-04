@@ -197,6 +197,7 @@ input[type="checkbox"] {width:auto !important; }
 
 #login-dialog-form a {
 	text-decoration: none;
+	display: block;
 }
 
 #search-box {

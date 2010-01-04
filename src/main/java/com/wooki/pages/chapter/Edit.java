@@ -16,9 +16,6 @@
 
 package com.wooki.pages.chapter;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -32,7 +29,6 @@ import org.apache.tapestry5.services.Cookies;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
-import com.wooki.services.WookiModule;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -144,21 +140,6 @@ public class Edit {
 
 		index.setBookId(bookId);
 		return index;
-	}
-
-	@OnEvent(value = "cancel")
-	public Object cancel() {
-		try {
-			String referer = cookieSource.readCookieValue(WookiModule.VIEW_REFERER);
-			if (referer != null && !"".equals(referer)) {
-				return new URL(referer);
-			}
-			index.setBookId(bookId);
-			return index;
-		} catch (MalformedURLException e) {
-			index.setBookId(bookId);
-			return index;
-		}
 	}
 
 	public Long getBookId() {

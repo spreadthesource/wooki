@@ -355,7 +355,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertEquals(chapters.size(), 4, "Chapter count is incorrect.");
 
 		// Remove the added chapter and verify the list again
-		chapterManager.delete(chapterThree);
+		chapterManager.remove(chapterThree.getId());
 		myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");
 		chapters = chapterManager.listChapters(myProduct.getId());

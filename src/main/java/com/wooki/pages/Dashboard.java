@@ -29,6 +29,7 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.WookiEventConstants;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
@@ -78,7 +79,7 @@ public class Dashboard {
 
 	@Persist(PersistenceConstants.FLASH)
 	private boolean firstAccess;
-	
+
 	/**
 	 * Set current user if someone has logged in.
 	 * 
@@ -121,6 +122,11 @@ public class Dashboard {
 		return this.yourActivity;
 	}
 
+	@OnEvent(value = WookiEventConstants.REMOVE, component = "removeBook")
+	public void removeBook(Long bookId) {
+		this.bookManager.remove(bookId);
+	}
+
 	public Object getFeed() {
 		if (this.showYours) {
 			return this.yourActivity;
@@ -129,14 +135,14 @@ public class Dashboard {
 	}
 
 	public String getCoAuthorsClass() {
-		if(this.showYours) {
+		if (this.showYours) {
 			return "inactive";
 		}
 		return "active";
 	}
 
 	public String getUserClass() {
-		if(this.showYours) {
+		if (this.showYours) {
 			return "active";
 		}
 		return "inactive";

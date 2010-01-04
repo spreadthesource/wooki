@@ -230,9 +230,15 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initClickAndRemove : function(data) {
 		$(data.elt).observe('click', function(e) {
+			
+			if(!window.confirm("Are you sure you want to delete this item ?")) {
+				Event.stop(e);
+				return;
+			}
+
 			jQuery.getJSON(data.url, function(result) {
 				if(result.result) {
-					jQuery('#'+data.toRemove).remove();
+					jQuery('#'+data.toRemove).hide();
 				}
 			});
 			e.stop();
@@ -315,6 +321,17 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initBlockReminder: function(domId) {
 		jQuery('#reminder-'+domId).append(jQuery('#'+domId).html());
-	}
+	},
 	
+	/**
+	 * 
+	 */
+	initConfirm: function(lnkId) {
+		$(lnkId).observe('click', function(e) {
+			if(!window.confirm("Are you sure you want to delete this item ?")) {
+				Event.stop(e);
+				return;
+			}
+		});
+	}	
 });

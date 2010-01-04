@@ -39,7 +39,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 								+ Book.class.getName()
 								+ " book, "
 								+ Publication.class.getName()
-								+ " pub join book.chapters item where book.id=:bid and pub.chapter.id=item.id and pub.deletionDate is null and pub.published = 1 and index(item) > (select index(item) from item where item.id=:cid) order by index(item) asc"));
+								+ " pub join book.chapters item where book.id=:bid and pub.chapter.id=item.id and pub.deletionDate is null and pub.published = 1 and item.deletionDate is null and index(item) > (select index(item) from item where item.id=:cid) order by index(item) asc"));
 		query.setMaxResults(1);
 		query.setParameter("bid", bookId);
 		query.setParameter("cid", chapterId);
@@ -57,7 +57,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 								+ Book.class.getName()
 								+ " book, "
 								+ Publication.class.getName()
-								+ " pub join book.chapters item where book.id=:bid and pub.chapter.id=item.id and pub.deletionDate is null and pub.published = 1and index(item) < (select index(item) from item where item.id=:cid)  order by index(item) desc"));
+								+ " pub join book.chapters item where book.id=:bid and pub.chapter.id=item.id and pub.deletionDate is null and pub.published = 1 and item.deletionDate is null and index(item) < (select index(item) from item where item.id=:cid)  order by index(item) desc"));
 		query.setMaxResults(1);
 		query.setParameter("bid", bookId);
 		query.setParameter("cid", chapterId);

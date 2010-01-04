@@ -31,6 +31,7 @@ import com.wooki.domain.model.WookiEntity;
 
 /**
  * This generic implementation of DAO will be the base for all wooki's DAO.
+ * 
  * @param <T>
  * @param <PK>
  */
@@ -62,8 +63,13 @@ public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> impl
 	public T findById(PK id) {
 		if (id == null)
 			throw new IllegalArgumentException("Id for " + entityType.getCanonicalName() + " cannot be null.");
-
-		return entityManager.find(entityType, id);
+		Query query = entityManager.createQuery("from " + this.getEntityType() + " e where e.deletionDate is null and e.id=:id");
+		query.setParameter("id", id);
+		List<T> results = (List<T>) query.getResultList();
+		if (results != null && results.size() == 1) {
+			return results.get(0);
+		}
+		return null;
 	}
 
 	public List<T> listAll() {

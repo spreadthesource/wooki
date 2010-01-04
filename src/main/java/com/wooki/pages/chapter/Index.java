@@ -48,6 +48,9 @@ public class Index {
 	@Inject
 	private WookiSecurityContext securityContext;
 
+	@InjectPage
+	private com.wooki.pages.book.Index bookIdxPage;
+	
 	@Property
 	private Long bookId;
 
@@ -144,6 +147,13 @@ public class Index {
 		}
 	}
 
+	@OnEvent(value = "delete")
+	public Object deleteChapter(Long boodId, Long chapterId) {
+		this.chapterManager.remove(chapterId);
+		this.bookIdxPage.setBookId(bookId);
+		return this.bookIdxPage;
+	}
+	
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
 		return new Object[] { this.bookId, this.chapterId };

@@ -9,6 +9,7 @@
 			<ul>
 				<t:security.ifAuthorOfBook t:bookId="bookId">
 					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
+					<li><a t:type="eventlink" t:event="delete" t:context="prop:editCtx" t:mixins="confirm">Delete</a></li>
 				</t:security.ifAuthorOfBook>
 			</ul>
 		</nav>

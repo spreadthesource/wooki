@@ -124,9 +124,9 @@ public interface ChapterManager {
 	 * Remove chapter from book.
 	 * 
 	 * @param book
-	 * @param chapter
+	 * @param chapterId
 	 */
-	void delete(Chapter chapter);
+	void remove(Long chapterId);
 
 	/**
 	 * List the chapters for a given book.

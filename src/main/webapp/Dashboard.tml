@@ -25,8 +25,13 @@
 		</div>
         <ol>
 			<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
-            	<li>
-                	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+            	<li id="ent-${currentBook.id}">
+            		<nav id="book-dashboard-nav">
+            			<ul>
+            				<li><a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a></li>
+            				<li><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></li>
+            			</ul>
+            		</nav>
          		</li>
          	</t:loop>
        	</ol>

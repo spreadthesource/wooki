@@ -23,7 +23,7 @@ import com.wooki.services.utils.LastActivityMessage;
 
 public enum CommentEventType {
 
-	POST;
+	DELETE, POST;
 
 	private final static Messages MESSAGES = MessagesImpl
 			.forClass(LastActivityMessage.class);

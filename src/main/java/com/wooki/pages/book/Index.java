@@ -48,7 +48,7 @@ import com.wooki.services.utils.DateUtils;
  * This page displays a book with its table of contents.
  */
 public class Index {
-
+ 
 	@Inject
 	private BookManager bookManager;
 

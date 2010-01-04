@@ -40,7 +40,7 @@ public class UnhandledBrowserDispatcher implements Dispatcher
 
     PageRenderRequestHandler handler, ComponentEventLinkEncoder linkEncoder,
 
-    @Inject @Symbol(WookiSymbolsConstants.UNHANDLED_BROWSER_PAGE) String unhandledBrowserPage)
+    @Inject @Symbol(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE) String unhandledBrowserPage)
     {
 	this.componentClassResolver = componentClassResolver;
 	this.linkEncoder = linkEncoder;

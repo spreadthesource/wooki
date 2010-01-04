@@ -7,12 +7,8 @@
 			<h2>General Settings</h2>
 			<form t:type="form" t:id="bookInfoForm">
 				<t:errors />
-				<ol>
-					<li>
-						<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title" class="form-field" size="35"/>
-					</li>
-				</ol>
-				<p><input t:type="submit" /></p>
+						<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title" class="form-field" />
+						<input t:type="submit" class="small-active-button radied-box" value="Update" />
 			</form>
 		</div>
 		<div id="authors-settings" class="radied-box">

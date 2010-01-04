@@ -17,18 +17,18 @@
 package com.wooki.services.internal;
 
 import org.apache.tapestry5.ioc.Configuration;
+import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.services.AliasContribution;
 import org.apache.tapestry5.services.RequestExceptionHandler;
 
+import com.wooki.WookiSymbolsConstants;
+
 
 
 /**
  * Tapestry module use for tapestry overrides or customization.
- *
- * @author ccordenier
- *
  */
 public class TapestryOverrideModule {
 
@@ -36,6 +36,13 @@ public class TapestryOverrideModule {
 		binder.bind(RequestExceptionHandler.class,
 				WookiRequestExceptionHandler.class).withId(
 				"WookiRequestExceptionHandler");
+	}
+	
+	/**
+	 * Wooki Symbols default
+	 */
+	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+		configuration.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
 	}
 
 	/**

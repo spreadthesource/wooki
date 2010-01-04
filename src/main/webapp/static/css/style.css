@@ -295,12 +295,16 @@ input[type="checkbox"] {width:auto !important; }
 .small-active-button {
 	background: #FF7351;
 	color: #FFD8A1;
-	display:block;
+	/* display:block; TO PUT BACK IF UNWANTED EFFECTS HAPPENS */
 	margin: 10px;
 	text-align: center;
 	font-size: 14px;
 	font-family: Helvetica;
 	text-decoration: none;
+}
+
+input.small-active-button  {
+	border: 0px !important;
 }
 
 .active-button em {
@@ -1042,9 +1046,10 @@ TODO: RKS: check what i've deleted :o)
 	margin-right: 5px;
 }
 
-#createBookForm a {
-	text-decoration: none;
+#author-feed form input[type=submit] {
+	width: auto !important;
 }
+
 
 #dashboard-feed-title {
 	background-color: #F5F5F5;

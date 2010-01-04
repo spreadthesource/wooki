@@ -56,7 +56,6 @@ public class WookiModule<T> {
 
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		conf.add(SymbolConstants.PRODUCTION_MODE, "false");
 		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
 	}
 
@@ -64,7 +63,7 @@ public class WookiModule<T> {
 	 * Wooki Symbols default
 	 */
 	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(WookiSymbolsConstants.UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
+		configuration.add(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
 	}
 
 	public static void bind(ServiceBinder binder) {

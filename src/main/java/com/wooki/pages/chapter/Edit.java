@@ -16,6 +16,9 @@
 
 package com.wooki.pages.chapter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -24,10 +27,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Cookies;
 
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
+import com.wooki.services.WookiModule;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -36,6 +41,9 @@ import com.wooki.pages.book.Index;
  * 
  */
 public class Edit {
+
+	@Inject
+	private Cookies cookieSource;
 
 	@Inject
 	private ChapterManager chapterManager;
@@ -69,7 +77,7 @@ public class Edit {
 		} catch (RuntimeException re) {
 			return com.wooki.pages.Index.class;
 		}
-		
+
 		this.bookId = bookId;
 		this.chapterId = chapterId;
 
@@ -114,6 +122,21 @@ public class Edit {
 		}
 		index.setBookId(bookId);
 		return index;
+	}
+
+	@OnEvent(value = "cancel")
+	public Object cancel() {
+		try {
+			String referer = cookieSource.readCookieValue(WookiModule.VIEW_REFERER);
+			if (referer != null && !"".equals(referer)) {
+				return new URL(referer);
+			}
+			index.setBookId(bookId);
+			return index;
+		} catch (MalformedURLException e) {
+			index.setBookId(bookId);
+			return index;
+		}
 	}
 
 	public Long getBookId() {

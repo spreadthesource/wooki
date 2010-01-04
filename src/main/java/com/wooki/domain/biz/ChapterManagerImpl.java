@@ -198,11 +198,28 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	}
 
 	@Transactional(readOnly = false)
-	public void delete(Chapter chapter) {
-		protectionNotNull(chapter);
+	public void remove(Long chapterId) {
+		protectionNotNull(chapterId);
 
-		Chapter toDelete = chapterDao.findById(chapter.getId());
-		chapterDao.delete(toDelete);
+		if (!this.securityCtx.isLoggedIn()) {
+			throw new AuthorizationException("User not logged in.");
+		}
+
+		Chapter toDelete = chapterDao.findById(chapterId);
+		if (toDelete != null) {
+			if (!this.securityCtx.isAuthorOfBook(toDelete.getBook().getId())) {
+				throw new AuthorizationException("You are not owner of the book");
+			}
+			chapterDao.delete(toDelete);
+
+			ChapterActivity activity = new ChapterActivity();
+			activity.setCreationDate(Calendar.getInstance().getTime());
+			activity.setChapter(toDelete);
+			activity.setUser(this.securityCtx.getAuthor());
+			activity.setType(ChapterEventType.DELETE);
+			this.activityDao.create(activity);
+		}
+
 	}
 
 	public Object[] findPrevious(Long bookId, Long chapterId) {
@@ -221,7 +238,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		return null;
 	}
 
-	
 	public List<Chapter> listChapters(Long bookId) {
 		return chapterDao.listChapters(bookId);
 	}

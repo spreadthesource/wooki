@@ -1039,6 +1039,7 @@ TODO: RKS: check what i've deleted :o)
 
 #author-feed form input {
 	width: 250px;
+	margin-right: 5px;
 }
 
 #createBookForm a {
@@ -1061,6 +1062,10 @@ TODO: RKS: check what i've deleted :o)
 	text-decoration: none;
 	padding: 5px;
 	margin-right: 5px;
+}
+
+#book-dashboard-nav {
+	float: left;
 }
 
 /** Tapestry overrides */

@@ -23,9 +23,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
+import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.activity.CommentActivity;
+import com.wooki.domain.model.activity.CommentEventType;
 import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -35,6 +39,9 @@ public class CommentManagerImpl implements CommentManager {
 	@Autowired
 	private CommentDAO commentDao;
 
+	@Autowired
+	private ActivityDAO activityDao;
+	
 	@Autowired
 	private WookiSecurityContext securityCtx;
 
@@ -76,6 +83,12 @@ public class CommentManagerImpl implements CommentManager {
 					+ "' cannot be found");
 		}
 		this.commentDao.delete(c);
+		CommentActivity ca = new CommentActivity();
+		ca.setCreationDate(Calendar.getInstance().getTime());
+		ca.setUser(this.securityCtx.getAuthor());
+		ca.setType(CommentEventType.DELETE);
+		ca.setComment(c);
+		this.activityDao.create(ca);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)

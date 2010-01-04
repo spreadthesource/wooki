@@ -5,12 +5,6 @@
 <div class="entry-content">
 	<header>
 	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
-		<nav id="book-nav">
-			<ol>
-				<li id="nav-left">&lt; Table of Contents</li>
-				<li id="nav-right">Releases &gt;</li>
-			</ol>
-		</nav>
 	</header> 
 	
 	<div class="clearer" />
@@ -22,7 +16,7 @@
 		<fieldset>
 			<div class="left"><t:submit t:id="update"  t:type="submit" t:event="update" class="wymupdate small-active-button radied-box" style="border:0px !important" value="update" /></div>
 			<div class="left"><t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate small-active-button radied-box" style="border:0px !important" value="publish" /></div>
-			
+			<div class="right"><t:submit t:id="cancel"  t:type="submit" t:event="cancel" class="wymupdate small-active-button radied-box" style="border:0px !important" value="cancel" /></div>
 		</fieldset>
 	</form>
 	

@@ -26,9 +26,6 @@ import org.apache.tapestry5.services.RequestExceptionHandler;
 
 /**
  * Tapestry module use for tapestry overrides or customization.
- *
- * @author ccordenier
- *
  */
 public class TapestryOverrideModule {
 

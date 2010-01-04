@@ -54,7 +54,21 @@ public class Edit {
 	@Validate("required")
 	private String data;
 
+	@Property
+	private Long previous;
+
+	@Property
+	private String previousTitle;
+
+	@Property
+	private Long next;
+
+	@Property
+	private String nextTitle;
+
 	private boolean publish;
+	
+	private boolean cancel;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object onActivate(EventContext ctx) {
@@ -80,6 +94,7 @@ public class Edit {
 	@SetupRender
 	public void prepareFormData() {
 		this.data = chapterManager.getLastContent(chapterId);
+
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -100,6 +115,10 @@ public class Edit {
 	public void onUpdate() {
 		this.publish = false;
 	}
+	
+	public void onCancel() {
+		this.cancel = true;
+	}
 
 	/**
 	 * Update content and publish if requested.
@@ -107,11 +126,14 @@ public class Edit {
 	 * @return The book index page
 	 */
 	@OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
-	public Object updateChapter() {
-		chapterManager.updateContent(chapterId, data);
-		if (publish) {
-			chapterManager.publishChapter(chapterId);
+	public Object updateChapter() {	
+		if (!cancel) {
+			chapterManager.updateContent(chapterId, data);
+			if (publish) {
+				chapterManager.publishChapter(chapterId);
+			}
 		}
+
 		index.setBookId(bookId);
 		return index;
 	}
@@ -131,5 +153,5 @@ public class Edit {
 	public void setChapterId(Long chapterId) {
 		this.chapterId = chapterId;
 	}
-
+	
 }

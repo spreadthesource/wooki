@@ -19,7 +19,7 @@
 					<t:label t:for="bookTitle" />
 				</p>
 				<p>
-					<input t:type="textfield" t:id="bookTitle" /><a t:type="linkSubmit">Create book</a>
+					<input t:type="textfield" t:id="bookTitle" class="form-field" /> <t:submit class="small-active-button radied-box" t:value="Create" />
 				</p>
 			</form>
 		</div>

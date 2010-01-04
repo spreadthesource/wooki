@@ -27,7 +27,7 @@
 				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a></li>
 			</t:security.ifAuthorOfBook>
 		
-			<li><a t:type="eventlink" t:event="print" t:mixins="openInWindow" t:name="prop:book.slugTitle">Print</a></li>
+			<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Print</a></li>
 
 		</ul>
 	</nav>

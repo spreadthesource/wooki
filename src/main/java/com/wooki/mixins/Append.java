@@ -29,6 +29,7 @@ import org.apache.tapestry5.annotations.MixinAfter;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.internal.InternalComponentResources;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.Component;
@@ -59,24 +60,22 @@ public class Append {
 	/**
 	 * Submit the form via Ajax and handle result to append instead of replacing
 	 * the whole content.
-	 *
+	 * 
 	 */
 	@AfterRender
 	public void append() {
-		ComponentResources formResources = Component.class.cast(form)
-				.getComponentResources();
+		ComponentResources formResources = Component.class.cast(form).getComponentResources();
 		if (formResources.isBound("zone")) {
-			throw new IllegalStateException(
-					"'Append' mixin cannot be used if 'zone' parameter is set on form");
+			throw new IllegalStateException("'Append' mixin cannot be used if 'zone' parameter is set on form");
 		}
-		Link link = formResources.createFormEventLink(EventConstants.ACTION);
-		support.addInit("appendToZone", link.toAbsoluteURI(), form
-				.getClientId(), to, position);
+		Object[] context =  (Object[])InternalComponentResources.class.cast(formResources).getParameterAccess("context").read(new Object[]{}.getClass());
+		Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
+		support.addInit("appendToZone", link.toAbsoluteURI(), form.getClientId(), to, position);
 	}
 
 	/**
 	 * Generate an errors message that will appear on the client side.
-	 *
+	 * 
 	 * @return
 	 */
 	@OnEvent(value = EventConstants.FAILURE)

@@ -7,22 +7,20 @@
               		<b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b>
               		<t:lastModifiedFormatter t:time="currentComment.creationDate.time" />
               		<t:security.ifAuthorOfComment t:commentId="currentComment.id">
-						|<span class="comment-state">${currentComment.state}</span> | <a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
+						<a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
+					</t:security.ifAuthorOfComment>
+					<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
+						<t:zone t:id="updateStateZone">
+							<span class="t-zone-update">
+							</span>
+							<form t:type="form" t:id="updateStateForm" t:context="currentComment.id" t:zone="prop:updateStateZone?.clientId">
+								<input t:blankOption="NEVER" t:type="select" t:value="currentComment.state" t:mixins="submitFormOnChange" />
+							</form>
+						</t:zone>
 						<p:else>
-							<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
-								<t:zone t:id="updateStateZone">
-									<span class="t-zone-update">
-									</span>
-									<form t:type="form" t:id="updateStateForm" t:context="currentComment.id" t:zone="prop:updateStateZone?.clientId">
-										<input t:blankOption="NEVER" t:type="select" t:value="currentComment.state" t:mixins="submitFormOnChange" />
-									</form>
-								</t:zone>
-								<p:else>
-									|<span class="comment-state">${currentComment.state}</span>
-								</p:else>
-							</t:security.ifAuthorOfBook>
+							<span class="comment-state">${currentComment.state}</span>
 						</p:else>
-					</t:security.ifAuthorOfComment>              
+					</t:security.ifAuthorOfBook>
             	</span>
           	</div>
           	<div class="comment-body">
@@ -41,7 +39,7 @@
 		</t:loop>
 	</div>
 	<t:security.ifLoggedIn>
-		<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="add-comment-form">
+		<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="add-comment-form" t:context="prop:publicationId">
 			<p><input t:type="textarea" t:value="content" t:id="content" /></p>
 			<p class="add-comment-link"><a t:type="linksubmit">Add Comment</a></p>
 		</form>

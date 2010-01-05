@@ -17,16 +17,16 @@
 		<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
 		<nav id="book-nav">
 		<ol>
-			<t:if test="showPrevious">
+			<t:ifNotNull test="previous">
 				<li id="nav-left">
 					<a t:type="pagelink" t:page="chapter/index" t:context="previousCtx" title="${previousTitle}">&lt; Previous</a>
 				</li>
-			</t:if>
-			<t:if test="showNext">
+			</t:ifNotNull>
+			<t:ifNotNull test="next">
 				<li id="nav-right">
 					<a t:type="pagelink" t:page="chapter/index" t:context="nextCtx" title="${nextTitle}">Next &gt;</a>
 				</li>
-			</t:if>
+			</t:ifNotNull>
 		</ol>
 		</nav>
 	</header> 
@@ -34,12 +34,12 @@
 	<t:if t:test="viewingRevision">
 		<p class="info">You are currently viewing the revision "${revision}" of this chapter.</p>
 	</t:if>
-	<t:if t:test="availableContent">
+	<t:ifNotNull t:test="content">
 		<t:outputRaw value="content" />
 		<p:else>
-		This chapter is still empty. Please come back later to see if the author have written something.
+			This chapter is still empty. Please come back later to see if the author have written something.
 		</p:else>
-	</t:if>
+	</t:ifNotNull>
 
 	<!-- Attach bubble to content -->
 	<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />

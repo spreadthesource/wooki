@@ -8,14 +8,13 @@
 	<p id="authors">
 		<t:loop source="authors" value="currentUser" index="loopIdx">
 			${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
-			<t:if test="notLastAuthor">, </t:if>
+			<t:if test="isLastLoop(loopIdx, authors.size())" negate="literal:true">, </t:if>
 		</t:loop>		
 	</p>
 	
 	<p id="published">
 		<t:output value="prop:book?.creationDate" t:format="prop:format" /> Edition
 	</p>
-	
 	
 	<nav id="book-actions">
 		<ul>
@@ -33,9 +32,8 @@
 	</nav>
 	<div class="clearer" />
 
-	
 	<section class="abstract">
-		<t:outputRaw value="abstractContent" />
+		<t:outputRaw value="content" />
 	</section>
 
 </header> 

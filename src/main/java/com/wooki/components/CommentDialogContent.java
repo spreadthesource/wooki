@@ -48,6 +48,7 @@ import com.wooki.domain.model.Comment;
  */
 public class CommentDialogContent {
 
+	@Property
 	@Parameter
 	private Long publicationId;
 
@@ -110,9 +111,9 @@ public class CommentDialogContent {
 	public void updateState() {
 		commentManager.update(currentComment);
 	}
-
+	
 	@OnEvent(value = EventConstants.SUCCESS, component = "createCommentForm")
-	public Object addComment() {
+	public Object addComment(Long publicationId) {
 		this.currentComment = chapterManager.addComment(publicationId, content,
 				this.domId);
 		return this.commentDetails;

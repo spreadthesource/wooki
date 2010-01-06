@@ -13,17 +13,21 @@
 		</div>
 		<div id="authors-settings" class="radied-box">
 			<h2>Author List</h2>
-			<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top">
-				<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete" class="form-field" size="15"/>
-				<span><a href="#" t:type="linksubmit">Add author</a></span>
-			</form>
+			<t:security.ifOwnerOfBook t:bookId="bookId">
+				<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top">
+					<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete" class="form-field" size="15"/>
+					<span><a href="#" t:type="linksubmit">Add author</a></span>
+				</form>
+			</t:security.ifOwnerOfBook>
 			<t:block id="authorRow">
 				<li id="ent-${currentAuthor.id}">
 					<t:if test="!loggedAuthor">
 						<span><a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})</span>
-						<a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
+						<t:security.ifOwnerOfBook t:bookId="bookId">
+							<a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
+						</t:security.ifOwnerOfBook>
 						<p:else>
-						<a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})
+							<a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})
 						</p:else>
 					</t:if>
 				</li>

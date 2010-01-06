@@ -20,6 +20,7 @@ import org.springframework.security.context.SecurityContextHolder;
 import org.springframework.security.providers.UsernamePasswordAuthenticationToken;
 
 import com.wooki.domain.dao.BookDAO;
+import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.model.User;
@@ -38,12 +39,13 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 
 	private UserDAO userDao;
 
+	private ChapterDAO chapterDao;
+	
 	public void log(User user) {
 		if (user == null) {
 			throw new IllegalArgumentException("User cannot be null");
 		}
-		UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(
-				user, user.getPassword(), user.getAuthorities());
+		UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 		SecurityContextHolder.getContext().setAuthentication(logged);
 	}
 
@@ -58,18 +60,31 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 	public boolean isAuthorOfBook(Long bookId) {
 		String username = this.getUsername();
 		if (username != null) {
-			return bookDAO.isOwner(bookId, username);
+			return bookDAO.isAuthor(bookId, username);
+		}
+		return false;
+	}
+	
+	public boolean isAuthorOfChapter(Long chapterId) {
+		String username = this.getUsername();
+		if (username != null) {
+			return chapterDao.isAuthor(chapterId, username);
 		}
 		return false;
 	}
 
 	public boolean isLoggedIn() {
-		if (SecurityContextHolder.getContext() != null
-				&& SecurityContextHolder.getContext().getAuthentication() != null
-				&& SecurityContextHolder.getContext().getAuthentication()
-						.getPrincipal() != null) {
-			return SecurityContextHolder.getContext().getAuthentication()
-					.isAuthenticated();
+		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
+				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
+			return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+		}
+		return false;
+	}
+
+	public boolean isOwnerOfBook(Long bookId) {
+		String username = this.getUsername();
+		if (username != null) {
+			return bookDAO.isOwner(bookId, username);
 		}
 		return false;
 	}
@@ -82,15 +97,11 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 		return false;
 	}
 
-	private String getUsername() {
-		if (SecurityContextHolder.getContext() != null
-				&& SecurityContextHolder.getContext().getAuthentication() != null
-				&& SecurityContextHolder.getContext().getAuthentication()
-						.getPrincipal() != null) {
-			if (SecurityContextHolder.getContext().getAuthentication()
-					.getPrincipal() instanceof User) {
-				return ((User) SecurityContextHolder.getContext()
-						.getAuthentication().getPrincipal()).getUsername();
+	public String getUsername() {
+		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
+				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
+			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+				return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 			} else {
 				return null;
 			}
@@ -120,6 +131,14 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 
 	public void setUserDao(UserDAO userDao) {
 		this.userDao = userDao;
+	}
+
+	public ChapterDAO getChapterDao() {
+		return chapterDao;
+	}
+
+	public void setChapterDao(ChapterDAO chapterDao) {
+		this.chapterDao = chapterDao;
 	}
 
 }

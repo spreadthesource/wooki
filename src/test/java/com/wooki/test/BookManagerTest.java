@@ -170,6 +170,15 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has one book");
 	}
+	
+	@Test
+	public void testOwnerOfBook() {
+		List<Book> books = bookManager.listByUser("john");
+		Assert.assertNotNull(books, "John has written books");
+		Assert.assertEquals(books.size(), 2, "John has two book");
+		securityCtx.log(this.userManager.findByUsername("john"));
+		securityCtx.isOwnerOfBook(books.get(0).getId());
+	}
 
 	/**
 	 * Check that an author cannot add a chapter if he is not user of the book.

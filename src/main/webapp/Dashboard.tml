@@ -29,7 +29,9 @@
             		<nav id="book-dashboard-nav">
             			<ul>
             				<li><a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a></li>
-            				<li><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></li>
+            				<t:security.ifOwnerOfBook t:bookId="currentBook.id">
+            					<li><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></li>
+            				</t:security.ifOwnerOfBook>
             			</ul>
             		</nav>
          		</li>

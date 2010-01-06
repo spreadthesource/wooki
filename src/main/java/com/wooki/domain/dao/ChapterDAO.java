@@ -29,6 +29,15 @@ import com.wooki.domain.model.Chapter;
 public interface ChapterDAO extends GenericDAO<Chapter, Long> {
 	
 	/**
+	 * Check if the user is author of the parent book of a chapter. 
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	boolean isAuthor(Long chapterId, String username);
+	
+	
+	/**
 	 * Find previous and next chapter. 
 	 *
 	 * @param bookId

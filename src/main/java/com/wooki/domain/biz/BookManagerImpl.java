@@ -70,17 +70,22 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	@Transactional(readOnly = false)
 	public User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException {
-		if (book == null || username == null) {
-			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
-		}
 
+		protectionNotNull(book);
+		protectionNotNull(username);
+
+		// Security checks
+		if(!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
+			throw new AuthorizationException("Action not authorized");
+		}
+		
 		User toAdd = authorDao.findByUsername(username);
 
 		if (toAdd == null) {
 			throw new UserNotFoundException(username + " does not exist.");
 		}
 
-		if (bookDao.isOwner(book.getId(), username)) {
+		if (bookDao.isAuthor(book.getId(), username)) {
 			throw new UserAlreadyOwnerException(username + "is already an author the book");
 		}
 
@@ -91,16 +96,18 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	@Transactional(readOnly = false)
 	public void remove(Long bookId) {
+		
 		protectionNotNull(bookId);
-		if (!this.securityCtx.isLoggedIn()) {
-			throw new AuthorizationException("User not logged in.");
-		}
 
+		// Security check
+		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(bookId)) {
+			throw new AuthorizationException("Operation not allowed");
+		}
+		
 		Book toRemove = this.bookDao.findById(bookId);
+		
 		if (toRemove != null) {
-			if (!this.securityCtx.isAuthorOfBook(toRemove.getId())) {
-				throw new AuthorizationException("You are not owner of the book.");
-			}
+			
 			this.bookDao.delete(toRemove);
 
 			BookActivity ba = new BookActivity();
@@ -116,9 +123,14 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	@Transactional(readOnly = false)
 	public void removeAuthor(Book book, Long authorId) {
-		if (book == null || authorId == null) {
-			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
+		
+		protectionNotNull(book);
+		protectionNotNull(authorId);
+
+		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
+			throw new AuthorizationException("Action not authorized");
 		}
+		
 		User user = authorDao.findById(authorId);
 		user.getBooks().remove(book);
 		book.getAuthors().remove(user);
@@ -127,9 +139,13 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	@Transactional(readOnly = false)
 	public Book updateTitle(Book book) throws TitleAlreadyInUseException {
-		if (book == null) {
-			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
+		
+		protectionNotNull(book);
+
+		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(book.getId())) {
+			throw new AuthorizationException("Action not authorized");
 		}
+		
 		// Create slug title
 		String slug = SlugBuilder.buildSlug(book.getTitle());
 
@@ -148,18 +164,19 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	}
 
 	public boolean isAuthor(Book book, String username) {
-		if (book == null || username == null) {
-			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
-		}
-		return bookDao.isOwner(book.getId(), username);
+		
+		protectionNotNull(book);
+		protectionNotNull(username);
+
+		return bookDao.isAuthor(book.getId(), username);
 	}
 
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
 	public Chapter addChapter(Book book, String title) throws AuthorizationException {
-		if (book == null || title == null) {
-			throw new IllegalArgumentException("Book and chapter title cannot be null for addition.");
-		}
-
+		
+		protectionNotNull(book);
+		protectionNotNull(title);
+		
 		if (!securityCtx.isAuthorOfBook(book.getId())) {
 			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
 		}
@@ -194,18 +211,20 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public Book create(String title) {
 
-		User author = securityCtx.getAuthor();
-
-		if (author == null) {
-			throw new AuthorizationException();
+		protectionNotNull(title);
+		
+		if (!this.securityCtx.isLoggedIn()) {
+			throw new AuthorizationException("Only logged user can create books.");
 		}
-
+		
+		User author = securityCtx.getAuthor();
+		
 		Book book = new Book();
 
 		// Set basic properties
 		book.setTitle(title);
 		book.setSlugTitle(SlugBuilder.buildSlug(title));
-		Date creationDate = new Date();
+		Date creationDate = Calendar.getInstance().getTime();
 		book.setCreationDate(creationDate);
 		book.setLastModified(creationDate);
 
@@ -215,6 +234,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 		bookAbstract.setTitle("Abstract");
 		bookAbstract.setSlugTitle("Abstract");
 		book.addChapter(bookAbstract);
+		book.setOwner(author);
 		book.addUser(author);
 		bookAbstract.setBook(book);
 

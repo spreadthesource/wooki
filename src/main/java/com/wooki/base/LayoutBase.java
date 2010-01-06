@@ -20,7 +20,6 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
 
 public class LayoutBase {
@@ -33,10 +32,7 @@ public class LayoutBase {
 
 	@SetupRender
 	private void setupUsername() {
-		User loggedIn = this.securityCtx.getAuthor();
-		if (loggedIn != null) {
-			this.username = loggedIn.getUsername();
-		}
+		this.username = this.securityCtx.getUsername();
 	}
 
 }

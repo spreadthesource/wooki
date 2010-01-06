@@ -29,6 +29,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.IndexColumn;
@@ -48,11 +49,14 @@ public class Book extends WookiEntity {
 	@JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns = { @JoinColumn(name = "id_user") })
 	private List<User> users;
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	private User owner;
+
 	/**
 	 * First element will always be the book abstract
 	 */
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="id_book", nullable = false)
+	@JoinColumn(name = "id_book", nullable = false)
 	@IndexColumn(name = "CHAPTER_POSITION")
 	private List<Chapter> chapters;
 
@@ -116,6 +120,14 @@ public class Book extends WookiEntity {
 
 	public void setSlugTitle(String titleSlug) {
 		this.slugTitle = titleSlug;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 }

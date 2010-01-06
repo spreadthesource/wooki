@@ -70,8 +70,9 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 		// Check security
 		if (!securityCtx.isLoggedIn()) {
-			throw new AuthorizationException("You must be logged in to add a comment.");
+			throw new AuthorizationException("Only logged user are allowed to add a comments.");
 		}
+
 		User author = securityCtx.getAuthor();
 
 		if (publicationId == null || content == null) {
@@ -134,20 +135,18 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	@Transactional(readOnly = false)
 	public void publishChapter(Long chapterId) {
+
 		protectionNotNull(chapterId);
 
 		// Check security
-		if (!securityCtx.isLoggedIn()) {
-			throw new AuthorizationException("You must be logged in to publish chapter.");
+		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
+			throw new AuthorizationException("Publish action not authorized");
 		}
 
 		Publication published = publicationDao.findLastRevision(chapterId);
 
 		// Check that the logged user is an author of the book
 		User author = securityCtx.getAuthor();
-		if (!securityCtx.isAuthorOfBook(published.getChapter().getBook().getId())) {
-			throw new AuthorizationException("You must be author to publish this chapter");
-		}
 
 		published.setLastModified(Calendar.getInstance().getTime());
 		String content = domManager.adaptContent(published.getContent(), published.getId());
@@ -167,8 +166,14 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	@Transactional(readOnly = false)
 	public void updateContent(Long chapterId, String content) {
+
 		protectionNotNull(chapterId);
 
+		// Security check
+		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
+			throw new AuthorizationException("Publish action not authorized");
+		}
+		
 		Publication publication = publicationDao.findLastRevision(chapterId);
 
 		// we check the published flag. If set, then this Publication must
@@ -199,17 +204,17 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	@Transactional(readOnly = false)
 	public void remove(Long chapterId) {
+		
 		protectionNotNull(chapterId);
 
-		if (!this.securityCtx.isLoggedIn()) {
-			throw new AuthorizationException("User not logged in.");
+		// Check security
+		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
+			throw new AuthorizationException("Publish action not authorized");
 		}
 
 		Chapter toDelete = chapterDao.findById(chapterId);
 		if (toDelete != null) {
-			if (!this.securityCtx.isAuthorOfBook(toDelete.getBook().getId())) {
-				throw new AuthorizationException("You are not owner of the book");
-			}
+
 			chapterDao.delete(toDelete);
 
 			ChapterActivity activity = new ChapterActivity();

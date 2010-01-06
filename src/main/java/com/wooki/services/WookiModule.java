@@ -34,7 +34,6 @@ import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Context;
-import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.context.ApplicationContext;
@@ -141,8 +140,4 @@ public class WookiModule<T> {
 
 		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
 	};
-
-	public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration) {
-		configuration.addInstance("UnhandledBrowserDispatcher", UnhandledBrowserDispatcher.class, "before:PageRender", "after:ComponentEvent");
-	}
 }

@@ -4,7 +4,7 @@
   
   <div id="meta">
   	<p id="authors">By Christophe Cordernier <a href="#">ccordernier</a>, Robin Komiwes <a href="#">robink</a> and Bruno Verachten <a href="#">gounthar</a></p>
-  	<p id="revision">Published 28th December 2009</p>
+  	<p id="revision">Published December 28th, 2009</p>
   </div>
   
   <p>What is social web? Are we social? Maybe, maybe not. But Wooki is definitely a truely social experience. Yeah.</p>
@@ -13,7 +13,19 @@
 
   <p>Nulla suscipit mollis enim, interdum commodo nulla viverra fermentum. Vestibulum ac tellus vitae ante eleifend rutrum. Ut lobortis, tortor vitae rutrum vulputate, nibh turpis volutpat dolor, eu bibendum velit massa ac justo. Nam ut diam quam. Cras fringilla elit eget purus tristique lobortis. Vivamus a risus dui, a hendrerit turpis. Duis at nunc eget mi malesuada lobortis. In quam odio, interdum non suscipit ut, facilisis a nisl. Nulla bibendum bibendum sapien, vel egestas eros semper quis. Nulla ut quam vel ipsum lacinia tempus in placerat nunc. Donec eleifend diam est, nec tristique enim. Etiam quis suscipit magna. Nulla nibh ligula, imperdiet at blandit nec, elementum non orci. Praesent vel ligula vel neque adipiscing viverra ut sit amet nisi. Mauris et ligula sed enim imperdiet vehicula in eget metus. Phasellus blandit est in dui tristique pulvinar eget ut nisi.</p>
   
-  <p></p>
+  <ul>
+  	<li>dolor sit amet</li>
+  	<li>dolor sit amet</li>
+  	<li>dolor sit amet</li>
+  </ul>
+  
+  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nisi sit amet purus fringilla vel laoreet risus sollicitudin. Mauris dui eros, pulvinar quis laoreet vitae, eleifend vel dolor. Sed nisl nunc, consequat a imperdiet eget, pretium eu ante. Pellentesque scelerisque rutrum urna, eu bibendum est lacinia ut. Vestibulum eget congue velit. Phasellus turpis nisi, vehicula eget scelerisque eget, sollicitudin id velit. Vivamus elementum ornare suscipit. Pellentesque tristique massa turpis. Proin in urna et augue consequat lobortis. Mauris ullamcorper nulla quis dolor ultrices dictum at quis urna. Ut ut viverra erat. In venenatis ante at urna feugiat sed consequat leo iaculis. Sed eleifend feugiat massa, nec mollis nulla tincidunt vitae. Phasellus dictum est vitae lectus aliquam ornare. Vivamus viverra aliquet mauris.</p>
+
+  <ol>
+  	<li>dolor sit amet</li>
+  	<li>dolor sit amet</li>
+  	<li>dolor sit amet</li>
+  </ol>
   
   <h2>Table of contents</h2>
   

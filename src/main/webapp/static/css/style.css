@@ -25,13 +25,13 @@ Theme inspired from kuler scheme : http://kuler.adobe.com/#themeID/617195
  */
 
 /* common tags */
-body { background: #FFD8A1 url('../img/top_bg.png') repeat-x; height:200px; font-family: Helvetica, Arial, sans-serif;	font-size: 14px; }
+body { background: #FFD8A1 url('../img/top_bg.png') repeat-x scroll; font-family: Helvetica, Arial, sans-serif; font-size: 14px; text-align: center}
 
-.wrapper { clear: both; margin: 0 auto; width: 800px; padding: 0px; }
+.wrapper { clear: both; margin: 0 auto; width: 760px; padding: 0px; text-align:left;}
 
 /* lists */
-ol, ul { list-style-position:outside; padding: 0px 5px; margin:0px 5px; }
-ol { list-style-type:upper-latin; }
+ol, ul { list-style-position:outside; padding: 10px 5px; margin:0px 20px; }
+ol { list-style-type:decimal; }
 ul { list-style-type:disc; }
 
 /* links */
@@ -54,7 +54,7 @@ input[type="checkbox"] { width:auto !important; }
 #nav li { display:inline; padding:0px 10px; }
 #nav a { text-decoration: none; }
 
-#search { clear:right; float: right; padding: 20px 10px 10px 10px;}
+#search { clear:right; float: right; padding: 20px 10px 10px 0px; width:450px; text-align:right;}
 #query { width:200px;}
 #query:focus { border: 1px solid #FF7351; }
 #submitSearch { text-decoration: none;  }
@@ -83,6 +83,7 @@ h3 { font-size: 20px; }
 p { padding: 10px 0px; }
 
 /* table of contents */
-#table-of-contents li { display:block; padding:10px;	}
+#table-of-contents { margin: 10px; padding:0px; }
+#table-of-contents li { display:block; padding:10px; list-style:none;}
 #table-of-contents h3 { width: 500px; float:left;}
 .last-update { padding:0px; line-height:20px; text-align:right; color:#6E6D65;}

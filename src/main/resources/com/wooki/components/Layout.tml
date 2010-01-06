@@ -5,12 +5,13 @@
 <head>
 <meta charset="utf-8" />
 <title>wooki - Collaborative Writing</title>
+<t:iexplorecomment t:script="asset:context:static/js/supersleight-min.js" />
 </head>
 <body>
 <div class="wrapper">
 	
 <div id="header">
-	<h1 id="wooki"><img src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" /></h1>	
+	<h1 id="wooki"><img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" /></h1>	
 		
 	<form name="signin" id="signin" action="${loginUrl}" method="POST">
 		<h2>Sign on Wooki</h2>

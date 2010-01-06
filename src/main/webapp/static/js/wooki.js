@@ -91,7 +91,6 @@ Tapestry.Append = Class.create({
 /**
  * Add initialization method to Tapestry.Initializer object
  */
-
 jQuery.extend(Tapestry.Initializer,{
 
 	/**
@@ -275,7 +274,7 @@ jQuery.extend(Tapestry.Initializer,{
 			comment.css({
 				'top': (jQuery(this).position().top) + 'px',
 				'left': (jQuery(this).position().left - 50)  + 'px',
-				'height' : jQuery(this).height() + 'px',
+				'height' : jQuery(this).height() + 'px'
 			});
 			
 			comment.css('visibility','visible');

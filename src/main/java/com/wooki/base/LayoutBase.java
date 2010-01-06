@@ -16,33 +16,27 @@
 
 package com.wooki.base;
 
-import java.security.Principal;
-
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.RequestGlobals;
 
-public class WookiBase {
+import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
+
+public class LayoutBase {
 
 	@Inject
-	private RequestGlobals requestGlobals;
+	private WookiSecurityContext securityCtx;
 
 	@Property
 	private String username;
 
-	private boolean logged;
-
 	@SetupRender
 	private void setupUsername() {
-		Principal principal = requestGlobals.getHTTPServletRequest()
-				.getUserPrincipal();
-		this.logged = principal != null && principal.getName() != "";
-		this.username = principal != null ? principal.getName() : null;
-	}
-
-	public boolean isLogged() {
-		return logged;
+		User loggedIn = this.securityCtx.getAuthor();
+		if (loggedIn != null) {
+			this.username = loggedIn.getUsername();
+		}
 	}
 
 }

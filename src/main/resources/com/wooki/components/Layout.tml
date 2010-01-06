@@ -7,95 +7,64 @@
 <title>wooki - Collaborative Writing</title>
 </head>
 <body>
-<div id="top">
-	<div class="body" style="position: relative;">
-			<hgroup id="wooki">
-				<a href="${indexPage}" class="button-link">
-					<h1><img src="${asset:context:static/img/logo.png}" alt="wooki logo" /> wooki</h1>
-					<h2>Collaborative Writing</h2>
-				</a>
-			</hgroup>
-			
-			
-			<form name="loginForm" id="login-dialog-form" action="${loginUrl}" method="POST">
-				<h1>Sign on Wooki</h1>
-	    		<table>
-	    			<tr>
-	    				<th><label for="j_username">Username</label></th>
-	    				<td><input name="j_username" type="text" /></td>
-	    			</tr>
-	    			<tr>
-	    				<th><label for="j_password">Password</label></th>
-	    				<td><input class="password" name="j_password" type="password" /></td>
-	    			</tr>
-	    			<tr>
-	    				<th> </th>
-	    				<td><input type="checkbox" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
-	    			</tr>
-	    		</table>	
-				<div>
-					<a href="javascript:$('login-dialog-form').submit();" class="radied-box small-active-button">Signin</a>
-					 <small><a href="#">Forgot password?</a></small>
-				</div>
-			</form>
-			
-			
-			<nav id="quick-nav">
-				<ul>
-					<t:security.ifLoggedIn>
-						<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
-						<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
-						<li><a href="${logoutUrl}" class="hard-link">Logout</a></li>
-					</t:security.ifLoggedIn>
-					<li><a href="#">Tour</a></li>
-					
-					<t:security.ifLoggedIn>	
-						<p:else>
-							<li>Have an account? <a href="#" id="login-link">Signin</a></li>
-							<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
-						</p:else>
-					</t:security.ifLoggedIn>
-					<li><a href="#">FAQ</a></li>
-				</ul>
-			</nav>
-			
-			<div id="search-box">
-				<form t:type="form" t:clientValidation="false" t:id="searchForm">
-					<p><label for="search-field">Looking for a document? </label>
-					<input t:type="textfield" t:value="queryString" t:id="searchField" name="search-field" t:clientId="search-field" class="form-field insidefield-field" />
-					<a class="form-field insidefield-button" id="submit-search" href="#" t:type="linksubmit">Search</a></p>
-				</form>
-			</div>	
-	</div>
+<div class="wrapper">
+	
+<div id="header">
+	<h1 id="wooki"><img src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" /></h1>	
+		
+	<form name="signin" id="signin" action="${loginUrl}" method="POST">
+		<h2>Sign on Wooki</h2>
+		<table>
+			<tr>
+				<th><label for="j_username">Username</label></th>
+				<td><input name="j_username" type="text" /></td>
+			</tr>
+			<tr>
+				<th><label for="j_password">Password</label></th>
+				<td><input class="password" name="j_password" type="password" /></td>
+			</tr>
+			<tr>
+				<th> </th>
+				<td><input type="checkbox" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
+			</tr>
+		</table>	
+		<div>
+			<a href="javascript:$('login-dialog-form').submit();" class="radied-box small-active-button">Signin</a>
+			 <small><a href="#">Forgot password?</a></small>
+		</div>
+	</form>
+	
+		
+	<ul id="nav">
+		<t:security.ifLoggedIn>
+			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
+			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
+			<li><a href="${logoutUrl}" class="hard-link">Logout</a></li>
+		</t:security.ifLoggedIn>
+		<li><a href="#">Tour</a></li>
+		
+		<t:security.ifLoggedIn>	
+			<p:else>
+				<li>Have an account? <a href="#" id="login-link">Signin</a></li>
+				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
+			</p:else>
+		</t:security.ifLoggedIn>
+		<li><a href="#">FAQ</a></li>
+	</ul>
+
+	
+	<form t:type="form" t:clientValidation="false" t:id="search">
+		<p><label for="search-field">Looking for a document? </label>
+		<input t:type="textfield" t:value="queryString" t:id="searchField" name="search-field" t:clientId="query" class="form-field insidefield-field" />
+		<a class="form-field insidefield-button" id="submitSearch" href="#" t:type="linksubmit">Search</a></p>
+	</form>
+	
 </div>
 
 <div id="content">
-	<div class="body">
-		<t:body />
-	</div>
-	<div class="clearer" />
+	<t:body />
 </div>
 
-<div id="bottom">
-	<footer class="body">
-		<div class="footer-nav" id="footer-wooki">
-			<h1>Wooki</h1>
-			<ul>
-				<li>About</li>
-				<li>FAQ</li>
-				<li>Help</li>
-			</ul>
-		</div>
-		
-		<div class="footer-nav" id="footer-legal">
-			<h1>Legal</h1>
-			<ul>
-				<li>Legal mentions</li>
-				<li>Data privacy</li>
-				<li>Licence</li>
-			</ul>
-		</div>
-	</footer>
 </div>
 
 </body>

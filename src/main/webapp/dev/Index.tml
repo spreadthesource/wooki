@@ -27,6 +27,12 @@
   	<li>dolor sit amet</li>
   </ol>
   
+  <p>Nulla suscipit mollis enim, <quote>interdum commodo nulla viverra fermentum</quote>. Vestibulum ac tellus vitae ante eleifend rutrum. Ut lobortis, tortor vitae rutrum vulputate, nibh turpis volutpat dolor, eu bibendum velit massa ac justo. Nam ut diam quam. Cras fringilla elit eget purus tristique lobortis. Vivamus a risus dui, a hendrerit turpis. Duis at nunc eget mi malesuada lobortis. In quam odio, interdum non suscipit ut, facilisis a nisl. Nulla bibendum bibendum sapien, vel egestas eros semper quis. Nulla ut quam vel ipsum lacinia tempus in placerat nunc.</p>
+  
+  <blockquote> Donec eleifend diam est, nec tristique enim. Etiam quis suscipit magna. Nulla nibh ligula, imperdiet at blandit nec, elementum non orci. Praesent vel ligula vel neque adipiscing viverra ut sit amet nisi. Mauris et ligula sed enim imperdiet vehicula in eget metus. Phasellus blandit est in dui tristique pulvinar eget ut nisi.</blockquote>
+
+  <pre> Donec eleifend diam est, nec tristique enim. Etiam quis suscipit magna. Nulla nibh ligula, imperdiet at blandit nec, elementum non orci. Praesent vel ligula vel neque adipiscing viverra ut sit amet nisi. Mauris et ligula sed enim imperdiet vehicula in eget metus. Phasellus blandit est in dui tristique pulvinar eget ut nisi.</pre>  
+  
   <h2>Table of contents</h2>
   
   <ol id="table-of-contents">

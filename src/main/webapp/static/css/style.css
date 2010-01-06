@@ -40,6 +40,11 @@ a { color: #FF7351;}
 /* forms */
 input[type="checkbox"] { width:auto !important; }
 
+/* others */
+p, blockquote, pre { margin: 10px 0px; }
+quote, blockquote {	font-family: Georgia; font-style: italic; }
+blockquote, pre { margin-left:40px; padding-left:10px; border-left:1px solid black; }
+pre { font-size:12px; white-space:normal; }
 
 
 /*****
@@ -79,8 +84,6 @@ h2 { font-size: 23px; }
 h3 { font-size: 20px; }
 
 #meta { text-align:center; color:#6E6D65; }
-
-p { padding: 10px 0px; }
 
 /* table of contents */
 #table-of-contents { margin: 10px; padding:0px; }

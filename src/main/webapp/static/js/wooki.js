@@ -255,7 +255,7 @@ jQuery.extend(Tapestry.Initializer,{
 
 		// Append comments div
 		var bubbleDiv = jQuery("<div/>").attr("id", "comments");
-		jQuery(".entry-content").append(bubbleDiv);
+		jQuery("#content").append(bubbleDiv);
 		
 		// Iterate through commentable block to create corresponding comment elt
 		jQuery('.commentable').each(function(i) {

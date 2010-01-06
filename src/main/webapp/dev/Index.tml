@@ -1,4 +1,3 @@
-
 <html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 		
   <h1><a href="#" t:type="pagelink" t:page="book/index">Wooki : When writing meet social web</a></h1>

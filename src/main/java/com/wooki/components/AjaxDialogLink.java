@@ -29,6 +29,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
  * Make a link to update a zone and popup a dialog box
  */
 public class AjaxDialogLink extends DialogLink {
+
 	@Parameter(required = true)
 	private String zone;
 

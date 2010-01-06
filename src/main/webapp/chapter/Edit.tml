@@ -1,6 +1,6 @@
 <html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="Tapestry 5 : When development meet Art">
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
 <div class="entry-content">
 	<header>

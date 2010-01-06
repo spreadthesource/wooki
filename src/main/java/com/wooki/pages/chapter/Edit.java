@@ -26,6 +26,7 @@ import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Cookies;
 
+import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
@@ -36,7 +37,7 @@ import com.wooki.pages.book.Index;
  * @author ccordenier
  * 
  */
-public class Edit {
+public class Edit extends BookBase {
 
 	@Inject
 	private Cookies cookieSource;
@@ -46,8 +47,6 @@ public class Edit {
 
 	@InjectPage
 	private Index index;
-
-	private Long bookId;
 
 	private Long chapterId;
 
@@ -77,21 +76,20 @@ public class Edit {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object onActivate(EventContext ctx) {
 
+		super.setupBook(ctx);
+		
 		if (ctx.getCount() != 2) {
 			return com.wooki.pages.Index.class;
 		}
 
 		try {
-			this.bookId = ctx.get(Long.class, 0);
 			this.chapterId = ctx.get(Long.class, 1);
 		} catch (RuntimeException re) {
 			return com.wooki.pages.Index.class;
 		}
 
-		this.bookId = bookId;
-		this.chapterId = chapterId;
-
 		this.chapter = chapterManager.findById(chapterId);
+
 		return null;
 	}
 
@@ -103,7 +101,7 @@ public class Edit {
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveIds() {
-		return new Object[] { this.bookId, this.chapterId };
+		return new Object[] { this.getBookId(), this.chapterId };
 	}
 
 	/**
@@ -138,16 +136,8 @@ public class Edit {
 			}
 		}
 
-		index.setBookId(bookId);
+		index.setBookId(this.getBookId());
 		return index;
-	}
-
-	public Long getBookId() {
-		return bookId;
-	}
-
-	public void setBookId(Long bookId) {
-		this.bookId = bookId;
 	}
 
 	public Long getChapterId() {

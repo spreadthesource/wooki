@@ -26,7 +26,7 @@ import com.wooki.domain.model.Book;
  * @author ccordenier
  * 
  */
-public interface BookDAO extends GenericDAO<Book, Long>{
+public interface BookDAO extends GenericDAO<Book, Long> {
 
 	/**
 	 * 
@@ -37,12 +37,12 @@ public interface BookDAO extends GenericDAO<Book, Long>{
 
 	/**
 	 * List book with similar title.
-	 *
+	 * 
 	 * @param title
 	 * @return
 	 */
 	List<Book> listByTitle(String title);
-	
+
 	/**
 	 * 
 	 * 
@@ -50,10 +50,21 @@ public interface BookDAO extends GenericDAO<Book, Long>{
 	 * @return
 	 */
 	List<Book> listByAuthor(Long id);
-	
+
 	/**
-	 * Verify if an author owns a book.
-	 *
+	 * Verify if an author owns a book. An author has lesser privileges than the
+	 * owner.
+	 * 
+	 * @return
+	 */
+	boolean isAuthor(Long bookId, String username);
+
+	/**
+	 * Check if the user is owner of the book, this will allow him to modify
+	 * book settings and list of authors.
+	 * 
+	 * @param bookId
+	 * @param username
 	 * @return
 	 */
 	boolean isOwner(Long bookId, String username);

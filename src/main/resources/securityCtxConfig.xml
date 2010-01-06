@@ -42,6 +42,7 @@
 		<property name="bookDAO" ref="bookDao" />
 		<property name="commentDao" ref="commentDao" />
 		<property name="userDao" ref="userDao" />
+		<property name="chapterDao" ref="chapterDao" />
 	</bean>
 
 	<bean id="ciUrlMatcher" class="org.springframework.security.util.RegexUrlPathMatcher">

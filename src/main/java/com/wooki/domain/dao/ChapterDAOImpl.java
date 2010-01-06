@@ -29,6 +29,17 @@ import com.wooki.domain.model.Publication;
 @Repository("chapterDao")
 public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements ChapterDAO {
 
+	public boolean isAuthor(Long chapterId, String username) {
+		if (chapterId == null) {
+			throw new IllegalArgumentException("Book cannot be null");
+		}
+		Query query = this.entityManager
+				.createQuery("select count(b) from Book b, Chapter c join b.users as u where c.id=:id and b.id=c.book.id and u.username=:un");
+		Long result = (Long) query.setParameter("un", username).setParameter(
+				"id", chapterId).getSingleResult();
+		return result == 1;
+	}
+
 	public List<Object[]> findNext(Long bookId, Long chapterId) {
 		if (bookId == null || chapterId == null) {
 			throw new IllegalArgumentException("Book id and chapter id should not be null to obtain next and previous");

@@ -14,43 +14,34 @@
 // limitations under the License.
 //
 
-package com.wooki.pages;
+package com.wooki.components.security;
 
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.corelib.base.AbstractConditional;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Cookies;
-import org.apache.tapestry5.services.ExceptionReporter;
 
-import com.wooki.services.WookiModule;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Default exception page.
- * 
+ * Verify if the current logged user is author of the requested book.
+ *
  * @author ccordenier
- * 
+ *
  */
-public class WookiExceptionReport implements ExceptionReporter {
+public class IfOwnerOfBook extends AbstractConditional {
 
+	@Parameter(required = true, allowNull = false)
+	private Long bookId;
+	
 	@Inject
-	private Cookies cookieSource;
+	private WookiSecurityContext securityContext;
 
-	@Property
-	private boolean displayLastViewUrl;
-
-	@Property
-	private String lastUrl;
-
-	public void reportException(Throwable exception) {
-
-	}
-
-	@SetupRender
-	public void setupLastUrl() {
-		lastUrl = cookieSource.readCookieValue(WookiModule.VIEW_REFERER);
-		if (lastUrl != null) {
-			displayLastViewUrl = true;
-		}
+	/**
+	 * @return test parameter (if negate is false), or test parameter inverted
+	 *         (if negate is true)
+	 */
+	protected boolean test() {
+		return securityContext.isOwnerOfBook(bookId);
 	}
 
 }

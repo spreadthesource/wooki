@@ -57,14 +57,25 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 		return (List<Book>) query.getResultList();
 	}
 
+	public boolean isAuthor(Long bookId, String username) {
+		if (bookId == null) {
+			throw new IllegalArgumentException("Book cannot be null");
+		}
+		Query query = this.entityManager
+				.createQuery("select count(b) from Book b join b.users as u where u.username=:un and b.id=:id");
+		Long result = (Long) query.setParameter("un", username).setParameter(
+				"id", bookId).getSingleResult();
+		return result == 1;
+	}
+	
 	public boolean isOwner(Long bookId, String username) {
 		if (bookId == null) {
 			throw new IllegalArgumentException("Book cannot be null");
 		}
 		Query query = this.entityManager
-				.createQuery("select count(b) from Book b join b.users as u where b.id=:id and u.username=:un and b.deletionDate is null");
+				.createQuery("select count(b) from Book b where b.id=:id and b.owner.username=:un");
 		Long result = (Long) query.setParameter("un", username).setParameter(
 				"id", bookId).getSingleResult();
-		return result > 0;
+		return result == 1;
 	}
 }

@@ -20,7 +20,7 @@ import com.wooki.services.utils.DateUtils;
  * @author ccordenier
  * 
  */
-public class AbstractIndex {
+public class BookBase {
 
 	@Inject
 	private BookManager bookManager;

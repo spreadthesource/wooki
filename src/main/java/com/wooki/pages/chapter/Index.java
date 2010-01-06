@@ -23,7 +23,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.base.AbstractIndex;
+import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.services.security.WookiSecurityContext;
@@ -34,7 +34,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * @author ccordenier
  * 
  */
-public class Index extends AbstractIndex {
+public class Index extends BookBase {
 
 	@Inject
 	private ChapterManager chapterManager;

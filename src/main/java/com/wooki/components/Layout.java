@@ -28,65 +28,63 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 
-import com.wooki.base.WookiBase;
+import com.wooki.base.LayoutBase;
 import com.wooki.pages.Index;
 import com.wooki.pages.SearchResult;
 import com.wooki.services.SecurityUrlSource;
+import com.wooki.services.security.WookiSecurityContext;
 
 @IncludeStylesheet("context:static/css/style.css")
-public class Layout extends WookiBase
-{
+public class Layout extends LayoutBase {
 
-    @InjectPage
-    private SearchResult searchResult;
+	@Inject
+	private WookiSecurityContext securitCtx;
 
-    @Inject
-    private RenderSupport support;
+	@Inject
+	private RenderSupport support;
 
-    @Inject
-    private SecurityUrlSource source;
+	@Inject
+	private SecurityUrlSource source;
 
-    @Inject
-    private PageRenderLinkSource linkSource;
+	@Inject
+	private PageRenderLinkSource linkSource;
 
-    @Property
-    private String loginUrl;
+	@InjectPage
+	private SearchResult searchResult;
 
-    @Property
-    private String logoutUrl;
+	@Property
+	private String loginUrl;
 
-    @Property
-    private String queryString;
+	@Property
+	private String logoutUrl;
 
-    @SetupRender
-    private void setup()
-    {
-	this.loginUrl = source.getLoginUrl();
-	this.logoutUrl = source.getLogoutUrl();
-    }
+	@Property
+	private String queryString;
 
-    @AfterRender
-    public void initLoginDialog()
-    {
-	if (!isLogged())
-	{
-	    support.addInit("initLoginDialog");
+	@SetupRender
+	private void setup() {
+		this.loginUrl = source.getLoginUrl();
+		this.logoutUrl = source.getLogoutUrl();
 	}
-    }
 
-    @OnEvent(value = EventConstants.SUCCESS, component = "searchForm")
-    private Object search()
-    {
-	searchResult.search(queryString);
-	return searchResult;
-    }
+	@AfterRender
+	public void initLoginDialog() {
+		if (!securitCtx.isLoggedIn()) {
+			support.addInit("initLoginDialog");
+		}
+	}
 
-    /**
-     * Return to page index without context.
-     */
-    public Link getIndexPage()
-    {
-	return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
-    }
+	@OnEvent(value = EventConstants.SUCCESS, component = "searchForm")
+	private Object search() {
+		searchResult.search(queryString);
+		return searchResult;
+	}
+
+	/**
+	 * Return to page index without context.
+	 */
+	public Link getIndexPage() {
+		return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+	}
 
 }

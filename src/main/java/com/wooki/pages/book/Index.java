@@ -30,7 +30,7 @@ import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.corelib.components.Delegate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.base.AbstractIndex;
+import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
@@ -44,7 +44,7 @@ import com.wooki.services.security.WookiSecurityContext;
 /**
  * This page displays a book with its table of contents.
  */
-public class Index extends AbstractIndex {
+public class Index extends BookBase {
  
 	@Inject
 	private BookManager bookManager;

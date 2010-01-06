@@ -1,7 +1,7 @@
 
 <html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 		
-  <h1><a href="#" t:type="pagelink" t:page="book/index">Wooki : When writing meet social web</a></h1>
+  <h1><a href="#" >Wooki : When writing meet social web</a></h1>
   
   <div id="meta">
   	<p id="authors">By Christophe Cordernier <a href="#">ccordernier</a>, Robin Komiwes <a href="#">robink</a> and Bruno Verachten <a href="#">gounthar</a></p>
@@ -14,20 +14,26 @@
 
   <p>Nulla suscipit mollis enim, interdum commodo nulla viverra fermentum. Vestibulum ac tellus vitae ante eleifend rutrum. Ut lobortis, tortor vitae rutrum vulputate, nibh turpis volutpat dolor, eu bibendum velit massa ac justo. Nam ut diam quam. Cras fringilla elit eget purus tristique lobortis. Vivamus a risus dui, a hendrerit turpis. Duis at nunc eget mi malesuada lobortis. In quam odio, interdum non suscipit ut, facilisis a nisl. Nulla bibendum bibendum sapien, vel egestas eros semper quis. Nulla ut quam vel ipsum lacinia tempus in placerat nunc. Donec eleifend diam est, nec tristique enim. Etiam quis suscipit magna. Nulla nibh ligula, imperdiet at blandit nec, elementum non orci. Praesent vel ligula vel neque adipiscing viverra ut sit amet nisi. Mauris et ligula sed enim imperdiet vehicula in eget metus. Phasellus blandit est in dui tristique pulvinar eget ut nisi.</p>
   
+  <p></p>
+  
   <h2>Table of contents</h2>
   
   <ol id="table-of-contents">
   	<li>
   		<h3>What is social?</h3>
+  		<p class="last-update">December 31, 2009</p>
   	</li>
   	<li>
   		<h3>What is the web?</h3>
+  		<p class="last-update">December 31, 2009</p>
   	</li>
   	<li>
   		<h3>What is the writing?</h3>
+  		<p class="last-update">December 31, 2009</p>
   	</li>
   	<li>
   		<h3>Wooki is the answer</h3>
+  		<p class="last-update">January 3, 2010</p>
   	</li>
   </ol>
 

@@ -30,9 +30,9 @@ body { background: #FFD8A1 url('../img/top_bg.png') repeat-x; height:200px; font
 .wrapper { clear: both; margin: 0 auto; width: 800px; padding: 0px; }
 
 /* lists */
-ol, li { list-style-position:outside; padding: 10px }
+ol, ul { list-style-position:outside; padding: 0px 5px; margin:0px 5px; }
 ol { list-style-type:upper-latin; }
-li { list-style-type:disc; }
+ul { list-style-type:disc; }
 
 /* links */
 a { color: #FF7351;}
@@ -81,3 +81,8 @@ h3 { font-size: 20px; }
 #meta { text-align:center; color:#6E6D65; }
 
 p { padding: 10px 0px; }
+
+/* table of contents */
+#table-of-contents li { display:block; padding:10px;	}
+#table-of-contents h3 { width: 500px; float:left;}
+.last-update { padding:0px; line-height:20px; text-align:right; color:#6E6D65;}

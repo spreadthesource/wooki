@@ -184,10 +184,10 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initLoginDialog : function(data) {
 		link = jQuery("#login-link");
-		dialog = jQuery('#signin')
+		dialog = jQuery('#signin-box')
 
-		x = link.position().left + link.width() - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
-		y = link.position().top + link.height() + parseInt(link.css('padding-bottom'));
+		x = link.position().left + link.width() * 2 - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
+		y = link.position().top + 5 + link.height() + parseInt(link.css('padding-bottom'));
 		
 		link.toggle(
 			function () {

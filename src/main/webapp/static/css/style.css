@@ -38,14 +38,22 @@ ul { list-style-type:disc; }
 a { color: #FF7351;}
 
 /* forms */
+input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; font-size:14px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:5px 0px; }
 input[type="checkbox"] { width:auto !important; }
 
 /* others */
 p, blockquote, pre { margin: 10px 0px; }
-quote, blockquote {	font-family: Georgia; font-style: italic; }
+quote, blockquote {	font-family: Georgia; font-style: italic;  }
 blockquote, pre { margin-left:40px; padding-left:10px; border-left:1px solid black; }
 pre { font-size:12px; white-space:normal; }
 
+small { font-size: 12px; font-style:italic;}
+
+/*****
+ * UTILITY CLASSES
+ */
+.radied { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
+.shadowed { box-shadow: 0px 0px 20px #333; -webkit-box-shadow: 0px 0px 20px #333; -moz-box-shadow: 0px 0px 20px #333;}
 
 /*****
  * HEADER
@@ -53,16 +61,22 @@ pre { font-size:12px; white-space:normal; }
 #header { height:110px; margin-bottom:10px;}
 #wooki { width: 300px; float:left; padding:20px 0px;}
 
-#signin { display:none; }
+#signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 190px 0px; position:absolute; width:260px; display:none;}
+#signin { color:white; padding: 10px; background:#2F2F32; }
+#signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 20px;}
+#signin th { text-align:right; padding:5px; }
+#signin td { text-align:left; padding:5px; }
+#signin div { text-align:right }
+#signin #do-signin { width: 100%; }
 
 #nav { list-style: none; float:right; padding:10px;}
 #nav li { display:inline; padding:0px 10px; }
 #nav a { text-decoration: none; }
 
 #search { clear:right; float: right; padding: 20px 10px 10px 0px; width:450px; text-align:right;}
-#query { width:200px;}
+#query { width:200px; }
 #query:focus { border: 1px solid #FF7351; }
-#submitSearch { text-decoration: none;  }
+#submitSearch { text-decoration: none; }
 
 /*****
  * BODY

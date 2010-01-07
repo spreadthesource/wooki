@@ -2,7 +2,7 @@
     
 	<div id="book-wrapper" class="full-content">
 
-		<div id="book">
+		<div id="book" class="radied">
 		
 			<div id="book-toolbar">
 			

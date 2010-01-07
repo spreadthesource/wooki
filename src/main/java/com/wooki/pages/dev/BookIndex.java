@@ -22,7 +22,7 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
-public class Index {
+public class BookIndex {
 	@Inject
 	@Symbol(SymbolConstants.PRODUCTION_MODE)
 	private boolean productionMode;

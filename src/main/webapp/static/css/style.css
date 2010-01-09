@@ -38,7 +38,8 @@ ul { list-style-type:disc; }
 a { color: #FF7351;}
 
 /* forms */
-input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; font-size:14px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:5px 0px; }
+input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; font-size:14px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:5px; border-bottom: 1px solid rgba(0,0,0,0.25);}
+input:focus { border: 1px solid #FF7351; }
 input[type="checkbox"] { width:auto !important; }
 
 /* others */
@@ -53,7 +54,12 @@ small { font-size: 12px; font-style:italic;}
  * UTILITY CLASSES
  */
 .radied { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
-.shadowed { box-shadow: 0px 0px 20px #333; -webkit-box-shadow: 0px 0px 20px #333; -moz-box-shadow: 0px 0px 20px #333;}
+.shadowed { box-shadow: 0px 0px 10px rgba(0,0,0,0.5); -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.5); -moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.5);}
+
+.block-field { display:block; width:100%}
+
+.btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25); font-weight:bold;}
+
 
 /*****
  * HEADER
@@ -61,13 +67,14 @@ small { font-size: 12px; font-style:italic;}
 #header { height:110px; margin-bottom:10px;}
 #wooki { width: 300px; float:left; padding:20px 0px;}
 
-#signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 190px 0px; position:absolute; width:260px; display:none;}
+#signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 130px 0px; position:absolute; width:200px; display:none;}
 #signin { color:white; padding: 10px; background:#2F2F32; }
-#signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 20px;}
-#signin th { text-align:right; padding:5px; }
-#signin td { text-align:left; padding:5px; }
+#signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 18px;}
+#signin label { font-size:12px; }
+#signin td { text-align:left; padding:5px 0px; }
 #signin div { text-align:right }
-#signin #do-signin { width: 100%; }
+#signin #rememberMe {margin-left:10px;}
+
 
 #nav { list-style: none; float:right; padding:10px;}
 #nav li { display:inline; padding:0px 10px; }
@@ -75,7 +82,6 @@ small { font-size: 12px; font-style:italic;}
 
 #search { clear:right; float: right; padding: 20px 10px 10px 0px; width:450px; text-align:right;}
 #query { width:200px; }
-#query:focus { border: 1px solid #FF7351; }
 #submitSearch { text-decoration: none; }
 
 /*****

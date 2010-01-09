@@ -19,19 +19,17 @@
 			<h2>Sign on Wooki</h2>
 			<table>
 				<tr>
-					<th><label for="j_username">Username</label></th>
-					<td><input name="j_username" type="text" /></td>
+					<td><label for="j_username">Username</label>
+						<input class="block-field" name="j_username" type="text" tabindex="1" /></td>
 				</tr>
 				<tr>
-					<th><label for="j_password">Password</label></th>
-					<td><input class="password" name="j_password" type="password" /></td>
+					<td><label for="j_password">Password</label>
+						<input class="block-field" name="j_password" type="password" tabindex="2" /></td>
 				</tr>
 				<tr>
-					<th> </th>
-					<td><input type="checkbox" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
+					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input type="checkbox" tabindex="3" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
 				</tr>
 			</table>	
-			<div><input type="submit" class="radied " value="Signin" id="do-signin" /></div>
 			<div><small><a href="#">Forgot password?</a></small></div>
 		</form>
 	</div>

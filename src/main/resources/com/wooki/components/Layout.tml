@@ -20,7 +20,7 @@
 			<table>
 				<tr>
 					<td><label for="j_username">Username</label>
-						<input class="signin-field" name="j_username" type="text" tabindex="1" /></td>
+						<input id="signin-username" class="signin-field" name="j_username" type="text" tabindex="1" /></td>
 				</tr>
 				<tr>
 					<td><label for="j_password">Password</label>
@@ -44,7 +44,7 @@
 		
 		<t:security.ifLoggedIn>	
 			<p:else>
-				<li>Have an account? <a href="#" id="login-link">Signin</a></li>
+				<li>Have an account? <a href="#" id="signin-link">Signin</a></li>
 				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 			</p:else>
 		</t:security.ifLoggedIn>

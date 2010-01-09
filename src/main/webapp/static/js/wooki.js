@@ -183,7 +183,7 @@ jQuery.extend(Tapestry.Initializer,{
 	 * 
 	 */
 	initLoginDialog : function(data) {
-		link = jQuery("#login-link");
+		link = jQuery("#signin-link");
 		dialog = jQuery('#signin-box')
 
 		x = link.position().left + link.width() * 2 - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
@@ -191,15 +191,15 @@ jQuery.extend(Tapestry.Initializer,{
 		
 		link.toggle(
 			function () {
-				link.addClass('login-link-active');
 				dialog.css({
 					'top': y + 'px',
 					'left': x + 'px',
 					'display': 'block'
 				});
+				
+				jQuery('#signin-username').focus();
 			},
 			function () {
-				link.removeClass('login-link-active');
 				dialog.css('display', 'none');
 			});
 			       

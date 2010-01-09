@@ -20,11 +20,11 @@
 			<table>
 				<tr>
 					<td><label for="j_username">Username</label>
-						<input class="block-field" name="j_username" type="text" tabindex="1" /></td>
+						<input class="signin-field" name="j_username" type="text" tabindex="1" /></td>
 				</tr>
 				<tr>
 					<td><label for="j_password">Password</label>
-						<input class="block-field" name="j_password" type="password" tabindex="2" /></td>
+						<input class="signin-field" name="j_password" type="password" tabindex="2" /></td>
 				</tr>
 				<tr>
 					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input type="checkbox" tabindex="3" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>

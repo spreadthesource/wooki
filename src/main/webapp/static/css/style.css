@@ -54,7 +54,7 @@ small { font-size: 12px; font-style:italic;}
  * UTILITY CLASSES
  */
 .radied { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
-.shadowed { box-shadow: 0px 0px 10px rgba(47,47,50,0.7); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.7); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.7);}
+.shadowed { box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.6);}
 
 .btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25); font-weight:bold;}
 
@@ -80,6 +80,7 @@ small { font-size: 12px; font-style:italic;}
 #nav a { text-decoration: none; }
 
 #search { clear:right; float: right; padding: 20px 10px 10px 0px; width:450px; text-align:right;}
+#search p { color:#6E6D65;}
 #query { width:200px; }
 #submitSearch { text-decoration: none; }
 
@@ -93,7 +94,7 @@ small { font-size: 12px; font-style:italic;}
  * BOOK LAYOUT
  */
 #book-wrapper { background:#C9BB9B; padding-left:40px; }
-#book { background:#FFFFFF; padding:10px; }
+#book { background:#FFFFFF; padding:10px;  }
 
 h1, h2 { font-family: Georgia, serif; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}

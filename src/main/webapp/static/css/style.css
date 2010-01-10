@@ -54,7 +54,7 @@ small { font-size: 12px; font-style:italic;}
  * UTILITY CLASSES
  */
 .radied { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
-.shadowed { box-shadow: 0px 0px 10px rgba(0,0,0,0.5); -webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.5); -moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.5);}
+.shadowed { box-shadow: 0px 0px 10px rgba(47,47,50,0.7); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.7); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.7);}
 
 .btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25); font-weight:bold;}
 

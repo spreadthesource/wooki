@@ -42,6 +42,14 @@ input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; fo
 input:focus { border: 1px solid #FF7351;box-shadow: 0px 0px 5px #FF7351; -webkit-box-shadow: 0px 0px 5px #FF7351; -moz-box-shadow: 0px 0px 5px #FF7351;  }
 input[type="checkbox"] { width:auto !important; }
 
+/* heading */
+h1, h2 { font-family: Georgia, serif; }
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}
+
+h1 { font-size: 25px; text-align:center; padding:20px; }
+h2 { font-size: 23px; }
+h3 { font-size: 20px; }
+
 /* others */
 p, blockquote, pre { margin: 10px 0px; }
 quote, blockquote {	font-family: Georgia; font-style: italic;  }
@@ -86,28 +94,23 @@ small { font-size: 12px; font-style:italic;}
 #submitSearch { text-decoration: none; }
 
 /*****
- * BODY
- */
-
-
-/*****
  * FOOTER
  */
 #footer { font-size: 12px; color:#6E6D65; text-align:center; padding:5px;}
 #footer a { color:#6E6D65; }
 
 /*****
+ * INDEX
+ */
+#teasing { width:280px; background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
+#teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
+#teasing em { font-size: 14px;}
+
+/*****
  * BOOK LAYOUT
  */
 #book-wrapper { background:#C9BB9B; padding-left:40px; margin-bottom:20px; }
 #book { background:#FFFFFF; padding:10px;  }
-
-h1, h2 { font-family: Georgia, serif; }
-h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}
-
-h1 { font-size: 25px; text-align:center; padding:20px; }
-h2 { font-size: 23px; }
-h3 { font-size: 20px; }
 
 #meta { text-align:center; color:#6E6D65; }
 

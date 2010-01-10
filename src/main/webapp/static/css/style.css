@@ -51,9 +51,9 @@ h2 { font-size: 23px; }
 h3 { font-size: 20px; }
 
 /* others */
-p, blockquote, pre { margin: 10px 0px; }
+p, blockquote, pre { margin: 5px 0px; padding:5px 0px; }
 quote, blockquote {	font-family: Georgia; font-style: italic;  }
-blockquote, pre { margin-left:40px; padding-left:10px; border-left:1px solid black; }
+blockquote, pre { margin-left:30px; padding-left:10px; border-left:1px solid #C9BB9B; }
 pre { font-size:12px; white-space:normal; }
 
 small { font-size: 12px; font-style:italic;}
@@ -65,6 +65,9 @@ small { font-size: 12px; font-style:italic;}
 .shadowed { box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.6);}
 
 .btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25); font-weight:bold;}
+
+.left-col { float:left; margin-right:5px; }
+.right-col { float:right; margin-left:5px; }
 
 
 /*****
@@ -96,16 +99,28 @@ small { font-size: 12px; font-style:italic;}
 /*****
  * FOOTER
  */
-#footer { font-size: 12px; color:#6E6D65; text-align:center; padding:5px;}
+#footer { clear:both; font-size: 12px; color:#6E6D65; text-align:center; padding:5px;}
 #footer a { color:#6E6D65; }
 
 /*****
  * INDEX
  */
-#teasing-box { padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom;}
-#teasing { width:280px; background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
+#teasing-box { width:300px; float:left; padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom; margin-right:5px;}
+#teasing { background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
 #teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
 #teasing em { font-size: 14px;}
+
+#index-feed { width:430px;}
+
+/*****
+ * NOT BOOK PAGES
+ */
+
+/* feeds */
+.feed { background: white; padding:10px;}
+.feed .first { border-top:0px }
+.feed  ul { list-style:none; padding: 0px; margin:0px; }
+.feed li { border-top:1px solid #C9BB9B; padding: 5px 0px; }
 
 /*****
  * BOOK LAYOUT

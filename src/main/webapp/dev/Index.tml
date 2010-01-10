@@ -12,6 +12,14 @@
 </div>
 </div>
 
-<div class="feed"></div>
+<div class="feed radied shadowed right-col" id="index-feed">
+<h2>Latest books</h2>
+<ul>
+	<li class="first"><a href="#">Wooki : When Writing meet social web</a> by <a href="#">john</a> 2 days ago.
+	<blockquote>What is social web? Are we social? Maybe, maybe not. But Wooki is definitely a truely social experience. Yeah.</blockquote></li>
+	<li><a href="#">Tapestry 5 : When development meets Art</a> by <a href="#">john</a> 2 days ago.
+	<blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nisi sit amet purus fringilla vel laoreet risus sollicitudin. Mauris dui eros, pulvinar quis laoreet vitae, eleifend vel dolor. Sed nisl nunc, consequat a imperdiet eget, pretium eu ante.</blockquote></li>
+</ul>
+</div>
 
 </html>

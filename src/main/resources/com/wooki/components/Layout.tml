@@ -54,8 +54,7 @@
 	
 	<form t:type="form" t:clientValidation="false" t:id="search">
 		<p><label for="search-field">Looking for a document? </label>
-		<input t:type="textfield" t:value="queryString" t:id="searchField" name="search-field" t:clientId="query" class="form-field insidefield-field" />
-		<a class="form-field insidefield-button" id="submitSearch" href="#" t:type="linksubmit">Search</a></p>
+		<input t:type="textfield" t:value="queryString" t:id="searchField" name="search-field" t:clientId="query" class="form-field insidefield-field" /></p>
 	</form>
 	
 </div>

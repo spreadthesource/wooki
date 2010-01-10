@@ -38,7 +38,7 @@
 		<t:security.ifLoggedIn>
 			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
 			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
-			<li><a href="${logoutUrl}" class="hard-link">Logout</a></li>
+			<li><a href="${logoutUrl}" id="logout">Logout</a></li>
 		</t:security.ifLoggedIn>
 		<li><a href="#">Tour</a></li>
 		
@@ -63,6 +63,8 @@
 	<t:body />
 </div>
 
+
+<div id="footer"><a href="http://www.wookicentral.com">wookicentral.com</a></div>
 </div>
 
 </body>

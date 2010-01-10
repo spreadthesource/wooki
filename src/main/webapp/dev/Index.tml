@@ -1,5 +1,6 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-		
+
+<div id="teasing-box">		
 <div id="teasing" class="radied shadowed">
 	<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
 	<p>Read them directly on the website as a PDF ebook. Get active by writing comments or by publishing content. </p>
@@ -9,6 +10,8 @@
 	        <em>Create and review documents now</em></p>
 	</t:pagelink>
 </div>
+</div>
 
+<div class="feed"></div>
 
 </html>

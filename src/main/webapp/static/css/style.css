@@ -102,6 +102,7 @@ small { font-size: 12px; font-style:italic;}
 /*****
  * INDEX
  */
+#teasing-box { padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom;}
 #teasing { width:280px; background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
 #teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
 #teasing em { font-size: 14px;}

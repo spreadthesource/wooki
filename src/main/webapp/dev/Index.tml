@@ -1,7 +1,7 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
 <div id="teasing-box">		
-<div id="teasing" class="radied shadowed">
+<div id="teasing" class="radied shadowed x300">
 	<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
 	<p>Read them directly on the website as a PDF ebook. Get active by writing comments or by publishing content. </p>
 	
@@ -12,7 +12,7 @@
 </div>
 </div>
 
-<div class="feed radied shadowed right-col" id="index-feed">
+<div class="feed section radied shadowed right-col x460">
 <h2>Latest books</h2>
 <ul>
 	<li class="first"><a href="#">Wooki : When Writing meet social web</a> by <a href="#">john</a> 2 days ago.

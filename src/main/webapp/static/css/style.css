@@ -38,11 +38,13 @@ ul { list-style-type:disc; }
 a { color: #FF7351;}
 
 /* forms */
-input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; font-size:14px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:5px; border-bottom: 1px solid rgba(0,0,0,0.25);}
+input { border: 1px solid #6E6D65; font-family: Helvetica, Arial, sans-serif; font-size:14px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding:5px; border-bottom: 1px solid rgba(0,0,0,0.25); color: #6E6D65;}
 input:focus { border: 1px solid #FF7351;box-shadow: 0px 0px 5px #FF7351; -webkit-box-shadow: 0px 0px 5px #FF7351; -moz-box-shadow: 0px 0px 5px #FF7351;  }
 input[type="checkbox"] { width:auto !important; }
 
 /* heading */
+h1, h2, h3, h4, h5, h6 { padding: 5px 0px; }
+
 h1, h2 { font-family: Georgia, serif; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}
 
@@ -64,10 +66,23 @@ small { font-size: 12px; font-style:italic;}
 .radied { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 .shadowed { box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.6);}
 
-.btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25); font-weight:bold;}
+.btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25);  border-top: 1px solid rgba(255,255,255, 0.25); border-bottom: 1px solid rgba(0,0,0,0.25);}
+
+.section { background: white; padding:10px; margin-bottom:10px;}
+.section h2 { font-family: Helvetica, Arial, sans-serif; padding:0px; padding-bottom:5px;}
 
 .left-col { float:left; margin-right:5px; }
 .right-col { float:right; margin-left:5px; }
+
+.clearer {clear:both;}
+
+.x160 { width: 135px; }
+.x260 { width: 235px; }
+.x300 { width: 275px; }
+.x360 { width: 335px; }
+.x400 { width: 375px; }
+.x460 { width: 435px; }
+.x500 { width: 475px; }
 
 
 /*****
@@ -84,7 +99,6 @@ small { font-size: 12px; font-style:italic;}
 #signin div { text-align:right }
 #signin .signin-field { display:block; width:170px;}
 #signin #rememberMe {margin-left:10px;}
-
 
 #nav { list-style: none; float:right; padding:10px;}
 #nav li { display:inline; padding:0px 10px; }
@@ -105,22 +119,35 @@ small { font-size: 12px; font-style:italic;}
 /*****
  * INDEX
  */
-#teasing-box { width:300px; float:left; padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom; margin-right:5px;}
+#teasing-box { float:left; padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom;}
 #teasing { background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
 #teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
 #teasing em { font-size: 14px;}
-
-#index-feed { width:430px;}
 
 /*****
  * NOT BOOK PAGES
  */
 
 /* feeds */
-.feed { background: white; padding:10px;}
 .feed .first { border-top:0px }
 .feed  ul { list-style:none; padding: 0px; margin:0px; }
 .feed li { border-top:1px solid #C9BB9B; padding: 5px 0px; }
+
+/* forms */
+.form-footer { background:#C9BB9B; border:0px; border-top:1px solid #6E6D65; padding:10px; color:#6E6D65; text-align:center; margin:0px -10px -10px -10px; border-bottom-left-radius: 10px; -moz-border-radius-bottomleft: 10px; -webkit-border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; -moz-border-radius-bottomright: 10px; -webkit-border-bottom-right-radius: 10px; }
+
+.full-form, .small-form { padding:10px 0px;}
+.full-form table th, .full-form table td { padding: 5px 5px;}
+.full-form table th { width: 180px; text-align:right; font-weight:normal; color: #6E6D65; }
+.full-form table label {  display:block; color: #2F2F32; font-size:18px;}
+.full-form input { font-size:18px;  }
+.full-form table td input { width:200px; }
+.full-form .form-submit {text-align:center; padding:10px 0px}
+
+.small-form label { display:block; color: #2F2F32;}
+.small-form table { width:100%; }
+.small-form td { padding: 5px 10px 5px 0px; }
+.small-form table tr td input { width:100%;}
 
 /*****
  * BOOK LAYOUT

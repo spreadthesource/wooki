@@ -1,0 +1,105 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+<div class="section radied shadowed">
+	<h2>Create your account</h2>
+	<h3>Start getting active on wooki</h3>
+	
+	<form class="full-form">
+		<table>
+			<tr>
+				<th>
+					<label>Username</label>
+				</th>
+				<td><input type="text" id="field1" /></td>
+				<td>ex: john or robert</td>
+			</tr>
+			<tr>
+				<th><label>Fullname</label></th>
+				<td><input type="text" id="field2" /></td>
+				<td>ex: John Doe</td>
+			</tr>
+			<tr>
+				<th>
+					<label>Password</label>
+				</th>
+				<td><input type="password" id="field3" /></td>
+				<td>Should be at least 8 characters long</td>
+			</tr>
+			<tr>
+				<th><label>Email</label></th>
+				<td><input type="text" id="field4" /></td>
+				<td></td>
+			</tr>
+		</table>
+		<div class="form-submit">
+			<input type="submit" class="btn-active" value="signup" /> or <a href="#">cancel</a>
+		</div>
+	</form>
+	
+	<div class="form-footer">
+		By submitting this form your confirm that you accept Wooki <a href="#">terms of service</a>
+	</div>
+</div>
+
+<div class="clearer" />
+
+<div class="section radied shadowed left-col x300">
+	<h2>Small forms</h2>
+	<form class="small-form">
+	
+		<table>
+			<tr>
+				<td>
+					<label>Username</label>
+					<input type="text" id="field1" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Fullname</label>
+					<input type="text" id="field2" />
+				</td>
+			</tr>
+		</table>
+		<div class="form-submit">
+			<input type="submit" class="btn-active" value="signup" /> or <a href="#">cancel</a>
+		</div>
+	
+	</form>
+</div>
+
+
+<div class="section radied shadowed right-col x460">
+	<h2>Single field with submit</h2>
+		<form class="small-form">
+		<table>
+			<tr>
+				<td>
+					<input type="text" id="field1"  value="initial value..." />
+				</td>
+			</tr>
+		</table>
+		<div class="form-submit">
+			<input type="submit" class="btn-active" value="signup" /> or <a href="#">cancel</a>
+		</div>
+	</form>
+</div>
+
+<div class="clearer" />
+
+<div class="section radied shadowed left-col x300">
+	<h2>Single field</h2>
+	Maybe it's a good idea to sometime avoid submit button.
+	<form class="small-form">
+		<table>
+			<tr>
+				<td>
+					<input type="text" id="field1"  value="initial value..." />
+				</td>
+			</tr>
+		</table>
+	
+	</form>
+</div>
+
+</html>

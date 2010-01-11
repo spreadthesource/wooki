@@ -147,7 +147,7 @@ small { font-size: 12px; font-style:italic;}
 .small-form label { display:block; color: #2F2F32;}
 .small-form table { width:100%; }
 .small-form td { padding: 5px 10px 5px 0px; }
-.small-form table tr td input { width:100%;}
+.small-form table tr td input { width:100%; margin-right:-10px;}
 
 /*****
  * BOOK LAYOUT

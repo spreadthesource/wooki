@@ -9,7 +9,7 @@
 <t:iexplorecomment t:script="asset:context:static/js/supersleight-min.js" />
 </head>
 <body>
-<div class="wrapper">
+<div class="wrapper" id="page-wrapper">
 	
 <div id="header">
 	<h1 id="wooki"><img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" /></h1>	

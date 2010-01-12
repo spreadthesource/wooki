@@ -11,7 +11,12 @@
   			By
   			<t:loop source="authors" value="currentUser" index="loopIdx">
   				${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
-  				<t:unless test="isLastLoop(loopIdx, authors.size())">, </t:unless>
+  				<t:if test="isAntepenultiemIteration(loopIdx, authors.size())">
+  					and
+  					<p:else>
+		  				<t:unless test="isLastIteration(loopIdx, authors.size())">, </t:unless>
+  					</p:else>
+  				</t:if>
   			</t:loop>
   		</p>
   		<p id="revision">Published <t:output value="prop:book?.creationDate" t:format="prop:format" /></p>

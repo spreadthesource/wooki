@@ -1,5 +1,7 @@
 delete from BookActivity
 delete from ChapterActivity
+delete from CommentActivity
+delete from Activity
 delete from Comment
 delete from Publication
 delete from BookAuthor

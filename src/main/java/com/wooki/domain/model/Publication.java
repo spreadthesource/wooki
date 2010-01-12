@@ -16,7 +16,6 @@
 
 package com.wooki.domain.model;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +30,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 
 /**
  * This class is used to publish chapter when an author has decided to publish

@@ -67,7 +67,7 @@ public class Index {
 
 	/**
 	 * Set current user if someone has logged in.
-	 * 
+	 *
 	 * @return
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)

@@ -3,7 +3,6 @@ package com.wooki.base;
 import java.text.SimpleDateFormat;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -21,6 +20,9 @@ import com.wooki.services.utils.DateUtils;
  * 
  */
 public class BookBase {
+
+	/** Used to display the working copy of a chapter */
+	protected static final String LAST = "last";
 
 	@Inject
 	private BookManager bookManager;
@@ -46,14 +48,8 @@ public class BookBase {
 	private String revision;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBook(EventContext ctx) {
-
-		// Check parameter numbers
-		if (ctx.getCount() < 1) {
-			return com.wooki.pages.Index.class;
-		}
-
-		this.bookId = ctx.get(Long.class, 0);
+	public Object setupBookBase(Long bookId) {
+		this.bookId = bookId;
 
 		// Check resource exists
 		this.book = this.bookManager.findById(this.bookId);
@@ -66,14 +62,25 @@ public class BookBase {
 	}
 
 	/**
-	 * Return true if this is the last row. 
-	 *
+	 * Return true if this is the last row.
+	 * 
 	 * @param idx
 	 * @param maxIdx
 	 * @return
 	 */
-	public boolean isLastLoop(int idx, int maxIdx) {
+	public boolean isLastIteration(int idx, int maxIdx) {
 		return idx == maxIdx - 1;
+	}
+
+	/**
+	 * Verify if this is the antepenultiem iteration.
+	 * 
+	 * @param idx
+	 * @param maxIdx
+	 * @return
+	 */
+	public boolean isAntepenultiemIteration(int idx, int maxIdx) {
+		return idx == maxIdx - 2;
 	}
 
 	/**

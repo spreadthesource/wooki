@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.test;
+package com.wooki.test.unit;
 
 import java.util.List;
 

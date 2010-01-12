@@ -17,7 +17,6 @@
 package com.wooki.pages.chapter;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
@@ -70,25 +69,18 @@ public class Edit extends BookBase {
 	private String nextTitle;
 
 	private boolean publish;
-	
+
 	private boolean cancel;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object onActivate(EventContext ctx) {
+	public Object onActivate(Long bookId, Long chapterId) {
 
-		super.setupBook(ctx);
-		
-		if (ctx.getCount() != 2) {
-			return com.wooki.pages.Index.class;
-		}
-
-		try {
-			this.chapterId = ctx.get(Long.class, 1);
-		} catch (RuntimeException re) {
-			return com.wooki.pages.Index.class;
-		}
-
+		this.chapterId = chapterId;
 		this.chapter = chapterManager.findById(chapterId);
+
+		if (this.chapter == null) {
+			return redirectToBookIndex();
+		}
 
 		return null;
 	}
@@ -96,7 +88,6 @@ public class Edit extends BookBase {
 	@SetupRender
 	public void prepareFormData() {
 		this.data = chapterManager.getLastContent(chapterId);
-
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -117,7 +108,7 @@ public class Edit extends BookBase {
 	public void onUpdate() {
 		this.publish = false;
 	}
-	
+
 	public void onCancel() {
 		this.cancel = true;
 	}
@@ -128,7 +119,7 @@ public class Edit extends BookBase {
 	 * @return The book index page
 	 */
 	@OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
-	public Object updateChapter() {	
+	public Object updateChapter() {
 		if (!cancel) {
 			chapterManager.updateContent(chapterId, data);
 			if (publish) {
@@ -147,5 +138,5 @@ public class Edit extends BookBase {
 	public void setChapterId(Long chapterId) {
 		this.chapterId = chapterId;
 	}
-	
+
 }

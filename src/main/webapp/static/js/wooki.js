@@ -332,7 +332,7 @@ jQuery.extend(Tapestry.Initializer,{
 				return;
 			}
 		});
-	}	
+	}
 });
 
 // Do not not desactivate Zone after a link is clicked.

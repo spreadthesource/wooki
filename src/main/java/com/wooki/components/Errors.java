@@ -19,18 +19,25 @@ package com.wooki.components;
 import java.util.List;
 
 import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.ValidationTracker;
 import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.services.FormSupport;
+import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
+@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/error.js" })
+@IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
 public class Errors {
+
+	@Inject
+	private RenderSupport support;
 
 	// Allow null so we can generate a better error message if missing
 	@Environmental(false)
 	private ValidationTracker tracker;
 
-	@Environmental
-	private FormSupport formSupport;
+	private String errorListId;
 
 	void beginRender(MarkupWriter writer) {
 
@@ -38,13 +45,15 @@ public class Errors {
 
 		if (!errors.isEmpty()) {
 
-			writer.element("div", "class", "wooki-form-error radied-box");
+			errorListId = support.allocateClientId("error-list");
+
+			writer.element("div", "style", "display:none;", "id", errorListId);
 
 			// Only write out the <UL> if it will contain <LI> elements. An
 			// empty <UL> is not
 			// valid XHTML.
 
-			writer.element("ul");
+			writer.element("ul", "class", "error-list wrapper");
 
 			for (String message : errors) {
 				writer.element("li");
@@ -57,6 +66,13 @@ public class Errors {
 			writer.end(); // div
 		}
 
+	}
+
+	// Add javascript
+	void afterRender() {
+		if (errorListId != null) {
+			support.addInit("initErrorBox", this.errorListId);
+		}
 	}
 
 }

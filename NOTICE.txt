@@ -2,3 +2,7 @@
    
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
+
+Twitter like notification bar under MIT License
+http://github.com/dknight/jQuery-Notify-bar
+

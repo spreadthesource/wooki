@@ -32,7 +32,7 @@
 		<property name="locations">
 			<list>
 				<value>
-					classpath*:com/wooki/services/security/WookiSecurityContext.properties
+					classpath*:config/security.properties
 				</value>
 			</list>
 		</property>
@@ -50,16 +50,58 @@
 	</bean>
 
 	<bean id="springSecurityFilterChain" class="org.springframework.security.util.FilterChainProxy">
-		<property name="filterInvocationDefinitionSource">
-			<value>
-				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-				PATTERN_TYPE_APACHE_ANT
-				/assets/**=httpSessionContextIntegrationFilter
-				/**=httpSessionContextIntegrationFilter,logoutFilter,authenticationProcessingFilter,securityContextHolderAwareRequestFilter,exceptionTranslationFilter,filterSecurityInterceptor
-			</value>
-		</property>
 		<property name="matcher" ref="ciUrlMatcher" />
+		<property name="filterChainMap">
+			<map>
+				<entry key="/assets/.*">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+					</list>
+				</entry>
+				<entry key="/signin.*">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+					</list>
+				</entry>
+				<entry key="/signup.*">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+					</list>
+				</entry>
+				<entry key="/j_spring_security_logout">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+						<ref bean="logoutFilter" />
+					</list>
+				</entry>
+				<entry key="/j_spring_security_check">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+						<ref bean="authenticationProcessingFilter" />
+					</list>
+				</entry>
+				<entry key="/dashboard.*" value-ref="securedFilterList" />
+				<entry key="/book/settings.*" value-ref="securedFilterList" />
+				<entry key="/chapter/edit.*" value-ref="securedFilterList" />
+
+				<!-- All other resources must be a public Tapestry pages -->
+				<entry key="/.*">
+					<list>
+						<ref bean="httpSessionContextIntegrationFilter" />
+						<ref bean="securityContextHolderAwareRequestFilter" />
+						<ref bean="tapestryPublicResourceFilter" />
+					</list>
+				</entry>
+			</map>
+		</property>
 	</bean>
+
+	<util:list id="securedFilterList">
+		<ref bean="httpSessionContextIntegrationFilter" />
+		<ref bean="securityContextHolderAwareRequestFilter" />
+		<ref bean="exceptionTranslationFilter" />
+		<ref bean="filterSecurityInterceptor" />
+	</util:list>
 
 	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
 		<constructor-arg ref="userManager" />
@@ -67,7 +109,7 @@
 
 	<bean id="defaultTargetUrlResolver" class="org.springframework.security.ui.TargetUrlResolverImpl" />
 
-	<bean id="viewBasedTargetUrlResolver" class="com.wooki.services.security.WookiTargetUrlResolver">
+	<bean id="viewBasedTargetUrlResolver" class="com.wooki.services.security.spring.WookiTargetUrlResolver">
 		<constructor-arg ref="defaultTargetUrlResolver" />
 	</bean>
 
@@ -105,6 +147,7 @@
 
 	<bean id="httpSessionContextIntegrationFilter"
 		class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+
 	</bean>
 
 	<!--
@@ -118,18 +161,32 @@
 		<property name="accessDecisionManager">
 			<ref bean="accessDecisionManager" />
 		</property>
+		<property name="rejectPublicInvocations" value="true" />
 		<property name="objectDefinitionSource">
 			<value>
 				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-				PATTERN_TYPE_REGEX
-				/.*edit.*=ROLE_Author
-				/.*settings.*=ROLE_Author
-				/.*dashboard.*=ROLE_Author
+				PATTERN_TYPE_APACHE_ANT
+				/**=ROLE_Author
 			</value>
 		</property>
 	</bean>
 
-	<bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
+	<bean id="tapestryPublicResourceFilter"
+		class="com.wooki.services.security.spring.TapestryPublicResourceFilter">
+		<constructor-arg>
+			<list>
+				<value></value>
+				<value>index</value>
+				<value>book</value>
+				<value>book/index</value>
+				<value>chapter</value>
+				<value>chapter/index</value>
+				<value>dev/full</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
 		<property name="decisionVoters">
 			<list>
 				<ref bean="tapestryResourceVoter" />
@@ -138,7 +195,7 @@
 		</property>
 	</bean>
 
-	<bean id="tapestryResourceVoter" class="com.wooki.services.security.TapestryResourceVoter">
+	<bean id="tapestryResourceVoter" class="com.wooki.services.security.spring.TapestryResourceVoter">
 		<constructor-arg>
 			<map>
 				<entry key="chapter/edit" value-ref="isOwnerAccessController" />
@@ -147,7 +204,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="isOwnerAccessController" class="com.wooki.services.security.BookAuthorAccessController">
+	<bean id="isOwnerAccessController" class="com.wooki.services.security.spring.BookAuthorAccessController">
 		<constructor-arg>
 			<ref bean="wookiSecurityContext" />
 		</constructor-arg>

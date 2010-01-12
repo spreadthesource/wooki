@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.services.security;
+package com.wooki.services.security.spring;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ import org.springframework.security.ui.savedrequest.SavedRequest;
 import com.wooki.services.WookiModule;
 
 /**
- * Implement a custom target url resolver for spring security.
+ * Implement a custom target url resolver for spring security based on cookies.
  *
  * @author ccordenier
  *
@@ -41,6 +41,7 @@ public class WookiTargetUrlResolver implements TargetUrlResolver {
 
 	public String determineTargetUrl(SavedRequest savedRequest,
 			HttpServletRequest currentRequest, Authentication auth) {
+		
 		// Check first wooki last view
 		Cookie [] cookies = currentRequest.getCookies();
 		if(cookies != null) {

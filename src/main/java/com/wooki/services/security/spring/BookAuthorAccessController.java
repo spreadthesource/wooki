@@ -14,11 +14,13 @@
 // limitations under the License.
 //
 
-package com.wooki.services.security;
+package com.wooki.services.security.spring;
 
 import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
+
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Secure the access to the book settings

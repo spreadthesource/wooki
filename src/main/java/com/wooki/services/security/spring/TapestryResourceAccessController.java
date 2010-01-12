@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.services.security;
+package com.wooki.services.security.spring;
 
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;

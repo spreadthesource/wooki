@@ -17,6 +17,7 @@
 package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.Field;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -24,7 +25,6 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Cookies;
 
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.UserAlreadyException;
@@ -39,14 +39,17 @@ public class Signup {
 	@InjectComponent
 	private Form signupForm;
 
+	@InjectComponent(value = "username")
+	private Field usernameF;
+
+	@InjectComponent(value = "password")
+	private Field passwordF;
+
 	@Inject
 	private UserManager userManager;
 
 	@Inject
 	private WookiSecurityContext securityCtx;
-
-	@Inject
-	private Cookies cookies;
 
 	@InjectPage
 	private Dashboard successPage;
@@ -60,7 +63,7 @@ public class Signup {
 	private String fullname;
 
 	@Property
-	@Validate("required,minLength=6")
+	@Validate("required,minLength=8")
 	private String password;
 
 	@Property
@@ -69,12 +72,12 @@ public class Signup {
 
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
 	public void onValidate() {
-		if(username.trim().compareToIgnoreCase(password.trim()) == 0) {
-			signupForm.recordError("User password cannot be its username");
+		if (username != null && password != null && username.trim().compareToIgnoreCase(password.trim()) == 0) {
+			signupForm.recordError(passwordF, "User password cannot be its username");
 		}
 		// Do a first check
-		if (userManager.findByUsername(username) != null) {
-			signupForm.recordError("User already exists");
+		if (username != null && userManager.findByUsername(username) != null) {
+			signupForm.recordError(usernameF, "User already exists");
 		}
 	}
 
@@ -93,7 +96,7 @@ public class Signup {
 
 			successPage.setFirstAccess(true);
 			return successPage;
-			
+
 		} catch (UserAlreadyException uaeEx) {
 			signupForm.recordError("User already exists");
 			return this;

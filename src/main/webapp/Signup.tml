@@ -1,35 +1,47 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
+    <head>
+    	<title>Create your account</title>
+    </head>
+    
+    <div class="section">
 
-    	<form t:type="form" class="full-content big-form" t:id="signupForm">
-    		<h1>Create your account</h1>
-    		<div class="radied-box basic-content">
-	    		<h2>Start getting active on Wooki</h2>
-	    		<t:errors />
-	    		<table>
-	    			<tr>
-	    				<th><label t:type="label" t:for="username"/></th>
-	    				<td><input type="text" t:type="textfield" t:id="username" /></td>
-	    			</tr>
-	    			<tr>
-	    				<th><label t:type="label" t:for="fullname"/></th>
-	    				<td><input type="text" t:type="textfield" t:id="fullname" /></td>
-	    			</tr>
-	    			<tr>
-	    				<th><label t:type="label" t:for="password"/></th>
-	    				<td><input type="text" t:type="passwordfield" t:id="password" /></td>
-	    			</tr>
-	    			<tr>
-	    				<th><label t:type="label" t:for="email"/></th>
-	    				<td><input type="text" t:type="textfield" t:id="email" /></td>
-	    			</tr>
-	    		</table>
-				<div id="submit">
-					<a t:type="linksubmit" class="radied-box active-button">Signup</a>
-				</div>
-				
-				<div class="form-footer">By submitting this form your confirm that you accept Wooki <a href="#">terms of service</a></div>
+		<h2>Create your account</h2>
+		<h3>Start getting active on wooki</h3>
+
+    	<form t:type="form" class="full-form" t:id="signupForm" t:clientValidation="false">
+
+    		<t:errors />
+    		<table>
+    			<tr>
+    				<th><label t:type="label" t:for="username"/></th>
+    				<td><input type="text" t:type="textfield" t:id="username" /></td>
+    				<td>ex: john or robert</td>
+    			</tr>
+    			<tr>
+    				<th><label t:type="label" t:for="fullname"/></th>
+    				<td><input type="text" t:type="textfield" t:id="fullname" /></td>
+    				<td>ex: John Doe</td>
+    			</tr>
+    			<tr>
+    				<th><label t:type="label" t:for="password"/></th>
+    				<td><input type="text" t:type="passwordfield" t:id="password" /></td>
+    				<td>Should be at least 8 characters long</td>
+    			</tr>
+    			<tr>
+    				<th><label t:type="label" t:for="email"/></th>
+    				<td><input type="text" t:type="textfield" t:id="email" /></td>
+					<td></td>
+    			</tr>
+    		</table>
+			<div class="form-submit">
+				<input type="submit" class="btn-active" value="signup" /> or <a href="#">cancel</a>
 			</div>
+
     	</form>
+    	
+    	<div class="form-footer">By submitting this form your confirm that you accept Wooki <a href="#">terms of service</a></div>
+
+    </div>
 
 </html>

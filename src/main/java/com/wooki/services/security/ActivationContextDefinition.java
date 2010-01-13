@@ -49,7 +49,8 @@ public class ActivationContextDefinition {
 
 			OnEvent eventHandler = method.getAnnotation(OnEvent.class);
 
-			if (eventHandler != null && EventConstants.ACTIVATE.equals(eventHandler.value())) {
+			if ((eventHandler != null && EventConstants.ACTIVATE.equals(eventHandler.value()))
+					|| ("on" + EventConstants.ACTIVATE).equalsIgnoreCase(method.getName())) {
 
 				// Check parameters
 				Class[] parameterType = method.getParameterTypes();

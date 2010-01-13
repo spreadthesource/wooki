@@ -63,7 +63,7 @@ public class Index {
 
 	@Property
 	private List<Book> userCollaborations;
-	
+
 	@Property
 	private Book currentBook;
 
@@ -72,13 +72,13 @@ public class Index {
 
 	@Property
 	private int loopIdx;
-	
+
 	@Property
 	private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
-	
+
 	/**
 	 * Set current user if someone has logged in.
-	 *
+	 * 
 	 * @return
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
@@ -108,7 +108,7 @@ public class Index {
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public String getCurrentUser() {
-		if (securityCtx.isLoggedIn()) {
+		if (securityCtx.isLoggedIn() && user != null) {
 			return user.getUsername();
 		}
 		return null;
@@ -128,7 +128,7 @@ public class Index {
 			return userBlock;
 		}
 	}
-	
+
 	public String getStyle() {
 		return this.loopIdx == 0 ? "first" : null;
 	}

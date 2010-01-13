@@ -16,8 +16,6 @@
 
 package com.wooki.pages;
 
-import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -40,11 +38,9 @@ public class Signin {
 
 	private boolean failed = false;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate() {
 	}
 
-	@OnEvent(value = EventConstants.ACTIVATE)
 	public void onActivate(String extra) {
 		if (extra.equals("failed")) {
 			failed = true;
@@ -60,4 +56,7 @@ public class Signin {
 		return failed;
 	}
 
+	public String[] getMessages() {
+		return new String[] { "Wrong username or password" };
+	}
 }

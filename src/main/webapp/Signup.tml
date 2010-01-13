@@ -1,9 +1,5 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     
-    <head>
-    	<title>Create your account</title>
-    </head>
-    
     <div class="section">
 
 		<h2>Create your account</h2>

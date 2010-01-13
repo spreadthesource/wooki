@@ -16,6 +16,7 @@
 
 package com.wooki.components;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.tapestry5.MarkupWriter;
@@ -24,15 +25,19 @@ import org.apache.tapestry5.ValidationTracker;
 import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 @IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/error.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
 public class Errors {
 
+	@Parameter
+	private String[] messages;
+
 	@Inject
 	private RenderSupport support;
-	
+
 	// Allow null so we can generate a better error message if missing
 	@Environmental(false)
 	private ValidationTracker tracker;
@@ -41,9 +46,15 @@ public class Errors {
 
 	void beginRender(MarkupWriter writer) {
 
-		List<String> errors = tracker.getErrors();
+		List<String> errors = null;
 
-		if (!errors.isEmpty()) {
+		if (tracker == null && messages != null) {
+			errors = Arrays.asList(messages);
+		} else {
+			errors = tracker.getErrors();
+		}
+
+		if (errors != null && !errors.isEmpty()) {
 
 			errorListId = support.allocateClientId("error-list");
 
@@ -52,8 +63,8 @@ public class Errors {
 			// Only write out the <UL> if it will contain <LI> elements. An
 			// empty <UL> is not
 			// valid XHTML.
-
-			writer.element("ul", "class", "error-list wrapper");
+			writer.element("div", "class", "error-list shadowed");
+			writer.element("ul", "class", "wrapper");
 
 			for (String message : errors) {
 				writer.element("li");
@@ -62,7 +73,7 @@ public class Errors {
 			}
 
 			writer.end(); // ul
-
+			writer.end(); // ul
 			writer.end(); // div
 		}
 

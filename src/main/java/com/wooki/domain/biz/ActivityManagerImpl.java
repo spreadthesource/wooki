@@ -38,23 +38,27 @@ public class ActivityManagerImpl implements ActivityManager {
 	private UserDAO userDao;
 
 	public List<Activity> listAll(int nbElts) {
-		return activityDao.list(nbElts);
+		return this.activityDao.list(nbElts);
 	}
 
 	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
-		return activityDao.listActivityOnUserBooks(nbElts, userId);
+		return this.activityDao.listActivityOnUserBooks(nbElts, userId);
 	}
 
 	public List<Activity> listUserActivity(int nbElts, Long userId) {
-		return activityDao.listUserActivity(nbElts, userId);
+		return this.activityDao.listUserActivity(nbElts, userId);
 	}
 
 	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
-		return activityDao.listActivityOnBook(nbElements, userId);
+		return this.activityDao.listActivityOnBook(nbElements, userId);
 	}
 
 	public List<Activity> listBookCreationActivity(int nbElements) {
-		return activityDao.listBookCreationActivity(nbElements);
+		return this.activityDao.listBookCreationActivity(nbElements);
+	}
+
+	public List<Activity> listAccountActivity(int nbElements, Long userId) {
+		return this.activityDao.listAccountActivity(nbElements, userId);
 	}
 
 }

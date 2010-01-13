@@ -96,7 +96,10 @@ public class Index {
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public String getCurrentUser() {
-		return user == null ? null : user.getUsername();
+		if (securityCtx.isLoggedIn()) {
+			return user.getUsername();
+		}
+		return null;
 	}
 
 	public ActivityType getActivityType() {

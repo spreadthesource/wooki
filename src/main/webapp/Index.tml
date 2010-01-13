@@ -44,6 +44,7 @@
 			</div>
 		</div>
 		<t:activity.feed t:userId="user?.id" t:type="prop:activityType"/>
+		<t:activity.feed t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
     </t:block>
     
     <t:block id="noBooks">

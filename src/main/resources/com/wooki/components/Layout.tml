@@ -12,7 +12,11 @@
 <div class="wrapper" id="page-wrapper">
 	
 <div id="header">
-	<h1 id="wooki"><img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" /></h1>	
+	<h1 id="wooki">
+		<a href="#" t:type="pagelink" t:page="index">
+			<img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" />
+		</a>
+	</h1>	
 		
 	<div id="signin-box">
 		<form name="signin" id="signin" action="${loginUrl}" method="POST" class="radied shadowed">
@@ -44,7 +48,7 @@
 		
 		<t:security.ifLoggedIn>	
 			<p:else>
-				<li>Have an account? <a href="#" id="signin-link">Signin</a></li>
+				<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="signin-link">Signin</a></li>
 				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 			</p:else>
 		</t:security.ifLoggedIn>

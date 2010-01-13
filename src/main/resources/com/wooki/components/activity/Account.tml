@@ -1,7 +1,5 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-	<ul>
-		<li class="${style}">
-			<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> has <span> ${activity.type} </span> Wooki <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
-		</li>
-	</ul>
+	<li class="${style}">
+		<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> has <span> ${activity.type} </span> Wooki <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
+	</li>
 </t:container>

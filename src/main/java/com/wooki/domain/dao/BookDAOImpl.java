@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
@@ -37,19 +38,26 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 		return null;
 	}
 
-	public List<Book> listByAuthor(Long id) {
-		if (id == null) {
-			throw new IllegalArgumentException(
-					"Author id cannot be null while listing book.");
-		}
+	public List<Book> listByOwner(Long id) {
+		Defense.notNull(id, "user id");
 		Query query = entityManager
 				.createQuery("select b from "
 						+ getEntityType()
-						+ " b join b.users u where u.id=:uid and b.deletionDate is null");
+						+ " b where b.owner.id=:uid and b.deletionDate is null");
 		query.setParameter("uid", id);
 		return (List<Book>) query.getResultList();
 	}
 
+	public List<Book> listByCollaborator(Long id) {
+		Defense.notNull(id, "user id");
+		Query query = entityManager
+				.createQuery("select b from "
+						+ getEntityType()
+						+ " b join b.users as u where b.owner.id!=:uid and u.id=:uid and b.deletionDate is null");
+		query.setParameter("uid", id);
+		return (List<Book>) query.getResultList();
+	}
+	
 	public List<Book> listByTitle(String title) {
 		Query query = this.entityManager.createQuery("from " + getEntityType()
 				+ " b where lower(b.title) like :title and b.deletionDate is null");
@@ -58,9 +66,7 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 	}
 
 	public boolean isAuthor(Long bookId, String username) {
-		if (bookId == null) {
-			throw new IllegalArgumentException("Book cannot be null");
-		}
+		Defense.notNull(bookId, "bookId");
 		Query query = this.entityManager
 				.createQuery("select count(b) from Book b join b.users as u where u.username=:un and b.id=:id");
 		Long result = (Long) query.setParameter("un", username).setParameter(
@@ -69,9 +75,7 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 	}
 	
 	public boolean isOwner(Long bookId, String username) {
-		if (bookId == null) {
-			throw new IllegalArgumentException("Book cannot be null");
-		}
+		Defense.notNull(bookId, "bookId");
 		Query query = this.entityManager
 				.createQuery("select count(b) from Book b where b.id=:id and b.owner.username=:un");
 		Long result = (Long) query.setParameter("un", username).setParameter(

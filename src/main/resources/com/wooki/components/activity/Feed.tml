@@ -7,9 +7,11 @@
 				<h2>${title}</h2>
 			</p:else>
 		</t:if>
-        <t:loop source="activities" value="current" index="loopIdx">
-    		<t:delegate to="activityBlock" />
-		</t:loop>
+		<ul>
+	        <t:loop source="activities" value="current" index="loopIdx" empty="block:empty">
+	    		<t:delegate to="activityBlock" />
+			</t:loop>
+		</ul>
     </div>
 
 	<t:block id="accountActivity">
@@ -26,6 +28,10 @@
 	
 	<t:block id="commentActivity">
 		<t:activity.comment t:activity="current" t:style="prop:currentStyle" />
+	</t:block>
+
+	<t:block t:id="empty">
+		<li>No activities by now</li>
 	</t:block>
 
 </t:container>

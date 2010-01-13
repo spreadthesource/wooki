@@ -16,6 +16,8 @@
 
 package com.wooki.pages;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
@@ -60,11 +62,20 @@ public class Index {
 	private List<Book> userBooks;
 
 	@Property
+	private List<Book> userCollaborations;
+	
+	@Property
 	private Book currentBook;
 
 	@Property
 	private User user;
 
+	@Property
+	private int loopIdx;
+	
+	@Property
+	private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
+	
 	/**
 	 * Set current user if someone has logged in.
 	 *
@@ -74,7 +85,7 @@ public class Index {
 	public boolean setupListBook() {
 		if (securityCtx.isLoggedIn()) {
 			this.user = securityCtx.getAuthor();
-			this.userBooks = bookManager.listByUser(user.getUsername());
+			this.userBooks = bookManager.listByOwner(user.getUsername());
 			return true;
 		}
 		return false;
@@ -90,7 +101,8 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupBookList(String username) {
 		this.user = this.userManager.findByUsername(username);
-		this.userBooks = bookManager.listByUser(username);
+		this.userBooks = this.bookManager.listByOwner(username);
+		this.userCollaborations = this.bookManager.listByCollaborator(username);
 		return true;
 	}
 
@@ -115,6 +127,10 @@ public class Index {
 		} else {
 			return userBlock;
 		}
+	}
+	
+	public String getStyle() {
+		return this.loopIdx == 0 ? "first" : null;
 	}
 
 }

@@ -35,7 +35,7 @@
     			</tr>
     		</table>
 			<div class="form-submit">
-				<input type="submit" class="btn-active" value="signup" /> or <a href="#">cancel</a>
+				<input type="submit" class="btn-active" value="signup" /> or <a href="#" t:type="pagelink" t:page="index">cancel</a>
 			</div>
 
     	</form>

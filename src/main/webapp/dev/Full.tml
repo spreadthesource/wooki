@@ -2,10 +2,12 @@
 
 <div id="error-box" style="display: none;">
 	<div id="error-list">
-		<ul class="error-list wrapper">
-			<li>Error one.....</li>
-			<li>Error two.....</li>
-		</ul>
+		<div class="error-list shadowed">
+			<ul class="wrapper">
+				<li>Error one.....</li>
+				<li>Error two.....</li>
+			</ul>
+		</div>
 	</div>
 </div>
 

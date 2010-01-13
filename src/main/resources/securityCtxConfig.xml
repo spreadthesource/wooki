@@ -182,6 +182,7 @@
 				<value>chapter</value>
 				<value>chapter/index</value>
 				<value>dev/full</value>
+				<value>searchresult</value>
 			</list>
 		</constructor-arg>
 	</bean>

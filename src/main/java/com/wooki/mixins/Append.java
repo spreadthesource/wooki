@@ -99,11 +99,13 @@ public class Append {
 		StringBuffer buff = new StringBuffer();
 		List<String> errors = form.getDefaultTracker().getErrors();
 		if (!errors.isEmpty()) {
+			buff.append("<div class=\"error-list shadowed\">");
 			buff.append("<ul class=\"error-list wrapper\">");
 			for (String error : errors) {
 				buff.append("<li>").append(error).append("</li>");
 			}
 			buff.append("</ul>");
+			buff.append("</div>");
 			result.put("errors", true);
 		} else {
 			buff.append("Unexcepted error");

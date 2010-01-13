@@ -1,16 +1,16 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-	<section id="${clientId}" class="activity-feed radied-box">
+	<div id="${clientId}" class="feed section radied shadowed right-col x460">
 		<t:if test="displayBlock">
 			<t:delegate to="titleBlock" />
 			<p:else>
-				<h1>${title}</h1>
+				<h2>${title}</h2>
 			</p:else>
 		</t:if>
         <t:loop source="activities" value="current">
     		<t:delegate to="activityBlock" />
 		</t:loop>
-    </section>
+    </div>
 
 	<t:block id="bookActivity">
 		<t:activity.book t:activity="current" />

@@ -1,10 +1,12 @@
 package com.wooki.base;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.domain.biz.BookManager;
@@ -33,7 +35,11 @@ public class BookBase {
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;
 
+	@Property
 	private SimpleDateFormat format = DateUtils.getDateFormat();
+
+	@Property
+	private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
 
 	private Book book;
 
@@ -151,14 +157,6 @@ public class BookBase {
 
 	public void setBook(Book book) {
 		this.book = book;
-	}
-
-	public SimpleDateFormat getFormat() {
-		return format;
-	}
-
-	public void setFormat(SimpleDateFormat format) {
-		this.format = format;
 	}
 
 }

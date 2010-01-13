@@ -131,14 +131,23 @@ small { font-size: 12px; font-style:italic;}
 #teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
 #teasing em { font-size: 14px;}
 
+#author-feed li { padding-bottom: 10px; }
+#collaborator-feed { padding-bottom: 10px; }
+
 /*****
  * NOT BOOK PAGES
  */
 
 /* feeds */
 .feed .first { border-top:0px }
-.feed  ul { list-style:none; padding: 0px; margin:0px; }
+.feed ul { list-style:none; padding: 0px; margin:0px; }
 .feed li { border-top:1px solid #C9BB9B; padding: 5px 0px; }
+
+/* info */
+.info ul { list-style:none; padding: 0px; margin:0px; }
+.info li { display: block; padding: 5px;}
+.info em { color: #6E6D65; font-style: normal }
+.info span { float:left; width: 120px; color: #6E6D65; font-style: normal; }
 
 /* forms */
 .form-footer { background:#C9BB9B; border:0px; border-top:1px solid #6E6D65; padding:10px; color:#6E6D65; text-align:center; margin:0px -10px -10px -10px; border-bottom-left-radius: 10px; -moz-border-radius-bottomleft: 10px; -webkit-border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; -moz-border-radius-bottomright: 10px; -webkit-border-bottom-right-radius: 10px; }

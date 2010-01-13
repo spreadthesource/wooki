@@ -1,16 +1,14 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-	<div class="activity-row">
-		<div class="activity-meta">
-			<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em>has ${activity.type} a chapter</em><t:lastModifiedFormatter t:time="activity.creationDate?.time" />
-		</div>
-		<div class="activity-body">
+	<li class="${style}">
+		<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em> has ${activity.type} a chapter </em><t:lastModifiedFormatter t:time="activity.creationDate?.time" />
+		<blockquote>
 			<t:if test="displayLink">
 				<a href="#" t:type="pagelink" t:page="chapter/Index" t:context="chapterCtx">${activity?.chapter?.title}</a>
 				<p:else>
 					${activity?.chapter?.title}
 				</p:else>
 			</t:if>
-			<em>in book</em><a href="#" t:type="pagelink" t:page="book/Index" t:context="activity?.chapter?.book?.id">${activity?.chapter?.book?.title}</a>
-		</div>
-	</div>
+			<em> in book </em><a href="#" t:type="pagelink" t:page="book/Index" t:context="activity?.chapter?.book?.id">${activity?.chapter?.book?.title}</a>
+		</blockquote>
+	</li>
 </t:container>

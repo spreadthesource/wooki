@@ -279,12 +279,20 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 		return bookDao.listByTitle(title);
 	}
 
-	public List<Book> listByUser(String userName) {
+	public List<Book> listByOwner(String userName) {
 		User author = authorDao.findByUsername(userName);
 		if (author != null) {
-			return bookDao.listByAuthor(author.getId());
+			return bookDao.listByOwner(author.getId());
 		}
 		return null;
 	}
 
+	public List<Book> listByCollaborator(String userName) {
+		User author = authorDao.findByUsername(userName);
+		if (author != null) {
+			return bookDao.listByCollaborator(author.getId());
+		}
+		return null;
+	}
+	
 }

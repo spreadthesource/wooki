@@ -113,4 +113,15 @@
 	</form>
 </div>
 
+<div class="clearer" />
+
+<div class="info section shadowed left-col x300">
+	<h2>john <em>(John Doe)</em></h2>
+	<ul>
+		<li><span>Name</span>John Doe</li>
+		<li><span>Email</span>john.doe@gmail.com</li>
+		<li><span>Member since</span>December 10 </li>
+	</ul>
+</div>
+
 </html>

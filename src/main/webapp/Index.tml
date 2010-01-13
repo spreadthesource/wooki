@@ -4,30 +4,34 @@
 
 	<!-- Block displayed when there is logged user or a profile requested -->    
     <t:block id="userBlock">
-    	<div class="section left-col x300">
+		<div class="info section shadowed left-col x300">
 			<h2>${user.username} <em>(${user.fullname})</em></h2>
-    		<div id="author-description"> 
-	    		<p class="first-row">
-	    			<span class="label">Name</span><span class="value">${user.username}</span>
-	    		</p>
-	    		<p>
-	    			<span class="label">Email</span><span class="value">${user.email}</span>
-	    		</p>
-	    		<p>
-	    			<span class="label">Member since</span><span class="value">${user.creationDate}</span>
-	    		</p>
-    		</div>
-    	</div>
+			<ul>
+				<li><span>Name</span>${user.username}</li>
+				<li><span>Email</span>${user.email}</li>
+				<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
+			</ul>
+		</div>
         <t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity"/>
-    	<div id="author-feed" class="section left-col x300">
-            <h1>${user.username}'s books</h1>
-            <ol>
-            	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
-                    <li>
+    	<div id="author-feed" class="feed section shadowed left-col x300">
+            <h2>${user.username}'s books</h2>
+            <ul>
+            	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
+                    <li class="${style}">
                     	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
             		</li>
             	</t:loop>
-            </ol>
+            </ul>
+    	</div>
+    	<div id="collaborator-feed" class="feed section shadowed left-col x300">
+            <h2>${user.username}'s collaboration</h2>
+            <ul>
+            	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
+                    <li class="${style}">
+                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+            		</li>
+            	</t:loop>
+            </ul>
     	</div>
     </t:block>          
 

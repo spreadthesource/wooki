@@ -44,13 +44,21 @@ public interface BookDAO extends GenericDAO<Book, Long> {
 	List<Book> listByTitle(String title);
 
 	/**
-	 * 
+	 * List the book own by one author
 	 * 
 	 * @param id
 	 * @return
 	 */
-	List<Book> listByAuthor(Long id);
+	List<Book> listByOwner(Long id);
 
+	/**
+	 * List all the book on which a user has worked.
+	 *
+	 * @param id
+	 * @return
+	 */
+	List<Book> listByCollaborator(Long id);
+	
 	/**
 	 * Verify if an author owns a book. An author has lesser privileges than the
 	 * owner.

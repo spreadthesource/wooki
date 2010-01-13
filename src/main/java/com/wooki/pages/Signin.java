@@ -40,6 +40,17 @@ public class Signin {
 
 	private boolean failed = false;
 
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public void onActivate() {
+	}
+
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public void onActivate(String extra) {
+		if (extra.equals("failed")) {
+			failed = true;
+		}
+	}
+
 	@SetupRender
 	public void setup() {
 		loginUrl = source.getLoginUrl();
@@ -49,10 +60,4 @@ public class Signin {
 		return failed;
 	}
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void onActivate(String extra) {
-		if (extra.equals("failed")) {
-			failed = true;
-		}
-	}
 }

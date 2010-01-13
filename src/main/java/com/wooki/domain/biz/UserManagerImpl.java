@@ -25,9 +25,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ibm.icu.util.Calendar;
+import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.AccountActivity;
+import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.services.WookiModule;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
@@ -36,6 +40,9 @@ public class UserManagerImpl implements UserManager {
 
 	@Autowired
 	private UserDAO authorDao;
+
+	@Autowired
+	private ActivityDAO activityDao;
 
 	@Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
 	public void addUser(User author) throws UserAlreadyException {
@@ -50,6 +57,13 @@ public class UserManagerImpl implements UserManager {
 		author.setCreationDate(new Date());
 		author.setPassword(encoder.encodePassword(pass, WookiModule.SALT));
 		authorDao.create(author);
+
+		AccountActivity aa = new AccountActivity();
+		aa.setCreationDate(Calendar.getInstance().getTime());
+		aa.setType(AccountEventType.JOIN);
+		aa.setUser(author);
+		this.activityDao.create(aa);
+
 	}
 
 	public User findByUsername(String username) {

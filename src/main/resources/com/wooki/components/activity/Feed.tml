@@ -7,21 +7,25 @@
 				<h2>${title}</h2>
 			</p:else>
 		</t:if>
-        <t:loop source="activities" value="current">
+        <t:loop source="activities" value="current" index="loopIdx">
     		<t:delegate to="activityBlock" />
 		</t:loop>
     </div>
 
+	<t:block id="accountActivity">
+		<t:activity.account t:activity="current" t:style="prop:currentStyle" />
+	</t:block>
+
 	<t:block id="bookActivity">
-		<t:activity.book t:activity="current" />
+		<t:activity.book t:activity="current" t:style="prop:currentStyle" />
 	</t:block>
 
 	<t:block id="chapterActivity">
-		<t:activity.chapter t:activity="current" />
+		<t:activity.chapter t:activity="current" t:style="prop:currentStyle" />
 	</t:block>
 	
 	<t:block id="commentActivity">
-		<t:activity.comment t:activity="current" />
+		<t:activity.comment t:activity="current" t:style="prop:currentStyle" />
 	</t:block>
 
 </t:container>

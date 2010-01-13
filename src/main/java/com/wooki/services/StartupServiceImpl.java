@@ -59,8 +59,8 @@ public class StartupServiceImpl implements StartupService {
 			userManager.addUser(ccordenier);
 
 			User gounthar = new User();
-			gounthar.setEmail("gounthar@gmail.com");
-			gounthar.setUsername("gounthar");
+			gounthar.setEmail("bruno@gmail.com");
+			gounthar.setUsername("bverachten");
 			gounthar.setPassword("password");
 			gounthar.setFullname("Bruno V.");
 			userManager.addUser(gounthar);

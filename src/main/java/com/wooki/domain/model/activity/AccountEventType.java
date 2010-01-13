@@ -14,16 +14,22 @@
 // limitations under the License.
 //
 
-package com.wooki;
+package com.wooki.domain.model.activity;
 
-/**
- * Describe the type of activity to display by the activity component.
- *
- * @author ccordenier
- *
- */
-public enum ActivityType {
+import org.apache.tapestry5.ioc.Messages;
+import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 
-	USER, CO_AUTHOR, USER_PUBLIC, BOOK_CREATION, ACCOUNT;
-	
+import com.wooki.services.utils.LastActivityMessage;
+
+public enum AccountEventType {
+
+	JOIN;
+
+	private final static Messages MESSAGES = MessagesImpl.forClass(LastActivityMessage.class);
+
+	@Override
+	public String toString() {
+		return MESSAGES.get(super.toString());
+	}
+
 }

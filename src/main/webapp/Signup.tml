@@ -5,7 +5,7 @@
 		<h2>Create your account</h2>
 		<h3>Start getting active on wooki</h3>
 
-    	<form t:type="form" class="full-form" t:id="signupForm" t:clientValidation="false">
+    	<form t:type="form" class="full-form" t:id="signupForm">
 
     		<t:errors />
     		<table>

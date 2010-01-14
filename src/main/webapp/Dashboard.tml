@@ -1,43 +1,39 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
 	<t:if t:test="firstAccess">
-		<section id="first-access" class="radied-box">
+		<div id="first-access" class="feed section shadowed left-col x300">
 			<h1>Thank you for creating your account on Wooki !</h1>
 			<p>
 				Welcome to Wooki, now you have created your account,
 				you will be able to create new Book and collaborate with other Wooki users.
 				Simply fill the 'Book Title' field and click on 'Create Book' to create your first book.
 			</p>
-		</section>
+		</div>
 	</t:if>
 
-	<section id="author-feed" class="activity-feed radied-box">
-		<h1>${user.username}'s books</h1>
-		<div>
-			<form t:type="form" t:id="createBookForm">
-				<p class="label">
-					<t:label t:for="bookTitle" />
-				</p>
-				<p>
-					<input t:type="textfield" t:id="bookTitle" class="form-field" /> <t:submit class="small-active-button radied-box" t:value="Create" />
-				</p>
-			</form>
-		</div>
-        <ol>
+	<div id="user-books" class="feed section shadowed left-col x300">
+		<h2>Create a new Book</h2>
+		<form t:type="form" t:id="createBookForm" class="small-form">
+			<table>
+				<tr>
+					<td>
+						<input t:type="textfield" t:id="bookTitle" />
+					</td>
+				</tr>
+			</table>
+			<div class="form-submit">
+				<t:submit class="btn-active" t:value="Create" /> or <a href="#" t:type="pagelink" t:page="dashboard" t:mixins="ResetFormOnClick">cancel</a>
+			</div>
+		</form>
+        <ul>
 			<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
             	<li id="ent-${currentBook.id}">
-            		<nav id="book-dashboard-nav">
-            			<ul>
-            				<li><a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a></li>
-            				<t:security.ifOwnerOfBook t:bookId="currentBook.id">
-            					<li><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></li>
-            				</t:security.ifOwnerOfBook>
-            			</ul>
-            		</nav>
+					<span><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></span>
+       				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
          		</li>
          	</t:loop>
-       	</ol>
-    </section>
+       	</ul>
+    </div>
 
 	<t:block t:id="titleBlock">
 		<div class="radied-box" id="dashboard-feed-title">

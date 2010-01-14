@@ -135,13 +135,20 @@ small { font-size: 12px; font-style:italic;}
 #collaborator-feed { padding-bottom: 10px; }
 
 /*****
+ * DASHBOARD
+ */
+#user-books ul { }
+#user-books li { border: none; padding: 5px; }
+#user-books span { float: right }
+
+/*****
  * NOT BOOK PAGES
  */
 
 /* feeds */
 .feed .first { border-top:0px }
 .feed ul { list-style:none; padding: 0px; margin:0px; }
-.feed li { border-top:1px solid #C9BB9B; padding: 5px 0px; }
+.feed li { border-top:1px solid #C9BB9B; padding: 10px 0px; }
 
 /* info */
 .info ul { list-style:none; padding: 0px; margin:0px; }
@@ -178,3 +185,9 @@ small { font-size: 12px; font-style:italic;}
 #table-of-contents li { display:block; padding:10px; list-style:none;}
 #table-of-contents h3 { width: 500px; float:left;}
 .last-update { margin:0px; padding:0px; line-height:20px; text-align:right; color:#6E6D65;}
+
+/*****
+ * Tapestry overrides
+ */
+img.t-error-icon { background:transparent repeat scroll 0 0;height:0px; margin-left:0px; width:0px; }
+input.t-error, textarea.t-error { border: 1px solid red;box-shadow: 0px 0px 5px red; -webkit-box-shadow: 0px 0px 5px red; -moz-box-shadow: 0px 0px 5px red; color: }

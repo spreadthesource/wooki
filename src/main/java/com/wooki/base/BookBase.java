@@ -78,11 +78,11 @@ public class BookBase {
 	}
 
 	@SetupRender
-	public boolean checkResource() {
+	public Object checkResource() {
 		if (this.resourceNotFound) {
 			return false;
 		}
-		return true;
+		return null;
 	}
 
 	/**

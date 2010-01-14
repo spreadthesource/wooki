@@ -112,6 +112,22 @@ jQuery.extend(Tapestry.Initializer,{
 	},
 	
 	/**
+	 * This method observe a link click event and reset the related form element.
+	 * 
+	 */
+	resetFormOnClick : function(lnkId, formId) {
+		$(lnkId).observe('click', function(event) {
+			
+			Event.stop(event);
+			
+			$(formId).reset();
+	        
+	        return false;
+			
+		});
+	},
+	
+	/**
 	 * This method overrides the update method to insert new content instead of
 	 * replacing current content.
 	 * 

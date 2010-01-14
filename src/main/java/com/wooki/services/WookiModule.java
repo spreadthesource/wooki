@@ -16,10 +16,16 @@
 
 package com.wooki.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.internal.services.CheckForUpdatesFilter;
+import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
+import org.apache.tapestry5.internal.services.RequestErrorFilter;
+import org.apache.tapestry5.internal.services.StaticFilesFilter;
+import org.apache.tapestry5.internal.services.URLRewriterRequestFilter;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -28,26 +34,37 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
+import org.apache.tapestry5.ioc.annotations.IntermediateType;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.ioc.util.TimeInterval;
 import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClasses;
+import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.RequestFilter;
+import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
+import org.apache.tapestry5.services.Traditional;
+import org.apache.tapestry5.services.URLRewriter;
+import org.apache.tapestry5.services.UpdateListenerHub;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
+import com.wooki.services.exception.HttpErrorException;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
@@ -110,6 +127,36 @@ public class WookiModule<T> {
 	 */
 	public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
 		filters.add("ViewRefererFilter", vrFilter);
+	}
+
+	public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration) {
+
+		RequestFilter sendErrorFilter = new RequestFilter() {
+			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
+				try {
+					return handler.service(request, response);
+				} catch (HttpErrorException htex) {
+					response.sendError(htex.getHttpError().getStatus(), htex.getHttpError().getMessage());
+					return true;
+				} catch (Throwable ex) {
+					return false;
+				}
+			}
+		};
+
+		configuration.add("SendErrorFilter", sendErrorFilter, "after:EndOfRequest", "after:ErrorFilter");
+
+	}
+
+	/**
+	 * Allow to return error code instance.
+	 * 
+	 * @param componentInstanceProcessor
+	 * @param configuration
+	 */
+	public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
+			MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
+		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
 	}
 
 	/**

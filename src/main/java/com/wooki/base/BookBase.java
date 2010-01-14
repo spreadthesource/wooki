@@ -1,5 +1,6 @@
 package com.wooki.base;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -7,12 +8,15 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Response;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Publication;
+import com.wooki.services.HttpError;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -25,6 +29,9 @@ public class BookBase {
 
 	/** Used to display the working copy of a chapter */
 	protected static final String LAST = "last";
+
+	@Inject
+	private Response response;
 
 	@Inject
 	private BookManager bookManager;
@@ -53,18 +60,29 @@ public class BookBase {
 
 	private String revision;
 
+	private boolean resourceNotFound;
+
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBookBase(Long bookId) {
+	public Object setupBookBase(Long bookId) throws IOException {
 		this.bookId = bookId;
 
 		// Check resource exists
 		this.book = this.bookManager.findById(this.bookId);
 
 		if (this.book == null) {
-			return com.wooki.pages.Index.class;
+			resourceNotFound = true;
+			return new HttpError(404, "Resource not found");
 		}
 
 		return null;
+	}
+
+	@SetupRender
+	public boolean checkResource() {
+		if (this.resourceNotFound) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

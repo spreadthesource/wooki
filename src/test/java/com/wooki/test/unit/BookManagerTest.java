@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.test;
+package com.wooki.test.unit;
 
 import java.util.List;
 
@@ -166,14 +166,14 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 	 */
 	@Test
 	public void testListBookByUser() {
-		List<Book> books = bookManager.listByUser("john");
+		List<Book> books = bookManager.listByOwner("john");
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has one book");
 	}
 	
 	@Test
 	public void testOwnerOfBook() {
-		List<Book> books = bookManager.listByUser("john");
+		List<Book> books = bookManager.listByOwner("john");
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has two book");
 		securityCtx.log(this.userManager.findByUsername("john"));

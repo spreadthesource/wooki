@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.services.security;
+package com.wooki.services.security.spring;
 
 import java.util.Map;
 
@@ -37,6 +37,7 @@ import org.springframework.security.ConfigAttributeDefinition;
 import org.springframework.security.intercept.web.FilterInvocation;
 import org.springframework.security.vote.AccessDecisionVoter;
 
+
 /**
  * This voter will be used to secure URL access authorization.
  * 
@@ -45,8 +46,7 @@ import org.springframework.security.vote.AccessDecisionVoter;
  */
 public class TapestryResourceVoter implements AccessDecisionVoter {
 
-	private Map<String, TapestryResourceAccessController> ac = CollectionFactory
-			.newCaseInsensitiveMap();
+	private Map<String, TapestryResourceAccessController> ac = CollectionFactory.newCaseInsensitiveMap();
 
 	private Registry tapestryRegistry;
 
@@ -58,8 +58,7 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 
 	private SessionPersistedObjectAnalyzer spoa;
 
-	public TapestryResourceVoter(
-			Map<String, TapestryResourceAccessController> configuration) {
+	public TapestryResourceVoter(Map<String, TapestryResourceAccessController> configuration) {
 		if (configuration != null) {
 			for (String key : configuration.keySet()) {
 				ac.put(key, configuration.get(key));
@@ -96,37 +95,31 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 	 * instances.
 	 * 
 	 */
-	public int vote(Authentication authentication, Object object,
-			ConfigAttributeDefinition config) {
-		
+	public int vote(Authentication authentication, Object object, ConfigAttributeDefinition config) {
+
 		// Use Tapestry services to analyze the URL
 		FilterInvocation fi = FilterInvocation.class.cast(object);
 		if (tapestryRegistry == null) {
 			initTapestry(fi.getHttpRequest().getSession().getServletContext());
 		}
-		RequestImpl request = new RequestImpl(fi.getHttpRequest(),
-				applicationCharset, spoa);
+		RequestImpl request = new RequestImpl(fi.getHttpRequest(), applicationCharset, spoa);
 		globals.storeRequestResponse(request, null);
 
 		// Secure Render request
-		PageRenderRequestParameters params = this.encoder
-				.decodePageRenderRequest(request);
+		PageRenderRequestParameters params = this.encoder.decodePageRenderRequest(request);
 		if (params != null) {
 			String logicalPageName = params.getLogicalPageName();
 			if (this.ac.containsKey(logicalPageName)) {
-				return this.ac.get(logicalPageName).isViewAuthorized(params) ? ACCESS_GRANTED
-						: ACCESS_DENIED;
+				return this.ac.get(logicalPageName).isViewAuthorized(params) ? ACCESS_GRANTED : ACCESS_DENIED;
 			}
 		}
 
 		// Secure action request
-		ComponentEventRequestParameters actionParams = this.encoder
-				.decodeComponentEventRequest(request);
+		ComponentEventRequestParameters actionParams = this.encoder.decodeComponentEventRequest(request);
 		if (actionParams != null) {
 			String logicalPageName = actionParams.getContainingPageName();
 			if (this.ac.containsKey(logicalPageName)) {
-				return this.ac.get(logicalPageName).isActionAuthorized(
-						actionParams) ? ACCESS_GRANTED : ACCESS_DENIED;
+				return this.ac.get(logicalPageName).isActionAuthorized(actionParams) ? ACCESS_GRANTED : ACCESS_DENIED;
 			}
 		}
 
@@ -140,14 +133,10 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 	 * @param ctx
 	 */
 	private void initTapestry(ServletContext ctx) {
-		this.tapestryRegistry = (Registry) ctx
-				.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
-		this.encoder = this.tapestryRegistry
-				.getService(ComponentEventLinkEncoder.class);
-		this.spoa = this.tapestryRegistry
-				.getService(SessionPersistedObjectAnalyzer.class);
-		this.applicationCharset = this.tapestryRegistry.getService(
-				SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
+		this.tapestryRegistry = (Registry) ctx.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
+		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
+		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
+		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
 		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
 	}
 

@@ -19,6 +19,7 @@ package com.wooki.domain.biz;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -71,8 +72,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException {
 
-		protectionNotNull(book);
-		protectionNotNull(username);
+		Defense.notNull(book, "book");
+		Defense.notNull(username, "username");
 
 		// Security checks
 		if(!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
@@ -97,7 +98,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public void remove(Long bookId) {
 		
-		protectionNotNull(bookId);
+		Defense.notNull(bookId, "bookId");
 
 		// Security check
 		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(bookId)) {
@@ -124,8 +125,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public void removeAuthor(Book book, Long authorId) {
 		
-		protectionNotNull(book);
-		protectionNotNull(authorId);
+		Defense.notNull(book, "book");
+		Defense.notNull(authorId, "authorId");
 
 		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
 			throw new AuthorizationException("Action not authorized");
@@ -140,7 +141,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public Book updateTitle(Book book) throws TitleAlreadyInUseException {
 		
-		protectionNotNull(book);
+		Defense.notNull(book, "book");
 
 		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(book.getId())) {
 			throw new AuthorizationException("Action not authorized");
@@ -165,8 +166,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 
 	public boolean isAuthor(Book book, String username) {
 		
-		protectionNotNull(book);
-		protectionNotNull(username);
+		Defense.notNull(book, "book");
+		Defense.notNull(username, "username");
 
 		return bookDao.isAuthor(book.getId(), username);
 	}
@@ -174,8 +175,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
 	public Chapter addChapter(Book book, String title) throws AuthorizationException {
 		
-		protectionNotNull(book);
-		protectionNotNull(title);
+		Defense.notNull(book, "book");
+		Defense.notNull(title, "title");
 		
 		if (!securityCtx.isAuthorOfBook(book.getId())) {
 			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
@@ -211,7 +212,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 	@Transactional(readOnly = false)
 	public Book create(String title) {
 
-		protectionNotNull(title);
+		Defense.notNull(title, "title");
 		
 		if (!this.securityCtx.isLoggedIn()) {
 			throw new AuthorizationException("Only logged user can create books.");
@@ -278,12 +279,20 @@ public class BookManagerImpl extends AbstractManager implements BookManager {
 		return bookDao.listByTitle(title);
 	}
 
-	public List<Book> listByUser(String userName) {
+	public List<Book> listByOwner(String userName) {
 		User author = authorDao.findByUsername(userName);
 		if (author != null) {
-			return bookDao.listByAuthor(author.getId());
+			return bookDao.listByOwner(author.getId());
 		}
 		return null;
 	}
 
+	public List<Book> listByCollaborator(String userName) {
+		User author = authorDao.findByUsername(userName);
+		if (author != null) {
+			return bookDao.listByCollaborator(author.getId());
+		}
+		return null;
+	}
+	
 }

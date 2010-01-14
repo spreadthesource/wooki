@@ -19,6 +19,7 @@ package com.wooki.components.activity;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 
+import com.wooki.base.AbstractActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.ChapterEventType;
 
@@ -28,7 +29,7 @@ import com.wooki.domain.model.activity.ChapterEventType;
  * @author ccordenier
  * 
  */
-public class Chapter {
+public class Chapter extends AbstractActivity {
 
 	@Property
 	@Parameter(allowNull = false, required = true)

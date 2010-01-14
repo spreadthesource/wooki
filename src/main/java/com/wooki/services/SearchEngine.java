@@ -32,8 +32,10 @@ import com.wooki.domain.model.Book;
 public interface SearchEngine {
 
 	/**
-	 * List the books 
-	 * @param queryString
+	 * List the books.
+	 *
+	 * @param queryString the search query string.
+	 *
 	 * @return
 	 */
 	public List<Book> findBook(String queryString);

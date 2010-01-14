@@ -45,7 +45,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * This page displays a book with its table of contents.
  */
 public class Index extends BookBase {
- 
+
 	@Inject
 	private BookManager bookManager;
 
@@ -54,7 +54,7 @@ public class Index extends BookBase {
 
 	@Inject
 	private WookiSecurityContext securityCtx;
-	
+
 	@Inject
 	private ExportService exportService;
 
@@ -96,7 +96,7 @@ public class Index extends BookBase {
 
 	@Property
 	private Block addChapterToggle;
-	
+
 	private boolean showWorkingCopyLink;
 
 	private boolean bookAuthor;
@@ -107,31 +107,20 @@ public class Index extends BookBase {
 	 * @param bookId
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBook(EventContext ctx) {
-
-		super.setupBook(ctx);
-		
-		if (ctx.getCount() > 1) {
-			String revision = ctx.get(String.class, 1);
-
-			if (!this.securityCtx.isLoggedIn()
-					|| !this.securityCtx.isAuthorOfBook(this.getBookId())
-					|| !"workingcopy".equals(revision))
-				return com.wooki.pages.Index.class;
-
+	public Object setupBookIndex(Long bookId, String revision) {
+		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()) && LAST.equals(revision)) {
 			this.setViewingRevision(true);
 		}
-
 		return null;
 	}
 
 	/**
 	 * Prepare book display.
-	 *
+	 * 
 	 */
 	@SetupRender
 	public void setupBookDisplay() {
-		
+
 		this.authors = this.getBook().getAuthors();
 
 		// List chapter infos
@@ -144,12 +133,12 @@ public class Index extends BookBase {
 
 		// Setup abstract content
 		this.setupContent(this.bookAbstractId, this.isViewingRevision());
-		
+
 		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
 		if (this.bookAuthor) {
 			this.addChapterToggle = this.addChapterLink;
 		}
-		
+
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -159,7 +148,6 @@ public class Index extends BookBase {
 		editChapter.setChapterId(chapter.getId());
 		return editChapter;
 	}
-
 
 	@OnEvent(value = EventConstants.ACTION, component = "showAddChapterField")
 	public Object toggleAddChapter() {
@@ -181,12 +169,11 @@ public class Index extends BookBase {
 	public Long retrieveBookId() {
 		return this.getBookId();
 	}
-	
+
 	public boolean isPublished() {
 		long chapterId = currentChapter.getId();
 
-		Publication publication = this.chapterManager
-				.getLastPublishedPublication(chapterId);
+		Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
 
 		return (publication != null);
 	}
@@ -201,8 +188,7 @@ public class Index extends BookBase {
 	}
 
 	private final boolean hasWorkingCopy(long chapterId) {
-		Publication publication = this.chapterManager
-				.getLastPublication(chapterId);
+		Publication publication = this.chapterManager.getLastPublication(chapterId);
 		if (publication != null) {
 			boolean workingCopy = !publication.isPublished();
 			return bookAuthor && workingCopy;
@@ -220,7 +206,7 @@ public class Index extends BookBase {
 	}
 
 	public Object[] getAbstractWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), "workingcopy" };
+		return new Object[] { this.getBookId(), LAST };
 	}
 
 	/**
@@ -233,8 +219,7 @@ public class Index extends BookBase {
 	}
 
 	public Object[] getChapterWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), this.currentChapter.getId(),
-				"workingcopy" };
+		return new Object[] { this.getBookId(), this.currentChapter.getId(), LAST };
 	}
 
 }

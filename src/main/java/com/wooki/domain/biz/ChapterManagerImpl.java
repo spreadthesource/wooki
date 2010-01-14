@@ -19,6 +19,7 @@ package com.wooki.domain.biz;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -106,7 +107,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	}
 
 	public Publication getLastPublication(Long chapterId) {
-		protectionNotNull(chapterId);
+		Defense.notNull(chapterId, "chapterId");
 
 		return publicationDao.findLastRevision(chapterId);
 	}
@@ -120,7 +121,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	}
 
 	public Publication getLastPublishedPublication(Long chapterId) {
-		protectionNotNull(chapterId);
+		Defense.notNull(chapterId, "chapterId");
 
 		return publicationDao.findLastPublishedRevision(chapterId);
 	}
@@ -136,7 +137,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	@Transactional(readOnly = false)
 	public void publishChapter(Long chapterId) {
 
-		protectionNotNull(chapterId);
+		Defense.notNull(chapterId, "chapterId");
 
 		// Check security
 		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
@@ -167,7 +168,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	@Transactional(readOnly = false)
 	public void updateContent(Long chapterId, String content) {
 
-		protectionNotNull(chapterId);
+		Defense.notNull(chapterId, "chapterId");
+		Defense.notNull(content, "content");
 
 		// Security check
 		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
@@ -205,7 +207,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	@Transactional(readOnly = false)
 	public void remove(Long chapterId) {
 		
-		protectionNotNull(chapterId);
+		Defense.notNull(chapterId, "chapterId");
 
 		// Check security
 		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {

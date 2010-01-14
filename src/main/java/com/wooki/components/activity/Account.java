@@ -14,33 +14,24 @@
 // limitations under the License.
 //
 
-package com.wooki.services.security;
+package com.wooki.components.activity;
 
-import org.apache.tapestry5.services.ComponentEventRequestParameters;
-import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+
+import com.wooki.base.AbstractActivity;
+import com.wooki.domain.model.activity.AccountActivity;
 
 /**
- * Verify if a resource is authorized or not.
+ * Display activities.
  * 
  * @author ccordenier
  * 
  */
-public interface TapestryResourceAccessController {
+public class Account extends AbstractActivity {
 
-	/**
-	 * Check if the user is authorized to access the resource.
-	 * 
-	 * @param activationContext
-	 * @return
-	 */
-	boolean isViewAuthorized(PageRenderRequestParameters params);
-
-	/**
-	 * Check if the user is authorized to the Tapestry action.
-	 * 
-	 * @param params
-	 * @return
-	 */
-	boolean isActionAuthorized(ComponentEventRequestParameters params);
+	@Property
+	@Parameter(allowNull = false, required = true)
+	private AccountActivity activity;
 
 }

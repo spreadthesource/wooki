@@ -89,7 +89,7 @@ public class Dashboard {
 	public boolean setupListBook() {
 		if (securityCtx.isLoggedIn()) {
 			this.user = securityCtx.getAuthor();
-			this.userBooks = bookManager.listByUser(user.getUsername());
+			this.userBooks = bookManager.listByOwner(user.getUsername());
 			return true;
 		}
 		return false;

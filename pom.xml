@@ -162,36 +162,6 @@
 			<groupId>org.apache.xmlgraphics</groupId>
 			<artifactId>fop</artifactId>
 			<version>0.95</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-svg-dom</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-bridge</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-awt-util</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-gvt</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-transcoder</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-extension</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.xmlgraphics</groupId>
-					<artifactId>batik-ext</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>jaxen</groupId>
@@ -296,13 +266,6 @@
                 </includes>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>${basedir}/src/main/webapp/WEB-INF</directory>
-                <includes>
-                    <include>web.xml</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
         </resources>
 		<plugins>
 			<plugin>
@@ -361,7 +324,6 @@
 						-->
 						<append>true</append>
 					</requestLog>
-					<webXml>${project.build.outputDirectory}/web.xml</webXml>
 					<port>8081</port>
 				</configuration>
 			</plugin>
@@ -375,14 +337,6 @@
 					</additionalClasspathElements>
 				</configuration>
 			</plugin>
-			
-			<plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <webXml>${project.build.outputDirectory}/web.xml</webXml>
-                </configuration>
-            </plugin>
-
 		</plugins>
 	</build>
 
@@ -394,7 +348,7 @@
             </activation>
             <build>
                 <filters>
-                    <filter>${basedir}/src/main/config/dev.properties</filter>
+                    <filter>${basedir}/src/build/dev.properties</filter>
                 </filters>
             </build>
         </profile>
@@ -402,7 +356,7 @@
             <id>prod</id>
             <build>
                 <filters>
-                    <filter>${basedir}/src/main/config/prod.properties</filter>
+                    <filter>${basedir}/src/build/prod.properties</filter>
                 </filters>
             </build>
         </profile>

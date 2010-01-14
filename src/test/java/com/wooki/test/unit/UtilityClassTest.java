@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.test;
+package com.wooki.test.unit;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

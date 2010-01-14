@@ -36,6 +36,12 @@ public interface ImportService {
 	 */
 	Book importDocbook(Resource docbook);
 	
+	/**
+	 * Import APT file in APT format.
+	 *
+	 * @param apt
+	 * @return
+	 */
 	Book importApt(Resource apt);
 	
 }

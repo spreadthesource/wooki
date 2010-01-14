@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6 { padding: 5px 0px; }
 h1, h2 { font-family: Georgia, serif; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}
 
-h1 { font-size: 25px; text-align:center; padding:20px; }
+h1 { font-size: 25px; text-align:center; padding:20px; clear:both;}
 h2 { font-size: 23px; }
 h3 { font-size: 20px; }
 
@@ -68,6 +68,7 @@ small { font-size: 12px; font-style:italic;}
 
 .btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25);  border-top: 1px solid rgba(255,255,255, 0.25); border-bottom: 1px solid rgba(0,0,0,0.25);}
 
+/* section and positioning */
 .section { background: white; padding:10px; margin-bottom:10px;}
 .section h2 { font-family: Helvetica, Arial, sans-serif; padding:0px; padding-bottom:5px;}
 
@@ -83,6 +84,11 @@ small { font-size: 12px; font-style:italic;}
 .x400 { width: 375px; }
 .x460 { width: 435px; }
 .x500 { width: 475px; }
+
+/* nav */
+.nav { list-style: none; padding:10px;}
+.nav li { display:inline; padding:0px 10px; }
+.nav a { text-decoration: none; }
 
 
 /*****
@@ -100,9 +106,7 @@ small { font-size: 12px; font-style:italic;}
 #signin .signin-field { display:block; width:170px;}
 #signin #rememberMe {margin-left:10px;}
 
-#nav { list-style: none; float:right; padding:10px;}
-#nav li { display:inline; padding:0px 10px; }
-#nav a { text-decoration: none; }
+#nav a { text-shadow:0px 1px 1px rgba(255,255,255,0.25); }
 #nav #logout { color: #6E6D65;}
 
 #search { clear:right; float: right; padding: 20px 10px 10px 0px; width:450px; text-align:right;}
@@ -134,7 +138,7 @@ small { font-size: 12px; font-style:italic;}
 .feed li { border-top:1px solid #C9BB9B; padding: 5px 0px; }
 
 /* forms */
-.form-footer { background:#C9BB9B; border:0px; border-top:1px solid #6E6D65; padding:10px; color:#6E6D65; text-align:center; margin:0px -10px -10px -10px; border-bottom-left-radius: 10px; -moz-border-radius-bottomleft: 10px; -webkit-border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; -moz-border-radius-bottomright: 10px; -webkit-border-bottom-right-radius: 10px; }
+.form-footer { background:#C9BB9B;  border:0px; border-top:1px solid #6E6D65; padding:10px; color:#6E6D65; text-align:center; margin:0px -10px -10px -10px; border-bottom-left-radius: 10px; -moz-border-radius-bottomleft: 10px; -webkit-border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; -moz-border-radius-bottomright: 10px; -webkit-border-bottom-right-radius: 10px; }
 
 .full-form, .small-form { padding:10px 0px;}
 .full-form table th, .full-form table td { padding: 5px 5px;}
@@ -156,6 +160,8 @@ small { font-size: 12px; font-style:italic;}
 #book { background:#FFFFFF; padding:10px;  }
 
 #meta { text-align:center; color:#6E6D65; }
+
+.book-admin { background:#ddd; border:1px solid #ddd; text-shadow:0px 1px 1px rgba(255,255,255,0.5); border-bottom:0px solid #C9BB9B; padding:10px; color:#6E6D65; text-align:right; margin:-10px -10px 0px -10px; border-top-left-radius: 10px; -moz-border-radius-topleft: 10px; -webkit-border-top-left-radius: 10px; border-top-right-radius: 10px; -moz-border-radius-topright: 10px; -webkit-border-top-right-radius: 10px; }
 
 /* table of contents */
 #table-of-contents { margin: 10px; padding:0px; }

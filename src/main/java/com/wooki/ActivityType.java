@@ -24,6 +24,6 @@ package com.wooki;
  */
 public enum ActivityType {
 
-	USER, CO_AUTHOR, USER_PUBLIC, BOOK_CREATION;
+	USER, CO_AUTHOR, USER_PUBLIC, BOOK_CREATION, ACCOUNT;
 	
 }

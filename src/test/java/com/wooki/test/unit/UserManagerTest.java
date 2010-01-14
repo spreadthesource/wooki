@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.test;
+package com.wooki.test.unit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;

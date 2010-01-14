@@ -29,5 +29,10 @@ public class DateUtils {
 	public static SimpleDateFormat getDateFormat() {
 		return new SimpleDateFormat("dd MMMMM yyyy");
 	}
+	
+	public static SimpleDateFormat getSinceDateFormat() {
+		return new SimpleDateFormat("MMMMMM dd, yyyy");
+	}
+
 
 }

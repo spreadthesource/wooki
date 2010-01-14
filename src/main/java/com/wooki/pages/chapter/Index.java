@@ -17,7 +17,6 @@
 package com.wooki.pages.chapter;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.EventContext;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
@@ -30,7 +29,7 @@ import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Display a chapter and provide link to version/revision if needed.
- *
+ * 
  * @author ccordenier
  * 
  */
@@ -41,7 +40,7 @@ public class Index extends BookBase {
 
 	@Inject
 	private WookiSecurityContext securityCtx;
-	
+
 	private Long chapterId;
 
 	@Property
@@ -60,35 +59,30 @@ public class Index extends BookBase {
 	private String nextTitle;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBook(EventContext ctx) {
+	public Object setupChapter(Long bookId, Long chapterId) {
 
-		super.setupBook(ctx);
-		
-		// Check parameter numbers
-		if (ctx.getCount() < 2) {
-			return com.wooki.pages.Index.class;
-		}
-
-		this.chapterId = ctx.get(Long.class, 1);
-
-		if (ctx.getCount() > 2) {
-			String revision = ctx.get(String.class, 2);
-			
-			if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(this.getBookId()) || !"workingcopy".equals(revision))
-				return redirectToBookIndex();
-
-			this.setViewingRevision(true);
-			this.setRevision(revision);
+		// Get book related information
+		this.chapterId = chapterId;
+		this.chapter = this.chapterManager.findById(chapterId);
+		if (this.chapter == null) {
+			return redirectToBookIndex();
 		}
 
 		return null;
 	}
 
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public void setupChapter(Long bookId, Long chapterId, String revision) {
+		this.chapterId = chapterId;
+
+		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()) && LAST.equals(revision)) {
+			this.setViewingRevision(true);
+			this.setRevision(revision);
+		}
+	}
+
 	@SetupRender
 	public void setupDisplay() {
-
-		// Get book related information
-		this.chapter = this.chapterManager.findById(chapterId);
 
 		// Prepare previous and next links
 		Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
@@ -104,7 +98,7 @@ public class Index extends BookBase {
 		}
 
 		this.setupContent(this.chapterId, this.isViewingRevision());
-		
+
 	}
 
 	@OnEvent(value = "delete")
@@ -112,31 +106,31 @@ public class Index extends BookBase {
 		this.chapterManager.remove(chapterId);
 		return this.redirectToBookIndex();
 	}
-	
+
 	public Object[] getEditCtx() {
 		return new Object[] { this.getBookId(), this.chapterId };
 	}
 
 	/**
 	 * Get context for previous link.
-	 *
+	 * 
 	 * @return Book id, previous chapter id and revision
 	 */
 	public Object[] getPreviousCtx() {
 		if (this.isViewingRevision()) {
-			return new Object[] { this.getBookId(), this.previous, "workingcopy" };
+			return new Object[] { this.getBookId(), this.previous, LAST };
 		}
 		return new Object[] { this.getBookId(), this.previous };
 	}
 
 	/**
 	 * Get context for next link.
-	 *
+	 * 
 	 * @return Book id, previous chapter id and revision
 	 */
 	public Object[] getNextCtx() {
 		if (this.isViewingRevision()) {
-			return new Object[] { this.getBookId(), this.next, "workingcopy" };
+			return new Object[] { this.getBookId(), this.next, LAST };
 		}
 		return new Object[] { this.getBookId(), this.next };
 	}

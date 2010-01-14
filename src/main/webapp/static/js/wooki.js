@@ -71,10 +71,7 @@ Tapestry.Append = Class.create({
 	 */
 	processReply : function(reply, position) {
 		if (reply.errors != undefined) {
-			var errorDiv = this.element.down('.append-errors');
-			errorDiv.update(reply.errors);
-			errorDiv.show();
-			errorDiv.fade({duration : 5.0});
+			Tapestry.loadScriptsInReply(reply, function(){});
 		} else {
 			Tapestry.loadScriptsInReply(reply, function() {
 				if(position == 'bottom') {
@@ -332,7 +329,7 @@ jQuery.extend(Tapestry.Initializer,{
 				return;
 			}
 		});
-	}	
+	}
 });
 
 // Do not not desactivate Zone after a link is clicked.

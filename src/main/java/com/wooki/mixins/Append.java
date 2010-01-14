@@ -30,9 +30,12 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.internal.InternalComponentResources;
+import org.apache.tapestry5.internal.services.PartialMarkupDocumentLinker;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.Component;
+import org.apache.tapestry5.services.AssetSource;
+import org.apache.tapestry5.services.Request;
 
 /**
  * Append content instead of replacing it.
@@ -52,7 +55,13 @@ public class Append {
 	private String to;
 
 	@Inject
+	private AssetSource assetSource;
+
+	@Inject
 	private RenderSupport support;
+
+	@Inject
+	private Request request;
 
 	@InjectContainer
 	private Form form;
@@ -68,7 +77,7 @@ public class Append {
 		if (formResources.isBound("zone")) {
 			throw new IllegalStateException("'Append' mixin cannot be used if 'zone' parameter is set on form");
 		}
-		Object[] context =  (Object[])InternalComponentResources.class.cast(formResources).getParameterAccess("context").read(new Object[]{}.getClass());
+		Object[] context = (Object[]) InternalComponentResources.class.cast(formResources).getParameterAccess("context").read(new Object[] {}.getClass());
 		Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
 		support.addInit("appendToZone", link.toAbsoluteURI(), form.getClientId(), to, position);
 	}
@@ -80,19 +89,35 @@ public class Append {
 	 */
 	@OnEvent(value = EventConstants.FAILURE)
 	public Object checkErrors() {
+
+		PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
+		linker.addStylesheetLink(assetSource.getContextAsset("context:/static/css/jquery.notifyBar.css", request.getLocale()).toClientURL(), null);
+		linker.addScriptLink(assetSource.getContextAsset("/static/js/jquery.notifyBar.js", request.getLocale()).toClientURL());
+		linker.addScriptLink(assetSource.getContextAsset("/static/js/error.js", request.getLocale()).toClientURL());
+
 		JSONObject result = new JSONObject();
 		StringBuffer buff = new StringBuffer();
 		List<String> errors = form.getDefaultTracker().getErrors();
 		if (!errors.isEmpty()) {
-			buff.append("<ul>");
+			buff.append("<div class=\"error-list shadowed\">");
+			buff.append("<ul class=\"error-list wrapper\">");
 			for (String error : errors) {
 				buff.append("<li>").append(error).append("</li>");
 			}
 			buff.append("</ul>");
-			result.put("errors", buff.toString());
+			buff.append("</div>");
+			result.put("errors", true);
 		} else {
 			buff.append("Unexcepted error");
+			result.put("errors", true);
 		}
+		
+		// Add error messages
+		JSONObject html = new JSONObject();
+		html.put("html", buff.toString());
+		linker.addScript(String.format("Tapestry.Initializer.initErrorMessage(%s);", html.toString()));
+
+		linker.commit(result);
 		return result;
 	}
 

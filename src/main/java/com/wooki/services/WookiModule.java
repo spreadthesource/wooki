@@ -27,14 +27,21 @@ import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
+import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
+import org.apache.tapestry5.services.ComponentClasses;
+import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.Context;
+import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.userdetails.UserDetailsService;
@@ -42,6 +49,9 @@ import org.springframework.security.userdetails.UserDetailsService;
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
 import com.wooki.services.internal.TapestryOverrideModule;
+import com.wooki.services.security.ActivationContextManager;
+import com.wooki.services.security.ActivationContextManagerImpl;
+import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
 
 @SubModule(TapestryOverrideModule.class)
@@ -52,6 +62,12 @@ public class WookiModule<T> {
 	 */
 	public static final String VIEW_REFERER = "tapestry-view.referer";
 
+	private final InvalidationEventHub classesInvalidationEventHub;
+
+	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
+		this.classesInvalidationEventHub = classesInvalidationEventHub;
+	}
+
 	/**
 	 * Use to encrypt the user password
 	 */
@@ -60,7 +76,6 @@ public class WookiModule<T> {
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
-	
 		conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
 	}
 
@@ -78,11 +93,35 @@ public class WookiModule<T> {
 		binder.bind(WookiViewRefererFilter.class);
 	}
 
+	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
+		// This covers invalidations due to changes to classes
+		classesInvalidationEventHub.addInvalidationListener(service);
+
+		return service;
+	}
+
+	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
+		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"), "before:*");
+		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"), "before:*");
+	}
+
 	/**
 	 * Store the last view page in session.
 	 */
 	public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
 		filters.add("ViewRefererFilter", vrFilter);
+	}
+
+	/**
+	 * Add a filter to secure activation context in request.
+	 * 
+	 * @param filters
+	 * @param manager
+	 * @param response
+	 */
+	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
+			Response response) {
+		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
 	}
 
 	/**
@@ -93,7 +132,7 @@ public class WookiModule<T> {
 	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
 		excludePattern.add("signin");
 		excludePattern.add("signup");
-		excludePattern.add(".*edit.*");	
+		excludePattern.add(".*edit.*");
 	}
 
 	/**

@@ -74,7 +74,7 @@ public class Layout extends LayoutBase {
 		}
 	}
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "searchForm")
+	@OnEvent(value = EventConstants.SUCCESS, component = "search")
 	private Object search() {
 		searchResult.search(queryString);
 		return searchResult;

@@ -38,6 +38,15 @@ public class Signin {
 
 	private boolean failed = false;
 
+	public void onActivate() {
+	}
+
+	public void onActivate(String extra) {
+		if (extra.equals("failed")) {
+			failed = true;
+		}
+	}
+
 	@SetupRender
 	public void setup() {
 		loginUrl = source.getLoginUrl();
@@ -47,9 +56,7 @@ public class Signin {
 		return failed;
 	}
 
-	void onActivate(String extra) {
-		if (extra.equals("failed")) {
-			failed = true;
-		}
+	public String[] getMessages() {
+		return new String[] { "Wrong username or password" };
 	}
 }

@@ -135,8 +135,16 @@ public interface BookManager {
 	 * @param userName
 	 * @return
 	 */
-	List<Book> listByUser(String userName);
+	List<Book> listByOwner(String userName);
 
+	/**
+	 * List all the book on which a user has collaborated.
+	 *
+	 * @param userName
+	 * @return
+	 */
+	List<Book> listByCollaborator(String userName);
+	
 	/**
 	 * Find all the books matching a title.
 	 * 

@@ -7,7 +7,7 @@ import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.services.Response;
 
 /**
- * Used to print a book from an action link. 
+ * Can be used to print a book from an action link.
  *
  * @author ccordenier
  *

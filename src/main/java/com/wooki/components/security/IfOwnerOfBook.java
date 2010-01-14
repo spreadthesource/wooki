@@ -23,7 +23,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Verify if the current logged user is author of the requested book.
+ * Verify if the current logged user is owner of the requested book.
  *
  * @author ccordenier
  *

@@ -27,6 +27,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.ActivityType;
 import com.wooki.domain.biz.ActivityManager;
+import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
@@ -73,30 +74,37 @@ public class Feed<T extends Activity> {
 	@Inject
 	private Block commentActivity;
 
+	@Inject
+	private Block accountActivity;
+
 	@Property
 	private List<Activity> activities;
 
 	@Property
 	private Activity current;
 
+	@Property
+	private int loopIdx;
+
 	@SetupRender
 	public void setupActivitiesList() {
-		if (userId == null) {
-			this.activities = this.activityManager
-					.listBookCreationActivity(nbElts);
+		if (ActivityType.BOOK_CREATION.equals(type)) {
+			this.activities = this.activityManager.listBookCreationActivity(nbElts);
 		} else {
-			if (ActivityType.USER == type) {
-				this.activities = this.activityManager.listActivityOnBook(
-						nbElts, userId);
+			if (ActivityType.USER.equals(type)) {
+				this.activities = this.activityManager.listActivityOnBook(nbElts, userId);
 			} else {
-				if (ActivityType.CO_AUTHOR == type) {
-					this.activities = this.activityManager
-							.listActivityOnUserBooks(nbElts, userId);
+				if (ActivityType.CO_AUTHOR.equals(type)) {
+					this.activities = this.activityManager.listActivityOnUserBooks(nbElts, userId);
 				} else {
-					if (ActivityType.USER_PUBLIC == type) {
-						this.activities = this.activityManager
-								.listUserActivity(nbElts, userId);
+					if (ActivityType.USER_PUBLIC.equals(type)) {
+						this.activities = this.activityManager.listUserActivity(nbElts, userId);
+					} else {
+						if (ActivityType.ACCOUNT.equals(type)) {
+							this.activities = this.activityManager.listAccountActivity(nbElts, userId);
+						}
 					}
+
 				}
 			}
 		}
@@ -109,19 +117,27 @@ public class Feed<T extends Activity> {
 	 */
 	public Block getActivityBlock() {
 		if (current instanceof ChapterActivity) {
-			return chapterActivity;
+			return this.chapterActivity;
 		} else {
 			if (current instanceof BookActivity) {
-				return bookActivity;
+				return this.bookActivity;
 			} else {
 				if (current instanceof CommentActivity) {
-					return commentActivity;
+					return this.commentActivity;
+				} else {
+					if (current instanceof AccountActivity) {
+						return this.accountActivity;
+					}
 				}
 			}
 		}
 		return null;
 	}
 
+	public String getCurrentStyle() {
+		return this.loopIdx == 0 ? "first" : null;
+	}
+	
 	public boolean isDisplayBlock() {
 		return this.titleBlock != null;
 	}

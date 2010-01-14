@@ -19,6 +19,7 @@ package com.wooki.components.activity;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 
+import com.wooki.base.AbstractActivity;
 import com.wooki.domain.model.activity.BookActivity;
 
 /**
@@ -27,7 +28,7 @@ import com.wooki.domain.model.activity.BookActivity;
  * @author ccordenier
  * 
  */
-public class Book {
+public class Book extends AbstractActivity {
 
 	@Property
 	@Parameter(allowNull = false, required = true)

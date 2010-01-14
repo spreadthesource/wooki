@@ -1,5 +1,16 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
+<div id="error-box" style="display: none;">
+	<div id="error-list">
+		<div class="error-list shadowed">
+			<ul class="wrapper">
+				<li>Error one.....</li>
+				<li>Error two.....</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
 <div class="section radied shadowed">
 	<h2>Create your account</h2>
 	<h3>Start getting active on wooki</h3>
@@ -100,6 +111,17 @@
 		</table>
 	
 	</form>
+</div>
+
+<div class="clearer" />
+
+<div class="info section shadowed left-col x300">
+	<h2>john <em>(John Doe)</em></h2>
+	<ul>
+		<li><span>Name</span>John Doe</li>
+		<li><span>Email</span>john.doe@gmail.com</li>
+		<li><span>Member since</span>December 10 </li>
+	</ul>
 </div>
 
 </html>

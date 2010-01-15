@@ -209,8 +209,8 @@ public class Index extends BookBase {
 		return new Object[] { this.getBookId(), ChapterManager.LAST };
 	}
 
-	public Object[] getAbstractIssuesCtx() {
-		return new Object[] { this.getBookId(), this.bookAbstractId };
+	public Object[] getIssuesCtx() {
+		return new Object[] { this.getBookId(), "all" };
 	}
 	
 	/**

@@ -59,6 +59,7 @@ blockquote, pre { margin-left:30px; padding-left:10px; border-left:1px solid #C9
 pre { font-size:12px; white-space:normal; }
 
 small { font-size: 12px; font-style:italic;}
+abbr { padding-right: 3px; padding-left: 3px; }
 
 /*****
  * UTILITY CLASSES
@@ -72,8 +73,8 @@ small { font-size: 12px; font-style:italic;}
 .section { background: white; padding:10px; margin-bottom:10px;}
 .section h2 { font-family: Helvetica, Arial, sans-serif; padding:0px; padding-bottom:5px;}
 
-.left-col { float:left; margin-right:5px; }
-.right-col { float:right; margin-left:5px; }
+.left-col { float:left; margin-right:5px; clear: left; }
+.right-col { float:right; margin-left:5px; clear: right; }
 
 .clearer {clear:both;}
 
@@ -132,7 +133,7 @@ small { font-size: 12px; font-style:italic;}
 /*****
  * INDEX
  */
-#teasing-box { float:left; padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom;}
+#teasing-box, #welcome-box { float:left; padding-bottom:20px; background: url('../img/bubble-teasing.png') no-repeat 220px bottom;}
 #teasing { background:#2F2F32; color:white; padding:10px; font-family: Georgia, serif; font-size: 18px;}
 #teasing a { display:block; width: auto; text-align: center; font-family: Helvetica, Arial, sans-serif; text-decoration:none; }
 #teasing em { font-size: 14px;}
@@ -146,6 +147,14 @@ small { font-size: 12px; font-style:italic;}
 #user-books ul { }
 #user-books li { border: none; padding: 5px; }
 #user-books span { float: right }
+
+#welcome-box { margin-bottom: 10px; }
+.thanks {color: #FF7351; padding: 10px; }
+
+#dashboard-feed-title { padding : 5px 0px; }
+#dashboard-feed-title a { text-decoration: none }
+#dashboard-feed-title ul { }
+#dashboard-feed-title li { padding-right : 10px; border: none; display: inline; font-size: 16px;}
 
 /*****
  * NOT BOOK PAGES

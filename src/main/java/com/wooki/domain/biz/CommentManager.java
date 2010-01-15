@@ -58,7 +58,7 @@ public interface CommentManager {
 	 * @param bookId
 	 * @return
 	 */
-	List<Comment> listAll(Long bookId);
+	List<Comment> listForChapter(Long chapterId);
 
 	/**
 	 * List all the comments associated the given chapter.

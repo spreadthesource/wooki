@@ -4,15 +4,15 @@
 
 	<!-- Block displayed when there is logged user or a profile requested -->    
     <t:block id="userBlock">
-		<div class="info section shadowed left-col x300">
+        <div class="info section shadowed left-col x300">
 			<h2>${user.username} <em>(${user.fullname})</em></h2>
 			<ul>
-				<li><span>Name</span>${user.username}</li>
+				<li><span>Username</span>${user.username}</li>
 				<li><span>Email</span>${user.email}</li>
 				<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
 			</ul>
 		</div>
-        <t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity"/>
+		<t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity"/>
     	<div id="author-feed" class="feed section shadowed left-col x300">
             <h2>${user.username}'s books</h2>
             <ul>
@@ -32,7 +32,8 @@
             		</li>
             	</t:loop>
             </ul>
-    	</div>
+    	</div>  
+       	
     </t:block>          
 
 	<!-- Block displayed in the index default page -->

@@ -83,6 +83,7 @@
 				<entry key="/dashboard.*" value-ref="securedFilterList" />
 				<entry key="/book/settings.*" value-ref="securedFilterList" />
 				<entry key="/chapter/edit.*" value-ref="securedFilterList" />
+				<entry key="/chapter/issues.*" value-ref="securedFilterList" />
 
 				<!-- All other resources must be a public Tapestry pages -->
 				<entry key="/.*">
@@ -189,7 +190,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="accessDecisionManager" class="org.springframework.security.vote.AffirmativeBased">
+	<bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
 		<property name="decisionVoters">
 			<list>
 				<ref bean="tapestryResourceVoter" />
@@ -203,6 +204,7 @@
 			<map>
 				<entry key="chapter/edit" value-ref="isOwnerAccessController" />
 				<entry key="book/settings" value-ref="isOwnerAccessController" />
+				<entry key="chapter/issues" value-ref="isOwnerAccessController" />
 			</map>
 		</constructor-arg>
 	</bean>

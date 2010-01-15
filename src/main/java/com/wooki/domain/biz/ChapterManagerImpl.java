@@ -60,7 +60,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	private PublicationDAO publicationDao;
 
 	@Autowired
-	// TODO : to delete?
 	private DOMManager domManager;
 
 	@Autowired
@@ -106,14 +105,20 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		return this.chapterDao.findById(chapterId);
 	}
 
-	public Publication getLastPublication(Long chapterId) {
+	public Publication getRevision(Long chapterId, String revision) {
 		Defense.notNull(chapterId, "chapterId");
-
-		return publicationDao.findLastRevision(chapterId);
+		if (LAST.equalsIgnoreCase(revision) || revision == null) {
+			return publicationDao.findLastRevision(chapterId);
+		}
+		try {
+			return this.publicationDao.findById(Long.parseLong(revision));
+		} catch (NumberFormatException nfEx) {
+			throw new IllegalArgumentException("Revision number is invalid");
+		}
 	}
 
 	public String getLastContent(Long chapterId) {
-		Publication publication = getLastPublication(chapterId);
+		Publication publication = getRevision(chapterId, null);
 		if (publication != null) {
 			return publication.getContent();
 		}
@@ -122,7 +127,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	public Publication getLastPublishedPublication(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
-
 		return publicationDao.findLastPublishedRevision(chapterId);
 	}
 
@@ -175,7 +179,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) {
 			throw new AuthorizationException("Publish action not authorized");
 		}
-		
+
 		Publication publication = publicationDao.findLastRevision(chapterId);
 
 		// we check the published flag. If set, then this Publication must
@@ -206,7 +210,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	@Transactional(readOnly = false)
 	public void remove(Long chapterId) {
-		
+
 		Defense.notNull(chapterId, "chapterId");
 
 		// Check security

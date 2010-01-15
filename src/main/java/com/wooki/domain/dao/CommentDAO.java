@@ -50,7 +50,7 @@ public interface CommentDAO extends GenericDAO<Comment, Long> {
 	 * 
 	 * @return
 	 */
-	List<Object[]> listCommentsInforForPublication(Long publicationId);
+	List<Object[]> listCommentsInfoForPublication(Long publicationId);
 
 	/**
 	 * List all the comments associated to a domId in a given publication.
@@ -61,4 +61,12 @@ public interface CommentDAO extends GenericDAO<Comment, Long> {
 	 */
 	List<Comment> listForPublicationAndDomId(Long publicationId,
 			String domId);
+	
+	/**
+	 * List all the comment for a given chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	List<Comment> listForChapter(Long chapterId);
 }

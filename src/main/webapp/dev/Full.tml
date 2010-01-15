@@ -124,4 +124,22 @@
 	</ul>
 </div>
 
+<div class="clearer" />
+
+<div class="feed section shadowed wrapper">
+<h1><a href="#">Tapestry 5 : When development meet art</a></h1>
+<h2><a href="#">Installation</a></h2>
+<ul>
+	<li class="first">
+		By <a href="#">mike</a> 2 days ago. <a href="#" title="123">See revision</a>
+		<blockquote>What is social web? Are we social? Maybe, maybe not. But Wooki is definitely a truely social experience. Yeah.</blockquote>
+	</li>
+	<li>
+		By <a href="#">john</a> 2 days ago. <a href="#" title="123">See revision</a>
+		<blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit nisi sit amet purus fringilla vel laoreet risus sollicitudin. Mauris dui eros, pulvinar quis laoreet vitae, eleifend vel dolor. Sed nisl nunc, consequat a imperdiet eget, pretium eu ante.</blockquote>
+	</li>
+</ul>
+</div>
+
+
 </html>

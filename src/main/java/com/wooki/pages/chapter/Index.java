@@ -59,6 +59,18 @@ public class Index extends BookBase {
 	private String nextTitle;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object setupChapter(Long bookId, Long chapterId, String revision) {
+		this.chapterId = chapterId;
+
+		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())) {
+			this.setViewingRevision(true);
+			this.setRevision(revision);
+		}
+		
+		return null;
+	}
+	
+	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, Long chapterId) {
 
 		// Get book related information
@@ -69,16 +81,6 @@ public class Index extends BookBase {
 		}
 
 		return null;
-	}
-
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void setupChapter(Long bookId, Long chapterId, String revision) {
-		this.chapterId = chapterId;
-
-		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()) && LAST.equals(revision)) {
-			this.setViewingRevision(true);
-			this.setRevision(revision);
-		}
 	}
 
 	@SetupRender
@@ -97,7 +99,7 @@ public class Index extends BookBase {
 			this.nextTitle = (String) data[1];
 		}
 
-		this.setupContent(this.chapterId, this.isViewingRevision());
+		this.setupContent(this.chapterId, this.isViewingRevision(), this.getRevision());
 
 	}
 
@@ -118,7 +120,7 @@ public class Index extends BookBase {
 	 */
 	public Object[] getPreviousCtx() {
 		if (this.isViewingRevision()) {
-			return new Object[] { this.getBookId(), this.previous, LAST };
+			return new Object[] { this.getBookId(), this.previous, ChapterManager.LAST };
 		}
 		return new Object[] { this.getBookId(), this.previous };
 	}
@@ -130,7 +132,7 @@ public class Index extends BookBase {
 	 */
 	public Object[] getNextCtx() {
 		if (this.isViewingRevision()) {
-			return new Object[] { this.getBookId(), this.next, LAST };
+			return new Object[] { this.getBookId(), this.next, ChapterManager.LAST };
 		}
 		return new Object[] { this.getBookId(), this.next };
 	}

@@ -34,5 +34,8 @@ public class DateUtils {
 		return new SimpleDateFormat("MMMMMM dd, yyyy");
 	}
 
+	public static SimpleDateFormat getLastModified() {
+		return new SimpleDateFormat("MMMMMM dd, yyyy hh:mm:ss");
+	}
 
 }

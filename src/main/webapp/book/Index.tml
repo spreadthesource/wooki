@@ -2,8 +2,23 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter">
 
+	<t:security.ifAuthorOfBook t:bookId="bookId">
+		<div class="book-admin">
+			<ul>
+				<t:if t:test="abstractHasWorkingCopy">
+					<li><a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a></li>
+				</t:if>
+				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
+				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a></li>
+				<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:abstractIssuesCtx">Abstract Issues</a></li>
+			</ul>
+		</div>
+	</t:security.ifAuthorOfBook>
 
-
+	<ul id="exports" class="nav right-col">
+		<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a></li>
+	</ul>	  
+  
 	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
 
 	<div id="meta">
@@ -21,21 +36,6 @@
   		</p>
   		<p id="revision">Published <t:output value="prop:book?.creationDate" t:format="prop:format" /></p>
   	</div>
-	
-	<div id="book-actions">
-		<ul>
-			<t:security.ifAuthorOfBook t:bookId="bookId">
-				<t:if t:test="abstractHasWorkingCopy">
-					<li><a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a></li>
-				</t:if>
-				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
-				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a></li>
-			</t:security.ifAuthorOfBook>
-		
-			<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Print</a></li>
-
-		</ul>
-	</div>
 
 	<t:outputRaw value="content" />
 

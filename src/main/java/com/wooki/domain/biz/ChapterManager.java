@@ -28,6 +28,8 @@ import com.wooki.domain.model.Publication;
  */
 public interface ChapterManager {
 
+	public static final String LAST = "last";
+	
 	/**
 	 * Add a comment to the list of existing one.
 	 * 
@@ -75,11 +77,12 @@ public interface ChapterManager {
 	/**
 	 * Retrieve the content for a given chapter. Content is lazy loaded for the
 	 * sake of performance. TODO:
-	 * 
+	 * @param revision TODO
 	 * @param chapter
+	 * 
 	 * @return
 	 */
-	Publication getLastPublication(Long chapterId);
+	Publication getRevision(Long chapterId, String revision);
 
 	/**
 	 * Publish chapter content TODO:

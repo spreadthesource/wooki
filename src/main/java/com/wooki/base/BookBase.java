@@ -27,9 +27,6 @@ import com.wooki.services.utils.DateUtils;
  */
 public class BookBase {
 
-	/** Used to display the working copy of a chapter */
-	protected static final String LAST = "last";
-
 	@Inject
 	private Response response;
 
@@ -110,12 +107,13 @@ public class BookBase {
 	/**
 	 * This method must be called to initialize the display of a chapter. It can
 	 * be the abstract for the index page or the content of a chapter.
+	 * @param revision TODO
 	 * 
 	 */
-	protected void setupContent(Long chapterId, boolean showRevision) {
+	protected void setupContent(Long chapterId, boolean showRevision, String revision) {
 
 		// Get the publication
-		Publication publication = (showRevision) ? this.chapterManager.getLastPublication(chapterId) : this.chapterManager
+		Publication publication = (showRevision) ? this.chapterManager.getRevision(chapterId, revision) : this.chapterManager
 				.getLastPublishedPublication(chapterId);
 		if (publication != null) {
 			this.content = publication.getContent();

@@ -18,6 +18,7 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -41,7 +42,7 @@ public class CommentManagerImpl implements CommentManager {
 
 	@Autowired
 	private ActivityDAO activityDao;
-	
+
 	@Autowired
 	private WookiSecurityContext securityCtx;
 
@@ -49,12 +50,9 @@ public class CommentManagerImpl implements CommentManager {
 		return commentDao.findById(commId);
 	}
 
-	public List<Comment> listAll(Long bookId) {
-		if (bookId == null) {
-			throw new IllegalArgumentException("BookId cannot be null");
-		}
-		// TODO Aggregate for all publication.
-		return null;
+	public List<Comment> listForChapter(Long chapterId) {
+		Defense.notNull(chapterId, "chapterId");
+		return this.commentDao.listForChapter(chapterId);
 	}
 
 	public List<Comment> listOpenForPublication(Long chapterId) {
@@ -62,26 +60,21 @@ public class CommentManagerImpl implements CommentManager {
 	}
 
 	public List<Object[]> listCommentInfos(Long publicationId) {
-		return commentDao.listCommentsInforForPublication(publicationId);
+		return commentDao.listCommentsInfoForPublication(publicationId);
 	}
 
-	public List<Comment> listForPublicationAndDomId(Long publicationId,
-			String domId) {
+	public List<Comment> listForPublicationAndDomId(Long publicationId, String domId) {
 		return commentDao.listForPublicationAndDomId(publicationId, domId);
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public void removeComment(Long commId) {
 		if (!securityCtx.isAuthorOfComment(commId)) {
-			throw new AuthorizationException(
-					"User is not authorized to remove this comment : " + commId);
+			throw new AuthorizationException("User is not authorized to remove this comment : " + commId);
 		}
 
 		Comment c = this.commentDao.findById(commId);
-		if (c == null) {
-			throw new IllegalArgumentException("Comment '" + commId
-					+ "' cannot be found");
-		}
+		Defense.notNull(c, "comment");
 		this.commentDao.delete(c);
 		CommentActivity ca = new CommentActivity();
 		ca.setCreationDate(Calendar.getInstance().getTime());
@@ -93,9 +86,7 @@ public class CommentManagerImpl implements CommentManager {
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 	public Comment update(Comment comment) {
-		if(comment == null) {
-			throw new IllegalArgumentException("Comment not found");
-		}
+		Defense.notNull(comment, "comment");
 		return commentDao.update(comment);
 	}
 

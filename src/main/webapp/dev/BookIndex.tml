@@ -1,7 +1,10 @@
 <html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
   <div class="book-admin">
-	Settings 
- </div>
+  	<ul>
+  		<li><a href="#">Settings</a></li>
+  	</ul>
+  </div>
   
   <ul id="exports" class="nav right-col">
   	<li><a href="#">Download PDF</a></li>

@@ -107,7 +107,8 @@ public class Index extends BookBase {
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookIndex(Long bookId, String revision) {
-		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()) && LAST.equals(revision)) {
+		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())) {
+			this.setRevision(revision);
 			this.setViewingRevision(true);
 		}
 		return null;
@@ -131,7 +132,7 @@ public class Index extends BookBase {
 		}
 
 		// Setup abstract content
-		this.setupContent(this.bookAbstractId, this.isViewingRevision());
+		this.setupContent(this.bookAbstractId, this.isViewingRevision(), this.getRevision());
 
 		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
 		if (this.bookAuthor) {
@@ -187,7 +188,7 @@ public class Index extends BookBase {
 	}
 
 	private final boolean hasWorkingCopy(long chapterId) {
-		Publication publication = this.chapterManager.getLastPublication(chapterId);
+		Publication publication = this.chapterManager.getRevision(chapterId, null);
 		if (publication != null) {
 			boolean workingCopy = !publication.isPublished();
 			return bookAuthor && workingCopy;
@@ -205,9 +206,13 @@ public class Index extends BookBase {
 	}
 
 	public Object[] getAbstractWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), LAST };
+		return new Object[] { this.getBookId(), ChapterManager.LAST };
 	}
 
+	public Object[] getAbstractIssuesCtx() {
+		return new Object[] { this.getBookId(), this.bookAbstractId };
+	}
+	
 	/**
 	 * Get id to link to chapter display
 	 * 
@@ -218,7 +223,7 @@ public class Index extends BookBase {
 	}
 
 	public Object[] getChapterWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), this.currentChapter.getId(), LAST };
+		return new Object[] { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
 	}
 
 }

@@ -125,7 +125,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 		Chapter chapter = bookManager.addChapter(myProduct, "Robin Book");
 		chapterManager.updateAndPublishContent(chapter.getId(), "<p>Hello world from unit test cases...</p>");
-		Publication published = chapterManager.getLastPublication(chapter.getId());
+		Publication published = chapterManager.getRevision(chapter.getId(), null);
 		Assert.assertNotNull(published);
 		chapterManager.addComment(published.getId(), "Yes", "b1");
 

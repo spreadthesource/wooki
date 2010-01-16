@@ -1,0 +1,13 @@
+<ul xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<t:loop t:source="comments" t:value="current" t:index="loopIdx" t:empty="block:noComments">
+		<li class="${style}">
+			By <a href="#" t:type="pagelink" t:page="index" t:context="${current.user.username}">${current.user.username}</a> <t:lastModifiedFormatter t:time="current.creationDate.time"/> <a href="#" t:type="pagelink" t:page="chapter/index" t:context="revisionCtx" title="${current.publication.id}">View revision</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em>
+			<blockquote>${current.content}</blockquote>
+		</li>				
+	</t:loop>
+	
+	<t:block t:id="noComments">
+		<li class="first">No comments</li>
+	</t:block>
+
+</ul>

@@ -4,36 +4,41 @@
 
 	<!-- Block displayed when there is logged user or a profile requested -->    
     <t:block id="userBlock">
-        <div class="info section shadowed left-col x300">
-			<h2>${user.username} <em>(${user.fullname})</em></h2>
-			<ul>
-				<li><span>Username</span>${user.username}</li>
-				<li><span>Email</span>${user.email}</li>
-				<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
-			</ul>
-		</div>
-		<t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity"/>
-    	<div id="author-feed" class="feed section shadowed left-col x300">
-            <h2>${user.username}'s books</h2>
-            <ul>
-            	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
-                    <li class="${style}">
-                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
-            		</li>
-            	</t:loop>
-            </ul>
+    	<div class="left-col">
+	        <div class="info section shadowed x300">
+				<h2>${user.username} <em>(${user.fullname})</em></h2>
+				<ul>
+					<li><span>Username</span>${user.username}</li>
+					<li><span>Email</span>${user.email}</li>
+					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
+				</ul>
+			</div>
+		  	<div id="author-feed" class="feed section shadowed x300">
+	            <h2>${user.username}'s books</h2>
+	            <ul>
+	            	<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
+	                    <li class="${style}">
+	                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+	            		</li>
+	            	</t:loop>
+	            </ul>
+    		</div>
+	    	<div id="collaborator-feed" class="feed section shadowed x300">
+	            <h2>${user.username}'s collaboration</h2>
+	            <ul>
+	            	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
+	                    <li class="${style}">
+	                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+	            		</li>
+	            	</t:loop>
+	            </ul>
+	    	</div>
     	</div>
-    	<div id="collaborator-feed" class="feed section shadowed left-col x300">
-            <h2>${user.username}'s collaboration</h2>
-            <ul>
-            	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
-                    <li class="${style}">
-                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
-            		</li>
-            	</t:loop>
-            </ul>
-    	</div>  
-       	
+
+		<div class="right-col x460">
+			<t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity"/>
+		</div>
+
     </t:block>          
 
 	<!-- Block displayed in the index default page -->
@@ -48,8 +53,10 @@
 				</t:pagelink>
 			</div>
 		</div>
-		<t:activity.feed t:userId="user?.id" t:type="prop:activityType"/>
-		<t:activity.feed t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
+		<div class="right-col x460">
+			<t:activity.feed t:userId="user?.id" t:type="prop:activityType"/>
+			<t:activity.feed t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
+		</div>
     </t:block>
     
     <t:block id="noBooks">

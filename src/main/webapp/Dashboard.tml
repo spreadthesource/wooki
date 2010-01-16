@@ -1,13 +1,15 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
 	<t:if t:test="firstAccess">
-		<div id="first-access" class="feed section shadowed left-col x300">
-			<h1>Thank you for creating your account on Wooki !</h1>
-			<p>
-				Welcome to Wooki, now you have created your account,
-				you will be able to create new Book and collaborate with other Wooki users.
-				Simply fill the 'Book Title' field and click on 'Create Book' to create your first book.
-			</p>
+		<div id="welcome-box">
+			<div id="teasing" class="radied shadowed">
+				<h1 class="thanks">Thank you for creating your account on Wooki !</h1>
+				<p>
+					Welcome to Wooki, now you have created your account,
+					you will be able to create new Book and collaborate with other Wooki users.
+					Simply fill the 'Book Title' field and click on 'Create Book' to create your first book.
+				</p>
+			</div>
 		</div>
 	</t:if>
 
@@ -36,21 +38,27 @@
     </div>
 
 	<t:block t:id="titleBlock">
-		<div class="radied-box" id="dashboard-feed-title">
-			<t:if test="showYours">
-				<a t:type="eventlink" t:event="showCoAuthors" class=".active" t:zone="feedZone">News Feeds</a>
-				<span><strong>Your Actions</strong></span>
-				<p:else>
-					<span><strong>News Feeds</strong></span>
-					<a t:type="eventlink" t:event="showUser" class=".active" t:zone="feedZone">Your Actions</a>
-				</p:else>
-			</t:if>
+		<div class="radied" id="dashboard-feed-title">
+			<ul>
+				<t:if test="showYours">
+					<li>
+						<a t:type="eventlink" t:event="showCoAuthors" class=".active" t:zone="feedZone">News Feeds</a>
+					</li>
+					<li><strong>Your Actions</strong></li>
+					<p:else>
+						<li><strong>News Feeds</strong></li>
+						<li><a t:type="eventlink" t:event="showUser" class=".active" t:zone="feedZone">Your Actions</a></li>
+					</p:else>
+				</t:if>
+			</ul>
 		</div>
 	</t:block>
 
-	<t:zone id="feedZone">
-		<t:delegate to="feed" />
-	</t:zone>
+	<div class="right-col x460">
+		<t:zone id="feedZone" t:update="none" t:show="none">
+				<t:delegate to="feed" />
+		</t:zone>
+	</div>
 
 	<t:block id="coAuthor">
 		<t:activity.feed t:type="co_author" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
@@ -61,7 +69,7 @@
 	</t:block>
 
 	<t:block id="noBooks">
-    	<li>No books available</li>
+    	<li class="first">No books available</li>
     </t:block>
 
 </html>

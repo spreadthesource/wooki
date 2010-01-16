@@ -83,7 +83,6 @@
 				<entry key="/dashboard.*" value-ref="securedFilterList" />
 				<entry key="/book/settings.*" value-ref="securedFilterList" />
 				<entry key="/chapter/edit.*" value-ref="securedFilterList" />
-				<entry key="/chapter/issues.*" value-ref="securedFilterList" />
 
 				<!-- All other resources must be a public Tapestry pages -->
 				<entry key="/.*">
@@ -182,6 +181,7 @@
 				<value>book/index</value>
 				<value>chapter</value>
 				<value>chapter/index</value>
+				<value>chapter/issues</value>
 				<value>dev/full</value>
 				<value>dev/index</value>
 				<value>dev/bookindex</value>

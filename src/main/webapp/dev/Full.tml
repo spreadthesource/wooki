@@ -141,5 +141,18 @@
 </ul>
 </div>
 
+<div class="clearer" />
+
+<div id="welcome-box">
+	<div id="teasing" class="radied shadowed">
+		<h1 class="thanks">Thank you for creating your account on Wooki !</h1>
+		<p>
+			Welcome to Wooki, now you have created your account,
+			you will be able to create new Book and collaborate with other Wooki users.
+			Simply fill the 'Book Title' field and click on 'Create Book' to create your first book.
+		</p>
+	</div>
+</div>
+
 
 </html>

@@ -1,6 +1,6 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-	<div id="${clientId}" class="feed section radied shadowed right-col x460">
+	<div id="${clientId}" class="feed section radied shadowed">
 		<t:if test="displayBlock">
 			<t:delegate to="titleBlock" />
 			<p:else>
@@ -31,7 +31,7 @@
 	</t:block>
 
 	<t:block t:id="empty">
-		<li>No activities by now</li>
+		<li class="first">No activities by now</li>
 	</t:block>
 
 </t:container>

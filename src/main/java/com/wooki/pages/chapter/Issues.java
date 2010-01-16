@@ -16,6 +16,7 @@
 
 package com.wooki.pages.chapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -25,9 +26,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
-import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Chapter;
-import com.wooki.domain.model.Comment;
 import com.wooki.services.HttpError;
 
 /**
@@ -38,64 +37,53 @@ import com.wooki.services.HttpError;
  */
 public class Issues extends BookBase {
 
+	protected static final String ALL = "all";
+
 	@Inject
 	private ChapterManager chapterManager;
 
-	@Inject
-	private CommentManager commentManager;
+	@Property
+	private List<Chapter> chapters;
 
 	@Property
 	private Chapter chapter;
 
-	@Property
-	private List<Comment> comments;
-
-	@Property
-	private Comment current;
-	
-	@Property
-	private int loopIdx;
-	
 	private Long chapterId;
 
+	private String request;
+	
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupChapter(Long bookId, Long chapterId) {
+	public Object setupChapter(Long bookId, String request) {
 
-		// Get book related information
-		this.chapterId = chapterId;
-		chapter = this.chapterManager.findById(chapterId);
-		if (chapter == null) {
-			return new HttpError(404, "Chapter not found");
+		this.request = request;
+
+		if (ALL.equals(request)) {
+			this.chapters = this.chapterManager.listChaptersInfo(bookId);
+		} else {
+			this.chapters = new ArrayList<Chapter>();
+			Long chapterId = Long.parseLong(request);
+
+			// Get book related information
+			this.chapterId = chapterId;
+			chapter = this.chapterManager.findById(chapterId);
+			if (chapter == null) {
+				return new HttpError(404, "Chapter not found");
+			}
+
+			this.chapters.add(chapter);
+
 		}
 
-		this.comments = this.commentManager.listForChapter(this.chapterId);
-		
 		return null;
 	}
 
-	/**
-	 * Prepare display of all the comments.
-	 * 
-	 */
-	public void setupCommentDisplay() {
-		this.comments = this.commentManager.listForChapter(chapterId);
-	}
-
 	public Object[] getChapterCtx() {
-		return new Object[] { this.getBookId(), this.chapterId };
+		return new Object[] { this.getBookId(), this.chapter.getId() };
 	}
 
-	public Object[] getRevisionCtx() {
-		return new Object[] { this.getBookId(), this.chapterId, this.current.getPublication().getId() };
-	}
-
-	public String getStyle() {
-		return this.loopIdx == 0 ? "first" : null;
-	}
-	
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
-		return new Object[] { this.getBookId(), this.chapterId };
+		return new Object[] { this.getBookId(), this.request };
 	}
 
 }

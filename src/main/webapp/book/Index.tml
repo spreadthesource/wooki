@@ -10,12 +10,12 @@
 				</t:if>
 				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
 				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a></li>
-				<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:abstractIssuesCtx">Abstract Issues</a></li>
 			</ul>
 		</div>
 	</t:security.ifAuthorOfBook>
 
 	<ul id="exports" class="nav right-col">
+		<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a></li>
 		<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a></li>
 	</ul>	  
   

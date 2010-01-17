@@ -1,0 +1,8 @@
+<t:extend xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd">
+	<t:replace id="extraBlock">
+		<t:block t:id="homeBlock">
+			<t:activity.feed t:type="BOOK_CREATION"/>
+			<t:activity.feed t:type="ACCOUNT" t:title="Latest Authors"/>
+		</t:block>
+	</t:replace>
+</t:extend>

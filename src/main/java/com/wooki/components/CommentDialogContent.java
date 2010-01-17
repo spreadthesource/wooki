@@ -91,6 +91,9 @@ public class CommentDialogContent {
 	private Comment currentComment;
 
 	@Property
+	private boolean published;
+	
+	@Property
 	@Validate("required")
 	@Width(80)
 	private String content;
@@ -102,6 +105,7 @@ public class CommentDialogContent {
 		}
 		this.comments = commentManager.listForPublicationAndDomId(
 				publicationId, domId);
+		this.published = this.chapterManager.isPublished(this.publicationId);
 		return true;
 	}
 

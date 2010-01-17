@@ -83,6 +83,7 @@
 				<entry key="/dashboard.*" value-ref="securedFilterList" />
 				<entry key="/book/settings.*" value-ref="securedFilterList" />
 				<entry key="/chapter/edit.*" value-ref="securedFilterList" />
+				<entry key="/home.*" value-ref="securedFilterList" />
 
 				<!-- All other resources must be a public Tapestry pages -->
 				<entry key="/.*">

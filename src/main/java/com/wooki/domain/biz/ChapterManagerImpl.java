@@ -105,6 +105,10 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		return this.chapterDao.findById(chapterId);
 	}
 
+	public boolean isPublished(Long revision) {
+		return this.publicationDao.isPublished(revision);
+	}
+
 	public Publication getRevision(Long chapterId, String revision) {
 		Defense.notNull(chapterId, "chapterId");
 		if (LAST.equalsIgnoreCase(revision) || revision == null) {
@@ -153,6 +157,14 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		// Check that the logged user is an author of the book
 		User author = securityCtx.getAuthor();
 
+		// Flag last publication as not published
+		Publication lastPublished = publicationDao.findLastPublishedRevision(chapterId);
+		if(lastPublished != null) {
+			lastPublished.setPublished(false);
+			publicationDao.update(lastPublished);
+		}
+
+		// Publish the last revision
 		published.setLastModified(Calendar.getInstance().getTime());
 		String content = domManager.adaptContent(published.getContent(), published.getId());
 		published.setContent(content);
@@ -181,7 +193,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		}
 
 		Publication publication = publicationDao.findLastRevision(chapterId);
-
+		
 		// we check the published flag. If set, then this Publication must
 		// be considered as "locked" and we must create a new publication as
 		// the new working copy

@@ -14,7 +14,7 @@
         .wym_skin_wooki                { font-size: 14px; font-family: Verdana, Arial, sans-serif; }
         .wym_skin_wooki h2             { font-size: 28px; /* = 11px */}
         .wym_skin_wooki h3             { font-size: 22px; /* = 10px */}
-        .wym_skin_wooki li             { font-size: 14px; /* = 10px */}
+        .wym_skin_wooki li             { font-size: 12px; /* = 10px */}
 
 
 /*WYM_BOX*/
@@ -93,7 +93,7 @@
         .wym_skin_wooki .wym_buttons li.wym_tools_preview a       { background-position: 0 -408px;}
 
 /*DECORATION*/
-        .wym_skin_wooki .wym_section h2             { font-size:16px !important; background: #FFD8A1; border: solid gray; border-width: 0 0 1px;}
+        .wym_skin_wooki .wym_section h2             { font-size:14px !important; background: #FFD8A1; border: solid gray; border-width: 0 0 1px;}
         .wym_skin_wooki .wym_section h2 span        { color: gray;}
         .wym_skin_wooki .wym_panel                  { padding: 0; border: solid gray; border-width: 1px; background: white;}    
         .wym_skin_wooki .wym_panel ul               { margin: 2px 0 5px; }        

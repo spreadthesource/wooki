@@ -40,7 +40,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
 	public List<Comment> listForPublication(Long publicationId) {
 		Defense.notNull(publicationId, "publicationId");
 		Query query = this.entityManager
-				.createQuery("from " + getEntityType() + " c where c.publication.id=:pubId and c.state!=:st and c.deletionDate is null");
+				.createQuery("from " + getEntityType() + " c where c.publication.id=:pubId and c.state!=:st and c.deletionDate is null order by c.creationDate desc");
 		query.setParameter("pubId", publicationId);
 		query.setParameter("st", CommentState.REJECTED);
 		return query.getResultList();
@@ -49,7 +49,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
 	public List<Comment> listForChapter(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
 		Query query = this.entityManager
-				.createQuery("from " + getEntityType() + " c where c.publication.chapter.id=:chapterId and c.state!=:st and c.deletionDate is null order by c.creationDate");
+				.createQuery("from " + getEntityType() + " c where c.publication.chapter.id=:chapterId and c.state!=:st and c.deletionDate is null order by c.creationDate desc");
 		query.setParameter("chapterId", chapterId);
 		query.setParameter("st", CommentState.REJECTED);
 		return query.getResultList();
@@ -58,7 +58,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
 	public List<Comment> listForPublicationAndDomId(Long publicationId, String domId) {
 		Defense.notNull(publicationId, "publicationId");
 		Query query = this.entityManager.createQuery("from " + getEntityType()
-				+ " c where c.publication.id=:pubId and c.state!=:st and c.domId=:cid and c.deletionDate is null");
+				+ " c where c.publication.id=:pubId and c.state!=:st and c.domId=:cid and c.deletionDate is null order by c.creationDate desc");
 		query.setParameter("pubId", publicationId);
 		query.setParameter("st", CommentState.REJECTED);
 		query.setParameter("cid", domId);

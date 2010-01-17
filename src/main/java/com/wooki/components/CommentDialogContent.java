@@ -48,6 +48,9 @@ import com.wooki.domain.model.Comment;
  */
 public class CommentDialogContent {
 
+	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+	private String dialogId;
+	
 	@Property
 	@Parameter
 	private Long publicationId;
@@ -131,6 +134,7 @@ public class CommentDialogContent {
 	@AfterRender
 	public void initReminder() {
 		support.addInit("initBlockReminder", domId);
+		support.addInit("initCloseLink", this.dialogId);
 	}
 
 }

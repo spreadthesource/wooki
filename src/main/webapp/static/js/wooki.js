@@ -158,13 +158,14 @@ jQuery.extend(Tapestry.Initializer,{
         {
             Event.stop(event);
 
+            jQuery('#'+dialogId).dialog('open');
+            
             var zoneObject = Tapestry.findZoneManager(element);
 
             if (!zoneObject) return;
 
-            zoneObject.updateFromURL(url);
-            
-            jQuery('#'+dialogId).dialog('open');
+            setTimeout(function() { zoneObject.updateFromURL(url); }, 500);
+                        
         });
     },
 	
@@ -294,7 +295,6 @@ jQuery.extend(Tapestry.Initializer,{
 			
 			jQuery(this).bind("mouseenter mouseleave", function(e){
 				jQuery(".comment-accessor .no-comment").css('visibility','hidden');
-						    
 			    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
 			});
 			
@@ -306,12 +306,12 @@ jQuery.extend(Tapestry.Initializer,{
 			jQuery("#" + comId + " div").attr("class", "commented").css('visibility', 'visible').append(document.createTextNode(val));
 		});
 		
-		jQuery('#book').bind("mouseleave", function(e){
+		jQuery('#content').bind("mouseleave", function(e){
 			jQuery(".comment-accessor .no-comment").css('visibility','hidden');
 		});
 
 		// On dialog close update all the bubbles
-		jQuery('#'+data.dialogId).bind('dialogclose', function(e, ui) {
+		jQuery('#'+data.dialogId).bind('dialogbeforeclose', function(e, ui) {
 			jQuery.getJSON(data.updateUrl, function(result) {
 				jQuery('.commentable').each(function(i) {
 					blockId = jQuery(this).attr('id');
@@ -325,7 +325,12 @@ jQuery.extend(Tapestry.Initializer,{
 				});
 			});
 		});
-	
+		
+		// Remove content on close
+		jQuery('#'+data.dialogId).bind('dialogclose', function(e, ui) {
+			jQuery('#'+data.zoneId).html("<div style=\"padding:10px;\"><div class=\"t-autoloader-icon\"/></div>");
+		});
+        	
 	},
 	
 	/**
@@ -333,6 +338,18 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initBlockReminder: function(domId) {
 		jQuery('#reminder-'+domId).append(jQuery('#'+domId).html());
+	},
+	
+	/**
+	 * Initialize close links in dialog. 
+	 *
+	 */
+	initCloseLink: function(dialogId) {
+        $A($(dialogId).getElementsByClassName("close-dialog")).each(function(closeLnk) {
+        	closeLnk.observe("click", function() {
+        		jQuery("#"+dialogId).dialog('close');
+        	});
+        });
 	},
 	
 	/**

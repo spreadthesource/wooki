@@ -14,9 +14,9 @@
 			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
 		</fieldset>
 		<fieldset>
-			<div class="left"><t:submit t:id="update"  t:type="submit" t:event="update" class="wymupdate small-active-button radied-box" style="border:0px !important" value="update" /></div>
-			<div class="left"><t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate small-active-button radied-box" style="border:0px !important" value="publish" /></div>
-			<div class="right"><t:submit t:id="cancel"  t:type="submit" t:event="cancel" class="wymupdate small-active-button radied-box" style="border:0px !important" value="cancel" /></div>
+			<div class="left"><t:submit t:id="update"  t:type="submit" t:event="update" class="wymupdate small-active-button radied" style="border:0px !important" value="update" /></div>
+			<div class="left"><t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate small-active-button radied" style="border:0px !important" value="publish" /></div>
+			<div class="right"><t:submit t:id="cancel"  t:type="submit" t:event="cancel" class="wymupdate small-active-button radied" style="border:0px !important" value="cancel" /></div>
 		</fieldset>
 	</form>
 	

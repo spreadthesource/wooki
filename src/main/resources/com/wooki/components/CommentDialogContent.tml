@@ -1,15 +1,18 @@
-<div class="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+<div id="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	
 	<t:block t:id="commentDetails">
-		<div class="comment-row radied-box" id="ent-${currentComment.id}">
-			<div class="comment-meta">
-            	<span>
-              		<b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b>
-              		<t:lastModifiedFormatter t:time="currentComment.creationDate.time" />
-              		<t:security.ifAuthorOfComment t:commentId="currentComment.id">
+		<div class="comment-row radied" id="ent-${currentComment.id}">
+			<ul class="nav comment-nav left-col">
+				<li class="first-child">
+					By <b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b><t:lastModifiedFormatter t:time="currentComment.creationDate.time" />
+				</li>
+				<t:security.ifAuthorOfComment t:commentId="currentComment.id">
+					<li>
 						<a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
-					</t:security.ifAuthorOfComment>
-					<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
+					</li>
+				</t:security.ifAuthorOfComment>
+				<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
+					<li>
 						<t:zone t:id="updateStateZone">
 							<span class="t-zone-update">
 							</span>
@@ -17,13 +20,15 @@
 								<input t:blankOption="NEVER" t:type="select" t:value="currentComment.state" t:mixins="submitFormOnChange" />
 							</form>
 						</t:zone>
-						<p:else>
+					</li>
+					<p:else>
+						<li>
 							<span class="comment-state">${currentComment.state}</span>
-						</p:else>
-					</t:security.ifAuthorOfBook>
-            	</span>
-          	</div>
-          	<div class="comment-body">
+						</li>
+					</p:else>
+				</t:security.ifAuthorOfBook>
+			</ul>
+          	<div class="radied">
 				<p>
 					${currentComment.content}
 				</p>
@@ -31,18 +36,31 @@
 		</div>
 	</t:block>
 	
-	<!-- Block used to display the comments window associated to a bubble -->
+	<!-- Display all the comments window associated to a bubble, comment-details is used by append mixin to append resulting element -->
 	<div class="comment-details" id="comment-details">
-		<div class="block-reminder radied-box" id="reminder-${domId}" />
+		<div class="block-reminder radied" id="reminder-${domId}" />
 		<t:loop t:source="comments" t:value="currentComment">
 			<t:delegate t:to="block:commentDetails" />
 		</t:loop>
 	</div>
+
+	<!-- Add comment for is displayed only for logged in users -->
 	<t:security.ifLoggedIn>
-		<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="add-comment-form" t:context="prop:publicationId">
-			<p><input t:type="textarea" t:value="content" t:id="content" /></p>
-			<p class="add-comment-link"><a t:type="linksubmit">Add Comment</a></p>
-		</form>
+		<div class="radied">
+			<h2>Add your own comment</h2>
+			<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="small-form" t:context="prop:publicationId">
+				<table>
+					<tr>
+						<td>
+							<input t:type="textarea" t:value="content" t:id="content" rows="4" />
+						</td>
+					</tr>
+				</table>
+				<div class="form-submit">
+					<input type="submit" class="btn-active" value="Add" /> or <a href="#" class="close-dialog">close</a>
+				</div>
+			</form>
+		</div>	
 	</t:security.ifLoggedIn>
 
 </div>

@@ -3,15 +3,15 @@
 	xmlns:p="tapestry:parameter">
 	<section id="book-settings">
 		<h1><a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
-		<div id="book-info" class="radied-box">
+		<div id="book-info" class="radied">
 			<h2>General Settings</h2>
 			<form t:type="form" t:id="bookInfoForm">
 				<t:errors />
 						<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title" class="form-field" />
-						<input t:type="submit" class="small-active-button radied-box" value="Update" />
+						<input t:type="submit" class="small-active-button radied" value="Update" />
 			</form>
 		</div>
-		<div id="authors-settings" class="radied-box">
+		<div id="authors-settings" class="radied">
 			<h2>Author List</h2>
 			<t:security.ifOwnerOfBook t:bookId="bookId">
 				<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top">

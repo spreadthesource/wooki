@@ -17,7 +17,7 @@
 	<ul id="exports" class="nav right-col">
 		<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a></li>
 		<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a></li>
-	</ul>	  
+	</ul>
   
 	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
 
@@ -38,6 +38,8 @@
   	</div>
 
 	<t:outputRaw value="content" />
+
+	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
 
 	<h2>Table of contents</h2>
 	
@@ -79,17 +81,15 @@
 			<t:block id="addChapterForm">
 				<t:form t:id="addChapterForm" class="big-form">
 					<h3>
-						<t:textfield t:value="chapterName" class="long-field" t:validate="required" /><t:linksubmit class="radied-box active-button inline-form-button">Add</t:linksubmit>
+						<t:textfield t:value="chapterName" class="long-field" t:validate="required" /><t:linksubmit class="radied active-button inline-form-button">Add</t:linksubmit>
 					</h3>
 					<p>
-						<t:linkSubmit class="active-button radied-box inline-form-button">Cancel</t:linkSubmit>
+						<t:linkSubmit class="active-button radied inline-form-button">Cancel</t:linkSubmit>
 					</p>
 				</t:form>
 			</t:block>
 				
 		</t:security.ifAuthorOfBook>
-	</ol>	
-
-	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
+	</ol>
 
 </html>

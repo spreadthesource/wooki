@@ -44,23 +44,32 @@
 		</t:loop>
 	</div>
 
-	<!-- Add comment for is displayed only for logged in users -->
-	<t:security.ifLoggedIn>
-		<div class="radied">
-			<h2>Add your own comment</h2>
-			<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="small-form" t:context="prop:publicationId">
-				<table>
-					<tr>
-						<td>
-							<input t:type="textarea" t:value="content" t:id="content" rows="4" />
-						</td>
-					</tr>
-				</table>
-				<div class="form-submit">
-					<input type="submit" class="btn-active" value="Add" /> or <a href="#" class="close-dialog">close</a>
+	<!-- Add comment for is displayed only for logged in users and if the displaeyed chapter is published -->
+	<t:if test="published">
+		<t:security.ifLoggedIn>
+			<div class="radied">
+				<h2>Add your own comment</h2>
+				<form t:type="form" t:clientValidation="false" t:id="createCommentForm" t:mixins="append" t:to="comment-details" class="small-form" t:context="prop:publicationId">
+					<table>
+						<tr>
+							<td>
+								<input t:type="textarea" t:value="content" t:id="content" rows="4" />
+							</td>
+						</tr>
+					</table>
+					<div class="form-submit">
+						<input type="submit" class="btn-active" value="Add" /> or <a href="#" class="close-dialog">close</a>
+					</div>
+				</form>
+			</div>
+			<p:else>
+				<div class="radied go-signup">
+					<a t:type="pagelink" t:page="signup">
+						<p>Signup in 30 seconds to post your own comment</p>
+					</a>
 				</div>
-			</form>
-		</div>	
-	</t:security.ifLoggedIn>
+			</p:else>
+		</t:security.ifLoggedIn>
+	</t:if>
 
 </div>

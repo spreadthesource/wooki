@@ -18,15 +18,12 @@ package com.wooki.pages.book;
 
 import java.util.List;
 
-import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.StreamResponse;
-import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
-import org.apache.tapestry5.corelib.components.Delegate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
@@ -57,15 +54,6 @@ public class Index extends BookBase {
 	@Inject
 	private ExportService exportService;
 
-	@Inject
-	private Block addChapterLink;
-
-	@Inject
-	private Block addChapterForm;
-
-	@Component
-	private Delegate addChapterDelegate;
-
 	@InjectPage
 	private Edit editChapter;
 
@@ -92,9 +80,6 @@ public class Index extends BookBase {
 	 */
 	@Property
 	private String chapterName;
-
-	@Property
-	private Block addChapterToggle;
 
 	private boolean showWorkingCopyLink;
 
@@ -134,11 +119,6 @@ public class Index extends BookBase {
 		// Setup abstract content
 		this.setupContent(this.bookAbstractId, this.isViewingRevision(), this.getRevision());
 
-		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
-		if (this.bookAuthor) {
-			this.addChapterToggle = this.addChapterLink;
-		}
-
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -147,12 +127,6 @@ public class Index extends BookBase {
 		editChapter.setBookId(this.getBookId());
 		editChapter.setChapterId(chapter.getId());
 		return editChapter;
-	}
-
-	@OnEvent(value = EventConstants.ACTION, component = "showAddChapterField")
-	public Object toggleAddChapter() {
-		this.addChapterToggle = addChapterForm;
-		return addChapterDelegate;
 	}
 
 	/**

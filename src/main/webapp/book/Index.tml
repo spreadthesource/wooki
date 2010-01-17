@@ -13,12 +13,11 @@
 			</ul>
 		</div>
 	</t:security.ifAuthorOfBook>
-
 	<ul id="exports" class="nav right-col">
 		<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a></li>
 		<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a></li>
 	</ul>
-  
+			
 	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
 
 	<div id="meta">
@@ -37,8 +36,9 @@
   		<p id="revision">Published <t:output value="prop:book?.creationDate" t:format="prop:format" /></p>
   	</div>
 
+	<h2>Abstract</h2>
 	<t:outputRaw value="content" />
-
+	
 	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
 
 	<h2>Table of contents</h2>
@@ -63,32 +63,28 @@
 				<p><t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" /></p>
 			</li>
 		</t:loop>
-		
-		
+
 		<t:security.ifAuthorOfBook t:bookId="bookId">
+			<!-- Add chapter section based on simple show hide mechanism -->
 			<li>
-				<t:zone id="addChapterZone" t:update="none">
-					<t:delegate t:to="addChapterToggle" t:id="addChapterDelegate" />
-				</t:zone>
-			</li>
-			
-			<t:block id="addChapterLink">
-				<h3>
-					<t:actionlink class="active" t:id="showAddChapterField" t:zone="addChapterZone">Add a chapter</t:actionlink>
+				<h3 class="add-chapter-link">
+					<t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHide" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">Add a chapter</t:actionlink>
 				</h3>
-			</t:block>
-			
-			<t:block id="addChapterForm">
-				<t:form t:id="addChapterForm" class="big-form">
-					<h3>
-						<t:textfield t:value="chapterName" class="long-field" t:validate="required" /><t:linksubmit class="radied active-button inline-form-button">Add</t:linksubmit>
-					</h3>
-					<p>
-						<t:linkSubmit class="active-button radied inline-form-button">Cancel</t:linkSubmit>
-					</p>
-				</t:form>
-			</t:block>
-				
+				<div style="display:none;" id="add-chapter-form">
+					<t:form t:id="addChapterForm" class="small-form">
+						<table>
+							<tr>
+								<td>
+									<t:textfield t:value="chapterName" class="long-field" t:validate="required" />
+								</td>
+							</tr>
+						</table>
+						<div class="form-submit">
+							<input t:type="submit" class="btn-active" value="Add Chapter" /> or <a href="#" id="hide-add-chapter">cancel</a>
+						</div>
+					</t:form>
+				</div>
+			</li>
 		</t:security.ifAuthorOfBook>
 	</ol>
 

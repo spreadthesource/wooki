@@ -34,7 +34,7 @@
 					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input type="checkbox" tabindex="3" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
 				</tr>
 			</table>	
-			<div><small><a href="#">Forgot password?</a></small></div>
+			<div style="display: none;"><small><a href="#">Forgot password?</a></small></div>
 		</form>
 	</div>
 		
@@ -46,9 +46,10 @@
 			</p:else>
 		</t:security.ifLoggedIn>
 		<t:security.ifLoggedIn>
+			<li><a href="#" t:type="pagelink" t:page="home">Home</a></li>
 			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
 			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
-			<li><a href="${logoutUrl}" id="logout">Logout</a></li>
+			<li class="last"><a href="${logoutUrl}" id="logout">Logout</a></li>
 		</t:security.ifLoggedIn>
 		<li><a href="#">Tour</a></li>
 		<li><a href="#">FAQ</a></li>

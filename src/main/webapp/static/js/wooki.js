@@ -13,12 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 if(!Wooki) var Wooki = {};
 
 jQuery.extend(Wooki, {
 	
 });
+
+/**
+ * JQuery utils
+ *
+ */
+jQuery.fn.outerHtml = function() {
+	return jQuery(jQuery('<div></div>').html(this.clone())).html();
+} 
 
 Tapestry.ElementEffect.none = function(element) {
 	// Do nothing
@@ -164,7 +171,7 @@ jQuery.extend(Tapestry.Initializer,{
 
             if (!zoneObject) return;
 
-            setTimeout(function() { zoneObject.updateFromURL(url); }, 500);
+            setTimeout(function() { zoneObject.updateFromURL(url); }, 250);
                         
         });
     },
@@ -198,7 +205,7 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initLoginDialog : function(data) {
 		link = jQuery("#signin-link");
-		dialog = jQuery('#signin-box')
+		dialog = jQuery('#signin-box');
 
 		x = link.position().left + link.width() * 2 - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
 		y = link.position().top + 5 + link.height() + parseInt(link.css('padding-bottom'));
@@ -216,6 +223,10 @@ jQuery.extend(Tapestry.Initializer,{
 			function () {
 				dialog.css('display', 'none');
 			});
+		
+		jQuery("#content").bind("click mouseenter", dialog, function(event) {
+			event.data.css('display', 'none'); 
+		});
 			       
 			
 	},
@@ -233,7 +244,22 @@ jQuery.extend(Tapestry.Initializer,{
 	 * 
 	 */
 	initWymEdit : function(data) {
-		jQuery('#'+data.elt).wymeditor(data.params);
+		if(data !== undefined && data.params !== undefined) {
+			
+			// Configure wooki specifics
+		    var containersItems = [
+		                      {'name': 'P', 'title': 'Paragraph', 'css': 'wym_containers_p'},
+		                      {'name': 'H3', 'title': 'Heading_3', 'css': 'wym_containers_h3'},
+		                      {'name': 'H4', 'title': 'Heading_4', 'css': 'wym_containers_h4'},
+		                      {'name': 'H5', 'title': 'Heading_5', 'css': 'wym_containers_h5'},
+		                      {'name': 'H6', 'title': 'Heading_6', 'css': 'wym_containers_h6'},
+		                      {'name': 'PRE', 'title': 'Preformatted', 'css': 'wym_containers_pre'},
+		                      {'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'},
+		                      {'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}];
+			data.params.containersItems = containersItems;
+			
+			jQuery('#'+data.elt).wymeditor(data.params);
+		}
 	},
 	
 	/**
@@ -275,28 +301,31 @@ jQuery.extend(Tapestry.Initializer,{
 		
 			// Add element
 			blockId = jQuery(this).attr('id');
-			comId = blockId.replace('b','c');
 			
-			// Add comment entry
-			comment = jQuery("<a/>").attr({"id": comId, "class":"comment-accessor"});
-
-			jQuery("#comments").append(comment);
-			
-			jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
-			
-			Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
-			comment.css({
-				'top': (jQuery(this).position().top) + 'px',
-				'left': (jQuery(this).position().left - 50)  + 'px',
-				'height' : jQuery(this).height() + 'px'
-			});
-			
-			comment.css('visibility','visible');
-			
-			jQuery(this).bind("mouseenter mouseleave", function(e){
-				jQuery(".comment-accessor .no-comment").css('visibility','hidden');
-			    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
-			});
+			if(blockId != "") {
+				comId = blockId.replace('b','c');
+				
+				// Add comment entry
+				comment = jQuery("<a/>").attr({"id": comId, "class":"comment-accessor"});
+	
+				jQuery("#comments").append(comment);
+				
+				jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
+				
+				Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
+				comment.css({
+					'top': (jQuery(this).position().top) + 'px',
+					'left': (jQuery(this).position().left - 50)  + 'px',
+					'height' : jQuery(this).height() + 'px'
+				});
+				
+				comment.css('visibility','visible');
+				
+				jQuery(this).bind("mouseenter mouseleave", function(e){
+					jQuery(".comment-accessor .no-comment").css('visibility','hidden');
+				    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
+				});
+			}
 			
 		});
 		
@@ -337,7 +366,7 @@ jQuery.extend(Tapestry.Initializer,{
 	 * Init the block reminder in the comment dialog
 	 */
 	initBlockReminder: function(domId) {
-		jQuery('#reminder-'+domId).append(jQuery('#'+domId).html());
+		jQuery('#reminder-'+domId).append(jQuery('#'+domId).outerHtml());
 	},
 	
 	/**
@@ -362,6 +391,28 @@ jQuery.extend(Tapestry.Initializer,{
 				return;
 			}
 		});
+	},
+	
+	/**
+	 * Implement a simple show hide effect for chapter addition.
+	 *
+	 */
+	initShowHideEffect: function(data) {
+		if(data != undefined) {
+			jQuery("#"+data.showLnkId).bind("click", data, function(event) {
+				if(jQuery("#"+event.data.showLnkId).disabled) {
+					return false;
+				}
+				jQuery("#"+event.data.showLnkId).disabled = true;
+				jQuery("#"+event.data.toShow).slideDown(event.data.duration);
+				return false;
+			});
+			jQuery("#"+data.hideLnkId).bind("click", data, function(event) {
+				jQuery("#"+event.data.showLnkId).disabled = false;
+				jQuery("#"+event.data.toShow).slideUp(data.duration);
+				return false;
+			});
+		}
 	}
 });
 

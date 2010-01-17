@@ -16,12 +16,14 @@
 
 package com.wooki.mixins;
 
+import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.corelib.components.TextArea;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
@@ -32,6 +34,18 @@ import org.apache.tapestry5.json.JSONObject;
 @IncludeJavaScriptLibrary("context:/static/js/wymeditor/jquery.wymeditor.pack.js")
 public class WymEditor {
 
+	@Inject
+	@Path("context:/static/js/wymeditor/")
+	private Asset basePath;
+
+	@Inject
+	@Path("context:/static/js/wymeditor/jquery.wymeditor.js")
+	private Asset wymPath;
+
+	@Inject
+	@Path("context:/static/js/jquery-1.3.2.min.js")
+	private Asset jQueryPath;
+	
 	@Parameter(defaultPrefix = BindingConstants.ASSET)
 	private String wymStyle;
 	
@@ -59,7 +73,13 @@ public class WymEditor {
 		}
 		
 		params.put("skin", wymSkin);
-
+		
+		// Set parameter for production mode compatibility
+		params.put("basePath", basePath.toClientURL() + "/");
+		params.put("wymPath", wymPath.toClientURL());
+		params.put("jQueryPath", jQueryPath.toClientURL());
+		params.put("classesHtml", "");
+		
 		data.put("params", params);
 		
 		// Use wymeditor

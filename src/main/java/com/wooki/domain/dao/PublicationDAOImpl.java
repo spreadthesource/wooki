@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Publication;
@@ -28,6 +29,7 @@ import com.wooki.domain.model.Publication;
 public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implements PublicationDAO {
 
 	public Publication findLastRevision(Long chapterId) {
+		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("id", chapterId);
 		query.setMaxResults(10);
@@ -40,6 +42,7 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 	}
 
 	public Publication findLastPublishedRevision(Long chapterId) {
+		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager.createQuery("from " + getEntityType()
 				+ " p where chapter.id=:id and p.deletionDate is null and p.published = 1 order by p.creationDate desc");
 		query.setParameter("id", chapterId);
@@ -49,6 +52,18 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 			return published.get(0);
 		} else {
 			return null;
+		}
+	}
+
+	public boolean isPublished(Long revision) {
+		Query query = entityManager.createQuery("select p.published from " + getEntityType()
+				+ " p where p.id=:id and p.deletionDate is null");
+		query.setParameter("id", revision);
+		List<Boolean> published = query.getResultList();
+		if (published != null && published.size() > 0) {
+			return published.get(0);
+		} else {
+			return false;
 		}
 	}
 

@@ -25,6 +25,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
+import com.wooki.services.HttpError;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -62,14 +63,16 @@ public class Index extends BookBase {
 	public Object setupChapter(Long bookId, Long chapterId, String revision) {
 		this.chapterId = chapterId;
 
-		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())) {
-			this.setViewingRevision(true);
-			this.setRevision(revision);
-		}
+		this.setViewingRevision(true);
+		this.setRevision(revision);
 		
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && (!this.securityCtx.isLoggedIn() || this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+			return new HttpError(403, "Access denied");
+		}
+
 		return null;
 	}
-	
+
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, Long chapterId) {
 
@@ -112,7 +115,15 @@ public class Index extends BookBase {
 	public Object[] getEditCtx() {
 		return new Object[] { this.getBookId(), this.chapterId };
 	}
+	
+	public Object[] getAllIssuesCtx() {
+		return new Object[] { this.getBookId(), Issues.ALL };
+	}
 
+	public Object[] getChapIssuesCtx() {
+		return new Object[] { this.getBookId(), this.chapterId };
+	}
+	
 	/**
 	 * Get context for previous link.
 	 * 

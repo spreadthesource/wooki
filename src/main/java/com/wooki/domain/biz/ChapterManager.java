@@ -85,6 +85,14 @@ public interface ChapterManager {
 	Publication getRevision(Long chapterId, String revision);
 
 	/**
+	 * Check if the revision is published.
+	 *
+	 * @param revision
+	 * @return
+	 */
+	boolean isPublished(Long revision);
+	
+	/**
 	 * Publish chapter content TODO:
 	 * 
 	 * @param chapterId

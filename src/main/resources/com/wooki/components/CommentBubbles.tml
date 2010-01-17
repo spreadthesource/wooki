@@ -1,13 +1,14 @@
-<div class="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+<div id="comments-popup" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	
 	<!-- Block used to display the comments window associated to a bubble -->
 	<t:block t:id="commentsBlock">
-		<t:commentDialogContent t:publicationId="inherit:publicationId" t:domId="domId" t:bookId="inherit:bookId" />
+		<t:commentDialogContent t:publicationId="inherit:publicationId" t:domId="domId" t:bookId="inherit:bookId" t:dialogId="commentDialog" />
 	</t:block>
 
 	<!-- Single dialog window refreshed via Ajax on bubble clicks -->   	
    	<t:dialog t:id="commentDialog">
    		<t:zone t:id="commentList" t:show="none" t:update="none">
+   			<div style="padding:10px;"><div class="t-autoloader-icon"/></div>
    		</t:zone>
    	</t:dialog>
 

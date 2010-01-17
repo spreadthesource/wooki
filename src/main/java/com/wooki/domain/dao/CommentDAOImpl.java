@@ -68,10 +68,11 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
 
 	public List<Object[]> listCommentsInfoForPublication(Long publicationId) {
 		Defense.notNull(publicationId, "publicationId");
-		String queryStr = String.format("select c.domId, count(c.domId) from %s c where c.publication.id=:id and c.deletionDate is null group by c.domId",
+		String queryStr = String.format("select c.domId, count(c.domId) from %s c where c.publication.id=:id and c.state!=:st and c.deletionDate is null group by c.domId",
 				Comment.class.getName());
 		Query query = this.entityManager.createQuery(queryStr);
 		query.setParameter("id", publicationId);
+		query.setParameter("st", CommentState.REJECTED);
 		return query.getResultList();
 	}
 

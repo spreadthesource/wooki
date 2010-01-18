@@ -34,6 +34,9 @@
 				<value>
 					classpath*:config/security.properties
 				</value>
+				<value>
+					classpath*:config/tapestry.properties
+				</value>
 			</list>
 		</property>
 	</bean>
@@ -43,6 +46,13 @@
 		<property name="commentDao" ref="commentDao" />
 		<property name="userDao" ref="userDao" />
 		<property name="chapterDao" ref="chapterDao" />
+	</bean>
+	
+	<bean id="userManager" class="com.wooki.domain.biz.UserManagerImpl">
+		<property name="activityDao" ref="activityDao" />
+		<property name="authorDao" ref="userDao" />
+		<property name="securityCtx" ref="wookiSecurityContext" />
+		<property name="salt" value="${wooki.salt}"/>
 	</bean>
 
 	<bean id="ciUrlMatcher" class="org.springframework.security.util.RegexUrlPathMatcher">
@@ -118,7 +128,7 @@
 	<security:authentication-provider
 		user-service-ref="wookiUserDetailsService">
 		<security:password-encoder hash="sha">
-			<security:salt-source system-wide="wookiwooki" />
+			<security:salt-source system-wide="${wooki.salt}" />
 		</security:password-encoder>
 	</security:authentication-provider>
 

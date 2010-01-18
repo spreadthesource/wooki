@@ -19,10 +19,8 @@ package com.wooki.domain.biz;
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,22 +32,19 @@ import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
-import com.wooki.services.WookiModule;
 import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Component("userManager")
 public class UserManagerImpl implements UserManager {
 
-	@Autowired
 	private UserDAO authorDao;
 
-	@Autowired
 	private ActivityDAO activityDao;
 
-	@Autowired
 	private WookiSecurityContext securityCtx;
 
+	private String salt;
+	
 	@Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
 	public void addUser(User author) throws UserAlreadyException {
 
@@ -61,7 +56,7 @@ public class UserManagerImpl implements UserManager {
 		PasswordEncoder encoder = new ShaPasswordEncoder();
 		String pass = author.getPassword();
 		author.setCreationDate(new Date());
-		author.setPassword(encoder.encodePassword(pass, WookiModule.SALT));
+		author.setPassword(encoder.encodePassword(pass, this.salt));
 		authorDao.create(author);
 
 		AccountActivity aa = new AccountActivity();
@@ -112,15 +107,47 @@ public class UserManagerImpl implements UserManager {
 		}
 
 		PasswordEncoder encoder = new ShaPasswordEncoder();
-		String encodedPassword = encoder.encodePassword(oldPassword, WookiModule.SALT) ;
+		String encodedPassword = encoder.encodePassword(oldPassword, this.salt) ;
 		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
 			throw new AuthorizationException();
 		}
 		
-		user.setPassword(encoder.encodePassword(newPassword, WookiModule.SALT));
+		user.setPassword(encoder.encodePassword(newPassword, this.salt));
 		this.securityCtx.log(authorDao.update(user));
 
 		return user;
+	}
+
+	public UserDAO getAuthorDao() {
+		return authorDao;
+	}
+
+	public void setAuthorDao(UserDAO authorDao) {
+		this.authorDao = authorDao;
+	}
+
+	public ActivityDAO getActivityDao() {
+		return activityDao;
+	}
+
+	public void setActivityDao(ActivityDAO activityDao) {
+		this.activityDao = activityDao;
+	}
+
+	public WookiSecurityContext getSecurityCtx() {
+		return securityCtx;
+	}
+
+	public void setSecurityCtx(WookiSecurityContext securityCtx) {
+		this.securityCtx = securityCtx;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 }

@@ -152,7 +152,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 /******
  * DIALOG
  */
-.ui-widget-overlay { background:#666; top:0px; opacity: 0.5; position:absolute; }
+.ui-widget-overlay { background:#666; top:0px; left: 0px; opacity: 0.5; filter: alpha(opacity=50); position:absolute; }
 .ui-dialog { background: #FF7351; border:1px solid #FF7351; border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; color:white; padding:0px; margin-top:30px; }
 .ui-dialog-titlebar { float:right; width:20px; }
 .ui-dialog-titlebar-close { color:white; }

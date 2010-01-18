@@ -163,8 +163,8 @@ jQuery.extend(Tapestry.Initializer,{
 	 * @param url
 	 *            absolute component event request URL
 	 */
-	openJQueryAjaxDialogOnClick : function(element, zoneId, dialogId, url)
-    {
+	openJQueryAjaxDialogOnClick : function(element, zoneId, dialogId, url) {
+		
         element = $(element);
 
         $T(element).zoneId = zoneId;
@@ -434,6 +434,7 @@ jQuery.extend(Tapestry.Initializer,{
 			});
 		}
 	}
+
 });
 
 // Do not not desactivate Zone after a link is clicked.

@@ -36,6 +36,9 @@ public class StartupServiceImpl implements StartupService {
 
 	public StartupServiceImpl(ApplicationContext applicationContext, @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode)
 			throws UserAlreadyException, AuthorizationException {
+		// enabled headless mode
+		System.setProperty("java.awt.headless", "true"); 
+		
 
 		if (!productionMode) {
 			WookiSecurityContext securityCtx = (WookiSecurityContext) applicationContext.getBean("wookiSecurityContext");

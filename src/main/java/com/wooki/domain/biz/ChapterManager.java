@@ -116,6 +116,14 @@ public interface ChapterManager {
 	Publication getLastPublishedPublication(Long chapterId);
 
 	/**
+	 * Simply update the entity.
+	 *
+	 * @param chapter
+	 * @return
+	 */
+	Chapter update(Chapter chapter);
+	
+	/**
 	 * When a chapter content is updated then all its related comments must be
 	 * re-organized for the sake of consistency.
 	 * 

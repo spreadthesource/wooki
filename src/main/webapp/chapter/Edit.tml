@@ -4,17 +4,40 @@
 
 	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
 	
-	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+	<t:block t:id="titleBlock">
+		<h2 class="title-with-link">
+			${chapter?.title}
+			<a href="#" t:type="actionlink" class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="update-title-div" t:hideLnkId="hide-edit-title" t:resetFormClass="reset-after-hide">(modify)</a> 
+		</h2>
+		<div style="display:none;" id="update-title-div">
+			<t:form t:id="updateTitle" class="small-form reset-after-hide" t:zone="updateTitleZone">
+				<table>
+					<tr>
+						<td>
+							<t:textfield t:id="title" t:value="chapter.title" class="long-field" t:validate="required" />
+						</td>
+					</tr>
+				</table>
+				<div class="form-submit">
+					<input t:type="submit" class="btn-active" value="Update Title" /> or <a href="#" id="hide-edit-title">cancel</a>
+				</div>
+			</t:form>
+		</div>
+	</t:block>
+
+	<t:zone t:id="updateTitleZone" t:show="none" t:update="none">
+		<t:delegate to="block:titleBlock"/>
+	</t:zone>
 	
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
 		<fieldset>
 			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
 		</fieldset>
-		<fieldset>
-			<div class="left"><t:submit t:id="update"  t:type="submit" t:event="update" class="wymupdate small-active-button radied" style="border:0px !important" value="update" /></div>
-			<div class="left"><t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate small-active-button radied" style="border:0px !important" value="publish" /></div>
-			<div class="right"><t:submit t:id="cancel"  t:type="submit" t:event="cancel" class="wymupdate small-active-button radied" style="border:0px !important" value="cancel" /></div>
-		</fieldset>
+		<div class="form-submit">
+			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="update" title="Modifications will be only visible by authors" />
+			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="publish" title="Modifications will be visible by everyone" />
+			or <a href="#" t:type="pagelink" t:page="chapter/index" t:context="cancelCtx" t:mixins="confirm" t:message="Doing this will discard all your modifications, are you sure ?">Cancel</a>
+		</div>
 	</form>
 
 </html>

@@ -36,7 +36,8 @@
   		<p id="revision">Published <t:output value="prop:book?.creationDate" t:format="prop:format" /></p>
   	</div>
 
-	<h2>Abstract</h2>
+	<h2>${bookAbstractTitle}</h2>
+
 	<t:outputRaw value="content" />
 	
 	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />

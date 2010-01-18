@@ -67,7 +67,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 .radied, .box, .section { border-radius: 10px; -moz-border-radius: 10px; -webkit-border-radius: 10px; }
 .shadowed, .box, .section { box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.6); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.6);}
 
-.btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25);  border-top: 1px solid rgba(255,255,255, 0.25); border-bottom: 1px solid rgba(0,0,0,0.25);}
+.btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25);  border-top: 1px solid rgba(255,255,255, 0.25); border-bottom: 1px solid rgba(0,0,0,0.25); }
 
 /* section and positioning */
 .section { background: white; padding:10px; margin-bottom:10px;}
@@ -207,6 +207,12 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #dashboard-feed-title a { text-decoration: none }
 #dashboard-feed-title ul { }
 #dashboard-feed-title li { padding-right : 10px; border: none; display: inline; font-size: 16px;}
+
+/****
+ * EDIT PAGE
+ */
+h2.title-with-link a { text-decoration: none; color: #FF7351; font-size: 16px; font-style: normal; font-family: Helvetica,Arial,sans-serif; }
+input.wymupdate { margin-right: 10px; }
 
 /*****
  * NOT BOOK PAGES

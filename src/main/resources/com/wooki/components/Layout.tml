@@ -39,19 +39,28 @@
 	</div>
 		
 	<ul class="nav right-col" id="nav">
+		
+	
+		<t:security.ifLoggedIn>
+			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
+			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
+		</t:security.ifLoggedIn>
+		
+		<li><a href="#">Tour</a></li>
+		<li><a href="#">FAQ</a></li>
+		
 		<t:security.ifLoggedIn>	
 			<p:else>
 				<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="signin-link">Signin</a></li>
 				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 			</p:else>
 		</t:security.ifLoggedIn>
+		
 		<t:security.ifLoggedIn>
-			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
-			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>
+			<li><a href="#" t:type="pagelink" t:page="settings">Settings</a></li>
 			<li><a href="${logoutUrl}" id="logout">Logout</a></li>
 		</t:security.ifLoggedIn>
-		<li><a href="#">Tour</a></li>
-		<li><a href="#">FAQ</a></li>
+		
 	</ul>
 
 	

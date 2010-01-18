@@ -24,9 +24,6 @@ import com.wooki.services.SecurityUrlSource;
 
 /**
  * Login form.
- * 
- * @author ccordenier
- * 
  */
 public class Signin {
 

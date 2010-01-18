@@ -1,0 +1,73 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+	
+	<div class="feed section shadowed left-col x380">
+		<h2>Personals details</h2>
+		<t:form t:id="userDetails" class="small-form" t:clientValidation="false">
+
+		<t:errors />
+		<table>
+			<tr>
+				<td>
+					<label t:type="label" t:for="username"></label>
+					<t:textfield t:value="user.username" t:id="username" t:validate="required" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label t:type="label" t:for="fullname">Fullname</label>
+					<t:textfield t:value="user.fullname" t:id="fullname" t:validate="required" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label t:type="label" t:for="email">Email</label>
+					<t:textfield t:value="user.email" t:id="email" t:validate="required,email" />
+				</td>
+			</tr>
+		</table>
+		<div class="form-submit">
+			<input t:type="submit" type="submit" class="btn-active" value="Update profile" />
+		</div>
+	
+		
+		</t:form>
+	</div>
+	
+	<div class="feed section shadowed right-col x380">
+		<h2>Password change</h2>
+		
+		<t:if t:test="passwordChangeSuccess">
+			<t:flashMessage t:message="literal:Your password has been updated" />
+		</t:if>
+		
+		<form t:type="form" t:id="passwordChange" class="small-form" t:clientValidation="false">
+	
+			<t:errors />
+			<table>
+				<tr>
+					<td>
+						<label t:type="label" t:for="oldPassword"></label>
+						<t:passwordfield t:value="oldPassword" t:id="oldPassword" t:validate="required" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label t:type="label" t:for="newPassword"></label>
+						<t:passwordfield t:value="newPassword" t:id="newPassword" t:validate="required" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label t:type="label" t:for="newPasswordConfirmation"></label>
+						<t:passwordfield t:value="newPasswordConfirmation" t:id="newPasswordConfirmation" t:validate="required" />
+					</td>
+				</tr>
+			</table>
+			<div class="form-submit">
+				<input t:type="submit" type="submit" class="btn-active" value="Update password" />
+			</div>
+		</form>
+	
+	</div>
+</html>

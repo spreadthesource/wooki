@@ -34,7 +34,7 @@
 					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input type="checkbox" tabindex="3" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
 				</tr>
 			</table>	
-			<div><small><a href="#">Forgot password?</a></small></div>
+			<div style="display: none;"><small><a href="#">Forgot password?</a></small></div>
 		</form>
 	</div>
 		

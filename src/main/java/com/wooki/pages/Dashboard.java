@@ -62,6 +62,9 @@ public class Dashboard {
 
 	@Property
 	private List<Book> userBooks;
+	
+	@Property
+	private List<Book> userCollaborations;
 
 	@Property
 	private Book currentBook;
@@ -69,6 +72,9 @@ public class Dashboard {
 	@Property
 	private User user;
 
+	@Property
+	private int loopIdx;
+	
 	@Property
 	@Persist
 	private boolean showYours;
@@ -90,6 +96,7 @@ public class Dashboard {
 		if (securityCtx.isLoggedIn()) {
 			this.user = securityCtx.getAuthor();
 			this.userBooks = bookManager.listByOwner(user.getUsername());
+			this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
 			return true;
 		}
 		return false;
@@ -157,4 +164,7 @@ public class Dashboard {
 		this.firstAccess = firstAccess;
 	}
 
+	public String getStyle() {
+		return this.loopIdx == 0 ? "first" : null;
+	}
 }

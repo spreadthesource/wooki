@@ -25,6 +25,7 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.json.JSONObject;
 
 @IncludeJavaScriptLibrary({ "context:/static/js/jquery.notifyBar.js", "context:/static/js/error.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
@@ -48,5 +49,11 @@ public class Full {
 	@AfterRender
 	public void initJs() {
 		renderSupport.addInit("initErrorBox", "error-list");
+		JSONObject data = new JSONObject();
+		data.put("showLnkId", "add-chapter");
+		data.put("toShow", "add-chapter-form");
+		data.put("hideLnkId", "hide-add-chapter");
+		data.put("duration", "200");
+		renderSupport.addInit("initShowHideEffect", data);
 	}
 }

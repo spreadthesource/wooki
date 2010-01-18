@@ -39,7 +39,7 @@ public class RevisionIssue {
 	private int loopIdx;
 	
 	@Property
-	private SimpleDateFormat format = DateUtils.getDateFormat(); 
+	private SimpleDateFormat format = DateUtils.getLastModified(); 
 	
 	@SetupRender
 	public void listComments() {
@@ -50,6 +50,10 @@ public class RevisionIssue {
 		return new Object[] { this.bookId, this.chapterId, this.current.getPublication().getId() };
 	}
 
+	public Object[] getPublishedCtx() {
+		return new Object[] { this.bookId, this.chapterId };
+	}
+	
 	public String getStyle() {
 		return this.loopIdx == 0 ? "first" : null;
 	}

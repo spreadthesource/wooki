@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
+import org.apache.tapestry5.internal.services.EndOfRequestEventHub;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -35,6 +36,7 @@ import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.runtime.ComponentEventException;
 import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
@@ -72,8 +74,11 @@ public class WookiModule<T> {
 
 	private final InvalidationEventHub classesInvalidationEventHub;
 
-	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
+	private final EndOfRequestEventHub endOfRequestEventHub;
+
+	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub, EndOfRequestEventHub endOfRequestEventHub) {
 		this.classesInvalidationEventHub = classesInvalidationEventHub;
+		this.endOfRequestEventHub = endOfRequestEventHub;
 	}
 
 	/**
@@ -126,9 +131,13 @@ public class WookiModule<T> {
 			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
 				try {
 					return handler.service(request, response);
-				} catch (HttpErrorException htex) {
-					response.sendError(htex.getHttpError().getStatus(), htex.getHttpError().getMessage());
-					return true;
+				} catch (ComponentEventException cEx) {
+					if (cEx.getCause() instanceof HttpErrorException) {
+						response.sendError(((HttpErrorException) cEx.getCause()).getHttpError().getStatus(), ((HttpErrorException) cEx.getCause())
+								.getHttpError().getMessage());
+						return true;
+					}
+					return false;
 				}
 			}
 		};

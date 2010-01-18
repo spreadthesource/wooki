@@ -2,38 +2,47 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
-
-<div class="entry-content">
-	<header>
-		<nav id="chapter-actions">
-			<ul>
-				<t:security.ifAuthorOfBook t:bookId="bookId">
-					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
-					<li><a t:type="eventlink" t:event="delete" t:context="prop:editCtx" t:mixins="confirm">Delete</a></li>
-				</t:security.ifAuthorOfBook>
+	<t:if test="viewingRevision">
+		<ul id="issues-links" class="nav right-col">
+			<li>
+				<a t:type="pagelink" t:page="chapter/issues" t:context="allIssuesCtx">All issues</a>
+			</li>
+			<li id="nav-right">
+				<a t:type="pagelink" t:page="chapter/issues" t:context="chapIssuesCtx">Chapter issues</a>
+			</li>
+		</ul>
+		<div class="info">
+			<p>You are currently viewing the revision "${revision}" of this chapter.</p>
+		</div>
+		<p:else>
+			<t:security.ifAuthorOfBook t:bookId="bookId">
+				<div class="book-admin">
+					<ul>
+						<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
+						<li><a t:type="eventlink" t:event="delete" t:context="prop:editCtx" t:mixins="confirm">Delete</a></li>
+					</ul>
+				</div>
+			</t:security.ifAuthorOfBook>	
+		
+			<ul id="exports" class="nav right-col">
+				<t:ifNotNull test="previous">
+					<li id="nav-left">
+						<a t:type="pagelink" t:page="chapter/index" t:context="previousCtx" title="${previousTitle}">&lt; Previous</a>
+					</li>
+				</t:ifNotNull>
+				<t:ifNotNull test="next">
+					<li id="nav-right">
+						<a t:type="pagelink" t:page="chapter/index" t:context="nextCtx" title="${nextTitle}">Next &gt;</a>
+					</li>
+				</t:ifNotNull>
 			</ul>
-		</nav>
-		<div class="clearer" />
-		<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
-		<nav id="book-nav">
-		<ol>
-			<t:ifNotNull test="previous">
-				<li id="nav-left">
-					<a t:type="pagelink" t:page="chapter/index" t:context="previousCtx" title="${previousTitle}">&lt; Previous</a>
-				</li>
-			</t:ifNotNull>
-			<t:ifNotNull test="next">
-				<li id="nav-right">
-					<a t:type="pagelink" t:page="chapter/index" t:context="nextCtx" title="${nextTitle}">Next &gt;</a>
-				</li>
-			</t:ifNotNull>
-		</ol>
-		</nav>
-	</header> 
-	<div class="clearer" />
-	<t:if t:test="viewingRevision">
-		<p class="info">You are currently viewing the revision "${revision}" of this chapter.</p>
+		</p:else>
 	</t:if>
+
+	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+	
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+	
 	<t:ifNotNull t:test="content">
 		<t:outputRaw value="content" />
 		<p:else>
@@ -43,8 +52,5 @@
 
 	<!-- Attach bubble to content -->
 	<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
-
-</div>
-
 
 </html>

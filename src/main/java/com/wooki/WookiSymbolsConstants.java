@@ -22,4 +22,6 @@ public interface WookiSymbolsConstants {
 	static final String ERROR_WOOKI_EXCEPTION_REPORT = "wooki.exception-report";
 	
 	static final String WOOKI_SALT = "wooki.salt";
+	
+	public static final String GANALYTICS_KEY = "wooki.ganalytics-key";
 }

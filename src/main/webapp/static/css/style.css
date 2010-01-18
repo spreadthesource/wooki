@@ -99,7 +99,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #header { height:110px; margin-bottom:10px;}
 #wooki { width: 300px; float:left; padding:20px 0px;}
 
-#signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 130px 0px; position:absolute; width:200px; display:none;}
+#signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 130px 0px; position:absolute; width:200px; display:none; z-index: 29999}
 #signin { color:white; padding: 10px; background:#2F2F32; }
 #signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 18px;}
 #signin label { font-size:12px; }
@@ -138,7 +138,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
  */
 /* common */
 .jquery-notify-bar ul { list-style: none; text-align: left; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; }
-.jquery-notify-bar li { padding: 5px; font-size: 20px; color: white; z-index: 1000000;}
+.jquery-notify-bar li { padding: 5px; font-size: 20px; color: white; z-index: 30000;}
 
 /* errors */
 .jquery-notify-bar.wooki-error { padding: 0px; color:#f00; background-color: transparent; border: none; background: transparent url('../img/bubble-error-down.png') no-repeat bottom; padding-bottom: 10px;}

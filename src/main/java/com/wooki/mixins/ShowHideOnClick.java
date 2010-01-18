@@ -17,7 +17,7 @@ import org.apache.tapestry5.json.JSONObject;
  * 
  */
 @MixinAfter
-public class ShowHide {
+public class ShowHideOnClick {
 
 	/**
 	 * This parameter is the element to display on click.

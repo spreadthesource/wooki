@@ -2,12 +2,9 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
-<div class="entry-content">
-	<header>
-	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
-	</header> 
+	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
 	
-	<div class="clearer" />
+	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
 	
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
 		<fieldset>
@@ -19,7 +16,5 @@
 			<div class="right"><t:submit t:id="cancel"  t:type="submit" t:event="cancel" class="wymupdate small-active-button radied" style="border:0px !important" value="cancel" /></div>
 		</fieldset>
 	</form>
-	
-</div>
 
 </html>

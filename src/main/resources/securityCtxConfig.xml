@@ -80,7 +80,7 @@
 						<ref bean="authenticationProcessingFilter" />
 					</list>
 				</entry>
-				<entry key="/settings.*" value-ref="securedFilterList" />
+				<entry key="/accountsettings.*" value-ref="securedFilterList" />
 				<entry key="/dashboard.*" value-ref="securedFilterList" />
 				<entry key="/book/settings.*" value-ref="securedFilterList" />
 				<entry key="/chapter/edit.*" value-ref="securedFilterList" />

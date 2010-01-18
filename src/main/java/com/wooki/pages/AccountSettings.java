@@ -17,7 +17,6 @@
 package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.Field;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -41,7 +40,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * Provide the ability to changes user account settings , like password, name,
  * username and so on.
  */
-public class Settings {
+public class AccountSettings {
 	@Inject
 	private WookiSecurityContext securityCtx;
 
@@ -82,12 +81,12 @@ public class Settings {
 	 * @return
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public boolean setupUser() {
+	public Object setupUser() {
 		if (securityCtx.isLoggedIn()) {
 			this.user = securityCtx.getAuthor();
 			return true;
 		}
-		return false;
+		return Signin.class;
 	}
 
 	@SetupRender

@@ -182,6 +182,12 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 	}
 
 	@Transactional(readOnly = false)
+	public Chapter update(Chapter chapter) {
+		Defense.notNull(chapter, "chapter");
+		return this.chapterDao.update(chapter);
+	}
+
+	@Transactional(readOnly = false)
 	public void updateContent(Long chapterId, String content) {
 
 		Defense.notNull(chapterId, "chapterId");

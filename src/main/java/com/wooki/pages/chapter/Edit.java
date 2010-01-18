@@ -16,6 +16,7 @@
 
 package com.wooki.pages.chapter;
 
+import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -23,7 +24,6 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Cookies;
 
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
@@ -39,11 +39,11 @@ import com.wooki.pages.book.Index;
 public class Edit extends BookBase {
 
 	@Inject
-	private Cookies cookieSource;
-
-	@Inject
 	private ChapterManager chapterManager;
 
+	@Inject
+	private Block titleBlock;
+	
 	@InjectPage
 	private Index index;
 
@@ -90,6 +90,12 @@ public class Edit extends BookBase {
 		this.data = chapterManager.getLastContent(chapterId);
 	}
 
+	@OnEvent(value = EventConstants.SUCCESS, component ="updateTitle")
+	public Object updateTitle() {
+		this.chapterManager.update(chapter);
+		return this.titleBlock;
+	}
+
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveIds() {
 		return new Object[] { this.getBookId(), this.chapterId };
@@ -129,6 +135,10 @@ public class Edit extends BookBase {
 
 		index.setBookId(this.getBookId());
 		return index;
+	}
+
+	public Object[] getCancelCtx() {
+		return new Object[] { this.getBookId(), this.chapterId };
 	}
 
 	public Long getChapterId() {

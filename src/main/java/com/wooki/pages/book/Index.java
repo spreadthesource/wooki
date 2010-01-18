@@ -61,6 +61,9 @@ public class Index extends BookBase {
 	private Long bookAbstractId;
 
 	@Property
+	private String bookAbstractTitle;
+	
+	@Property
 	private User currentUser;
 
 	@Property
@@ -111,6 +114,7 @@ public class Index extends BookBase {
 		// List chapter infos
 		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
 		this.bookAbstractId = chapters.get(0).getId();
+		this.bookAbstractTitle = chapters.get(0).getTitle();
 
 		if (chapters.size() > 0) {
 			this.chaptersInfo = chapters.subList(1, chapters.size());

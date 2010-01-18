@@ -392,13 +392,19 @@ jQuery.extend(Tapestry.Initializer,{
 	/**
 	 * 
 	 */
-	initConfirm: function(lnkId) {
-		$(lnkId).observe('click', function(e) {
-			if(!window.confirm("Are you sure you want to delete this item ?")) {
-				Event.stop(e);
-				return;
-			}
-		});
+	initConfirm: function(params) {
+		if(params !== undefined && params.lnkId !== undefined) {
+			$(params.lnkId).observe('click', function(e) {
+				message = "Are you sure you want to delete this item ?";
+				if(params.message !== undefined) {
+					message = params.message;
+				}
+				if(!window.confirm(message)) {
+					Event.stop(e);
+					return;
+				}
+			}.bind(params));
+		}
 	},
 	
 	/**
@@ -416,6 +422,13 @@ jQuery.extend(Tapestry.Initializer,{
 				return false;
 			});
 			jQuery("#"+data.hideLnkId).bind("click", data, function(event) {
+				if(event.data.formClass !== undefined) {
+					jQuery("."+event.data.formClass).each(
+						function (i, form) { 
+							form.reset(); 
+						}
+					);
+				}
 				jQuery("#"+event.data.showLnkId).disabled = false;
 				jQuery("#"+event.data.toShow).slideUp(data.duration);
 				return false;

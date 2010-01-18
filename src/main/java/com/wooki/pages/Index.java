@@ -22,9 +22,12 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Request;
 
 import com.wooki.ActivityType;
 import com.wooki.domain.biz.BookManager;
@@ -58,6 +61,9 @@ public class Index {
 	@Inject
 	private Block userBlock;
 
+	@Inject
+	private RenderSupport support;
+	
 	@Property
 	private List<Book> userBooks;
 
@@ -76,6 +82,9 @@ public class Index {
 	@Property
 	private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
 
+	@Inject
+	private Request request;
+	
 	/**
 	 * Set current user if someone has logged in.
 	 * 
@@ -114,6 +123,12 @@ public class Index {
 		return null;
 	}
 
+	
+	public boolean isDisplayMessage() {
+		String userAgent = request.getHeader("User-Agent");
+		return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null) : false;
+	}
+	
 	public ActivityType getActivityType() {
 		if (user == null) {
 			return ActivityType.BOOK_CREATION;

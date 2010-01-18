@@ -18,7 +18,7 @@
 		</a>
 	</h1>	
 		
-	<div id="signin-box" class="fix-z-index">
+	<div id="signin-box">
 		<form name="signin" id="signin" action="${loginUrl}" method="post" class="radied shadowed">
 			<h2>Sign on Wooki</h2>
 			<table>

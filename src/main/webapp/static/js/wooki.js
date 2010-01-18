@@ -25,7 +25,7 @@ jQuery.extend(Wooki, {
  */
 jQuery.fn.outerHtml = function() {
 	return jQuery(jQuery('<div></div>').html(this.clone())).html();
-} 
+};
 
 Tapestry.ElementEffect.none = function(element) {
 	// Do nothing
@@ -174,7 +174,7 @@ jQuery.extend(Tapestry.Initializer,{
             Event.stop(event);
 
             jQuery('#'+dialogId).dialog('open');
-            
+
             var zoneObject = Tapestry.findZoneManager(element);
 
             if (!zoneObject) return;
@@ -233,10 +233,9 @@ jQuery.extend(Tapestry.Initializer,{
 			});
 		
 		jQuery("#content").bind("click mouseenter", dialog, function(event) {
-			event.data.css('display', 'none'); 
+			event.data.css('display', 'none');
 		});
-			       
-			
+
 	},
 
 	/**

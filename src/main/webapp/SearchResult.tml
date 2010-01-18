@@ -1,25 +1,27 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-   	<section id="search-results" class="radied-box">
+	<div class="section shadowed" id="search-results">
    		<h1>Books search results</h1>
-   		<div id="results">
-	   		<t:loop t:source="results" t:value="currentBook" t:empty="block:noResult">
-	   			<div class="result-row">
-	   				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
-	   				by
-	   				<t:loop t:source="currentBook.authors" t:value="currentAuthor">
-	   					<a t:type="pagelink" t:page="index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})
-	   				</t:loop>
-	   				<t:lastModifiedFormatter t:time="currentBook.creationDate.time" />
-	   			</div>
-	   		</t:loop>
+   		<div id="results" class="feed">
+   			<ul>
+		   		<t:loop t:source="results" t:value="currentBook" t:index="loopIdx" t:empty="block:noResult">
+		   			<li class="${style}">
+		   				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+		   				by
+		   				<t:loop t:source="currentBook.authors" t:value="currentAuthor">
+		   					<a t:type="pagelink" t:page="index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})
+		   				</t:loop>
+		   				<t:lastModifiedFormatter t:time="currentBook.creationDate.time" />
+		   			</li>
+		   		</t:loop>
+	   		</ul>
    		</div>
-   	</section>
-   	
+	</div>
+	   	
    	<t:block id="noResult">
-   		<p>
+   		<li>
    			No Results Found.
-   		</p>
+   		</li>
    	</t:block>
     
 </html>

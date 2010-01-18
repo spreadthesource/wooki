@@ -250,4 +250,26 @@
 	</div>
 </div>
 
+<div class="clearer" />
+	<div class="section shadowed wrapper">
+		<ol id="table-of-contents">
+			<li>
+				<h3><a href="#" class="active" id="add-chapter">Add Chapter</a></h3>
+				<div id="add-chapter-form" style="display: none;">
+					<form name="addChapterForm" class="small-form">
+						<table>
+							<tr>
+								<td>
+									<input type="text" id="field1" value="Introduction" />
+								</td>
+							</tr>
+						</table>
+						<div class="form-submit">
+							<input type="submit" class="btn-active" value="Add Chapter" /> or <a href="#" id="hide-add-chapter">cancel</a>
+						</div>
+					</form>
+				</div>
+			</li>
+		</ol>
+	</div>
 </html>

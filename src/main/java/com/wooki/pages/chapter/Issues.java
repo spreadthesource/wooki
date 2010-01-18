@@ -37,7 +37,7 @@ import com.wooki.services.HttpError;
  */
 public class Issues extends BookBase {
 
-	protected static final String ALL = "all";
+	public static final String ALL = "all";
 
 	@Inject
 	private ChapterManager chapterManager;

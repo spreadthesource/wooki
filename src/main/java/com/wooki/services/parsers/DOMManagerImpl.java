@@ -38,8 +38,9 @@ public class DOMManagerImpl implements DOMManager {
 
 	private static final String COMMENTABLE_CLASS = "commentable";
 
-	private final Set<String> COMMENTABLE = CollectionFactory.newSet("p", "h1",
-			"h2", "h3", "h4", "h5", "h6", "ul", "ol");
+	private static final String BLOCKQUOTE = "blockquote";
+
+	private final Set<String> COMMENTABLE = CollectionFactory.newSet("p", "h1", "h2", "h3", "h4", "h5", "h6", "ul", "ol", "pre", "blockquote");
 
 	private static final String CHAPTER_ROOT_NODE = "chapter";
 
@@ -52,7 +53,7 @@ public class DOMManagerImpl implements DOMManager {
 	private final Logger logger = LoggerFactory.getLogger(DOMManagerImpl.class);
 
 	private String characterEncoding = "UTF-8";
-	
+
 	/**
 	 * Used to allocate id on content.
 	 * 
@@ -78,8 +79,7 @@ public class DOMManagerImpl implements DOMManager {
 
 	public String adaptContent(String content, Long prefix) {
 		StringBuffer result = new StringBuffer();
-		result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(
-				ID_START).append("=\"0\">");
+		result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(ID_START).append("=\"0\">");
 		result.append(content);
 		result.append("</").append(CHAPTER_ROOT_NODE).append(">");
 		return addIds(result.toString(), prefix);
@@ -110,8 +110,7 @@ public class DOMManagerImpl implements DOMManager {
 
 	}
 
-	public void reAssignComment(List<Comment> comments, String content,
-			String newContent) {
+	public void reAssignComment(List<Comment> comments, String content, String newContent) {
 
 		Document currentDoc = parseContent(content);
 		Document newDoc = parseContent(newContent);
@@ -124,14 +123,12 @@ public class DOMManagerImpl implements DOMManager {
 				try {
 					// Verify that the comment do no exist in the new document
 					XPath path = XPath.newInstance("//*[@id=" + domId + "]");
-					Element elt = (Element) path.selectSingleNode(newDoc
-							.getRootElement());
+					Element elt = (Element) path.selectSingleNode(newDoc.getRootElement());
 
 					// Reassign if needed
 					if (elt == null) {
 
-						elt = (Element) path.selectSingleNode(currentDoc
-								.getRootElement());
+						elt = (Element) path.selectSingleNode(currentDoc.getRootElement());
 
 						// Cannot find the element in the existing document
 						if (elt == null) {
@@ -145,31 +142,23 @@ public class DOMManagerImpl implements DOMManager {
 							boolean found = false;
 
 							for (int i = idx - 1; i >= 0; i--) {
-								Element cont = (Element) elt.getParentElement()
-										.getContent(i);
+								Element cont = (Element) elt.getParentElement().getContent(i);
 								if (cont.getName().startsWith("h")) {
-									XPath reaffect = XPath
-											.newInstance("//*[@id="
-													+ cont
-															.getAttributeValue("id")
-													+ "]");
+									XPath reaffect = XPath.newInstance("//*[@id=" + cont.getAttributeValue("id") + "]");
 									// Check that the new node still exist
 									if (reaffect.selectSingleNode(newDoc) != null) {
 										found = true;
-										comment.setDomId(cont
-												.getAttributeValue("id"));
+										comment.setDomId(cont.getAttributeValue("id"));
 										break;
 									}
 								}
 							}
 
 							if (!found) {
-								if (CHAPTER_ROOT_NODE.equals(elt
-										.getParentElement().getName())) {
+								if (CHAPTER_ROOT_NODE.equals(elt.getParentElement().getName())) {
 									comment.setDomId(null);
 								} else {
-									comment.setDomId(elt.getParentElement()
-											.getAttributeValue("id"));
+									comment.setDomId(elt.getParentElement().getAttributeValue("id"));
 								}
 							}
 
@@ -183,8 +172,7 @@ public class DOMManagerImpl implements DOMManager {
 
 			}
 		} else {
-			logger
-					.error("Document content cannot be parsed during comment reassignment.");
+			logger.error("Document content cannot be parsed during comment reassignment.");
 		}
 
 	}
@@ -195,18 +183,37 @@ public class DOMManagerImpl implements DOMManager {
 	 * @param elt
 	 */
 	private void buildIds(IdAllocator allocator, Element elt, Long prefix) {
-		if (COMMENTABLE.contains(elt.getName())
-				&& elt.getAttribute("id") == null) {
+		if (COMMENTABLE.contains(elt.getName())) {
 			if (prefix != null) {
-				elt.setAttribute("id", "b" + prefix.toString()
-						+ allocator.next());
+				elt.setAttribute("id", "b" + prefix.toString() + allocator.next());
 			} else {
 				elt.setAttribute("id", "b" + allocator.next());
 			}
 			elt.setAttribute("class", COMMENTABLE_CLASS);
 		}
-		for (Element child : (List<Element>) elt.getChildren()) {
-			buildIds(allocator, child, prefix);
+
+		if (!BLOCKQUOTE.equalsIgnoreCase(elt.getName())) {
+			for (Element child : (List<Element>) elt.getChildren()) {
+				buildIds(allocator, child, prefix);
+			}
+		} else {
+			for (Element child : (List<Element>) elt.getChildren()) {
+				clearId(child);
+			}
+		}
+	}
+
+	/**
+	 * Clear all subsequent ids.
+	 * 
+	 * @param elt
+	 */
+	private void clearId(Element elt) {
+		if (elt != null) {
+			elt.removeAttribute("id");
+			for (Element child : (List<Element>) elt.getChildren()) {
+				clearId(child);
+			}
 		}
 	}
 
@@ -221,8 +228,7 @@ public class DOMManagerImpl implements DOMManager {
 			SAXBuilder builder = new SAXBuilder();
 			builder.setValidation(false);
 			builder.setIgnoringElementContentWhitespace(true);
-			Document doc = builder.build(new StringInputStream(new String(
-					content.getBytes(getCharacterEncoding()))));
+			Document doc = builder.build(new StringInputStream(new String(content.getBytes(getCharacterEncoding()))));
 			return doc;
 		} catch (JDOMException jdEx) {
 			logger.error("Error during document parsing", jdEx);
@@ -276,5 +282,5 @@ public class DOMManagerImpl implements DOMManager {
 	public void setCharacterEncoding(String characterEncoding) {
 		this.characterEncoding = characterEncoding;
 	}
-	
+
 }

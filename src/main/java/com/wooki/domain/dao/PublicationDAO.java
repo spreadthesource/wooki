@@ -41,5 +41,13 @@ public interface PublicationDAO extends GenericDAO<Publication, Long>{
 	 * @return
 	 */
 	Publication findLastPublishedRevision(Long chapterId);
+
 	
+	/**
+	 * Check if the revision is published.
+	 *
+	 * @param revision
+	 * @return
+	 */
+	boolean isPublished(Long revision);
 }

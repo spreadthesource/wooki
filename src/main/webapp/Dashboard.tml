@@ -13,28 +13,40 @@
 		</div>
 	</t:if>
 
-	<div id="user-books" class="feed section shadowed left-col x300">
-		<h2>Create a new Book</h2>
-		<form t:type="form" t:id="createBookForm" class="small-form">
-			<table>
-				<tr>
-					<td>
-						<input t:type="textfield" t:id="bookTitle" />
-					</td>
-				</tr>
-			</table>
-			<div class="form-submit">
-				<t:submit class="btn-active" t:value="Create" /> or <a href="#" t:type="pagelink" t:page="dashboard" t:mixins="ResetFormOnClick">cancel</a>
-			</div>
-		</form>
-        <ul>
-			<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
-            	<li id="ent-${currentBook.id}">
-					<span><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></span>
-       				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
-         		</li>
-         	</t:loop>
-       	</ul>
+	<div class="left-col">
+		<div id="user-books" class="feed section shadowed x300">
+			<h2>Create a new Book</h2>
+			<form t:type="form" t:id="createBookForm" class="small-form">
+				<table>
+					<tr>
+						<td>
+							<input t:type="textfield" t:id="bookTitle" />
+						</td>
+					</tr>
+				</table>
+				<div class="form-submit">
+					<t:submit class="btn-active" t:value="Create" /> or <a href="#" t:type="pagelink" t:page="dashboard" t:mixins="ResetFormOnClick">cancel</a>
+				</div>
+			</form>
+	        <ul>
+				<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
+	            	<li id="ent-${currentBook.id}">
+						<span><a t:id="removeBook" class="delete-book-link" t:type="clickAndRemove" t:entityId="currentBook.id" title="Delete Book">Delete</a></span>
+	       				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+	         		</li>
+	         	</t:loop>
+	       	</ul>
+	    </div>
+		<div id="collaborator-feed" class="feed section shadowed x300">
+	    	<h2>Your collaboration</h2>
+            <ul>
+            	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
+                    <li class="${style}">
+                    	<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
+            		</li>
+            	</t:loop>
+            </ul>
+	    </div>
     </div>
 
 	<t:block t:id="titleBlock">

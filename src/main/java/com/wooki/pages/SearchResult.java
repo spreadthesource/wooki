@@ -77,4 +77,8 @@ public class SearchResult {
 		this.results = searchService.findBook(queryString);
 	}
 	
+	public String getStyle() {
+		return this.loopIdx == 0 ? "first" : null;
+	}
+	
 }

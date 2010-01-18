@@ -50,9 +50,9 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 	}
 
 	public User getAuthor() {
-		String username = this.getUsername();
-		if (username != null) {
-			return userDao.findByUsername(username);
+		Long id = this.getId();
+		if (id != null) {
+			return userDao.findById(id);
 		}
 		return null;
 	}
@@ -102,6 +102,18 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
 			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
 				return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	private Long getId() {
+		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
+				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
+			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+				return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
 			} else {
 				return null;
 			}

@@ -46,9 +46,6 @@ import com.wooki.services.utils.SlugBuilder;
 
 /**
  * Global wooki application business manager.
- * 
- * @author ccordenier
- * 
  */
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("bookManager")

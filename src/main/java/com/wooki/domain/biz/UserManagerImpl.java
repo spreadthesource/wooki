@@ -18,6 +18,7 @@ package com.wooki.domain.biz;
 
 import java.util.Date;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
@@ -28,11 +29,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.UserDAO;
+import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.services.WookiModule;
+import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("userManager")
@@ -43,6 +46,9 @@ public class UserManagerImpl implements UserManager {
 
 	@Autowired
 	private ActivityDAO activityDao;
+
+	@Autowired
+	private WookiSecurityContext securityCtx;
 
 	@Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
 	public void addUser(User author) throws UserAlreadyException {
@@ -72,6 +78,49 @@ public class UserManagerImpl implements UserManager {
 
 	public String[] listUserNames(String prefix) {
 		return authorDao.listUserNames(prefix);
+	}
+
+	@Transactional(readOnly = false)
+	public User updateDetails(User user) throws AuthorizationException, UserAlreadyException {
+		Defense.notNull(user, "user");
+
+		if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()
+				&& user.getPassword() != this.securityCtx.getAuthor().getPassword()) {
+			throw new AuthorizationException("Action not authorized");
+		}
+
+		User userByUsername = findByUsername(user.getUsername());
+
+		// check if the new username is not already taken by someone else
+		if (userByUsername != null && userByUsername.getId() != user.getId()) {
+			throw new UserAlreadyException();
+		}
+
+		this.securityCtx.log(authorDao.update(user));
+
+		return user;
+	}
+
+	@Transactional(readOnly=false)
+	public User updatePassword(User user, String oldPassword, String newPassword) throws AuthorizationException {
+		Defense.notNull(user, "user");
+		Defense.notNull(oldPassword, "oldPassword");
+		Defense.notNull(newPassword, "newPassword");
+
+		if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()) {
+			throw new AuthorizationException("Action not authorized");
+		}
+
+		PasswordEncoder encoder = new ShaPasswordEncoder();
+		String encodedPassword = encoder.encodePassword(oldPassword, WookiModule.SALT) ;
+		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
+			throw new AuthorizationException();
+		}
+		
+		user.setPassword(encoder.encodePassword(newPassword, WookiModule.SALT));
+		this.securityCtx.log(authorDao.update(user));
+
+		return user;
 	}
 
 }

@@ -16,8 +16,7 @@
 
 package com.wooki.domain.biz;
 
-import java.util.List;
-
+import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 
@@ -51,5 +50,22 @@ public interface UserManager {
 	 * @return
 	 */
 	String[] listUserNames(String prefix);
+	
+	/**
+	 * update user details
+	 * @param user with updated details, excepting the password
+	 * @return
+	 * @throws UserAlreadyException 
+	 * @throws AuthorizationException 
+	 */
+	User updateDetails(User user) throws AuthorizationException, UserAlreadyException;
+	
+	/**
+	 * Update an user password
+	 * @param user
+	 * @return
+	 * @throws AuthorizationException
+	 */
+	User updatePassword(User user, String oldPassword, String newPassword) throws AuthorizationException;
 
 }

@@ -82,6 +82,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 .x260 { width: 235px; }
 .x300 { width: 275px; }
 .x360 { width: 335px; }
+.x380 { width: 355px; }
 .x400 { width: 375px; }
 .x460 { width: 435px; }
 .x500 { width: 475px; }
@@ -132,12 +133,20 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #collaborator-feed { padding-bottom: 10px; }
 
 /******
- * ERRORS
+ * JQUERY NOTIFY BAR 
  */
+/* common */
+.jquery-notify-bar ul { list-style: none; text-align: left; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; }
+.jquery-notify-bar li { padding: 5px; font-size: 20px; color: white; z-index: 1000000;}
+
+/* errors */
 .jquery-notify-bar.wooki-error { padding: 0px; color:#f00; background-color: transparent; border: none; background: transparent url('../img/bubble-error-down.png') no-repeat bottom; padding-bottom: 10px;}
 .error-list { background-color: #2F2F32;}
-.error-list ul { list-style: none; text-align: left; padding-bottom: 5px; padding-top: 5px; padding-left: 20px; }
-.error-list li { padding: 5px; font-size: 20px; color: white; z-index: 1000000;}
+
+/* flash msg */
+.jquery-notify-bar.wooki-flash { padding: 0px; color:#2F2F32; background-color: transparent; border: none; padding-bottom: 10px;}
+.flash-list { background-color: white; }
+.flash-list li { color:#2F2F32 }
 
 /******
  * DIALOG

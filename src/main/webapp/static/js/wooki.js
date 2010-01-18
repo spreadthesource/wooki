@@ -89,6 +89,14 @@ Tapestry.Append = Class.create({
  * Add initialization method to Tapestry.Initializer object
  */
 jQuery.extend(Tapestry.Initializer,{
+	
+	initFlashMsgBox : function(elt) {
+		jQuery.notifyBar( {
+			html : jQuery("#" + elt).html(),
+			animationSpeed : "normal",
+			cls : "wooki-flash"
+		});
+	},
 
 	/**
 	 * This method overrides the update method to insert new content instead of

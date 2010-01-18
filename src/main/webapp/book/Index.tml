@@ -68,7 +68,7 @@
 			<!-- Add chapter section based on simple show hide mechanism -->
 			<li>
 				<h3 class="add-chapter-link">
-					<t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHide" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">Add a chapter</t:actionlink>
+					<t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">Add a chapter</t:actionlink>
 				</h3>
 				<div style="display:none;" id="add-chapter-form">
 					<t:form t:id="addChapterForm" class="small-form">

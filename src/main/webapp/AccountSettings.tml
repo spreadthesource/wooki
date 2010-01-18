@@ -27,9 +27,8 @@
 			</tr>
 		</table>
 		<div class="form-submit">
-			<input t:type="submit" type="submit" class="btn-active" value="Update profile" />
+			<input t:type="submit" type="submit" class="btn-active" value="Update profile" /> or <a href="#" t:type="pagelink" t:page="accountSettings" t:id="reset" t:mixins="resetFormOnClick">cancel</a>
 		</div>
-	
 		
 		</t:form>
 	</div>

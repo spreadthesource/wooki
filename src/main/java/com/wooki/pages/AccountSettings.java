@@ -26,9 +26,11 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.springframework.security.providers.encoding.PasswordEncoder;
 import org.springframework.security.providers.encoding.ShaPasswordEncoder;
 
+import com.wooki.WookiSymbolsConstants;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
@@ -41,6 +43,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * username and so on.
  */
 public class AccountSettings {
+
 	@Inject
 	private WookiSecurityContext securityCtx;
 
@@ -50,6 +53,10 @@ public class AccountSettings {
 	@Inject
 	private Messages messages;
 
+	@Inject
+	@Symbol(value = WookiSymbolsConstants.WOOKI_SALT)
+	private String salt;
+	
 	@Component(id = "userDetails")
 	private Form userDetails;
 
@@ -122,7 +129,7 @@ public class AccountSettings {
 	void validatePasswordChange() {
 		// first, let's check if old password is ok
 		PasswordEncoder encoder = new ShaPasswordEncoder();
-		String encodedPassword = encoder.encodePassword(oldPassword, WookiModule.SALT);
+		String encodedPassword = encoder.encodePassword(oldPassword, this.salt);
 		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
 			passwordChange.recordError(messages.get("error-old-password-wrong"));	
 		}

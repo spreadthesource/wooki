@@ -81,11 +81,6 @@ public class WookiModule<T> {
 		this.endOfRequestEventHub = endOfRequestEventHub;
 	}
 
-	/**
-	 * Use to encrypt the user password
-	 */
-	public static final String SALT = "wookiwooki";
-
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");

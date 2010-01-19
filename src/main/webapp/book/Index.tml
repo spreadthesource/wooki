@@ -50,7 +50,10 @@
 				<h3>
 					<t:if t:test="published">
 						<t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink>
-						<p:else><span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+						<p:else>
+							<t:security.ifAuthorOfBook t:bookId="bookId">
+								<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+							</t:security.ifAuthorOfBook>
 						</p:else>
 					</t:if>
 					

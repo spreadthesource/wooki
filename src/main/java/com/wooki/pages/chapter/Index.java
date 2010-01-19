@@ -148,8 +148,8 @@ public class Index extends BookBase {
 		return new Object[] { this.getBookId(), this.next };
 	}
 
-	public boolean isLastRevision() {
-		return ChapterManager.LAST.equals(this.getRevision());
+	public boolean isShowAdmin() {
+		return !this.isViewingRevision() || ChapterManager.LAST.equals(this.getRevision());
 	}
 	
 	@OnEvent(value = EventConstants.PASSIVATE)

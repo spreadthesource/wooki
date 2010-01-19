@@ -3,7 +3,7 @@
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
 	<t:security.ifAuthorOfBook t:bookId="bookId">
-		<t:if test="lastRevision">
+		<t:if test="showAdmin">
 			<div class="book-admin">
 				<ul>
 					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>

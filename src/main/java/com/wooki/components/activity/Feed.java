@@ -46,6 +46,10 @@ public class Feed<T extends Activity> {
 	private String title;
 
 	@Property
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "x460")
+	private String size;
+	
+	@Property
 	@Parameter(defaultPrefix = BindingConstants.BLOCK, allowNull = true)
 	private Block titleBlock;
 
@@ -101,7 +105,7 @@ public class Feed<T extends Activity> {
 						this.activities = this.activityManager.listUserActivity(nbElts, userId);
 					} else {
 						if (ActivityType.ACCOUNT.equals(type)) {
-							this.activities = this.activityManager.listAccountActivity(nbElts, userId);
+							this.activities = this.activityManager.listAccountActivity(nbElts);
 						}
 					}
 

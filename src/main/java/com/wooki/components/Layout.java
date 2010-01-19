@@ -25,6 +25,7 @@ import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PageRenderLinkSource;
 
@@ -58,6 +59,7 @@ public class Layout extends LayoutBase {
 	@Property
 	private String logoutUrl;
 
+	@Validate("required")
 	@Property
 	private String queryString;
 

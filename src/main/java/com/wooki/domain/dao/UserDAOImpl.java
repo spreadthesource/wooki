@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.User;
@@ -28,10 +29,7 @@ import com.wooki.domain.model.User;
 public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO {
 
 	public User findByUsername(String username) {
-		if (username == null) {
-			throw new IllegalArgumentException(
-					"Username should not be null to find it by name.");
-		}
+		Defense.notNull(username, "username");
 		Query query = this.entityManager.createQuery("from "
 				+ this.getEntityType() + " u where lower(u.username)=:un");
 		query.setParameter("un", username.toLowerCase());
@@ -43,10 +41,7 @@ public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO {
 	}
 
 	public String[] listUserNames(String prefix) {
-		if (prefix == null) {
-			throw new IllegalArgumentException(
-					"Username should not be null to find it by name.");
-		}
+		Defense.notNull(prefix, "prefix");
 		Query query = this.entityManager.createQuery("select u.username from "
 				+ this.getEntityType() + " u where lower(u.username) like :un");
 		query.setParameter("un", prefix.toLowerCase() + "%");

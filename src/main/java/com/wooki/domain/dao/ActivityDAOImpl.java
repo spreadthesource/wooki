@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
@@ -41,9 +42,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 	}
 
 	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
-		if (userId == null) {
-			throw new IllegalArgumentException("User id cannot be null to find its activities");
-		}
+		Defense.notNull(userId, "userId");
 		Query query = entityManager
 				.createQuery("select distinct a from "
 						+ Activity.class.getName()
@@ -62,9 +61,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 	}
 
 	public List<Activity> listUserActivity(int nbElts, Long userId) {
-		if (userId == null) {
-			throw new IllegalArgumentException("User id cannot be null to find its activities");
-		}
+		Defense.notNull(userId, "userId");
 		Query query = entityManager.createQuery("select a from " + getEntityType()
 				+ " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
 		query.setParameter("uid", userId);
@@ -73,9 +70,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 	}
 
 	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
-		if (userId == null) {
-			throw new IllegalArgumentException("User id cannot be null to find its activities");
-		}
+		Defense.notNull(userId, "userId");
 		Query query = entityManager
 				.createQuery("select distinct a from "
 						+ Activity.class.getName()
@@ -101,7 +96,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		return query.getResultList();
 	}
 
-	public List<Activity> listAccountActivity(int nbElts, Long userId) {
+	public List<Activity> listAccountActivity(int nbElts) {
 		Query query = entityManager.createQuery("from " + AccountActivity.class.getName()
 				+ " a where a.deletionDate is null and a.type=:type order by a.creationDate desc");
 		query.setParameter("type", AccountEventType.JOIN);

@@ -31,7 +31,7 @@
 						<input class="signin-field" name="j_password" type="password" tabindex="2" /></td>
 				</tr>
 				<tr>
-					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input type="checkbox" tabindex="3" id="rememberMe"/> <label for="rememberMe">Remember me</label></td>
+					<td><input type="submit" class="radied btn-active" value="Signin" id="do-signin" tabindex="4" /> <input style="display: none;" type="checkbox" tabindex="3" id="rememberMe"/> <label style="display: none;" for="rememberMe">Remember me</label></td>
 				</tr>
 			</table>	
 			<div style="display: none;"><small><a href="#">Forgot password?</a></small></div>

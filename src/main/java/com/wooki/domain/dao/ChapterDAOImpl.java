@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.persistence.Query;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
@@ -30,9 +31,7 @@ import com.wooki.domain.model.Publication;
 public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements ChapterDAO {
 
 	public boolean isAuthor(Long chapterId, String username) {
-		if (chapterId == null) {
-			throw new IllegalArgumentException("Book cannot be null");
-		}
+		Defense.notNull(chapterId, "chapterId");
 		Query query = this.entityManager
 				.createQuery("select count(b) from Book b, Chapter c join b.users as u where c.id=:id and b.id=c.book.id and u.username=:un");
 		Long result = (Long) query.setParameter("un", username).setParameter(
@@ -41,9 +40,8 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 	}
 
 	public List<Object[]> findNext(Long bookId, Long chapterId) {
-		if (bookId == null || chapterId == null) {
-			throw new IllegalArgumentException("Book id and chapter id should not be null to obtain next and previous");
-		}
+		Defense.notNull(bookId, "bookId");
+		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager
 				.createQuery(String
 						.format("select item.id, item.title from "
@@ -59,9 +57,8 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 	}
 
 	public List<Object[]> findPrevious(Long bookId, Long chapterId) {
-		if (bookId == null || chapterId == null) {
-			throw new IllegalArgumentException("Book id and chapter id should not be null to obtain next and previous");
-		}
+		Defense.notNull(bookId, "bookId");
+		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager
 				.createQuery(String
 						.format("select item.id, item.title from "
@@ -77,9 +74,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 	}
 
 	public List<Chapter> listChapterInfo(Long bookId) {
-		if (bookId == null) {
-			throw new IllegalArgumentException("Book id should not be null while lis chapters informations");
-		}
+		Defense.notNull(bookId, "bookId");
 		Query query = entityManager.createQuery(String.format(
 				"select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book and c.deletionDate is null", getEntityType(), getEntityType()));
 		query.setParameter("book", bookId);
@@ -87,18 +82,14 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
 	}
 
 	public List<Chapter> listChapters(Long idBook) {
-		if (idBook == null) {
-			throw new IllegalArgumentException("Book id cannot.");
-		}
+		Defense.notNull(idBook, "bookId");
 		Query query = this.entityManager.createQuery("from " + getEntityType() + " c where c.book.id=:book and c.deletionDate is null");
 		List<Chapter> result = (List<Chapter>) query.setParameter("book", idBook).getResultList();
 		return result;
 	}
 
 	public List<Chapter> listLastModified(Long id, int nbElts) {
-		if (id == null) {
-			throw new IllegalArgumentException("Book id cannot.");
-		}
+		Defense.notNull(id, "bookId");
 		Query query = this.entityManager.createQuery("from " + this.getEntityType()
 				+ " c where c.book.id=:booId and c.deletionDate is null order by c.lastModified desc");
 		query.setParameter("bookId", id);

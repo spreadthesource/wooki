@@ -1,26 +1,46 @@
 <html t:type="layout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter">
-	<section id="book-settings">
-		<h1><a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
-		<div id="book-info" class="radied">
+
+	<h1><a t:type="pagelink" t:page="book/index" t:context="book.id">${book.title}</a></h1>
+
+	<div class="left-col">
+		<div id="general-settings" class="section shadowed x460">
 			<h2>General Settings</h2>
-			<form t:type="form" t:id="bookInfoForm">
+			<form t:type="form" t:id="bookInfoForm" class="small-form">
 				<t:errors />
-						<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title" class="form-field" />
-						<input t:type="submit" class="small-active-button radied" value="Update" />
+				<table>
+					<tr>
+						<td>
+							<label t:type="label" t:for="title"></label><input t:validate="required" t:type="textfield" t:id="title" t:value="book.title"/>
+						</td>
+					</tr>
+				</table>
+				<div class="form-submit">
+					<t:submit class="btn-active" t:value="Update" /> or <a href="#" t:type="pagelink" t:page="book/settings" t:mixins="ResetFormOnClick">cancel</a>
+				</div>
 			</form>
 		</div>
-		<div id="authors-settings" class="radied">
+	</div>
+	<div class="right-col">
+		<div id="authors-settings" class="feed section shadowed x300 ">
 			<h2>Author List</h2>
 			<t:security.ifOwnerOfBook t:bookId="bookId">
-				<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top">
-					<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete" class="form-field" size="15"/>
-					<span><a href="#" t:type="linksubmit">Add author</a></span>
+				<form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top" class="small-form">
+					<table>
+						<tr>
+							<td>
+								<input t:type="textfield" t:id="newAuthor" t:mixins="autocomplete" class="form-field" size="15"/>
+							</td>
+							<td>
+								<input t:type="submit" class="btn-active" t:value="Add author" />
+							</td>
+						</tr>
+					</table>
 				</form>
 			</t:security.ifOwnerOfBook>
 			<t:block id="authorRow">
-				<li id="ent-${currentAuthor.id}">
+				<li id="ent-${currentAuthor.id}" class="${style}">
 					<t:if test="!loggedAuthor">
 						<span><a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})</span>
 						<t:security.ifOwnerOfBook t:bookId="bookId">
@@ -38,5 +58,5 @@
 				</t:loop>
 			</ul>
 		</div>
-	</section>
+	</div>
 </html>

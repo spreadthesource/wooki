@@ -23,7 +23,7 @@ public class GAnalyticsScriptsInjectorImpl implements GAnalyticsScriptsInjector 
 	}
 
 	public void addScript(Document document) {
-		if (key != null && !key.isEmpty()) {
+		if (key != null && !key.trim().equals("")) {
 			Element root = document.getRootElement();
 
 			if (root == null)

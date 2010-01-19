@@ -1,102 +1,112 @@
-<html t:type="booklayout"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter">
-
-	<t:security.ifAuthorOfBook t:bookId="bookId">
-		<div class="book-admin">
-			<ul>
-				<t:if t:test="abstractHasWorkingCopy">
-					<li><a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a></li>
-				</t:if>
-				<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a></li>
-				<li><a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a></li>
-			</ul>
-		</div>
-	</t:security.ifAuthorOfBook>
-	<ul id="exports" class="nav right-col">
-		<li><a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a></li>
-		<li><a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a></li>
-	</ul>
-			
-	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
-
-	<div id="meta">
-  		<p id="authors">
-  			By
-  			<t:loop source="authors" value="currentUser" index="loopIdx">
-  				${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
-  				<t:if test="isAntepenultiemIteration(loopIdx, authors.size())">
-  					and
-  					<p:else>
-		  				<t:unless test="isLastIteration(loopIdx, authors.size())">, </t:unless>
-  					</p:else>
-  				</t:if>
-  			</t:loop>
-  		</p>
-  		<p id="revision">Published <t:output value="prop:book?.creationDate" t:format="prop:format" /></p>
-  	</div>
-
-	<h2>${bookAbstractTitle}</h2>
-
-	<t:outputRaw value="content" />
-	
-	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
-
-	<h2>Table of contents</h2>
-	
-	<ol id="table-of-contents">
-		<t:loop t:source="chaptersInfo" t:value="currentChapter">
-			<li>
-				<h3>
-					<t:if t:test="published">
-						<t:pagelink t:page="chapter/index" t:context="chapterCtx">${currentChapter.title}</t:pagelink>
-						<p:else>
-							<t:security.ifAuthorOfBook t:bookId="bookId">
-								<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
-							</t:security.ifAuthorOfBook>
-						</p:else>
-					</t:if>
-					
-					<t:if t:test="showWorkingCopyLink">
-						<t:security.ifAuthorOfBook t:bookId="bookId">
-							<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx"><em> (Working copy) </em></t:pagelink>
-						</t:security.ifAuthorOfBook>
-					</t:if>
-		
-				</h3>
-				<p><t:if t:test="published">
-					<t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-					<p:else>
-							<t:security.ifAuthorOfBook t:bookId="bookId">
-								<t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-							</t:security.ifAuthorOfBook>
-					</p:else>
-				</t:if></p>
-			</li>
-		</t:loop>
-
-		<t:security.ifAuthorOfBook t:bookId="bookId">
-			<!-- Add chapter section based on simple show hide mechanism -->
-			<li>
-				<h3 class="add-chapter-link">
-					<t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">Add a chapter</t:actionlink>
-				</h3>
-				<div style="display:none;" id="add-chapter-form">
-					<t:form t:id="addChapterForm" class="small-form">
-						<table>
-							<tr>
-								<td>
-									<t:textfield t:value="chapterName" class="long-field" t:validate="required" />
-								</td>
-							</tr>
-						</table>
-						<div class="form-submit">
-							<input t:type="submit" class="btn-active" value="Add Chapter" /> or <a href="#" id="hide-add-chapter">cancel</a>
-						</div>
-					</t:form>
-				</div>
-			</li>
-		</t:security.ifAuthorOfBook>
-	</ol>
-
+<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+    <t:security.ifAuthorOfBook t:bookId="bookId">
+        <div class="book-admin">
+            <ul>
+                <t:if t:test="abstractHasWorkingCopy">
+                    <li>
+                        <a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a>
+                    </li>
+                </t:if>
+                <li>
+                    <a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a>
+                </li>
+                <li>
+                    <a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a>
+                </li>
+            </ul>
+        </div>
+    </t:security.ifAuthorOfBook>
+    <ul id="exports" class="nav right-col">
+        <li>
+            <a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a>
+        </li>
+        <li>
+            <a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a>
+        </li>
+    </ul>
+    <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+    <div id="meta">
+        <p id="authors">
+            By
+            <t:loop source="authors" value="currentUser" index="loopIdx">
+                ${currentUser.fullname} <a t:type="pagelink" t:page="index" t:context="currentUser.username">${currentUser.username}</a>
+                <t:if test="isAntepenultiemIteration(loopIdx, authors.size())">
+                    and
+                    <p:else>
+                        <t:unless test="isLastIteration(loopIdx, authors.size())">
+                            , 
+                        </t:unless>
+                    </p:else>
+                </t:if>
+            </t:loop>
+        </p>
+        <p id="revision">
+            Published <t:output value="prop:book?.creationDate" t:format="prop:format" />
+        </p>
+    </div><h2>${bookAbstractTitle}</h2>
+    <t:outputRaw value="content" /><t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" /><h2>Table of contents</h2>
+    <ol id="table-of-contents">
+        <t:loop t:source="chaptersInfo" t:value="currentChapter">
+            <t:if t:test="published">
+                <li>
+                    <h3>
+                        <t:pagelink t:page="chapter/index" t:context="chapterCtx">
+                            ${currentChapter.title}
+                        </t:pagelink>
+                        <t:if t:test="showWorkingCopyLink">
+                            <t:security.ifAuthorOfBook t:bookId="bookId">
+                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+                                    <em>(Working copy) </em>
+                                </t:pagelink>
+                            </t:security.ifAuthorOfBook>
+                        </t:if>
+                    </h3>
+                    <p>
+                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+                    </p>
+                </li>
+                <p:else>
+                	<t:security.ifAuthorOfBook t:bookId="bookId">
+                		<t:if t:test="showWorkingCopyLink">
+			                <li>
+			                    <h3>
+		                        	<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+	                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+	                                    <em>(Working copy) </em>
+	                                </t:pagelink>
+			                    </h3>
+			                    <p>
+			                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+			                    </p>
+			                </li>
+                        </t:if>
+                    </t:security.ifAuthorOfBook>
+                </p:else>
+            </t:if>
+        </t:loop>
+        <t:security.ifAuthorOfBook t:bookId="bookId">
+            <!-- Add chapter section based on simple show hide mechanism -->
+            <li>
+                <h3 class="add-chapter-link">
+                    <t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
+                        Add a chapter
+                    </t:actionlink>
+                </h3>
+                <div style="display:none;" id="add-chapter-form">
+                    <t:form t:id="addChapterForm" class="small-form">
+                        <table>
+                            <tr>
+                                <td>
+                                    <t:textfield t:value="chapterName" class="long-field" t:validate="required" />
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="form-submit">
+                            <input t:type="submit" class="btn-active" value="Add Chapter" />or <a href="#" id="hide-add-chapter">cancel</a>
+                        </div>
+                    </t:form>
+                </div>
+            </li>
+        </t:security.ifAuthorOfBook>
+    </ol>
 </html>

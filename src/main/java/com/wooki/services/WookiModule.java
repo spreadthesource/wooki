@@ -62,7 +62,6 @@ import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.userdetails.UserDetailsService;
 
-
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
 import com.wooki.services.exception.HttpErrorException;
@@ -145,6 +144,9 @@ public class WookiModule<T> {
 						return true;
 					}
 					return false;
+				} catch (HttpErrorException httpEx) {
+					response.sendError(httpEx.getHttpError().getStatus(), httpEx.getHttpError().getMessage());
+					return true;
 				}
 			}
 		};

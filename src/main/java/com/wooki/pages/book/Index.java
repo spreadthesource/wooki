@@ -110,6 +110,7 @@ public class Index extends BookBase {
 	public void setupBookDisplay() {
 
 		this.authors = this.getBook().getAuthors();
+		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
 
 		// List chapter infos
 		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
@@ -166,7 +167,7 @@ public class Index extends BookBase {
 	}
 
 	private final boolean hasWorkingCopy(long chapterId) {
-		Publication publication = this.chapterManager.getRevision(chapterId, null);
+		Publication publication = this.chapterManager.getRevision(chapterId, ChapterManager.LAST);
 		if (publication != null) {
 			boolean workingCopy = !publication.isPublished();
 			return bookAuthor && workingCopy;

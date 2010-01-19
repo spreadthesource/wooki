@@ -66,7 +66,7 @@ public class Index extends BookBase {
 		this.setViewingRevision(true);
 		this.setRevision(revision);
 		
-		if (ChapterManager.LAST.equalsIgnoreCase(revision) && (!this.securityCtx.isLoggedIn() || this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
 		}
 

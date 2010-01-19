@@ -53,6 +53,7 @@
 		<t:security.ifLoggedIn>	
 			<li><a href="http://wookicentral.com/faq">FAQ</a></li>
 			<p:else>
+				<li><a href="http://wookicentral.com/faq">FAQ</a></li>
 				<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="signin-link">Signin</a></li>
 				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 			</p:else>

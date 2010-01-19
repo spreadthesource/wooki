@@ -3,7 +3,7 @@
  */
 body { background: #FFD8A1 url('../img/top_bg.gif') repeat-x scroll; }
 #signin-box { padding-top:10px; background: url('../img/bubble-signin-top.gif') no-repeat 130px 0px; }
-#teasing-box, #welcome-box { float:left; padding-bottom:20px; background: url('../img/teasing.png') no-repeat 220px bottom;}
+#teasing-box, #welcome-box { float:left; padding-bottom:20px; background: url('../img/teasing.gif') no-repeat 220px bottom;}
 .jquery-notify-bar.wooki-error { padding-top: 0px; padding-bottom: 10px; color:#f00; background-color: transparent; border: none; background: transparent url('../img/bubble-error-down.gif') no-repeat bottom; }
 .ui-icon { background:url('../img/bubble_close_button.gif'); }
 #comments .comment-accessor .no-comment { background:url("../img/bubble_inactive.gif") no-repeat center; }

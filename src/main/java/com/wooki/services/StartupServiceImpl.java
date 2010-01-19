@@ -111,7 +111,7 @@ public class StartupServiceImpl implements StartupService {
 		chapterManager
 				.updateAndPublishContent(
 						chapterTwo.getId(),
-						"<p>We are working since many months (...years?) on the web framework Tapestry 5. In some way, we always wanted to contribute to it as some kind of \"<quote>thank you\".</p>"
+						"<p>We are working since many months (...years?) on the web framework Tapestry 5. In some way, we always wanted to contribute to it as some kind of \"<quote>thank you</quote>\".</p>"
 								+ "<p>Doing a project like Wooki was perfect to show the possibilities of this framework: technologies integration, ease of development. </p>");
 
 		Chapter chapterTree = bookManager.addChapter(bookOfWooki, "Get started");

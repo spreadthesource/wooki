@@ -64,7 +64,14 @@
 					</t:if>
 		
 				</h3>
-				<p><t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" /></p>
+				<p><t:if t:test="published">
+					<t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+					<p:else>
+							<t:security.ifAuthorOfBook t:bookId="bookId">
+								<t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+							</t:security.ifAuthorOfBook>
+					</p:else>
+				</t:if></p>
 			</li>
 		</t:loop>
 

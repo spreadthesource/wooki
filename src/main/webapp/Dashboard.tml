@@ -1,7 +1,7 @@
 <html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
 	<t:if t:test="firstAccess">
-		<div id="welcome-box">
+		<div id="welcome-box" class="wrapper">
 			<div id="teasing" class="radied shadowed">
 				<h1 class="thanks">Thank you for creating your account on Wooki !</h1>
 				<p>
@@ -12,6 +12,8 @@
 			</div>
 		</div>
 	</t:if>
+
+	<div class="clearer" />
 
 	<div class="left-col">
 		<div id="user-books" class="feed section shadowed x300">

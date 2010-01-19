@@ -55,7 +55,7 @@ public class Signup {
 	private Dashboard successPage;
 
 	@Property
-	@Validate("required")
+	@Validate("required,maxLength=20")
 	private String username;
 
 	@Property

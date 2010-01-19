@@ -198,6 +198,9 @@
 				<value>dev/index</value>
 				<value>dev/bookindex</value>
 				<value>searchresult</value>
+				<value>error/generic</value>
+				<value>error/notfound</value>
+				<value>error/accessdenied</value>
 			</list>
 		</constructor-arg>
 	</bean>

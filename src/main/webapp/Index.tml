@@ -28,7 +28,7 @@
 	    	</div>
 		</div>
     	<div class="right-col">
-	        <div class="info section shadowed">
+	        <div class="info section shadowed x460">
 				<h2>${user.username} <em>(${user.fullname})</em></h2>
 				<ul>
 					<li><span>Username</span>${user.username}</li>

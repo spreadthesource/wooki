@@ -1,6 +1,6 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-	<div id="${clientId}" class="feed section radied shadowed">
+	<div id="${clientId}" class="feed section radied shadowed ${size}">
 		<t:if test="displayBlock">
 			<t:delegate to="titleBlock" />
 			<p:else>

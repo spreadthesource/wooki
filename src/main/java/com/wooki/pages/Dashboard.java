@@ -21,12 +21,14 @@ import java.util.List;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.WookiEventConstants;
@@ -34,6 +36,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.utils.SlugBuilder;
 
 /**
  * Display an index page for wooki application. If no user logged in or
@@ -57,6 +60,9 @@ public class Dashboard {
 	@Inject
 	private Block yourActivity;
 
+	@InjectComponent
+	private Form createBookForm;
+	
 	@InjectPage
 	private com.wooki.pages.book.Index index;
 
@@ -110,6 +116,13 @@ public class Dashboard {
 		return true;
 	}
 
+	@OnEvent(value = EventConstants.VALIDATE, component = "bookTitle")
+	public void checkUnicity(String title) {
+		if(bookManager.findBookBySlugTitle(SlugBuilder.buildSlug(title)) != null) {
+			this.createBookForm.recordError("A book with the same exact title already exists");
+		}
+	}
+	
 	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
 	public Object createBook() {
 		Book created = bookManager.create(bookTitle);

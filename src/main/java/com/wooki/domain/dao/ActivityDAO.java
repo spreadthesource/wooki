@@ -77,6 +77,6 @@ public interface ActivityDAO extends GenericDAO<Activity, Long> {
 	 * @param userId
 	 * @return
 	 */
-	List<Activity> listAccountActivity(int nbElts, Long userId);
+	List<Activity> listAccountActivity(int nbElts);
 
 }

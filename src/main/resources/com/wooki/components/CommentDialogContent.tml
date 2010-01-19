@@ -53,7 +53,7 @@
 					<table>
 						<tr>
 							<td>
-								<input t:type="textarea" t:value="content" t:id="content" rows="4" />
+								<input t:type="textarea" t:value="content" t:id="content" rows="4" class="comment-area" />
 							</td>
 						</tr>
 					</table>

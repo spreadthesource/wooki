@@ -89,7 +89,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 
 /* nav */
 .nav { list-style: none; padding:10px;}
-.nav li { display:inline; padding:0px 10px; }
+.nav li { display:inline; padding:0px 5px; }
 .nav a { text-decoration: none; }
 .nav li.last { border-right: 1px solid #6E6D65; }
 
@@ -192,6 +192,8 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #comments-popup .comment-row form { display: inline; }
 #comments-popup .comment-row p { padding: 10px; }
 
+#comments-popup .comment-area {width: 100%; }
+
 /*****
  * DASHBOARD
  */
@@ -208,6 +210,11 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #dashboard-feed-title ul { }
 #dashboard-feed-title li { padding-right : 10px; border: none; display: inline; font-size: 16px;}
 
+/*****
+ * BOOK SETTINGS
+ */
+#authors-settings form.small-form input {width: auto; margin-right: 5px;}
+	
 /****
  * EDIT PAGE
  */
@@ -249,8 +256,8 @@ input.wymupdate { margin-right: 10px; }
 /*****
  * BOOK LAYOUT
  */
+#book { background:#FFFFFF; padding: 10px; }
 #book-wrapper { background:#C9BB9B; padding-left:40px; margin-bottom:20px; }
-#book { background:#FFFFFF; padding:10px;  }
 
 #meta { text-align:center; color:#6E6D65; }
 
@@ -272,3 +279,8 @@ input.wymupdate { margin-right: 10px; }
 img.t-error-icon { background:transparent repeat scroll 0 0;height:0px; margin-left:0px; width:0px; }
 div.t-autoloader-icon { background: transparent url(../img/ajax-loader.gif); width: 220px; height: 19px; margin-left: 275px; }
 input.t-error, textarea.t-error { border: 1px solid red;box-shadow: 0px 0px 5px red; -webkit-box-shadow: 0px 0px 5px red; -moz-box-shadow: 0px 0px 5px red; color: }
+
+div.t-autocomplete-menu { z-index: 9999; }
+div.t-autocomplete-menu UL { border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-bottom: 1px solid #6E6D65; border-left: 1px solid #6E6D65; border-right: 1px solid #6E6D65; background-color: white; padding: 4px 6px; overflow: auto; }
+div.t-autocomplete-menu LI {color: black; list-style-type: none; padding: 2px; border-bottom: none; border-top: none; cursor: pointer;}
+div.t-autocomplete-menu LI.selected { color: #FF7351; font-weight: bold;}

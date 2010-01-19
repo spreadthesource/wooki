@@ -17,6 +17,7 @@
 		<div id="user-books" class="feed section shadowed x300">
 			<h2>Create a new Book</h2>
 			<form t:type="form" t:id="createBookForm" class="small-form">
+				<t:errors />
 				<table>
 					<tr>
 						<td>
@@ -38,7 +39,7 @@
 	       	</ul>
 	    </div>
 		<div id="collaborator-feed" class="feed section shadowed x300">
-	    	<h2>Your collaboration</h2>
+	    	<h2>Your collaborations</h2>
             <ul>
             	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
                     <li class="${style}">
@@ -66,7 +67,7 @@
 		</div>
 	</t:block>
 
-	<div class="right-col x460">
+	<div class="right-col">
 		<t:zone id="feedZone" t:update="none" t:show="none">
 				<t:delegate to="feed" />
 		</t:zone>

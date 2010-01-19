@@ -57,5 +57,5 @@ public interface ActivityManager {
 	 * @param userId
 	 * @return
 	 */
-	List<Activity> listAccountActivity(int nbElements, Long userId);
+	List<Activity> listAccountActivity(int nbElements);
 }

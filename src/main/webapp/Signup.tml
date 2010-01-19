@@ -12,7 +12,7 @@
     			<tr>
     				<th><label t:type="label" t:for="username"/></th>
     				<td><input type="text" t:type="textfield" t:id="username" /></td>
-    				<td>ex: john or robert</td>
+    				<td>ex: johndoe</td>
     			</tr>
     			<tr>
     				<th><label t:type="label" t:for="fullname"/></th>

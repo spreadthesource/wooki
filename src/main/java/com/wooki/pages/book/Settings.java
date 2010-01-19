@@ -144,6 +144,10 @@ public class Settings extends BookBase {
 		return this.getBookId();
 	}
 
+	public String getStyle() {
+		return this.rowIndex == 0 ? "first" : null;
+	}
+	
 	public Object[] getRemoveAuthorCtx() {
 		return new Object[] { this.getBookId(), this.currentAuthor.getId() };
 	}

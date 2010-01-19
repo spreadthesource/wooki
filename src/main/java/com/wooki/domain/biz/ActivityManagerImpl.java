@@ -57,8 +57,8 @@ public class ActivityManagerImpl implements ActivityManager {
 		return this.activityDao.listBookCreationActivity(nbElements);
 	}
 
-	public List<Activity> listAccountActivity(int nbElements, Long userId) {
-		return this.activityDao.listAccountActivity(nbElements, userId);
+	public List<Activity> listAccountActivity(int nbElements) {
+		return this.activityDao.listAccountActivity(nbElements);
 	}
 
 }

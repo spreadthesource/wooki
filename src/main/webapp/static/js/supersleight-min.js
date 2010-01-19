@@ -1,6 +1,6 @@
 var supersleight=function(){var root=false;
 	var applyPositioning=true;
-	var shim='/wooki/assets/ctx/0.1/static/img/x.gif';
+
 	var shim_pattern=/x\.gif$/i;
 var fnLoadPngs=function(){if(root){root=document.getElementById(root);}else{root=document;}
 for(var i=root.all.length-1,obj=null;(obj=root.all[i]);i--){if(obj.currentStyle.backgroundImage.match(/\.png/i)!==null){bg_fnFixPng(obj);}

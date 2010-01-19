@@ -12,7 +12,7 @@ import org.apache.tapestry5.annotations.SetupRender;
  * @author ccordenier
  *
  */
-public class IExploreComment {
+public class IExploreScriptComment {
 
 	@Parameter
 	private Asset script;

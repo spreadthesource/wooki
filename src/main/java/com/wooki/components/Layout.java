@@ -20,7 +20,6 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
@@ -35,7 +34,6 @@ import com.wooki.pages.SearchResult;
 import com.wooki.services.SecurityUrlSource;
 import com.wooki.services.security.WookiSecurityContext;
 
-@IncludeStylesheet("context:static/css/style.css")
 public class Layout extends LayoutBase {
 
 	@Inject
@@ -86,7 +84,8 @@ public class Layout extends LayoutBase {
 	 * Return to page index without context.
 	 */
 	public Link getIndexPage() {
-		return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+		return linkSource.createPageRenderLinkWithContext(Index.class,
+				new Object[0]);
 	}
 
 }

@@ -95,6 +95,7 @@ public class Index {
 		if (securityCtx.isLoggedIn()) {
 			this.user = securityCtx.getAuthor();
 			this.userBooks = bookManager.listByOwner(user.getUsername());
+			this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
 			return true;
 		}
 		return false;

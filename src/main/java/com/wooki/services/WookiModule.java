@@ -186,6 +186,8 @@ public class WookiModule<T> {
 		excludePattern.add("signin");
 		excludePattern.add("signup");
 		excludePattern.add(".*edit.*");
+		excludePattern.add("dev.*");
+		excludePattern.add("error.*");
 	}
 
 	/**

@@ -80,18 +80,23 @@ public class StartupServiceImpl implements StartupService {
 		chapterManager
 				.updateAndPublishContent(
 						bookAbstract.getId(),
-						"<p>What would you need if you had to write something and share it with people? We think you would be looking for Wooki : a publish platform offering the possibility to have direct feedback on what you have written.</p>");
+						"<p>What would you need if you had to write something and share it with someone else? We think you would be looking for Wooki : a <strong>publish platform</strong> offering the possibility to have <strong>direct feedback</strong> on what you have written.</p>");
 
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(bookOfWooki, "Collaborative document publishing");
 		chapterManager
 				.updateAndPublishContent(
 						chapterOne.getId(),
-						"<p>The will to make Wooki came from a constatation. We noticed that the documentation we write every day at work did not get the expected result.</p>"
-								+ "<p>We used to produce lots of documents on multiples formats: Word, PDF, Powerpoint and of course on our intranet knowledge base.</p>"
-								+ "<p>Each format used to have its inconvenient: intranet knowledge base wasn't enough corporate, Word and PDF contents weren't indexed by our internal crawlers.</p>"
-								+ "<p>And the worst was that we almost never had  feedback on them. Why? Because we didn't proposed an easy way to collaborate with people</p>"
-								+ "<p>Wooki's goal is to offer a solution to all theses problems. Of course, Wooki is not finished, but we hope it will encounter a big future.</p>");
+						"<p>The desire to make Wooki came from a finding: we noticed that the documentation we wrote every days at work did not provide the expected result.</p>"
+								+ "<p>We used to produce lots of documents on multiples formats: Word, PDF, Powerpoint and of course on our intranet knowledge base." +
+										"Each format used to have its inconvenient:</p>" +
+										"<ul>" +
+										"<li>Intranet knowledge base wasn't enough corporate</li>" +
+										"<li>Word and PDF contents were not indexed by our intranet crawlers.</li>" +
+										"</ul>" +
+										"<p>And the worst was that we almost never had feedback on these documents. We did not knew if the produced documentation was good enough." +
+										" Why? <strong>Because we did not proposed an easy way to collaborate with people</strong>.</p>"
+								+ "<p>Wooki's goal is to suggest a solution to all theses problems. Of course, Wooki is not finished, that is just the beginning of the story.</p>");
 
 		// Add robin to author's list
 		try {
@@ -106,16 +111,21 @@ public class StartupServiceImpl implements StartupService {
 		chapterManager
 				.updateAndPublishContent(
 						chapterTwo.getId(),
-						"<p>We are working since many months (...years?) on the web framework Tapestry 5. We always wanted to contribute in some way to it.</p>"
+						"<p>We are working since many months (...years?) on the web framework Tapestry 5. In some way, we always wanted to contribute to it as some kind of \"<quote>thank you\".</p>"
 								+ "<p>Doing a project like Wooki was perfect to show the possibilities of this framework: technologies integration, ease of development. </p>");
 
 		Chapter chapterTree = bookManager.addChapter(bookOfWooki, "Get started");
 
 		chapterManager.updateAndPublishContent(chapterTree.getId(), "<h3>Try the demo</h3>"
-				+ "<p>If you are reading that, you must already know that we host a demo website. You can freely create accounts and try Wooki there. </p>"
-				+ "<h3>Build Wooki directly from the source code</h3>"
+				+ "<p>If you are reading that, you must already know that we host a demo website. You can freely:</p>" +
+						"<ul>" +
+						"<li>create accounts</li>" +
+						"<li>create books</li>" +
+						"<li>export them as PDF</li>" +
+						"</ul>" +
+				"<h3>Build Wooki directly from the source code</h3>"
 				+ "<p>Considering that you have already manipulated Tapestry 5 and maven, you can build the application directly from the source code.</p>"
-				+ "<p>Go on Github, download the sources and run jetty executing this command:</p>" + "<pre>" + "mvn jetty:run" + "</pre>"
+				+ "<p>Go on <a href=\"http://github.com/robink/wooki\">Github</a>, download the sources and run jetty executing this command:</p>" + "<pre>" + "mvn jetty:run" + "</pre>"
 				+ "<p>Launch your browser and that's it!</p>");
 
 	}

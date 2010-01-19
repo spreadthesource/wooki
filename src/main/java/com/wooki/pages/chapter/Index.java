@@ -148,6 +148,10 @@ public class Index extends BookBase {
 		return new Object[] { this.getBookId(), this.next };
 	}
 
+	public boolean isLastRevision() {
+		return ChapterManager.LAST.equals(this.getRevision());
+	}
+	
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
 		return new Object[] { this.getBookId(), this.chapterId };

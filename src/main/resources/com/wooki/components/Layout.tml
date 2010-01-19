@@ -51,9 +51,8 @@
 		</t:security.ifLoggedIn>
 
 		<t:security.ifLoggedIn>	
-			<li><a href="#">FAQ</a></li>
+			<li><a href="http://wookicentral.com/faq">FAQ</a></li>
 			<p:else>
-				<li><a href="#">Tour</a></li>
 				<li>Have an account? <a href="#" t:type="pagelink" t:page="signin" id="signin-link">Signin</a></li>
 				<li><a href="#" t:type="pagelink" t:page="signup" id="singup-link">Signup</a></li>
 			</p:else>

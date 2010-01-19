@@ -121,8 +121,8 @@ public class WookiModule<T> {
 	}
 
 	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
-		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"), "before:*");
-		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"), "before:*");
+		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
+		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
 	}
 
 	/**

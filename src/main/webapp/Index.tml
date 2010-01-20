@@ -32,7 +32,9 @@
 				<h2>${user.username} <em>(${user.fullname})</em></h2>
 				<ul>
 					<li><span>Username</span>${user.username}</li>
-					<li><span>Email</span>${user.email}</li>
+					<t:security.ifLoggedIn>	
+						<li><span>Email</span>${user.email}</li>
+					</t:security.ifLoggedIn>	
 					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
 				</ul>
 			</div>

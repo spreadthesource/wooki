@@ -43,7 +43,7 @@
         <p id="revision">
             Published <t:output value="prop:book?.creationDate" t:format="prop:format" />
         </p>
-    </div><h2>${bookAbstractTitle}</h2>
+    </div>
     <t:outputRaw value="content" /><t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" /><h2>Table of contents</h2>
     <ol id="table-of-contents">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">

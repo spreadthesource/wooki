@@ -25,7 +25,8 @@ Theme inspired from kuler scheme : http://kuler.adobe.com/#themeID/617195
  */
 
 /* common tags */
-body { background: #FFD8A1 url('../img/top_bg.png') repeat-x scroll; font-family: Helvetica, Arial, sans-serif; font-size: 14px; text-align: center}
+html { background-color:#FFD8A1;}
+body { background:url('../img/top_bg.png') repeat-x scroll; font-family: Helvetica, Arial, sans-serif; font-size: 14px; text-align: center; background-color: #FFD8A1; min-height: 100%;}
 
 .wrapper { clear: both; margin: 0 auto; width: 760px; padding: 0px; text-align:left;}
 

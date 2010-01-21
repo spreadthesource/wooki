@@ -56,13 +56,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-public class XHTMLToFormattingObjects implements Convertor, URIResolver,
-		EntityResolver {
+public class XHTMLToFormattingObjects implements Convertor, URIResolver, EntityResolver {
 	private TransformerFactory tFactory = TransformerFactory.newInstance();
 	private Transformer transformer;
 	private Resource xslStylesheet;
 	private Map stylesheetParameters;
-	
+
 	private HttpClient httpClient;
 	// Cache management
 	private CacheManager cacheManager;
@@ -79,17 +78,19 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 		logger.debug("Start to init " + cacheName + " cache");
 		cache = cacheManager.getCache(cacheName);
 		if (cache == null) {
-			throw new IllegalArgumentException("Cache " + cacheName
-					+ " does not exist");
+			throw new IllegalArgumentException("Cache " + cacheName + " does not exist");
 		}
-		putInCache("xhtml1-strict.dtd",
-				"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
-		putInCache("xhtml-lat1.ent",
-				"http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent");
-		putInCache("xhtml-symbol.ent",
-				"http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent");
-		putInCache("xhtml-special.ent",
-				"http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent");
+		
+		// HTML DTDs
+		putInCache("xhtml1-strict.dtd", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd");
+		putInCache("xhtml1-frameset.dtd", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd");
+		putInCache("xhtml1-transitional.dtd", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd");
+		
+		// Entities
+		putInCache("xhtml-lat1.ent", "http://www.w3.org/TR/xhtml1/DTD/xhtml-lat1.ent");
+		putInCache("xhtml-symbol.ent", "http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent");
+		putInCache("xhtml-special.ent", "http://www.w3.org/TR/xhtml1/DTD/xhtml-special.ent");
+
 
 		tFactory.setURIResolver(this);
 		logger.debug("Init of " + cacheName + " is finished for xslt "/*
@@ -120,8 +121,7 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 			cache.put(element);
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.error("Didn't manage to put " + fileLocation + " in the \""
-					+ cacheName + "\" cache for systemId " + systemId);
+			logger.error("Didn't manage to put " + fileLocation + " in the \"" + cacheName + "\" cache for systemId " + systemId);
 			logger.error(e.getLocalizedMessage());
 		}
 	}
@@ -149,7 +149,7 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 	public void setHttpClient(HttpClient httpClient) {
 		this.httpClient = httpClient;
 		HttpClientParams params = httpClient.getParams();
-		//params.
+		// params.
 		httpClient.setHttpConnectionManager(new MultiThreadedHttpConnectionManager());
 	}
 
@@ -160,7 +160,7 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 	public void setXslStylesheet(Resource xslStylesheet) {
 		this.xslStylesheet = xslStylesheet;
 	}
-	
+
 	public Map getStylesheetParameters() {
 		return stylesheetParameters;
 	}
@@ -188,27 +188,22 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 					GetMethod method = new GetMethod(url.toString());
 					this.httpClient.executeMethod(method);
 					byte[] body = method.getResponseBody();
-					StreamSource input = new StreamSource(
-							new ByteArrayInputStream(body));
+					StreamSource input = new StreamSource(new ByteArrayInputStream(body));
 					input.setSystemId(url.toString());
 					tFactory.setURIResolver(this);
 					transformer = tFactory.newTransformer(input);
 					transformer.setURIResolver(this);
-					processedStylesheet = new Element(this.xslStylesheet
-							.getURL(), transformer);
+					processedStylesheet = new Element(this.xslStylesheet.getURL(), transformer);
 				} else {
-					StreamSource input = new StreamSource(this.xslStylesheet
-							.getInputStream());
+					StreamSource input = new StreamSource(this.xslStylesheet.getInputStream());
 					input.setSystemId(this.xslStylesheet.getFile());
 					transformer = tFactory.newTransformer(input);
 					transformer.setURIResolver(this);
-					processedStylesheet = new Element(this.xslStylesheet
-							.getURL(), transformer);
+					processedStylesheet = new Element(this.xslStylesheet.getURL(), transformer);
 				}
 				cache.put(processedStylesheet);
 			} else {
-				transformer = (Transformer) processedStylesheet
-						.getObjectValue();
+				transformer = (Transformer) processedStylesheet.getObjectValue();
 			}
 			XMLReader reader = XMLReaderFactory.createXMLReader();
 			reader.setEntityResolver(this);
@@ -217,9 +212,8 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 			// Use the Transformer to apply the associated Templates object to
 			// an
 			// XML document (foo.xml) and write the output to a file.
-			transformer.transform(new SAXSource(reader, new InputSource(
-					xmlDocument.getInputStream())), toReturn);
-			 String result = new String(baos.toByteArray());
+			transformer.transform(new SAXSource(reader, new InputSource(xmlDocument.getInputStream())), toReturn);
+			String result = new String(baos.toByteArray());
 			return new ByteArrayInputStream(baos.toByteArray());
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
@@ -247,13 +241,10 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 	public Source resolve(String href, String base) throws TransformerException {
 		Source toReturn = null;
 		if (base != null && base.contains("file://")) {
-			String newPath = base.substring("file:///".length()).replace('/',
-					File.separatorChar);
-			newPath = newPath.substring(0, newPath
-					.lastIndexOf(File.separatorChar));
+			String newPath = base.substring("file:///".length()).replace('/', File.separatorChar);
+			newPath = newPath.substring(0, newPath.lastIndexOf(File.separatorChar));
 			File baseFile = new File(newPath);
-			baseFile = new File(baseFile.getAbsolutePath() + File.separatorChar
-					+ href.replace('/', File.separatorChar));
+			baseFile = new File(baseFile.getAbsolutePath() + File.separatorChar + href.replace('/', File.separatorChar));
 			try {
 				toReturn = new StreamSource(new FileInputStream(baseFile));
 			} catch (FileNotFoundException e) {
@@ -264,16 +255,15 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 		} else {
 			if (base.contains("http://")) {
 				String newUrl = base.substring(0, base.lastIndexOf('/') + 1);
-				newUrl+=href;
+				newUrl += href;
 				HttpMethod get = new GetMethod(newUrl);
 				try {
 					httpClient.executeMethod(get);
 					byte[] body = get.getResponseBody();
-					//System.out.println(new String(body));
+					// System.out.println(new String(body));
 					Element element = new Element(newUrl, body);
 					cache.put(element);
-					toReturn = new StreamSource(new BufferedInputStream(
-							new ByteArrayInputStream(body)));
+					toReturn = new StreamSource(new BufferedInputStream(new ByteArrayInputStream(body)));
 				} catch (HttpException e) {
 					e.printStackTrace();
 					logger.error(e.getLocalizedMessage());
@@ -285,15 +275,13 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 				}
 				toReturn.setSystemId(newUrl);
 			} else {
-				toReturn = new StreamSource(XHTMLToFormattingObjects.class
-						.getResourceAsStream(href));
+				toReturn = new StreamSource(XHTMLToFormattingObjects.class.getResourceAsStream(href));
 			}
 		}
 		return toReturn;
 	}
 
-	public InputSource resolveEntity(String publicId, String systemId)
-			throws SAXException, IOException {
+	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 		InputSource toReturn = null;
 		Element cachedValue = cache.get(systemId);
 		if (cachedValue == null) {
@@ -303,12 +291,10 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 				byte[] body = get.getResponseBody();
 				Element element = new Element(systemId, body);
 				cache.put(element);
-				toReturn = new InputSource(new BufferedInputStream(
-						new ByteArrayInputStream(body)));
+				toReturn = new InputSource(new BufferedInputStream(new ByteArrayInputStream(body)));
 				toReturn.setSystemId(systemId);
 			} else if (systemId.contains("file://")) {
-				String newPath = systemId.substring("file:///".length())
-						.replace('/', File.separatorChar);
+				String newPath = systemId.substring("file:///".length()).replace('/', File.separatorChar);
 				File baseFile = new File(newPath);
 				try {
 					toReturn = new InputSource(new FileInputStream(baseFile));
@@ -319,9 +305,7 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver,
 				}
 			}
 		} else {
-			toReturn = new InputSource(new BufferedInputStream(
-					new ByteArrayInputStream((byte[]) cachedValue
-							.getObjectValue())));
+			toReturn = new InputSource(new BufferedInputStream(new ByteArrayInputStream((byte[]) cachedValue.getObjectValue())));
 			toReturn.setSystemId(systemId);
 		}
 		return toReturn;

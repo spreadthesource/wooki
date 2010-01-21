@@ -11,6 +11,9 @@ import org.apache.tapestry5.annotations.Property;
  */
 public class AbstractActivity {
 
+	@Parameter
+	private boolean resourceAvailable;
+	
 	@Property
 	@Parameter(value = "")
 	private String style;

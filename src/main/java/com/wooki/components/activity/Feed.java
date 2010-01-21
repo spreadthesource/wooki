@@ -145,4 +145,9 @@ public class Feed<T extends Activity> {
 	public boolean isDisplayBlock() {
 		return this.titleBlock != null;
 	}
+	
+	public boolean isResourceAvailable() {
+		return !this.current.isResourceUnavailable();
+	}
+
 }

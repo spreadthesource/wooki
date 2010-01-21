@@ -142,7 +142,7 @@ public class Dashboard {
 		return this.yourActivity;
 	}
 
-	@OnEvent(value = WookiEventConstants.REMOVE, component = "removeBook")
+	@OnEvent(value = WookiEventConstants.REMOVE_BOOK)
 	public void removeBook(Long bookId) {
 		this.bookManager.remove(bookId);
 	}

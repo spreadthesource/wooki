@@ -30,6 +30,8 @@ public interface ActivityManager {
 
 	List<Activity> listAll(int nbElts);
 
+	List<Activity> listAllBookActivities(Long bookId);
+	
 	List<Activity> listUserActivity(int nbElts, Long userId);
 
 	List<Activity> listActivityOnUserBooks(int nbElts, Long userId);

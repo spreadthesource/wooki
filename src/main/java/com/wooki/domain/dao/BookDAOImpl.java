@@ -30,7 +30,7 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 
 	public Book findBookBySlugTitle(String title) {
 		Query query = this.entityManager.createQuery("select b from "
-				+ getEntityType() + " b where b.slugTitle=:st");
+				+ getEntityType() + " b where b.slugTitle=:st and b.deletionDate is null");
 		List<Book> results = query.setParameter("st", title).getResultList();
 		if (results != null && results.size() > 0) {
 			return results.get(0);

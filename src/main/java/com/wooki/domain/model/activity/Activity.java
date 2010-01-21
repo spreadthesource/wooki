@@ -49,6 +49,8 @@ public abstract class Activity extends WookiEntity {
 	@JoinColumn(name = "id_user", nullable = false)
 	private User user;
 
+	private boolean resourceUnavailable;
+	
 	public Long getId() {
 		return id;
 	}
@@ -63,6 +65,14 @@ public abstract class Activity extends WookiEntity {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isResourceUnavailable() {
+		return resourceUnavailable;
+	}
+
+	public void setResourceUnavailable(boolean resourceUnavailable) {
+		this.resourceUnavailable = resourceUnavailable;
 	}
 
 }

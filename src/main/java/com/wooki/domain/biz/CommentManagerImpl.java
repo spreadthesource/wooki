@@ -29,6 +29,7 @@ import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.CommentActivity;
 import com.wooki.domain.model.activity.CommentEventType;
 import com.wooki.services.security.WookiSecurityContext;
@@ -82,6 +83,16 @@ public class CommentManagerImpl implements CommentManager {
 		ca.setType(CommentEventType.DELETE);
 		ca.setComment(c);
 		this.activityDao.create(ca);
+
+		// Flag comment activity as unavailable
+		List<Activity> activities = this.activityDao.listAllActivitiesOnComment(c.getId());
+		if (activities != null) {
+			for (Activity ac : activities) {
+				ac.setResourceUnavailable(true);
+				this.activityDao.update(ac);
+			}
+		}
+
 	}
 
 	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)

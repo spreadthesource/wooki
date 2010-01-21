@@ -27,7 +27,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
-import com.wooki.services.HttpError;
 
 /**
  * Display all the comment for a given chapter.
@@ -67,7 +66,7 @@ public class Issues extends BookBase {
 			this.chapterId = chapterId;
 			chapter = this.chapterManager.findById(chapterId);
 			if (chapter == null) {
-				return new HttpError(404, "Chapter not found");
+				return redirectToBookIndex();
 			}
 
 			this.chapters.add(chapter);

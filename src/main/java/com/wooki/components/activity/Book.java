@@ -18,6 +18,7 @@ package com.wooki.components.activity;
 
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 
 import com.wooki.base.AbstractActivity;
 import com.wooki.domain.model.activity.BookActivity;
@@ -34,4 +35,13 @@ public class Book extends AbstractActivity {
 	@Parameter(allowNull = false, required = true)
 	private BookActivity activity;
 
+	public boolean isBookAvailable() {
+		return activity.getBook().getDeletionDate() == null;
+	}
+
+	@SetupRender
+	public boolean checkByPass() {
+		return !this.activity.isResourceUnavailable(); 
+	}
+	
 }

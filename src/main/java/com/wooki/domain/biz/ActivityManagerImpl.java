@@ -37,6 +37,10 @@ public class ActivityManagerImpl implements ActivityManager {
 	@Autowired
 	private UserDAO userDao;
 
+	public List<Activity> listAllBookActivities(Long bookId) {
+		return this.activityDao.listAllActivitiesOnBook(bookId);
+	}
+	
 	public List<Activity> listAll(int nbElts) {
 		return this.activityDao.list(nbElts);
 	}

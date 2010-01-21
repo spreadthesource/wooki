@@ -16,6 +16,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Publication;
+import com.wooki.pages.Index;
 import com.wooki.services.HttpError;
 import com.wooki.services.utils.DateUtils;
 
@@ -68,7 +69,7 @@ public class BookBase {
 
 		if (this.book == null) {
 			resourceNotFound = true;
-			return new HttpError(404, "Resource not found");
+			return Index.class;
 		}
 
 		return null;
@@ -175,4 +176,8 @@ public class BookBase {
 		this.book = book;
 	}
 
+	public boolean isLast() {
+		return ChapterManager.LAST.equals(this.getRevision());
+	}
+	
 }

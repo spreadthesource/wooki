@@ -19,4 +19,6 @@ package com.wooki;
 public interface WookiEventConstants {
 
 	static final String REMOVE = "remove";
+	
+	static final String REMOVE_BOOK = "removeBook";
 }

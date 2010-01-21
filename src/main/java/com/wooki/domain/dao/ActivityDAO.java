@@ -29,6 +29,30 @@ import com.wooki.domain.model.activity.Activity;
 public interface ActivityDAO extends GenericDAO<Activity, Long> {
 
 	/**
+	 * List comment on activities.
+	 *
+	 * @param commentId
+	 * @return
+	 */
+	List<Activity> listAllActivitiesOnComment(Long commentId);
+	
+	/**
+	 * Get all the activities on a given chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	List<Activity> listAllActivitiesOnChapter(Long chapterId);
+	
+	/**
+	 * Get all the activities on a given chapter.
+	 *
+	 * @param chapterId
+	 * @return
+	 */
+	List<Activity> listAllActivitiesOnBook(Long bookId);
+	
+	/**
 	 * List the last nbElelements activities.
 	 * 
 	 * @param nbElements

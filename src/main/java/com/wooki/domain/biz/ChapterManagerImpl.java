@@ -36,6 +36,7 @@ import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.ChapterEventType;
 import com.wooki.domain.model.activity.CommentActivity;
@@ -159,7 +160,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 		// Flag last publication as not published
 		Publication lastPublished = publicationDao.findLastPublishedRevision(chapterId);
-		if(lastPublished != null) {
+		if (lastPublished != null) {
 			lastPublished.setPublished(false);
 			publicationDao.update(lastPublished);
 		}
@@ -199,7 +200,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		}
 
 		Publication publication = publicationDao.findLastRevision(chapterId);
-		
+
 		// we check the published flag. If set, then this Publication must
 		// be considered as "locked" and we must create a new publication as
 		// the new working copy
@@ -247,6 +248,17 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 			activity.setUser(this.securityCtx.getAuthor());
 			activity.setType(ChapterEventType.DELETE);
 			this.activityDao.create(activity);
+
+			List<Activity> activities = this.activityDao.listAllActivitiesOnChapter(chapterId);
+			if (activities != null) {
+				for(Activity ac : activities) {
+					ac.setResourceUnavailable(true);
+					this.activityDao.update(ac);
+				}
+			}
+			
+			// TODO Delete publication entries also ??
+			
 		}
 
 	}

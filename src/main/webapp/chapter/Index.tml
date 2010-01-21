@@ -53,6 +53,9 @@
 	</t:ifNotNull>
 
 	<!-- Attach bubble to content -->
-	<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
+	<t:unless t:test="last">
+		<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
+	</t:unless>
+
 
 </html>

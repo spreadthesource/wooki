@@ -18,6 +18,7 @@ package com.wooki.components.activity;
 
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 
 import com.wooki.base.AbstractActivity;
 import com.wooki.domain.model.activity.CommentActivity;
@@ -40,4 +41,9 @@ public class Comment extends AbstractActivity {
 						.getId(), activity.getComment().getPublication().getChapter().getId() };
 	}
 
+	@SetupRender
+	public boolean checkByPass() {
+		return !this.activity.isResourceUnavailable(); 
+	}
+	
 }

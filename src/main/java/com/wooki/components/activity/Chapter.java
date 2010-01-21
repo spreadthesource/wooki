@@ -18,6 +18,7 @@ package com.wooki.components.activity;
 
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 
 import com.wooki.base.AbstractActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
@@ -36,11 +37,16 @@ public class Chapter extends AbstractActivity {
 	private ChapterActivity activity;
 
 	public Object[] getChapterCtx() {
-		return new Object[] { activity.getChapter().getBook().getId(),
-				activity.getChapter().getId() };
+		return new Object[] { activity.getChapter().getBook().getId(), activity.getChapter().getId() };
 	}
 
 	public boolean isDisplayLink() {
 		return ChapterEventType.PUBLISHED.equals(activity.getType());
 	}
+
+	@SetupRender
+	public boolean checkByPass() {
+		return !this.activity.isResourceUnavailable();
+	}
+
 }

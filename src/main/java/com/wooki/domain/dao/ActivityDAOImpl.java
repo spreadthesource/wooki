@@ -41,20 +41,39 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		return query.getResultList();
 	}
 
+	public List<Activity> listAllActivitiesOnComment(Long commentId) {
+		Defense.notNull(commentId, "commentId");
+		Query query = entityManager.createQuery("select a from " + CommentActivity.class.getName() + " ca where ca.id=:cid");
+		query.setParameter("cid", commentId);
+		return query.getResultList();
+	}
+	
+	public List<Activity> listAllActivitiesOnChapter(Long chapterId) {
+		Defense.notNull(chapterId, "chapterId");
+		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from " + CommentActivity.class.getName()
+				+ " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from " + ChapterActivity.class.getName()
+				+ " ca where ca.chapter.book.id=:bid) ");
+		query.setParameter("cid", chapterId);
+		return query.getResultList();
+	}
+	
+	public List<Activity> listAllActivitiesOnBook(Long bookId) {
+		Defense.notNull(bookId, "bookId");
+		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from "
+				+ BookActivity.class.getName() + " ba where ba.book.id=:bid) or a.id in (select id from " + CommentActivity.class.getName()
+				+ " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from " + ChapterActivity.class.getName()
+				+ " ca where ca.chapter.book.id=:bid) ");
+		query.setParameter("bid", bookId);
+		return query.getResultList();
+	}
+
 	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
 		Defense.notNull(userId, "userId");
-		Query query = entityManager
-				.createQuery("select distinct a from "
-						+ Activity.class.getName()
-						+ " a, "
-						+ ChapterActivity.class.getName()
-						+ " ca, "
-						+ CommentActivity.class.getName()
-						+ " coa, "
-						+ BookActivity.class.getName()
-						+ " ba, "
-						+ Book.class.getName()
-						+ " b join b.users u where ( (b.id=coa.comment.publication.chapter.book.id and coa.id=a.id) or (b.id=ca.chapter.book.id and ca.id=a.id) or (b.id=ba.book.id and ba.id=a.id)) and u.id=:uid and a.user.id!=:uid order by a.creationDate desc");
+		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
+				+ " b join b.users u where u.id=:uid and a.user.id!=:uid and (a.id in (select id from " + BookActivity.class.getName()
+				+ " ba where ba.book.id=b.id) or a.id in (select id from " + CommentActivity.class.getName()
+				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
+				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
 		query.setMaxResults(nbElts);
 		return query.getResultList();
@@ -71,18 +90,11 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
 		Defense.notNull(userId, "userId");
-		Query query = entityManager
-				.createQuery("select distinct a from "
-						+ Activity.class.getName()
-						+ " a, "
-						+ ChapterActivity.class.getName()
-						+ " ca, "
-						+ CommentActivity.class.getName()
-						+ " coa, "
-						+ BookActivity.class.getName()
-						+ " ba, "
-						+ Book.class.getName()
-						+ " b join b.users u where ( (b.id=coa.comment.publication.chapter.book.id and coa.id=a.id) or (b.id=ca.chapter.book.id and ca.id=a.id) or (b.id=ba.book.id and ba.id=a.id)) and u.id=:uid and a.user.id=:uid order by a.creationDate desc");
+		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
+				+ " b join b.users u where u.id=:uid and a.user.id=:uid and (a.id in (select id from " + BookActivity.class.getName()
+				+ " ba where ba.book.id=b.id) or a.id in (select id from " + CommentActivity.class.getName()
+				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
+				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
 		query.setMaxResults(nbElements);
 		return query.getResultList();
@@ -90,7 +102,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> listBookCreationActivity(int nbElements) {
 		Query query = entityManager.createQuery("from " + BookActivity.class.getName()
-				+ " a where a.deletionDate is null and a.type=:type order by a.creationDate desc");
+				+ " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", BookEventType.CREATE);
 		query.setMaxResults(nbElements);
 		return query.getResultList();
@@ -98,7 +110,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> listAccountActivity(int nbElts) {
 		Query query = entityManager.createQuery("from " + AccountActivity.class.getName()
-				+ " a where a.deletionDate is null and a.type=:type order by a.creationDate desc");
+				+ " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", AccountEventType.JOIN);
 		query.setMaxResults(nbElts);
 		return query.getResultList();

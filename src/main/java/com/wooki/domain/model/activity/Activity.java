@@ -49,8 +49,9 @@ public abstract class Activity extends WookiEntity {
 	@JoinColumn(name = "id_user", nullable = false)
 	private User user;
 
+	@Column(nullable = true)
 	private boolean resourceUnavailable;
-	
+
 	public Long getId() {
 		return id;
 	}

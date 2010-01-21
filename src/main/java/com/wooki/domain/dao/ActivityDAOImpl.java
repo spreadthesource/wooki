@@ -43,7 +43,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> listAllActivitiesOnComment(Long commentId) {
 		Defense.notNull(commentId, "commentId");
-		Query query = entityManager.createQuery("select ca from " + CommentActivity.class.getName() + " ca where ca.id=:cid");
+		Query query = entityManager.createQuery("from " + CommentActivity.class.getName() + " ca where ca.comment.id=:cid");
 		query.setParameter("cid", commentId);
 		return query.getResultList();
 	}

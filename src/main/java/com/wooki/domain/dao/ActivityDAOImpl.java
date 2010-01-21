@@ -51,8 +51,8 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 	public List<Activity> listAllActivitiesOnChapter(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from " + CommentActivity.class.getName()
-				+ " coa where coa.comment.publication.chapter.book.id=:cid) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.book.id=:cid) ");
+				+ " coa where coa.comment.publication.chapter.id=:cid) or a.id in (select id from " + ChapterActivity.class.getName()
+				+ " ca where ca.chapter.id=:cid) ");
 		query.setParameter("cid", chapterId);
 		return query.getResultList();
 	}

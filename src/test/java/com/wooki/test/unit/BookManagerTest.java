@@ -170,7 +170,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertNotNull(books, "John has written books");
 		Assert.assertEquals(books.size(), 2, "John has one book");
 	}
-	
+
 	@Test
 	public void testOwnerOfBook() {
 		List<Book> books = bookManager.listByOwner("john");
@@ -256,17 +256,17 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 	@Test
 	public void testChapterPreviousAndNext() {
-		
+
 		Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct);
 		Assert.assertNotNull(myProduct.getChapters());
 		Assert.assertEquals(myProduct.getChapters().size(), 3);
-		
+
 		// Publish all the chapters
-		for(Chapter chapter : myProduct.getChapters()) {
+		for (Chapter chapter : myProduct.getChapters()) {
 			chapterManager.updateAndPublishContent(chapter.getId(), "Some content...");
 		}
-		
+
 		Object[] result = chapterManager.findPrevious(myProduct.getId(), myProduct.getChapters().get(1).getId());
 		Assert.assertNotNull(result);
 		Assert.assertEquals(result.length, 2);
@@ -275,7 +275,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Installation", result[1]);
 		Assert.assertEquals(result.length, 2);
-		
+
 		result = chapterManager.findPrevious(myProduct.getId(), myProduct.getChapters().get(0).getId());
 		Assert.assertNull(result);
 
@@ -283,7 +283,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertEquals(result.length, 2);
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Requirements", result[1]);
-		
+
 		result = chapterManager.findPrevious(myProduct.getId(), myProduct.getChapters().get(2).getId());
 		Assert.assertNotNull(result);
 		Assert.assertEquals(result.length, 2);

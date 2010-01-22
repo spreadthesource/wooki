@@ -23,4 +23,4 @@ Ajax Loader image generated with http://www.ajaxload.info/
 
 ------------------------------------------------
 
-XSLT string library hosted at http://xsltsl.sourceforge.net/
+XSLT string library hosted at http://xsltsl.sourceforge.net/ under LGPL

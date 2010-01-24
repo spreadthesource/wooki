@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
-import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
 import org.apache.tapestry5.internal.services.EndOfRequestEventHub;
@@ -32,7 +31,6 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.annotations.Symbol;
@@ -43,14 +41,11 @@ import org.apache.tapestry5.runtime.ComponentEventException;
 import org.apache.tapestry5.services.ApplicationInitializer;
 import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
-import org.apache.tapestry5.services.ClientInfrastructure;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.Context;
-import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.InvalidationEventHub;
-import org.apache.tapestry5.services.MarkupRenderer;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Request;
@@ -65,7 +60,6 @@ import org.springframework.security.userdetails.UserDetailsService;
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
 import com.wooki.services.exception.HttpErrorException;
-import com.wooki.services.impl.GAnalyticsScriptsInjectorImpl;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
@@ -107,7 +101,6 @@ public class WookiModule<T> {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
-		binder.bind(GAnalyticsScriptsInjector.class, GAnalyticsScriptsInjectorImpl.class);
 		binder.bind(WookiViewRefererFilter.class);
 		
 	}
@@ -237,20 +230,11 @@ public class WookiModule<T> {
 	
 
 
-	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration, @Inject final GAnalyticsScriptsInjector scriptInjector,
-			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode, @Inject final Environment environment,
-			final ClientInfrastructure clientInfrastructure) {
+	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
 
 		if (productionMode) {
-			MarkupRendererFilter injectGAnalyticsScript = new MarkupRendererFilter() {
-				public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer) {
-					renderer.renderMarkup(writer);
-
-					scriptInjector.addScript(writer.getDocument());
-				}
-			};
-
-			configuration.add("GAnalyticsScript", injectGAnalyticsScript, "after:RenderSupport");
+			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
 		}
 
 	}

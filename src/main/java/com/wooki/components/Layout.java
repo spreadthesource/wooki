@@ -39,7 +39,7 @@ import com.wooki.services.security.WookiSecurityContext;
 public class Layout extends LayoutBase {
 
 	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki - Collaborative Writing")
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
 	private String title;
 
 	@Inject

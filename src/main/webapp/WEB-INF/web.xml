@@ -46,16 +46,14 @@
 	<filter-mapping>
 		<filter-name>wooki</filter-name>
 		<url-pattern>/*</url-pattern>
-		<dispatcher>ERROR</dispatcher>
-		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
 	<error-page>
 		<error-code>403</error-code>
-		<location>/error/AccessDenied</location>
+		<location>/error/403.html</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/error/NotFound</location>
+		<location>/error/404.html</location>
 	</error-page>
 </web-app>
       

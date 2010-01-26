@@ -1,5 +1,6 @@
 package com.wooki.test.integration;
 
+import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -25,10 +26,12 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		waitForPageToLoad();
 		checkProfile("ccordenier");
 
+		// Too many parameters
 		open("/ccordenier/1");
 		waitForPageToLoad();
 		checkNotFound();
 
+		// Inexistant user
 		open("/userNotExist");
 		waitForPageToLoad();
 		checkNotFound();
@@ -40,6 +43,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 	 */
 	@Test
 	public void testAccountSettings() {
+		// Verify redirection to signin page
 		open("/accountSettings");
 		waitForPageToLoad();
 		checkSignin();
@@ -51,6 +55,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 	 */
 	@Test
 	public void testDashboard() {
+		// Verify redirection to signin page
 		open("/dashboard");
 		waitForPageToLoad();
 		checkSignin();
@@ -62,7 +67,8 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 	 */
 	@Test
 	public void testBookSettings() {
-		open("book/settings/1");
+		// Verify redirection to signin pages
+		open("/book/settings/1");
 		waitForPageToLoad();
 		checkSignin();
 	}
@@ -73,65 +79,78 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 	 */
 	@Test
 	public void testBookAccess() {
-		open("book/1");
-		waitForPageToLoad();
-		checkBookTitle("The book of Wooki");
-
-		open("book/index/1");
+		open("/book/1");
 		waitForPageToLoad();
 		checkBookTitle("The book of Wooki");
 		
-		open("book/index/2");
+		open("/book/index/1");
 		waitForPageToLoad();
-		checkIndex();
+		checkBookTitle("The book of Wooki");
+
+		open("/book/index/2");
+		waitForPageToLoad();
+		checkNotFound();
+
+		open("/book/index/1/last");
+		waitForPageToLoad();
+		checkAccessDenied();
+
+		open("/book/index/1/2/3");
+		waitForPageToLoad();
+		checkNotFound();
 	}
-	
+
 	/**
 	 * Try to access to book settings page.
 	 * 
 	 */
 	@Test
 	public void testEditChapter() {
-		open("chapter/edit/1/1");
+		
+		open("/chapter/edit/1/1");
 		waitForPageToLoad();
 		checkSignin();
 
 		// Resource does not exist
-		open("chapter/edit/2/2");
+		open("/chapter/edit/2/2");
 		waitForPageToLoad();
 		checkSignin();
 
 		// Incorrect parameters
-		open("chapter/edit/2");
+		open("/chapter/edit/2");
 		waitForPageToLoad();
 		checkSignin();
 	}
-	
+
 	/**
 	 * Test chapter access.
 	 * 
 	 */
 	@Test
 	public void testChapterAccess() {
-		open("chapter/1/2");
+		// Access an existing chapter
+		open("/chapter/1/2");
 		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=nav-left"));
+		Assert.assertTrue(isElementPresent("id=nav-right"));
+		Assert.assertFalse(isElementPresent("id=book-admin"));
 		checkChapterTitle("Collaborative document publishing");
 
 		// Resource does not exist
-		open("chapter/1/5");
+		open("/chapter/1/5");
 		waitForPageToLoad();
-		checkBookTitle("The book of Wooki");
+		checkNotFound();
 
 		// Resource does not exist
-		open("chapter/5/1");
+		open("/chapter/5/1");
 		waitForPageToLoad();
-		checkIndex();
+		checkNotFound();
 
 		// Revision does not exist
-		open("chapter/1/1/5");
+		open("/chapter/1/1/5");
 		waitForPageToLoad();
 		checkNotFound();
 
 	}
-	
+
 }

@@ -4,7 +4,7 @@
 
 	<t:security.ifAuthorOfBook t:bookId="bookId">
 		<t:if test="showAdmin">
-			<div class="book-admin">
+			<div id="book-admin" class="book-admin">
 				<ul>
 					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
 					<li><a t:type="eventlink" t:event="delete" t:context="prop:editCtx" t:mixins="confirm">Delete</a></li>

@@ -49,7 +49,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param text
 	 */
 	protected void checkNotFound() {
-		Assert.assertTrue("Resource should not be found but was " + this.getText("//title"), this.getText("//title").equals("Resource Not Found"));
+		Assert.assertTrue("Resource should not be found but was " + this.getText("//title"), this.getText("//title").equalsIgnoreCase("Resource Not Found"));
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * user.
 	 */
 	protected void checkAccessDenied() {
-		Assert.assertTrue("Access to this resource should be denied.", this.getText("//title").equals("Access Denied"));
+		Assert.assertTrue("Access to this resource should be denied.", this.getText("//title").equalsIgnoreCase("Access Denied"));
 	}
 
 	/**

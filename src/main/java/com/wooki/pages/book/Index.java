@@ -35,6 +35,7 @@ import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.ExportService;
+import com.wooki.services.HttpError;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -95,11 +96,15 @@ public class Index extends BookBase {
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookIndex(Long bookId, String revision) {
-		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())) {
-			this.setRevision(revision);
-			this.setViewingRevision(true);
+
+		this.setRevision(revision);
+		this.setViewingRevision(true);
+		
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+			return new HttpError(403, "Access denied");
 		}
-		return null;
+		
+		return true;
 	}
 
 	/**
@@ -122,7 +127,7 @@ public class Index extends BookBase {
 		}
 
 		// Setup abstract content
-		this.setupContent(this.bookAbstractId, this.isViewingRevision(), this.getRevision());
+		this.setupContent();
 
 	}
 

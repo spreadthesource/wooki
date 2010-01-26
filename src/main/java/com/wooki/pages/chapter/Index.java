@@ -61,7 +61,9 @@ public class Index extends BookBase {
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, Long chapterId, String revision) {
-		this.chapterId = chapterId;
+
+		// Setup chapter
+		this.setupChapter(bookId, chapterId);
 
 		this.setViewingRevision(true);
 		this.setRevision(revision);
@@ -69,8 +71,13 @@ public class Index extends BookBase {
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
 		}
-		
-		return null;
+
+		this.setPublication(this.chapterManager.getRevision(chapterId, revision));
+		if (this.getPublication() == null) {
+			return new HttpError(404, "Revision not found");
+		}
+
+		return true;
 	}
 
 	@OnEvent(value = EventConstants.ACTIVATE)
@@ -80,32 +87,39 @@ public class Index extends BookBase {
 		this.chapterId = chapterId;
 		this.chapter = this.chapterManager.findById(chapterId);
 		if (this.chapter == null) {
-			return redirectToBookIndex();
+			return new HttpError(404, "Chapter not found");
 		}
 
-		return null;
+		this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
+		if (this.getPublication() == null) {
+			return new HttpError(404, "Nothing published not found");
+		}
+
+		return true;
 	}
 
 	@SetupRender
 	public Object setupDisplay() {
 
-		this.setupContent(this.chapterId, this.isViewingRevision(), this.getRevision());
-		
-		// Prepare previous and next links
-		Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
-		if (data != null && data.length == 2) {
-			this.previous = (Long) data[0];
-			this.previousTitle = (String) data[1];
-		}
+		this.setupContent();
 
-		data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
-		if (data != null && data.length == 2) {
-			this.next = (Long) data[0];
-			this.nextTitle = (String) data[1];
+		if (!this.isViewingRevision()) {
+			// Prepare previous and next links
+			Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
+			if (data != null && data.length == 2) {
+				this.previous = (Long) data[0];
+				this.previousTitle = (String) data[1];
+			}
+
+			data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
+			if (data != null && data.length == 2) {
+				this.next = (Long) data[0];
+				this.nextTitle = (String) data[1];
+			}
 		}
 
 		return null;
-		
+
 	}
 
 	@OnEvent(value = "delete")

@@ -9,4 +9,4 @@ target/
 tidyErrors.txt
 *.origin
 *.orig
-
+bin/

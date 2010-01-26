@@ -65,11 +65,11 @@ public class Index extends BookBase {
 
 		this.setViewingRevision(true);
 		this.setRevision(revision);
-		
+
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
 		}
-
+		
 		return null;
 	}
 
@@ -87,8 +87,10 @@ public class Index extends BookBase {
 	}
 
 	@SetupRender
-	public void setupDisplay() {
+	public Object setupDisplay() {
 
+		this.setupContent(this.chapterId, this.isViewingRevision(), this.getRevision());
+		
 		// Prepare previous and next links
 		Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
 		if (data != null && data.length == 2) {
@@ -102,8 +104,8 @@ public class Index extends BookBase {
 			this.nextTitle = (String) data[1];
 		}
 
-		this.setupContent(this.chapterId, this.isViewingRevision(), this.getRevision());
-
+		return null;
+		
 	}
 
 	@OnEvent(value = "delete")
@@ -112,10 +114,14 @@ public class Index extends BookBase {
 		return this.redirectToBookIndex();
 	}
 
+	public String getTitle() {
+		return this.getBook().getTitle() + " - " + this.chapter.getTitle();
+	}
+
 	public Object[] getEditCtx() {
 		return new Object[] { this.getBookId(), this.chapterId };
 	}
-	
+
 	public Object[] getAllIssuesCtx() {
 		return new Object[] { this.getBookId(), Issues.ALL };
 	}
@@ -123,7 +129,7 @@ public class Index extends BookBase {
 	public Object[] getChapIssuesCtx() {
 		return new Object[] { this.getBookId(), this.chapterId };
 	}
-	
+
 	/**
 	 * Get context for previous link.
 	 * 
@@ -151,7 +157,7 @@ public class Index extends BookBase {
 	public boolean isShowAdmin() {
 		return !this.isViewingRevision() || ChapterManager.LAST.equals(this.getRevision());
 	}
-	
+
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
 		return new Object[] { this.getBookId(), this.chapterId };

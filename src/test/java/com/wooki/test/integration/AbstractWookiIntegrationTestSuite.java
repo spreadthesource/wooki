@@ -81,7 +81,14 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param title
 	 */
 	protected void checkBookTitle(String title) {
-		Assert.assertTrue("Book title is incorrect", this.getText("//title").contains(title));
+		Assert.assertTrue("Book title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
+	}
+
+	/**
+	 * Verify chapter title
+	 */
+	protected void checkChapterTitle(String title) {
+		Assert.assertTrue("Chapter title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
 	}
 
 }

@@ -1,6 +1,6 @@
-<html t:type="booklayout"
+<html t:type="booklayout" t:title="prop:title"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
+	xmlns:p="tapestry:parameter" t:bookId="book?.id">
 
 	<t:security.ifAuthorOfBook t:bookId="bookId">
 		<t:if test="showAdmin">

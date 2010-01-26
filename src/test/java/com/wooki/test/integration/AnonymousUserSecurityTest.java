@@ -86,4 +86,52 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		checkIndex();
 	}
 	
+	/**
+	 * Try to access to book settings page.
+	 * 
+	 */
+	@Test
+	public void testEditChapter() {
+		open("chapter/edit/1/1");
+		waitForPageToLoad();
+		checkSignin();
+
+		// Resource does not exist
+		open("chapter/edit/2/2");
+		waitForPageToLoad();
+		checkSignin();
+
+		// Incorrect parameters
+		open("chapter/edit/2");
+		waitForPageToLoad();
+		checkSignin();
+	}
+	
+	/**
+	 * Test chapter access.
+	 * 
+	 */
+	@Test
+	public void testChapterAccess() {
+		open("chapter/1/2");
+		waitForPageToLoad();
+		checkChapterTitle("Collaborative document publishing");
+
+		// Resource does not exist
+		open("chapter/1/5");
+		waitForPageToLoad();
+		checkBookTitle("The book of Wooki");
+
+		// Resource does not exist
+		open("chapter/5/1");
+		waitForPageToLoad();
+		checkIndex();
+
+		// Revision does not exist
+		open("chapter/1/1/5");
+		waitForPageToLoad();
+		checkNotFound();
+
+	}
+	
 }

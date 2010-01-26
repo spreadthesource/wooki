@@ -65,4 +65,13 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 		Assert.assertTrue("Page should be displaying the profile of " + profile, this.getText("//title").equals(profile + "'s Profile"));
 	}
 
+	/**
+	 * Check that the book title is correct.
+	 *
+	 * @param title
+	 */
+	protected void checkBookTitle(String title) {
+		Assert.assertTrue("Book title is incorrect", this.getText("//title").contains(title));
+	}
+	
 }

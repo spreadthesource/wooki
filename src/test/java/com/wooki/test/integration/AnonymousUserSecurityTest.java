@@ -1,6 +1,5 @@
 package com.wooki.test.integration;
 
-import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -25,7 +24,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		open("/ccordenier");
 		waitForPageToLoad();
 		checkProfile("ccordenier");
-		
+
 		open("/ccordenier/1");
 		waitForPageToLoad();
 		checkNotFound();
@@ -33,7 +32,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		open("/userNotExist");
 		waitForPageToLoad();
 		checkNotFound();
-		
+
 	}
 
 	/**
@@ -48,12 +47,40 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 
 	/**
 	 * Try to access to account settings page.
+	 * 
 	 */
 	@Test
 	public void testDashboard() {
 		open("/dashboard");
 		waitForPageToLoad();
 		checkSignin();
+	}
+
+	/**
+	 * Try to access to book settings page.
+	 * 
+	 */
+	@Test
+	public void testBookSettings() {
+		open("book/settings/1");
+		waitForPageToLoad();
+		checkSignin();
+	}
+
+	/**
+	 * Try to access to book settings page.
+	 * 
+	 */
+	@Test
+	public void testBookAccess() {
+		open("book/1");
+		waitForPageToLoad();
+		checkBookTitle("The book of Wooki");
+
+		open("book/index/1");
+		waitForPageToLoad();
+		checkBookTitle("The book of Wooki");
+	
 	}
 	
 }

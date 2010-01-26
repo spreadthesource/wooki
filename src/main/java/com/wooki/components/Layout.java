@@ -16,12 +16,14 @@
 
 package com.wooki.components;
 
+import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
@@ -35,6 +37,10 @@ import com.wooki.services.SecurityUrlSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 public class Layout extends LayoutBase {
+
+	@Property
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki - Collaborative Writing")
+	private String title;
 
 	@Inject
 	private WookiSecurityContext securitCtx;
@@ -84,8 +90,7 @@ public class Layout extends LayoutBase {
 	 * Return to page index without context.
 	 */
 	public Link getIndexPage() {
-		return linkSource.createPageRenderLinkWithContext(Index.class,
-				new Object[0]);
+		return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
 	}
 
 }

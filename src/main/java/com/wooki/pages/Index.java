@@ -25,7 +25,7 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
@@ -34,6 +34,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
+import com.wooki.services.HttpError;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -63,6 +64,9 @@ public class Index {
 
 	@Inject
 	private RenderSupport support;
+
+	@Inject
+	private Messages messages;
 	
 	@Property
 	private List<Book> userBooks;
@@ -84,7 +88,7 @@ public class Index {
 
 	@Inject
 	private Request request;
-	
+
 	/**
 	 * Set current user if someone has logged in.
 	 * 
@@ -109,11 +113,21 @@ public class Index {
 	 * @return
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public boolean setupBookList(String username) {
+	public Object setupBookList(String username) {
 		this.user = this.userManager.findByUsername(username);
+		if (this.user == null) {
+			return new HttpError(404, "User not found");
+		}
 		this.userBooks = this.bookManager.listByOwner(username);
 		this.userCollaborations = this.bookManager.listByCollaborator(username);
 		return true;
+	}
+
+	public String getTitle() {
+		if (this.user != null) {
+			return messages.format("profile-title", this.user.getUsername()); 
+		}
+		return messages.get("index-message");
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -124,12 +138,11 @@ public class Index {
 		return null;
 	}
 
-	
 	public boolean isDisplayMessage() {
 		String userAgent = request.getHeader("User-Agent");
 		return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null) : false;
 	}
-	
+
 	public ActivityType getActivityType() {
 		if (user == null) {
 			return ActivityType.BOOK_CREATION;

@@ -1,3 +1,4 @@
+delete from AccountActivity
 delete from BookActivity
 delete from ChapterActivity
 delete from CommentActivity

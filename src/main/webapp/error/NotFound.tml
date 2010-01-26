@@ -2,4 +2,9 @@
   <t:replace id="errorMessage">
   	<h2>Sorry, but the resource you are trying to access does not exist or has been deleted by its author.</h2>
   </t:replace>
+  
+  <t:replace id="title">
+  	Resource Not Found
+  </t:replace>
+  
 </t:extend>

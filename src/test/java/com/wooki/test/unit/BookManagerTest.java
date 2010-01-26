@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -27,6 +28,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -83,7 +85,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		ClassPathResource script = new ClassPathResource("reset.sql");
 		SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
 		SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-
+		
 		// Add author to the book
 		User john = new User();
 		john.setEmail("john.doe@gmail.com");

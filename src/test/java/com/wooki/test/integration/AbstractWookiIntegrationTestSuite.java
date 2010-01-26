@@ -38,8 +38,18 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * 
 	 * @param text
 	 */
+	protected void checkIndex() {
+		Assert.assertTrue("Index page should be displayed instead of " + this.getText("//title"), this.getText("//title").equals(
+				"wooki - Collaborative Writing"));
+	}
+
+	/**
+	 * Verify that the returned page corresponds to a resource not found.
+	 * 
+	 * @param text
+	 */
 	protected void checkNotFound() {
-		Assert.assertTrue("Resource should not be found.", this.getText("//title").equals("Resource Not Found"));
+		Assert.assertTrue("Resource should not be found but was " + this.getText("//title"), this.getText("//title").equals("Resource Not Found"));
 	}
 
 	/**
@@ -67,11 +77,11 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 
 	/**
 	 * Check that the book title is correct.
-	 *
+	 * 
 	 * @param title
 	 */
 	protected void checkBookTitle(String title) {
 		Assert.assertTrue("Book title is incorrect", this.getText("//title").contains(title));
 	}
-	
+
 }

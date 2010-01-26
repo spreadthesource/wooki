@@ -80,7 +80,10 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		open("book/index/1");
 		waitForPageToLoad();
 		checkBookTitle("The book of Wooki");
-	
+		
+		open("book/index/2");
+		waitForPageToLoad();
+		checkIndex();
 	}
 	
 }

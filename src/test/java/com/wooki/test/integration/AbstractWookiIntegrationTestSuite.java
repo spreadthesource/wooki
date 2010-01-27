@@ -101,21 +101,17 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	/**
 	 * Verify book authors
 	 */
-	protected void checkAuthors(String... names) {
+	protected void checkAuthorsPresent(int number) {
 		Assert.assertTrue("Cannot find book meta: authors", isElementPresent("id=authors"));
-		for (String name : names) {
-			Assert.assertTrue("Author '" + name + "' was not found", this.getText("//p[@id='authors']").contains(name));
-		}
+		Assert.assertEquals(this.getXpathCount("//p[@id='authors']//a"),number);
 	}
 	
 	/**
 	 * Verify table of contents
 	 */
-	protected void checkTableOfContents(String... chapters) {
-		Assert.assertTrue("Cannot find book meta: authors", this.getText("//div[@id='book']").contains("Table of contents"));
-		for (String chapter : chapters) {
-			Assert.assertTrue("Chapter '" + chapter + "' was not found", this.getText("//ol[@id='table-of-contents']").contains(chapter));
-		}
+	protected void checkTableOfContentsPresent(int number) {
+		Assert.assertTrue("Cannot find Table of contents", this.getText("//div[@id='book']").contains("Table of contents"));
+		Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']//li"),number);
 	}
 
 }

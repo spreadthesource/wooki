@@ -50,8 +50,7 @@
 	    <defaultCache
         maxElementsInMemory="300"
         eternal="false"
-        timeToIdleSeconds="500"
-        timeToLiveSeconds="500"
+        timeToIdleSeconds="0"
         overflowToDisk="true"
         />
         
@@ -59,7 +58,6 @@
 			maxElementsInMemory="200"
 			eternal="false"
 			overflowToDisk="false"
-			timeToIdleSeconds="300"
-			timeToLiveSeconds="600"
+			timeToIdleSeconds="0"
 		/>
 </ehcache>

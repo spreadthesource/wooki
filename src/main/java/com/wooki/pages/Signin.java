@@ -16,17 +16,23 @@
 
 package com.wooki.pages;
 
+import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.services.SecurityUrlSource;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Login form.
  */
 public class Signin {
 
+	@Inject
+	private WookiSecurityContext securityCtx;
+	
 	@Inject
 	private SecurityUrlSource source;
 
@@ -35,10 +41,16 @@ public class Signin {
 
 	private boolean failed = false;
 
-	public void onActivate() {
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object checkSecurityCtx() {
+		if(securityCtx.isLoggedIn()) {
+			return Index.class;
+		}
+		return null;
 	}
 
-	public void onActivate(String extra) {
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public void checkError(String extra) {
 		if (extra.equals("failed")) {
 			failed = true;
 		}

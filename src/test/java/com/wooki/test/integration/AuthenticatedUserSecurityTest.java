@@ -70,13 +70,29 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		waitForPageToLoad();
 		checkDashboard("john");
 
-		// Try to delete a book that exist but where john is not owner
+		// Try to delete a book that exist but that john does not own
 		open("/dashboard:removebook/1");
 		waitForPageToLoad();
 		checkAccessDenied();
 
 		// Not allowad context
 		open("/dashboard/1");
+		waitForPageToLoad();
+		checkNotFound();
+	}
+
+	/**
+	 * Test access to dashboard.
+	 * 
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testAccountSettings() {
+		open("/accountSettings");
+		waitForPageToLoad();
+		checkAccountSettings("john");
+
+		// Bad URL
+		open("/accountSettings/1");
 		waitForPageToLoad();
 		checkNotFound();
 	}
@@ -99,6 +115,47 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	public void testBookIndex() {
 		open("/book/1");
 		waitForPageToLoad();
+		checkBookTitle(BookNavigationTest.BOOK_TITLE);
+		Assert.assertFalse("Admin button should not be present for this book", isElementPresent("id='book-admin'"));
+		Assert.assertFalse("Admin button should not be present for this book", isElementPresent("id='add-chapter-link'"));
+
+		// User is not owner so he has not access to the last copy
+		open("/book/1/last");
+		waitForPageToLoad();
+		checkAccessDenied();
 	}
 
+	/**
+	 * When the user is authenticated, it should not be able to see signin.
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testSignin() {
+		open("/signin");
+		waitForPageToLoad();
+		checkProfile("john");
+	}
+
+	/**
+	 * When the user is authenticated, it should not be able to see signup.
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testSignup() {
+		open("/signup");
+		waitForPageToLoad();
+		checkProfile("john");
+	}
+
+	/**
+	 * Logout of the application.
+	 *
+	 */
+	@Test(dependsOnGroups = { "authenticated" })
+	public void testLogout() {
+		open("/index");
+		waitForPageToLoad();
+		Assert.assertTrue("Authenticated user should be able to logout", isElementPresent("id=logout"));
+		click("id=logout");
+		waitForPageToLoad();
+		checkIndex();
+	}
 }

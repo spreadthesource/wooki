@@ -129,6 +129,9 @@ public class StartupServiceImpl implements StartupService {
 				+ "<p>Go on <a href=\"http://github.com/robink/wooki\">Github</a>, download the sources and run jetty executing this command:</p>" + "<pre>" + "mvn jetty:run" + "</pre>"
 				+ "<p>Launch your browser and that's it!</p>");
 		
+		// Do an update for testing purpose
+		chapterManager.updateContent(bookAbstract.getId(), "<p>What would you need if you had to write something and share it with someone else? We think you would be looking for Wooki : a <strong>publish platform</strong> offering the possibility to have <strong>direct feedback</strong> on what you have written.</p>");
+		
 		// Add a comment
 		securityCtx.log(ccordenier);
 		Publication publication = chapterManager.getLastPublishedPublication(bookAbstract.getId());

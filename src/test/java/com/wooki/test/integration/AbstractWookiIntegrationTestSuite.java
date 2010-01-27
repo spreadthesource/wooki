@@ -74,6 +74,13 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	protected void checkProfile(String profile) {
 		Assert.assertTrue("Page should be displaying the profile of " + profile, this.getText("//title").equals(profile + "'s Profile"));
 	}
+	
+	/**
+	 * Verify if the title contains dashboard owne name
+	 */
+	protected void checkDashboard(String username) {
+		Assert.assertTrue("Page should be displaying the dashboard of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(username + "'s Dashboard"));
+	}
 
 	/**
 	 * Check that the book title is correct.

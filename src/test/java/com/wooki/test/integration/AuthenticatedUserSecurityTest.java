@@ -28,11 +28,24 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	public void signup() {
 		open("signup");
 		Assert.assertTrue("Cannot load signup page", isElementPresent("id=signupForm"));
+		type("id=username", "john");
+		type("id=fullname", "John Doe");
+		type("id=email", "John.Doe@gmail.com");
+		type("id=password", "mylongpassword");
+		click("//form[@id='signupForm']//input[@type='submit']");
+		waitForPageToLoad();
+		checkDashboard("john");
 	}
 	
 	@Test(dependsOnMethods={"signup"})
 	public void testIndex() {
-		
+		open("/");
+		waitForPageToLoad();
+		checkProfile("john");
+
+		open("/index");
+		waitForPageToLoad();
+		checkProfile("john");
 	}
 	
 }

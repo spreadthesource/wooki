@@ -110,13 +110,13 @@
 						<ref bean="httpSessionContextIntegrationFilter" />
 					</list>
 				</entry>
-				<entry key="/j_spring_security_logout">
+				<entry key="/j_spring_security_logout.*">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
 						<ref bean="logoutFilter" />
 					</list>
 				</entry>
-				<entry key="/j_spring_security_check">
+				<entry key="/j_spring_security_check.*">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
 						<ref bean="authenticationProcessingFilter" />

@@ -29,6 +29,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.WookiEventConstants;
@@ -54,6 +55,9 @@ public class Dashboard {
 	@Inject
 	private WookiSecurityContext securityCtx;
 
+	@Inject
+	private Messages messages;
+	
 	@Inject
 	private Block coAuthor;
 
@@ -175,6 +179,10 @@ public class Dashboard {
 
 	public void setFirstAccess(boolean firstAccess) {
 		this.firstAccess = firstAccess;
+	}
+	
+	public String getTitle() {
+		return this.messages.format("dashboard-title", this.user.getUsername());
 	}
 
 	public String getStyle() {

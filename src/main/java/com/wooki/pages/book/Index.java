@@ -63,7 +63,7 @@ public class Index extends BookBase {
 
 	@Property
 	private String bookAbstractTitle;
-	
+
 	@Property
 	private User currentUser;
 
@@ -99,11 +99,11 @@ public class Index extends BookBase {
 
 		this.setRevision(revision);
 		this.setViewingRevision(true);
-		
+
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
 		}
-		
+
 		return true;
 	}
 
@@ -125,6 +125,11 @@ public class Index extends BookBase {
 		if (chapters.size() > 0) {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
+
+		// Get abstract publication
+		Publication abstractPublication = this.isViewingRevision() ? this.chapterManager.getRevision(this.bookAbstractId, this.getRevision())
+				: this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
+		this.setPublication(abstractPublication);
 
 		// Setup abstract content
 		this.setupContent();
@@ -196,7 +201,7 @@ public class Index extends BookBase {
 	public Object[] getIssuesCtx() {
 		return new Object[] { this.getBookId(), "all" };
 	}
-	
+
 	/**
 	 * Get id to link to chapter display
 	 * 

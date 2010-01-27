@@ -147,7 +147,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		checkNotFound();
 
 		// Revision does not exist
-		open("/chapter/1/1/5");
+		open("/chapter/1/1/4");
 		waitForPageToLoad();
 		checkNotFound();
 

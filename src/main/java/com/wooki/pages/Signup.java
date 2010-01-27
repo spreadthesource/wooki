@@ -70,6 +70,14 @@ public class Signup {
 	@Validate("required,email")
 	private String email;
 
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object checkSecurityCtx() {
+		if (securityCtx.isLoggedIn()) {
+			return Index.class;
+		}
+		return null;
+	}
+
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
 	public void onValidate() {
 		if (username != null && password != null && username.trim().compareToIgnoreCase(password.trim()) == 0) {

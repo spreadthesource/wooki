@@ -57,7 +57,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * user.
 	 */
 	protected void checkAccessDenied() {
-		Assert.assertTrue("Access to this resource should be denied instead of " + this.getText("//title"), this.getText("//title").equalsIgnoreCase("Access Denied"));
+		Assert.assertTrue("Access to this resource should be denied instead of " + this.getText("//title"), this.getText("//title").equalsIgnoreCase(
+				"Access Denied"));
 	}
 
 	/**
@@ -65,21 +66,30 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * 
 	 */
 	protected void checkSignin() {
-		Assert.assertTrue("Access to this resource should be denied.", this.getText("//title").equals("Wooki Signin"));
+		Assert.assertTrue("You should have been redirected to signin instead of " + this.getText("//title"), this.getText("//title").equals("Wooki Signin"));
 	}
 
 	/**
 	 * Verify if the title contains profile names
 	 */
 	protected void checkProfile(String profile) {
-		Assert.assertTrue("Page should be displaying the profile of " + profile, this.getText("//title").equals(profile + "'s Profile"));
+		Assert.assertTrue("Page should be displaying the profile of " + profile + " instead of " + this.getText("//title"), this.getText("//title").equals(profile + "'s Profile"));
 	}
-	
+
 	/**
 	 * Verify if the title contains dashboard owne name
 	 */
 	protected void checkDashboard(String username) {
-		Assert.assertTrue("Page should be displaying the dashboard of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(username + "'s Dashboard"));
+		Assert.assertTrue("Page should be displaying the dashboard of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(
+				username + "'s Dashboard"));
+	}
+
+	/**
+	 * Verify if the title contains dashboard owne name
+	 */
+	protected void checkAccountSettings(String username) {
+		Assert.assertTrue("Page should be displaying the settings of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(
+				username + "'s Settings"));
 	}
 
 	/**
@@ -97,7 +107,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	protected void checkChapterTitle(String title) {
 		Assert.assertTrue("Chapter title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
 	}
-	
+
 	/**
 	 * Verify book authors
 	 */
@@ -107,7 +117,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 			Assert.assertTrue("Author '" + name + "' was not found", this.getText("//p[@id='authors']").contains(name));
 		}
 	}
-	
+
 	/**
 	 * Verify table of contents
 	 */

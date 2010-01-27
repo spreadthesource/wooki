@@ -35,7 +35,6 @@ import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
-import com.wooki.services.WookiModule;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -149,5 +148,9 @@ public class AccountSettings {
 		} catch (AuthorizationException e) {
 			userDetails.recordError(messages.get("error-authorization-exception"));
 		}
+	}
+	
+	public String getTitle() {
+		return this.messages.format("account-settings-title", user.getUsername());
 	}
 }

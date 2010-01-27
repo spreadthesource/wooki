@@ -27,6 +27,15 @@ import com.wooki.domain.model.Publication;
 public interface PublicationDAO extends GenericDAO<Publication, Long>{
 
 	/**
+	 * Retrieve a revision number for given chapter.
+	 *
+	 * @param chapterId
+	 * @param revision 
+	 * @return null if the revision does not exist.
+	 */
+	Publication findRevisionById(Long chapterId, Long revision);
+	
+	/**
 	 * Used to retrieve the last revision of a chapter.
 	 *
 	 * @param chapterId

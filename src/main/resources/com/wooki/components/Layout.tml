@@ -5,7 +5,7 @@
 	xmlns:p="tapestry:parameter">
 <head>
 <meta charset="utf-8" />
-<title>wooki - Collaborative Writing</title>
+<title>${title}</title>
 <link href="${asset:context:static/css/style.css}" rel="stylesheet" type="text/css" />
 <script type="text/javascript">	var shim='${asset:context:static/img/x.gif}';</script>
 <t:iexploreCssComment t:script="asset:context:static/css/ie6style.css" />

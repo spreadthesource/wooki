@@ -1,6 +1,6 @@
-<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+<html t:type="booklayout" t:title="prop:book?.title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     <t:security.ifAuthorOfBook t:bookId="bookId">
-        <div class="book-admin">
+        <div id="book-admin" class="book-admin">
             <ul>
                 <t:if t:test="abstractHasWorkingCopy">
                     <li>

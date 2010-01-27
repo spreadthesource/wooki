@@ -28,9 +28,24 @@ import com.wooki.domain.model.Publication;
 @Repository("publicationDao")
 public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implements PublicationDAO {
 
+	public Publication findRevisionById(Long chapterId, Long revision) {
+		Defense.notNull(chapterId, "chapterId");
+		Defense.notNull(revision, "revision");
+		Query query = entityManager.createQuery("from " + getEntityType() + " p where p.id=:pid and p.chapter.id=:cid and p.deletionDate is null order by p.creationDate desc");
+		query.setParameter("cid", chapterId);
+		query.setParameter("pid", revision);
+		query.setMaxResults(1);
+		List<Publication> published = query.getResultList();
+		if (published != null && published.size() > 0) {
+			return published.get(0);
+		} else {
+			return null;
+		}
+	}
+
 	public Publication findLastRevision(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
-		Query query = entityManager.createQuery("from " + getEntityType() + " p where chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
+		Query query = entityManager.createQuery("from " + getEntityType() + " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("id", chapterId);
 		query.setMaxResults(10);
 		List<Publication> published = query.getResultList();
@@ -44,7 +59,7 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 	public Publication findLastPublishedRevision(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager.createQuery("from " + getEntityType()
-				+ " p where chapter.id=:id and p.deletionDate is null and p.published = 1 order by p.creationDate desc");
+				+ " p where p.chapter.id=:id and p.deletionDate is null and p.published = 1 order by p.creationDate desc");
 		query.setParameter("id", chapterId);
 		query.setMaxResults(10);
 		List<Publication> published = query.getResultList();

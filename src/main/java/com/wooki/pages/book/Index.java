@@ -35,6 +35,7 @@ import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.ExportService;
+import com.wooki.services.HttpError;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -62,7 +63,7 @@ public class Index extends BookBase {
 
 	@Property
 	private String bookAbstractTitle;
-	
+
 	@Property
 	private User currentUser;
 
@@ -95,11 +96,15 @@ public class Index extends BookBase {
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookIndex(Long bookId, String revision) {
-		if (this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())) {
-			this.setRevision(revision);
-			this.setViewingRevision(true);
+
+		this.setRevision(revision);
+		this.setViewingRevision(true);
+
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+			return new HttpError(403, "Access denied");
 		}
-		return null;
+
+		return true;
 	}
 
 	/**
@@ -121,8 +126,13 @@ public class Index extends BookBase {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
 		}
 
+		// Get abstract publication
+		Publication abstractPublication = this.isViewingRevision() ? this.chapterManager.getRevision(this.bookAbstractId, this.getRevision())
+				: this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
+		this.setPublication(abstractPublication);
+
 		// Setup abstract content
-		this.setupContent(this.bookAbstractId, this.isViewingRevision(), this.getRevision());
+		this.setupContent();
 
 	}
 
@@ -191,7 +201,7 @@ public class Index extends BookBase {
 	public Object[] getIssuesCtx() {
 		return new Object[] { this.getBookId(), "all" };
 	}
-	
+
 	/**
 	 * Get id to link to chapter display
 	 * 

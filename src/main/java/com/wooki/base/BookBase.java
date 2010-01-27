@@ -29,9 +29,6 @@ import com.wooki.services.utils.DateUtils;
 public class BookBase {
 
 	@Inject
-	private Response response;
-
-	@Inject
 	private BookManager bookManager;
 
 	@Inject
@@ -46,6 +43,8 @@ public class BookBase {
 	@Property
 	private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
 
+	private Publication publication;
+	
 	private Book book;
 
 	private Long bookId;
@@ -69,7 +68,7 @@ public class BookBase {
 
 		if (this.book == null) {
 			resourceNotFound = true;
-			return Index.class;
+			return new HttpError(404, "Resource Not Found");
 		}
 
 		return null;
@@ -111,11 +110,9 @@ public class BookBase {
 	 * @param revision TODO
 	 * 
 	 */
-	protected void setupContent(Long chapterId, boolean showRevision, String revision) {
+	protected void setupContent() {
 
 		// Get the publication
-		Publication publication = (showRevision) ? this.chapterManager.getRevision(chapterId, revision) : this.chapterManager
-				.getLastPublishedPublication(chapterId);
 		if (publication != null) {
 			this.content = publication.getContent();
 			this.publicationId = publication.getId();
@@ -179,5 +176,13 @@ public class BookBase {
 	public boolean isLast() {
 		return ChapterManager.LAST.equals(this.getRevision());
 	}
-	
+
+	public Publication getPublication() {
+		return publication;
+	}
+
+	public void setPublication(Publication publication) {
+		this.publication = publication;
+	}
+
 }

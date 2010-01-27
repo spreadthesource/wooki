@@ -2,7 +2,11 @@
 <html lang="en" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
     <head>
         <meta charset="utf-8" />
-        <title>wooki - Collaborative Writing</title>
+        <title>
+	        <t:extension-point id="title">
+		        wooki - Collaborative Writing
+			</t:extension-point>
+		</title>
     </head>
     <style>
         /*

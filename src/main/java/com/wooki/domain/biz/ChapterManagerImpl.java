@@ -116,7 +116,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 			return publicationDao.findLastRevision(chapterId);
 		}
 		try {
-			return this.publicationDao.findById(Long.parseLong(revision));
+			return this.publicationDao.findRevisionById(chapterId, Long.parseLong(revision));
 		} catch (NumberFormatException nfEx) {
 			throw new IllegalArgumentException("Revision number is invalid");
 		}

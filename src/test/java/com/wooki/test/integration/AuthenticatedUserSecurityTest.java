@@ -1,10 +1,7 @@
 package com.wooki.test.integration;
 
 import org.junit.Assert;
-import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-
-import com.wooki.pages.Signin;
 
 /**
  * This test class is design to check that URL are secured by Wooki security
@@ -21,7 +18,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	}
 
 	/**
-	 * Register a new user.
+	 * Register a new user, this is the first method to execute in the test.
 	 *
 	 */
 	@Test
@@ -36,8 +33,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		waitForPageToLoad();
 		checkDashboard("john");
 	}
-	
-	@Test(dependsOnMethods={"signup"})
+
+	/**
+	 * Check index page.
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
 	public void testIndex() {
 		open("/");
 		waitForPageToLoad();
@@ -46,6 +46,39 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		open("/index");
 		waitForPageToLoad();
 		checkProfile("john");
+		
+		open("/ccordenier");
+		waitForPageToLoad();
+		checkProfile("ccordenier");
+
+		open("/1/2");
+		waitForPageToLoad();
+		checkNotFound();
+
+		open("/userNotExist");
+		waitForPageToLoad();
+		checkNotFound();
+	}
+
+	/**
+	 * Test access to dashboard.
+	 *
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testDashboard() {
+		open("/dashboard");
+		waitForPageToLoad();
+		checkDashboard("john");
+		
+		// Try to delete a book that exist but where john is not owner
+		open("/dashboard:removebook/1");
+		waitForPageToLoad();
+		checkAccessDenied();
+		
+		// Not allowad context
+		open("/dashboard/1");
+		waitForPageToLoad();
+		checkNotFound();
 	}
 	
 }

@@ -64,6 +64,7 @@ import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
+import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.services.exception.HttpErrorException;
 import com.wooki.services.impl.GAnalyticsScriptsInjectorImpl;
 import com.wooki.services.internal.TapestryOverrideModule;
@@ -142,6 +143,10 @@ public class WookiModule<T> {
 					if (cEx.getCause() instanceof HttpErrorException) {
 						response.sendError(((HttpErrorException) cEx.getCause()).getHttpError().getStatus(), ((HttpErrorException) cEx.getCause())
 								.getHttpError().getMessage());
+						return true;
+					}
+					if (cEx.getCause() instanceof AuthorizationException) {
+						response.sendError(403, cEx.getCause().getMessage());
 						return true;
 					}
 					return false;

@@ -97,5 +97,25 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	protected void checkChapterTitle(String title) {
 		Assert.assertTrue("Chapter title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
 	}
+	
+	/**
+	 * Verify book authors
+	 */
+	protected void checkAuthors(String... names) {
+		Assert.assertTrue("Cannot find book meta: authors", isElementPresent("id=authors"));
+		for (String name : names) {
+			Assert.assertTrue("Author '" + name + "' was not found", this.getText("//p[@id='authors']").contains(name));
+		}
+	}
+	
+	/**
+	 * Verify table of contents
+	 */
+	protected void checkTableOfContents(String... chapters) {
+		Assert.assertTrue("Cannot find book meta: authors", this.getText("//div[@id='book']").contains("Table of contents"));
+		for (String chapter : chapters) {
+			Assert.assertTrue("Chapter '" + chapter + "' was not found", this.getText("//ol[@id='table-of-contents']").contains(chapter));
+		}
+	}
 
 }

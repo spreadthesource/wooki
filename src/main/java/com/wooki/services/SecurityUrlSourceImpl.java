@@ -18,16 +18,12 @@ package com.wooki.services;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
-import org.apache.tapestry5.services.Cookies;
 import org.apache.tapestry5.services.Request;
 
 public class SecurityUrlSourceImpl implements SecurityUrlSource {
 
 	@Inject
 	private Request request;
-
-	@Inject
-	private Cookies cookieSource;
 
 	@Inject
 	@Symbol("loginFilterProcessesUrl")
@@ -42,12 +38,7 @@ public class SecurityUrlSourceImpl implements SecurityUrlSource {
 	}
 
 	public String getLogoutUrl() {
-		String result = request.getContextPath() + logoutUrl;
-		String viewReferer = cookieSource.readCookieValue(WookiModule.VIEW_REFERER);
-		if (viewReferer != null) {
-			result += "?logoutSuccessUrl=" + viewReferer;
-		}
-		return result;
+		return request.getContextPath() + logoutUrl;
 	}
 
 }

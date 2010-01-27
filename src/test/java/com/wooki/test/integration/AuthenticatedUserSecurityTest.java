@@ -19,7 +19,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 
 	/**
 	 * Register a new user, this is the first method to execute in the test.
-	 *
+	 * 
 	 */
 	@Test
 	public void signup() {
@@ -46,7 +46,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		open("/index");
 		waitForPageToLoad();
 		checkProfile("john");
-		
+
 		open("/ccordenier");
 		waitForPageToLoad();
 		checkProfile("ccordenier");
@@ -62,23 +62,42 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 
 	/**
 	 * Test access to dashboard.
-	 *
+	 * 
 	 */
 	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
 	public void testDashboard() {
 		open("/dashboard");
 		waitForPageToLoad();
 		checkDashboard("john");
-		
+
 		// Try to delete a book that exist but where john is not owner
 		open("/dashboard:removebook/1");
 		waitForPageToLoad();
 		checkAccessDenied();
-		
+
 		// Not allowad context
 		open("/dashboard/1");
 		waitForPageToLoad();
 		checkNotFound();
 	}
-	
+
+	/**
+	 * Verify that the user cannot delete a comment when he is not the owner
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testComment() {
+		open("/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1");
+		checkAccessDenied();
+	}
+
+	/**
+	 * Verify that elements are not present if the user is not author of the
+	 * book.
+	 * 
+	 */
+	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	public void testBookIndex() {
+
+	}
+
 }

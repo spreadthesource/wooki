@@ -27,6 +27,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.runtime.ComponentEventException;
 
 import com.wooki.WookiEventConstants;
 
@@ -79,15 +80,15 @@ public class ClickAndRemove extends AbstractLink {
 	}
 
 	@OnEvent(value = CLICK_AND_REMOVE)
-	public Object clickAndRemove(Long entityId) {
+	public Object clickAndRemove(Long entityId) throws Throwable {
 		final JSONObject data = new JSONObject();
 		try {
 			resources.triggerEvent(WookiEventConstants.REMOVE, new Object[] { entityId }, null);
 			data.put("result", true);
-		} catch (Exception ex) {
-			data.put("result", false);
+			return data;
+		} catch (ComponentEventException cEx) {
+			throw cEx.getCause();
 		}
-		return data;
 	}
 
 }

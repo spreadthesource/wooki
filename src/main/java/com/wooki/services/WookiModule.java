@@ -40,14 +40,11 @@ import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvide
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.runtime.ComponentEventException;
-import org.apache.tapestry5.services.ApplicationInitializer;
-import org.apache.tapestry5.services.ApplicationInitializerFilter;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ClientInfrastructure;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
-import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRenderer;
@@ -59,7 +56,6 @@ import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.util.StringToEnumCoercion;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
@@ -111,7 +107,7 @@ public class WookiModule<T> {
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
 		binder.bind(GAnalyticsScriptsInjector.class, GAnalyticsScriptsInjectorImpl.class);
 		binder.bind(WookiViewRefererFilter.class);
-		
+
 	}
 
 	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
@@ -150,6 +146,9 @@ public class WookiModule<T> {
 						return true;
 					}
 					return false;
+				} catch (AuthorizationException authEx) {
+					response.sendError(403, authEx.getMessage());
+					return true;
 				} catch (HttpErrorException httpEx) {
 					response.sendError(httpEx.getHttpError().getStatus(), httpEx.getHttpError().getMessage());
 					return true;
@@ -207,16 +206,6 @@ public class WookiModule<T> {
 		configuration.add(tuple);
 	}
 
-	public void contributeApplicationInitializer(OrderedConfiguration<ApplicationInitializerFilter> configuration, final ApplicationContext springContext) {
-		ApplicationInitializerFilter filter = new ApplicationInitializerFilter() {
-			public void initializeApplication(Context context, ApplicationInitializer initializer) {
-				// initializer.initializeApplication(context);
-			}
-		};
-
-		configuration.add("WookiContextInitialization", filter);
-	}
-
 	/**
 	 * Add jQuery in no conflict mode to default JavaScript Stack
 	 * 
@@ -240,9 +229,17 @@ public class WookiModule<T> {
 
 		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
 	};
-	
 
-
+	/**
+	 * Contribute GAnalytics plugin to append google analytics javascript to
+	 * generated pages.
+	 * 
+	 * @param configuration
+	 * @param scriptInjector
+	 * @param productionMode
+	 * @param environment
+	 * @param clientInfrastructure
+	 */
 	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration, @Inject final GAnalyticsScriptsInjector scriptInjector,
 			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode, @Inject final Environment environment,
 			final ClientInfrastructure clientInfrastructure) {

@@ -28,6 +28,7 @@ import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
 
@@ -127,6 +128,11 @@ public class StartupServiceImpl implements StartupService {
 				+ "<p>Considering that you have already manipulated Tapestry 5 and maven, you can build the application directly from the source code.</p>"
 				+ "<p>Go on <a href=\"http://github.com/robink/wooki\">Github</a>, download the sources and run jetty executing this command:</p>" + "<pre>" + "mvn jetty:run" + "</pre>"
 				+ "<p>Launch your browser and that's it!</p>");
+		
+		// Add a comment
+		securityCtx.log(ccordenier);
+		Publication publication = chapterManager.getLastPublishedPublication(bookAbstract.getId());
+		chapterManager.addComment(publication.getId(), "Wooki is really cool !", "b10");
 
 	}
 }

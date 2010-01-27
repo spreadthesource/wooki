@@ -57,7 +57,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * user.
 	 */
 	protected void checkAccessDenied() {
-		Assert.assertTrue("Access to this resource should be denied.", this.getText("//title").equalsIgnoreCase("Access Denied"));
+		Assert.assertTrue("Access to this resource should be denied instead of " + this.getText("//title"), this.getText("//title").equalsIgnoreCase("Access Denied"));
 	}
 
 	/**

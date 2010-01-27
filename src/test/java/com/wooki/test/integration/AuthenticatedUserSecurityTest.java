@@ -97,7 +97,8 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 */
 	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
 	public void testBookIndex() {
-
+		open("/book/1");
+		waitForPageToLoad();
 	}
 
 }

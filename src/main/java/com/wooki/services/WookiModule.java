@@ -236,9 +236,8 @@ public class WookiModule<T> {
 	 * @param environment
 	 * @param clientInfrastructure
 	 */
-	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration, @Inject final GAnalyticsScriptsInjector scriptInjector,
-			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode, @Inject final Environment environment,
-			final ClientInfrastructure clientInfrastructure) {
+	 public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+			 @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
 
 		if (productionMode) {
 			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");

@@ -73,7 +73,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * Verify if the title contains profile names
 	 */
 	protected void checkProfile(String profile) {
-		Assert.assertTrue("Page should be displaying the profile of " + profile + " instead of " + this.getText("//title"), this.getText("//title").equals(profile + "'s Profile"));
+		Assert.assertTrue("Page should be displaying the profile of " + profile + " instead of " + this.getText("//title"), this.getText("//title").equals(
+				profile + "'s Profile"));
 	}
 
 	/**
@@ -113,7 +114,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 */
 	protected void checkAuthorsPresent(int number) {
 		Assert.assertTrue("Cannot find book meta: authors", isElementPresent("id=authors"));
-		Assert.assertEquals(this.getXpathCount("//p[@id='authors']//a"),number);
+		Assert.assertEquals(this.getXpathCount("//p[@id='authors']//a"), number);
 	}
 
 	/**
@@ -121,7 +122,24 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 */
 	protected void checkTableOfContentsPresent(int number) {
 		Assert.assertTrue("Cannot find Table of contents", this.getText("//div[@id='book']").contains("Table of contents"));
-		Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']//li"),number);
+		Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']//li"), number);
+	}
+
+	/**
+	 * Check if a chapter page has been loaded
+	 * 
+	 * @param bookId
+	 * @param chapterId
+	 */
+	public void checkChapterPage(String prefix, int bookId, int chapterId) {
+		open(prefix + "/" + bookId + "/" + chapterId);
+		waitForPageToLoad();
+
+		Assert.assertTrue("Could not load chapter " + chapterId + " book " + bookId, isElementPresent("id=content"));
+
+		// check if there is a chapter title
+		Assert.assertEquals("Could not find chapter title : " + this.getXpathCount("//div[@id='content']//h2") + " h2 tag found", 1, this
+				.getXpathCount("//div[@id='content']//h2"));
 	}
 
 }

@@ -44,14 +44,14 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		int chapters = 4;
 
 		for (int chapterId = 1; chapterId < chapters; chapterId++) {
-			checkChapter(bookId, chapterId);
-			
-			if(chapterId > 1) 
+			checkChapterPage("chapter", bookId, chapterId);
+
+			if (chapterId > 1)
 				Assert.assertTrue("Could not find previous nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-left"));
 			else
 				Assert.assertFalse("unexpected found of previous nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-left"));
-			
-			if(chapterId < chapters) 
+
+			if (chapterId < chapters)
 				Assert.assertTrue("Could not find next nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-right"));
 			else
 				Assert.assertFalse("unexpected found of next nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-right"));
@@ -59,15 +59,23 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 
 	}
 
-	public void checkChapter(int bookId, int chapterId) {
-		open("chapter/" + bookId + "/" + chapterId);
+	@Test
+	public void checkIssues() {
+		open("chapter/issues/1/all");
 		waitForPageToLoad();
 
-		// check book layout
-		Assert.assertTrue("Could not load chapter " + chapterId + " book " + bookId, isElementPresent("id=book"));
+		int bookId = 1;
+		int chapters = 4;
+
+		Assert.assertTrue("Could not load issues page", isElementPresent("id=content"));
 
 		// check if there is a chapter title
-		Assert.assertEquals("Could not find chapter title : " + this.getXpathCount("//div[@id='book']//h2") + " h2 tag found", this
-				.getXpathCount("//div[@id='book']//h2"), 1);
+		Assert.assertEquals("Could not find exepected number of chapters : " + this.getXpathCount("//div[@id='content']//h2") + " h2 tag found", chapters, this
+				.getXpathCount("//div[@id='content']//h2"));
+
+		for (int chapterId = 1; chapterId < chapters; chapterId++) {
+			checkChapterPage("chapter/issues", bookId, chapterId);
+		}
+
 	}
 }

@@ -55,24 +55,21 @@ public class WookiViewRefererFilter implements PageRenderRequestFilter {
 		}
 	}
 
-	public void handle(PageRenderRequestParameters parameters,
-			PageRenderRequestHandler handler) throws IOException {
-		try {
+	public void handle(PageRenderRequestParameters parameters, PageRenderRequestHandler handler) throws IOException {
+		
+		// Handle request
+		handler.handle(parameters);
 
-			// Verify if the cookie must view URL must be registered.
-			for (Pattern p : ignoredPatterns) {
-				if (p.matcher(parameters.getLogicalPageName()).matches()) {
-					return;
-				}
+		// Verify if the cookie must view URL must be registered.
+		for (Pattern p : ignoredPatterns) {
+			if (p.matcher(parameters.getLogicalPageName()).matches()) {
+				return;
 			}
-
-			// Write referer cookie value
-			cookieService.writeCookieValue(WookiModule.VIEW_REFERER, request
-					.getHTTPServletRequest().getRequestURL().toString(), 1800);
-
-		} finally {
-			handler.handle(parameters);
 		}
+
+		// Write referer cookie value
+		cookieService.writeCookieValue(WookiModule.VIEW_REFERER, request.getHTTPServletRequest().getRequestURL().toString(), 1800);
+
 	}
 
 }

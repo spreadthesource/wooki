@@ -6,9 +6,9 @@ import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.apache.tapestry5.services.Response;
 
 import com.wooki.services.HttpError;
-import com.wooki.services.exception.HttpErrorException;
 
 /**
  * Verify that the activation context passed corresponds to an existing
@@ -21,8 +21,11 @@ public class SecureActivationContextRequestFilter implements ComponentRequestFil
 
 	private final ActivationContextManager manager;
 
-	public SecureActivationContextRequestFilter(ActivationContextManager manager) {
+	private final Response response;
+
+	public SecureActivationContextRequestFilter(ActivationContextManager manager, Response response) {
 		this.manager = manager;
+		this.response = response;
 	}
 
 	public void handleComponentEvent(ComponentEventRequestParameters parameters, ComponentRequestHandler handler) throws IOException {
@@ -30,7 +33,7 @@ public class SecureActivationContextRequestFilter implements ComponentRequestFil
 			handler.handleComponentEvent(parameters);
 			return;
 		}
-		throw new HttpErrorException(new HttpError(404, "Resource not found"));
+		this.response.sendError(404, "Resource not found");
 	}
 
 	public void handlePageRender(PageRenderRequestParameters parameters, ComponentRequestHandler handler) throws IOException {
@@ -38,7 +41,7 @@ public class SecureActivationContextRequestFilter implements ComponentRequestFil
 			handler.handlePageRender(parameters);
 			return;
 		}
-		throw new HttpErrorException(new HttpError(404, "Resource not found"));
+		this.response.sendError(404, "Resource not found");
 	}
 
 }

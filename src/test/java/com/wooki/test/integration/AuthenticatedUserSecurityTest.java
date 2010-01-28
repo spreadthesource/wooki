@@ -39,6 +39,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 */
 	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
 	public void testIndex() {
+		
+		open("/userNotExist");
+		waitForPageToLoad();
+		checkNotFound();
+		
 		open("/");
 		waitForPageToLoad();
 		checkProfile("john");
@@ -55,9 +60,6 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		waitForPageToLoad();
 		checkNotFound();
 
-		open("/userNotExist");
-		waitForPageToLoad();
-		checkNotFound();
 	}
 
 	/**

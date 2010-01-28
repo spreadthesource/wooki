@@ -25,19 +25,15 @@ import org.apache.tapestry5.services.RequestExceptionHandler;
 
 import com.wooki.WookiSymbolsConstants;
 
-
-
 /**
  * Tapestry module use for tapestry overrides or customization.
  */
 public class TapestryOverrideModule {
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(RequestExceptionHandler.class,
-				WookiRequestExceptionHandler.class).withId(
-				"WookiRequestExceptionHandler");
+		binder.bind(RequestExceptionHandler.class, WookiRequestExceptionHandler.class).withId("WookiRequestExceptionHandler");
 	}
-	
+
 	/**
 	 * Wooki Symbols default
 	 */
@@ -51,11 +47,9 @@ public class TapestryOverrideModule {
 	 * @param exceptionHandler
 	 * @param configuration
 	 */
-	public static void contributeAlias(
-			@InjectService("WookiRequestExceptionHandler") RequestExceptionHandler exceptionHandler,
+	public static void contributeAlias(@InjectService("WookiRequestExceptionHandler") RequestExceptionHandler exceptionHandler,
 			Configuration<AliasContribution> configuration) {
-		configuration.add(AliasContribution.create(
-				RequestExceptionHandler.class, exceptionHandler));
+		configuration.add(AliasContribution.create(RequestExceptionHandler.class, exceptionHandler));
 	}
 
 }

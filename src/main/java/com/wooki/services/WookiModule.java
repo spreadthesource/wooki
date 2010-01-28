@@ -16,7 +16,6 @@
 
 package com.wooki.services;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
@@ -31,26 +30,19 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
-import org.apache.tapestry5.runtime.ComponentEventException;
 import org.apache.tapestry5.services.AssetSource;
-import org.apache.tapestry5.services.ClientInfrastructure;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
-import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestFilter;
-import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.util.StringToEnumCoercion;
@@ -58,8 +50,6 @@ import org.springframework.security.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;
-import com.wooki.domain.exception.AuthorizationException;
-import com.wooki.services.exception.HttpErrorException;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
@@ -125,37 +115,6 @@ public class WookiModule<T> {
 		filters.add("ViewRefererFilter", vrFilter);
 	}
 
-	public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration) {
-
-		RequestFilter sendErrorFilter = new RequestFilter() {
-			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
-				try {
-					return handler.service(request, response);
-				} catch (ComponentEventException cEx) {
-					if (cEx.getCause() instanceof HttpErrorException) {
-						response.sendError(((HttpErrorException) cEx.getCause()).getHttpError().getStatus(), ((HttpErrorException) cEx.getCause())
-								.getHttpError().getMessage());
-						return true;
-					}
-					if (cEx.getCause() instanceof AuthorizationException) {
-						response.sendError(403, cEx.getCause().getMessage());
-						return true;
-					}
-					return false;
-				} catch (AuthorizationException authEx) {
-					response.sendError(403, authEx.getMessage());
-					return true;
-				} catch (HttpErrorException httpEx) {
-					response.sendError(httpEx.getHttpError().getStatus(), httpEx.getHttpError().getMessage());
-					return true;
-				}
-			}
-		};
-
-		configuration.add("SendErrorFilter", sendErrorFilter, "after:EndOfRequest", "after:ErrorFilter");
-
-	}
-
 	/**
 	 * Allow to return error code instance.
 	 * 
@@ -174,8 +133,9 @@ public class WookiModule<T> {
 	 * @param manager
 	 * @param response
 	 */
-	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager));
+	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
+			Response response) {
+		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
 	}
 
 	/**
@@ -236,12 +196,13 @@ public class WookiModule<T> {
 	 * @param environment
 	 * @param clientInfrastructure
 	 */
-	 public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-			 @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
+	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
 
 		if (productionMode) {
 			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
 		}
 
 	}
+
 }

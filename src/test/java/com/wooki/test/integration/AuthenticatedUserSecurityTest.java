@@ -1,6 +1,6 @@
 package com.wooki.test.integration;
 
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -24,7 +24,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	@Test
 	public void signup() {
 		open("signup");
-		Assert.assertTrue("Cannot load signup page", isElementPresent("id=signupForm"));
+		Assert.assertTrue(isElementPresent("id=signupForm"), "Cannot load signup page");
 		type("id=username", "john");
 		type("id=fullname", "John Doe");
 		type("id=email", "John.Doe@gmail.com");
@@ -118,8 +118,8 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		open("/book/1");
 		waitForPageToLoad();
 		checkBookTitle(BookNavigationTest.BOOK_TITLE);
-		Assert.assertFalse("Admin button should not be present for this book", isElementPresent("id='book-admin'"));
-		Assert.assertFalse("Admin button should not be present for this book", isElementPresent("id='add-chapter-link'"));
+		Assert.assertFalse(isElementPresent("id='book-admin'"), "Admin button should not be present for this book");
+		Assert.assertFalse(isElementPresent("id='add-chapter-link'"), "Admin button should not be present for this book");
 
 		// User is not owner so he has not access to the last copy
 		open("/book/1/last");
@@ -155,7 +155,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	public void testLogout() {
 		open("/index");
 		waitForPageToLoad();
-		Assert.assertTrue("Authenticated user should be able to logout", isElementPresent("id=logout"));
+		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
 		click("id=logout");
 		waitForPageToLoad();
 		checkIndex();

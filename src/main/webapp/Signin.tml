@@ -13,12 +13,12 @@
 	    		<table>
 	    			<tr>
 	    				<th><label class="username" for="j_username">Username</label></th>
-	    				<td><input class="username" name="j_username" type="text" maxlength="30" /></td>
+	    				<td><input class="username" id="j_username" name="j_username" type="text" maxlength="30" /></td>
 	    				<td style="display: none;"></td>
 	    			</tr>
 	    			<tr>
 	    				<th><label class="password" for="j_password">Password</label></th>
-	    				<td><input class="password" name="j_password" type="password" maxlength="30" /></td>
+	    				<td><input class="password" id="j_password" name="j_password" type="password" maxlength="30" /></td>
 	    				<td style="display: none;"><small><a href="#">Forgot</a></small></td>
 	    			</tr>
 	    		</table>

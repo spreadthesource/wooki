@@ -31,7 +31,8 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 	public Publication findRevisionById(Long chapterId, Long revision) {
 		Defense.notNull(chapterId, "chapterId");
 		Defense.notNull(revision, "revision");
-		Query query = entityManager.createQuery("from " + getEntityType() + " p where p.id=:pid and p.chapter.id=:cid and p.deletionDate is null order by p.creationDate desc");
+		Query query = entityManager.createQuery("from " + getEntityType()
+				+ " p where p.id=:pid and p.chapter.id=:cid and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("cid", chapterId);
 		query.setParameter("pid", revision);
 		query.setMaxResults(1);
@@ -45,7 +46,8 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 
 	public Publication findLastRevision(Long chapterId) {
 		Defense.notNull(chapterId, "chapterId");
-		Query query = entityManager.createQuery("from " + getEntityType() + " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
+		Query query = entityManager
+				.createQuery("from " + getEntityType() + " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
 		query.setParameter("id", chapterId);
 		query.setMaxResults(10);
 		List<Publication> published = query.getResultList();
@@ -71,14 +73,26 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 	}
 
 	public boolean isPublished(Long revision) {
-		Query query = entityManager.createQuery("select p.published from " + getEntityType()
-				+ " p where p.id=:id and p.deletionDate is null");
+		Query query = entityManager.createQuery("select p.published from " + getEntityType() + " p where p.id=:id and p.deletionDate is null");
 		query.setParameter("id", revision);
 		List<Boolean> published = query.getResultList();
 		if (published != null && published.size() > 0) {
 			return published.get(0);
 		} else {
 			return false;
+		}
+	}
+
+	public Publication getLastPublicationInfo(Long chapterId) {
+		Query query = entityManager.createQuery("select new " + this.getEntityType() + "(p.id, p.published) from " + getEntityType()
+				+ " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
+		query.setParameter("id", chapterId);
+		query.setMaxResults(1);
+		List<Publication> workingCopy = query.getResultList();
+		if (workingCopy != null && workingCopy.size() > 0) {
+			return workingCopy.get(0);
+		} else {
+			return null;
 		}
 	}
 

@@ -1,7 +1,7 @@
 package com.wooki.test.integration;
 
 import org.apache.tapestry5.test.AbstractIntegrationTestSuite;
-import org.junit.Assert;
+import org.testng.Assert;
 
 public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSuite {
 
@@ -39,8 +39,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param text
 	 */
 	protected void checkIndex() {
-		Assert.assertTrue("Index page should be displayed instead of " + this.getText("//title"), this.getText("//title").equals(
-				"wooki - Collaborative Writing"));
+		Assert.assertTrue(this.getText("//title").equals("wooki - Collaborative Writing"), "Index page should be displayed instead of "
+				+ this.getText("//title"));
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param text
 	 */
 	protected void checkNotFound() {
-		Assert.assertTrue("Resource should not be found but was " + this.getText("//title"), this.getText("//title").equalsIgnoreCase("Resource Not Found"));
+		Assert.assertTrue(this.getText("//title").equalsIgnoreCase("Resource Not Found"), "Resource should not be found but was " + this.getText("//title"));
 	}
 
 	/**
@@ -57,8 +57,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * user.
 	 */
 	protected void checkAccessDenied() {
-		Assert.assertTrue("Access to this resource should be denied instead of " + this.getText("//title"), this.getText("//title").equalsIgnoreCase(
-				"Access Denied"));
+		Assert.assertTrue(this.getText("//title").equalsIgnoreCase("Access Denied"), "Access to this resource should be denied instead of "
+				+ this.getText("//title"));
 	}
 
 	/**
@@ -66,31 +66,31 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * 
 	 */
 	protected void checkSignin() {
-		Assert.assertTrue("You should have been redirected to signin instead of " + this.getText("//title"), this.getText("//title").equals("Wooki Signin"));
+		Assert.assertTrue(this.getText("//title").equals("Wooki Signin"), "You should have been redirected to signin instead of " + this.getText("//title"));
 	}
 
 	/**
 	 * Verify if the title contains profile names
 	 */
 	protected void checkProfile(String profile) {
-		Assert.assertTrue("Page should be displaying the profile of " + profile + " instead of " + this.getText("//title"), this.getText("//title").equals(
-				profile + "'s Profile"));
+		Assert.assertTrue(this.getText("//title").equals(profile + "'s Profile"), "Page should be displaying the profile of " + profile + " instead of "
+				+ this.getText("//title"));
 	}
 
 	/**
 	 * Verify if the title contains dashboard owne name
 	 */
 	protected void checkDashboard(String username) {
-		Assert.assertTrue("Page should be displaying the dashboard of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(
-				username + "'s Dashboard"));
+		Assert.assertTrue(this.getText("//title").equals(username + "'s Dashboard"), "Page should be displaying the dashboard of " + username + " instead of "
+				+ this.getText("//title"));
 	}
 
 	/**
 	 * Verify if the title contains dashboard owne name
 	 */
 	protected void checkAccountSettings(String username) {
-		Assert.assertTrue("Page should be displaying the settings of " + username + " instead of " + this.getText("//title"), this.getText("//title").equals(
-				username + "'s Settings"));
+		Assert.assertTrue(this.getText("//title").equals(username + "'s Settings"), "Page should be displaying the settings of " + username + " instead of "
+				+ this.getText("//title"));
 	}
 
 	/**
@@ -99,21 +99,21 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param title
 	 */
 	protected void checkBookTitle(String title) {
-		Assert.assertTrue("Book title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
+		Assert.assertTrue(this.getText("//title").contains(title), "Book title is incorrect " + this.getText("//title"));
 	}
 
 	/**
 	 * Verify chapter title
 	 */
 	protected void checkChapterTitle(String title) {
-		Assert.assertTrue("Chapter title is incorrect " + this.getText("//title"), this.getText("//title").contains(title));
+		Assert.assertTrue(this.getText("//title").contains(title), "Chapter title is incorrect " + this.getText("//title"));
 	}
 
 	/**
 	 * Verify book authors
 	 */
 	protected void checkAuthorsPresent(int number) {
-		Assert.assertTrue("Cannot find book meta: authors", isElementPresent("id=authors"));
+		Assert.assertTrue(isElementPresent("id=authors"), "Cannot find book meta: authors");
 		Assert.assertEquals(this.getXpathCount("//p[@id='authors']//a"), number);
 	}
 
@@ -121,7 +121,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * Verify table of contents
 	 */
 	protected void checkTableOfContentsPresent(int number) {
-		Assert.assertTrue("Cannot find Table of contents", this.getText("//div[@id='book']").contains("Table of contents"));
+		Assert.assertTrue(this.getText("//div[@id='book']").contains("Table of contents"), "Cannot find Table of contents");
 		Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']//li"), number);
 	}
 
@@ -135,11 +135,11 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 		open(prefix + "/" + bookId + "/" + chapterId);
 		waitForPageToLoad();
 
-		Assert.assertTrue("Could not load chapter " + chapterId + " book " + bookId, isElementPresent("id=content"));
+		Assert.assertTrue(isElementPresent("id=content"), "Could not load chapter " + chapterId + " book " + bookId);
 
 		// check if there is a chapter title
-		Assert.assertEquals("Could not find chapter title : " + this.getXpathCount("//div[@id='content']//h2") + " h2 tag found", 1, this
-				.getXpathCount("//div[@id='content']//h2"));
+		Assert.assertEquals(1, this.getXpathCount("//div[@id='content']//h2"), "Could not find chapter title : "
+				+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
 	}
 
 }

@@ -100,6 +100,7 @@ public class Index extends BookBase {
 		this.setRevision(revision);
 		this.setViewingRevision(true);
 
+		// Only authors have access to the last revision
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
 		}

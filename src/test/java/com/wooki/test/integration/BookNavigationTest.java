@@ -1,6 +1,6 @@
 package com.wooki.test.integration;
 
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -24,7 +24,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		// opening book
 		open("book/1");
 		waitForPageToLoad();
-		Assert.assertTrue("Cannot load initial book", isElementPresent("id=book"));
+		Assert.assertTrue(isElementPresent("id=book"), "Cannot load initial book");
 
 		// checking title
 		checkBookTitle(BOOK_TITLE);
@@ -47,14 +47,14 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 			checkChapterPage("chapter", bookId, chapterId);
 
 			if (chapterId > 1)
-				Assert.assertTrue("Could not find previous nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-left"));
+				Assert.assertTrue(isElementPresent("id=nav-left"), "Could not find previous nav link for chapter " + chapterId + ", book " + bookId);
 			else
-				Assert.assertFalse("unexpected found of previous nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-left"));
+				Assert.assertFalse(isElementPresent("id=nav-left"), "unexpected found of previous nav link for chapter " + chapterId + ", book " + bookId);
 
 			if (chapterId < chapters)
-				Assert.assertTrue("Could not find next nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-right"));
+				Assert.assertTrue(isElementPresent("id=nav-right"), "Could not find next nav link for chapter " + chapterId + ", book " + bookId);
 			else
-				Assert.assertFalse("unexpected found of next nav link for chapter " + chapterId + ", book " + bookId, isElementPresent("id=nav-right"));
+				Assert.assertFalse(isElementPresent("id=nav-right"), "unexpected found of next nav link for chapter " + chapterId + ", book " + bookId);
 		}
 
 	}
@@ -67,11 +67,11 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		int bookId = 1;
 		int chapters = 4;
 
-		Assert.assertTrue("Could not load issues page", isElementPresent("id=content"));
+		Assert.assertTrue(isElementPresent("id=content"), "Could not load issues page");
 
 		// check if there is a chapter title
-		Assert.assertEquals("Could not find exepected number of chapters : " + this.getXpathCount("//div[@id='content']//h2") + " h2 tag found", chapters, this
-				.getXpathCount("//div[@id='content']//h2"));
+		Assert.assertEquals(chapters, this.getXpathCount("//div[@id='content']//h2"), "Could not find exepected number of chapters : "
+				+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
 
 		for (int chapterId = 1; chapterId < chapters; chapterId++) {
 			checkChapterPage("chapter/issues", bookId, chapterId);

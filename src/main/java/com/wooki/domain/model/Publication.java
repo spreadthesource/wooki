@@ -56,6 +56,15 @@ public class Publication extends WookiEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
 	private List<Comment> comments;
 
+	public Publication() {
+		
+	}
+	
+	public Publication(Long id, boolean published) {
+		this.id = id;
+		this.published = published;
+	}
+	
 	public Long getId() {
 		return id;
 	}

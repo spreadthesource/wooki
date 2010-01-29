@@ -83,17 +83,4 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 		}
 	}
 
-	public Publication getLastPublicationInfo(Long chapterId) {
-		Query query = entityManager.createQuery("select new " + this.getEntityType() + "(p.id, p.published) from " + getEntityType()
-				+ " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
-		query.setParameter("id", chapterId);
-		query.setMaxResults(1);
-		List<Publication> workingCopy = query.getResultList();
-		if (workingCopy != null && workingCopy.size() > 0) {
-			return workingCopy.get(0);
-		} else {
-			return null;
-		}
-	}
-
 }

@@ -110,15 +110,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 		return this.publicationDao.isPublished(revision);
 	}
 
-	public boolean isWorkingCopy(Long chapterId, Long revisionId) {
-		Publication workingCopy = this.publicationDao.getLastPublicationInfo(chapterId);
-		if (workingCopy == null) {
-			return false;
-		} else {
-			return workingCopy.getId().equals(revisionId);
-		}
-	}
-
 	public Publication getRevision(Long chapterId, String revision) {
 		Defense.notNull(chapterId, "chapterId");
 		if (LAST.equalsIgnoreCase(revision) || revision == null) {

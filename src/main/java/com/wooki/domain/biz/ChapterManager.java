@@ -91,16 +91,7 @@ public interface ChapterManager {
 	 * @return
 	 */
 	boolean isPublished(Long revision);
-	
-	/**
-	 * Check if the revision is a working copy.
-	 *
-	 * @param chapterId
-	 * @param revisionId
-	 * @return true if this is the working copy, false otherwise
-	 */
-	boolean isWorkingCopy(Long chapterId, Long revisionId);
-	
+
 	/**
 	 * Publish chapter content TODO:
 	 * 

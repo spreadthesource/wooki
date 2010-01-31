@@ -12,9 +12,19 @@
 	</context-param>
 
 	<context-param>
+		<param-name>tapestry.use-external-spring-context</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:applicationContext*.xml</param-value>
 	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -47,13 +57,16 @@
 		<filter-name>wooki</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
 	<error-page>
-		<error-code>403</error-code>		
+		<error-code>403</error-code>
 		<location>/error/403.html</location>
 	</error-page>
+
 	<error-page>
 		<error-code>404</error-code>
 		<location>/error/404.html</location>
 	</error-page>
+
 </web-app>
       

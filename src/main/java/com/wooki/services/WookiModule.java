@@ -46,7 +46,7 @@ import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.util.StringToEnumCoercion;
-import org.springframework.security.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
 import com.wooki.WookiSymbolsConstants;

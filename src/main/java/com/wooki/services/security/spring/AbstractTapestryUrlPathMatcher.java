@@ -29,6 +29,8 @@ import org.springframework.web.context.ServletContextAware;
  */
 public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher, ServletContextAware {
 
+	private ServletContext servletContext;
+
 	private Registry tapestryRegistry;
 
 	private RequestGlobals globals;
@@ -48,11 +50,29 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 	 * 
 	 */
 	public void setServletContext(ServletContext servletContext) {
-		this.tapestryRegistry = (Registry) servletContext.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
-		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
-		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
-		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
-		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
+		this.servletContext = servletContext;
+	}
+
+	/**
+	 * Init Tapestry registries and services.
+	 *
+	 */
+	private void init() {
+
+		boolean create = false;
+		synchronized (this) {
+			if (this.tapestryRegistry == null) {
+				create = true;
+			}
+		}
+
+		if (create) {
+			this.tapestryRegistry = (Registry) this.servletContext.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
+			this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
+			this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
+			this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
+			this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
+		}
 	}
 
 	/**
@@ -62,6 +82,7 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 	 * @return
 	 */
 	protected ComponentEventRequestParameters decodeComponentEventRequest(String path) {
+		this.init();
 		RequestImpl tapRequest = new RequestImpl(this.createRequestForTapestry(path), applicationCharset, spoa);
 		globals.storeRequestResponse(tapRequest, null);
 		return this.encoder.decodeComponentEventRequest(tapRequest);
@@ -74,6 +95,7 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 	 * @return
 	 */
 	protected PageRenderRequestParameters decodePageRenderRequest(String path) {
+		this.init();
 		RequestImpl tapRequest = new RequestImpl(this.createRequestForTapestry(path), applicationCharset, spoa);
 		globals.storeRequestResponse(tapRequest, null);
 		return this.encoder.decodePageRenderRequest(tapRequest);

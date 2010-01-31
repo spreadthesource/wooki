@@ -145,7 +145,22 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 			<version>${spring-version}</version>
-			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-version}</version>
 		</dependency>
 
 		<dependency>
@@ -193,11 +208,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.0</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>2.0.5.RELEASE</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.doxia</groupId>
@@ -251,11 +261,6 @@
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
 			<version>1.7.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-mock</artifactId>
-			<version>2.0.8</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -433,6 +438,11 @@
 			<url>http://repo1.maven.org/maven2/org/apache/xmlgraphics/fop</url>
 		</repository>
 
+		<repository>
+			<id>springsource maven repo</id>
+			<url>http://maven.springframework.org/milestone</url>
+		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
@@ -446,7 +456,6 @@
 			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
 		</pluginRepository>
 
-
 	</pluginRepositories>
 
 	<properties>
@@ -457,6 +466,6 @@
 		<hibernate-entitymanager-version>3.3.2.GA
 		</hibernate-entitymanager-version>
 		<tapestry-release-version>5.1.0.5</tapestry-release-version>
-		<spring-version>2.5.6</spring-version>
+		<spring-version>3.0.0.RELEASE</spring-version>
 	</properties>
 </project>

@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.springframework.security.util.RegexUrlPathMatcher;
-import org.springframework.security.util.UrlMatcher;
+import org.springframework.security.web.util.RegexUrlPathMatcher;
+import org.springframework.security.web.util.UrlMatcher;
+
 
 /**
  * This class will us to delegate url path matching to multiple implementation.

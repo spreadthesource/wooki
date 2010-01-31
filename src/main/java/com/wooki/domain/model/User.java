@@ -16,6 +16,7 @@
 
 package com.wooki.domain.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,9 +28,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import org.springframework.security.GrantedAuthority;
-import org.springframework.security.GrantedAuthorityImpl;
-import org.springframework.security.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Wooki basic user. Can post comment, write book etc.
@@ -106,8 +107,8 @@ public class User extends WookiEntity implements UserDetails {
 		this.books = books;
 	}
 
-	public GrantedAuthority[] getAuthorities() {
-		return new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_Author") };
+	public List<GrantedAuthority> getAuthorities() {
+		return Arrays.asList(new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_Author") });
 	}
 
 	public boolean isAccountNonExpired() {

@@ -16,13 +16,12 @@
 	-->
 
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:security="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd
-		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.4.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
 	<bean id="security-properties"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -72,8 +71,6 @@
 				<value>dev/bookindex</value>
 				<value>searchresult</value>
 				<value>error/generic</value>
-				<value>error/notfound</value>
-				<value>error/accessdenied</value>
 			</list>
 		</constructor-arg>
 		<property name="encoding" value="${tapestry.charset}" />
@@ -90,7 +87,7 @@
 		<property name="requiresLowerCaseUrl" value="true" />
 	</bean>
 
-	<bean id="springSecurityFilterChain" class="org.springframework.security.util.FilterChainProxy">
+	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
 		<property name="matcher" ref="delegatingUrlMatcher" />
 		<property name="stripQueryStringFromUrls" value="false" />
 		<property name="filterChainMap">
@@ -143,58 +140,89 @@
 		</property>
 	</bean>
 
+	<bean id="wookiPasswordEncoder"
+		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
+
+	<bean id="wookiSaltSource"
+		class="org.springframework.security.authentication.dao.SystemWideSaltSource">
+		<property name="systemWideSalt" value="${wooki.salt}" />
+	</bean>
+
 	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
 		<constructor-arg ref="userManager" />
 	</bean>
 
-	<bean id="defaultTargetUrlResolver" class="org.springframework.security.ui.TargetUrlResolverImpl" />
-
-	<bean id="viewBasedTargetUrlResolver"
-		class="com.wooki.services.security.spring.WookiTargetUrlResolver">
-		<constructor-arg ref="defaultTargetUrlResolver" />
+	<bean id="wookiAuthenticationManager"
+		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<property name="userDetailsService" ref="wookiUserDetailsService" />
+		<property name="passwordEncoder" ref="wookiPasswordEncoder" />
+		<property name="saltSource" ref="wookiSaltSource" />
 	</bean>
 
-	<security:authentication-provider
-		user-service-ref="wookiUserDetailsService">
-		<security:password-encoder hash="sha">
-			<security:salt-source system-wide="${wooki.salt}" />
-		</security:password-encoder>
-	</security:authentication-provider>
+	<bean id="authenticationManager"
+		class="org.springframework.security.authentication.ProviderManager">
+		<property name="providers">
+			<list>
+				<ref local="wookiAuthenticationManager" />
+			</list>
+		</property>
+	</bean>
 
-	<security:authentication-manager alias="authenticationManager" />
+	<!--
+		security:authentication-manager alias="authenticationManager">
+
+		<security:authentication-provider
+		user-service-ref="wookiUserDetailsService"> <security:password-encoder
+		hash="sha"> <security:salt-source system-wide="${wooki.salt}" />
+		</security:password-encoder> </security:authentication-provider>
+		</security:authentication-manager
+	-->
 
 	<bean id="authenticationProcessingFilter"
-		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilter">
-		<security:custom-filter position="AUTHENTICATION_PROCESSING_FILTER" />
-		<property name="defaultTargetUrl" value="${defaultTargetUrl}" />
-		<property name="authenticationFailureUrl" value="${authenticationFailureUrl}" />
+		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<property name="authenticationSuccessHandler" ref="authenticationSuccess" />
+		<property name="authenticationFailureHandler" ref="authenticationFailure" />
 		<property name="allowSessionCreation" value="true" />
 		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="targetUrlResolver" ref="viewBasedTargetUrlResolver" />
 		<property name="filterProcessesUrl" value="${loginFilterProcessesUrl}" />
 	</bean>
 
-	<bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
-		<security:custom-filter position="LOGOUT_FILTER" />
+	<bean id="authenticationSuccess"
+		class="com.wooki.services.security.spring.WookiTargetUrlResolver">
+		<property name="defaultTargetUrl" value="${defaultTargetUrl}" />
+	</bean>
+
+	<bean id="authenticationFailure"
+		class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/signin" />
+	</bean>
+
+
+	<bean id="logoutFilter"
+		class="org.springframework.security.web.authentication.logout.LogoutFilter">
 		<constructor-arg value="${logoutTargetUrl}" />
 		<constructor-arg>
 			<list>
 				<bean
-					class="org.springframework.security.ui.logout.SecurityContextLogoutHandler" />
+					class="org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler" />
 			</list>
 		</constructor-arg>
 		<property name="filterProcessesUrl" value="${logoutFilterProcessUrl}" />
 	</bean>
 
 	<bean id="httpSessionContextIntegrationFilter"
-		class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+		class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
+	</bean>
+
+	<bean id="wookiFilterSecurityMeta" class="org.springframework.security.config.http.FilterInvocationSecurityMetadataSourceParser">
+		
 	</bean>
 
 	<!--
-		Securisation des URLs
+		Authorization configuration.
 	-->
 	<bean id="filterSecurityInterceptor"
-		class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+		class="org.springframework.security.web.access.intercept.FilterSecurityInterceptor">
 		<property name="authenticationManager">
 			<ref bean="authenticationManager" />
 		</property>
@@ -202,16 +230,14 @@
 			<ref bean="accessDecisionManager" />
 		</property>
 		<property name="rejectPublicInvocations" value="true" />
-		<property name="objectDefinitionSource">
-			<value>
-				CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
-				PATTERN_TYPE_APACHE_ANT
-				/**=ROLE_Author
-			</value>
+		<property name="securityMetadataSource">
+			<security:filter-security-metadata-source path-type="ant" lowercase-comparisons="true">
+				<security:intercept-url pattern="/**" access="ROLE_Author" />
+			</security:filter-security-metadata-source>
 		</property>
 	</bean>
 
-	<bean id="accessDecisionManager" class="org.springframework.security.vote.UnanimousBased">
+	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
 		<property name="decisionVoters">
 			<list>
 				<ref bean="tapestryResourceVoter" />
@@ -238,7 +264,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="roleVoter" class="org.springframework.security.vote.RoleVoter">
+	<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
 		<property name="rolePrefix">
 			<value>ROLE_</value>
 		</property>
@@ -246,14 +272,14 @@
 
 	<!-- Exception handler -->
 	<bean id="exceptionTranslationFilter"
-		class="org.springframework.security.ui.ExceptionTranslationFilter">
+		class="org.springframework.security.web.access.ExceptionTranslationFilter">
 		<property name="authenticationEntryPoint">
 			<ref bean="formLoginAuthenticationEntryPoint" />
 		</property>
 	</bean>
 
 	<bean id="formLoginAuthenticationEntryPoint"
-		class="org.springframework.security.ui.webapp.AuthenticationProcessingFilterEntryPoint">
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
 		<property name="loginFormUrl">
 			<value>${loginFormUrl}</value>
 		</property>
@@ -264,7 +290,7 @@
 
 	<!-- Servlet API aware filter -->
 	<bean id="securityContextHolderAwareRequestFilter"
-		class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter">
+		class="org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter">
 	</bean>
 
 </beans>

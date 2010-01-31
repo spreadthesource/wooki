@@ -16,6 +16,7 @@
 
 package com.wooki.services.security.spring;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -31,12 +32,10 @@ import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.RequestGlobals;
 import org.apache.tapestry5.services.SessionPersistedObjectAnalyzer;
-import org.springframework.security.Authentication;
-import org.springframework.security.ConfigAttribute;
-import org.springframework.security.ConfigAttributeDefinition;
-import org.springframework.security.intercept.web.FilterInvocation;
-import org.springframework.security.vote.AccessDecisionVoter;
-
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.FilterInvocation;
 
 /**
  * This voter will be used to secure URL access authorization.
@@ -75,6 +74,19 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 	}
 
 	/**
+	 * Initialize tapestry context for spring security.
+	 * 
+	 * @param ctx
+	 */
+	private void initTapestry(ServletContext ctx) {
+		this.tapestryRegistry = (Registry) ctx.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
+		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
+		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
+		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
+		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
+	}
+
+	/**
 	 * This implementation supports any type of class, because it does not query
 	 * the presented secure object.
 	 * 
@@ -83,20 +95,14 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 	 * 
 	 * @return always <code>true</code>
 	 */
-	public boolean supports(Class clazz) {
+	public boolean supports(Class<?> clazz) {
 		if (clazz == FilterInvocation.class) {
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * This vote method will delegate access control to AccessController
-	 * instances.
-	 * 
-	 */
-	public int vote(Authentication authentication, Object object, ConfigAttributeDefinition config) {
-
+	public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
 		// Use Tapestry services to analyze the URL
 		FilterInvocation fi = FilterInvocation.class.cast(object);
 		if (tapestryRegistry == null) {
@@ -124,20 +130,6 @@ public class TapestryResourceVoter implements AccessDecisionVoter {
 		}
 
 		return ACCESS_GRANTED;
-
-	}
-
-	/**
-	 * Initialize tapestry context for spring security.
-	 * 
-	 * @param ctx
-	 */
-	private void initTapestry(ServletContext ctx) {
-		this.tapestryRegistry = (Registry) ctx.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
-		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
-		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
-		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
-		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
 	}
 
 }

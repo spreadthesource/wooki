@@ -16,42 +16,45 @@
 
 package com.wooki.services.security.spring;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.security.Authentication;
-import org.springframework.security.ui.TargetUrlResolver;
-import org.springframework.security.ui.savedrequest.SavedRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.wooki.services.WookiModule;
 
 /**
  * Implement a custom target url resolver for spring security based on cookies.
- *
+ * 
  * @author ccordenier
- *
+ * 
  */
-public class WookiTargetUrlResolver implements TargetUrlResolver {
+public class WookiTargetUrlResolver extends SimpleUrlAuthenticationSuccessHandler {
 
-	private final TargetUrlResolver defaultTargetUrlResolver;
-	
-	public WookiTargetUrlResolver(TargetUrlResolver defaultTargetUrlResolver) {
-		this.defaultTargetUrlResolver = defaultTargetUrlResolver;
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException,
+			ServletException {
+		super.onAuthenticationSuccess(request, response, authentication);
 	}
 
-	public String determineTargetUrl(SavedRequest savedRequest,
-			HttpServletRequest currentRequest, Authentication auth) {
-		
+	@Override
+	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
 		// Check first wooki last view
-		Cookie [] cookies = currentRequest.getCookies();
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				if(WookiModule.VIEW_REFERER.equals(cookie.getName())) {
+		Cookie[] cookies = request.getCookies();
+		if (cookies != null) {
+			for (Cookie cookie : cookies) {
+				if (WookiModule.VIEW_REFERER.equals(cookie.getName())) {
 					return cookie.getValue();
 				}
 			}
 		}
-		return defaultTargetUrlResolver.determineTargetUrl(savedRequest, currentRequest, auth);
+		return super.determineTargetUrl(request, response);
 	}
 
 }

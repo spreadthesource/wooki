@@ -37,7 +37,7 @@
 		<h2>Password change</h2>
 		
 		<t:if t:test="passwordChangeSuccess">
-			<t:flashMessage t:message="literal:Your password has been updated" />
+			<t:flashMessage t:message="message:success-password-updated" />
 		</t:if>
 		
 		<form t:type="form" t:id="passwordChange" class="small-form" t:clientValidation="false">

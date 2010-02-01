@@ -51,7 +51,8 @@
 		<property name="activityDao" ref="activityDao" />
 		<property name="authorDao" ref="userDao" />
 		<property name="securityCtx" ref="wookiSecurityContext" />
-		<property name="salt" value="${wooki.salt}" />
+		<property name="saltSource" ref="wookiSaltSource" />
+		<property name="passwordEncoder" ref="wookiPasswordEncoder" />
 	</bean>
 
 	<!-- Match tapestry public page -->
@@ -167,16 +168,6 @@
 			</list>
 		</property>
 	</bean>
-
-	<!--
-		security:authentication-manager alias="authenticationManager">
-
-		<security:authentication-provider
-		user-service-ref="wookiUserDetailsService"> <security:password-encoder
-		hash="sha"> <security:salt-source system-wide="${wooki.salt}" />
-		</security:password-encoder> </security:authentication-provider>
-		</security:authentication-manager
-	-->
 
 	<bean id="authenticationProcessingFilter"
 		class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">

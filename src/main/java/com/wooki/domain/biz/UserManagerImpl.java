@@ -19,6 +19,7 @@ package com.wooki.domain.biz;
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,7 +44,9 @@ public class UserManagerImpl implements UserManager {
 
 	private WookiSecurityContext securityCtx;
 
-	private String salt;
+	private SaltSource saltSource;
+
+	private PasswordEncoder passwordEncoder;
 	
 	@Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
 	public void addUser(User author) throws UserAlreadyException {
@@ -53,10 +56,9 @@ public class UserManagerImpl implements UserManager {
 		}
 
 		// Encode password into database
-		PasswordEncoder encoder = new ShaPasswordEncoder();
 		String pass = author.getPassword();
 		author.setCreationDate(new Date());
-		author.setPassword(encoder.encodePassword(pass, this.salt));
+		author.setPassword(this.passwordEncoder.encodePassword(pass, this.saltSource.getSalt(author)));
 		authorDao.create(author);
 
 		AccountActivity aa = new AccountActivity();
@@ -106,13 +108,12 @@ public class UserManagerImpl implements UserManager {
 			throw new AuthorizationException("Action not authorized");
 		}
 
-		PasswordEncoder encoder = new ShaPasswordEncoder();
-		String encodedPassword = encoder.encodePassword(oldPassword, this.salt) ;
+		String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource.getSalt(user)) ;
 		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
 			throw new AuthorizationException();
 		}
 		
-		user.setPassword(encoder.encodePassword(newPassword, this.salt));
+		user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource.getSalt(user)));
 		this.securityCtx.log(authorDao.update(user));
 
 		return user;
@@ -142,12 +143,20 @@ public class UserManagerImpl implements UserManager {
 		this.securityCtx = securityCtx;
 	}
 
-	public String getSalt() {
-		return salt;
+	public SaltSource getSaltSource() {
+		return saltSource;
 	}
 
-	public void setSalt(String salt) {
-		this.salt = salt;
+	public void setSaltSource(SaltSource saltSource) {
+		this.saltSource = saltSource;
+	}
+
+	public PasswordEncoder getPasswordEncoder() {
+		return passwordEncoder;
+	}
+
+	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
 	}
 
 }

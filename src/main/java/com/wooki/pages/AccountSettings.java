@@ -22,15 +22,14 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.TextField;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 
-import com.wooki.WookiSymbolsConstants;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
@@ -53,15 +52,17 @@ public class AccountSettings {
 	private Messages messages;
 
 	@Inject
-	@Symbol(value = WookiSymbolsConstants.WOOKI_SALT)
-	private String salt;
-	
+	private SaltSource saltSource;
+
+	@Inject
+	private PasswordEncoder passwordEncoder;
+
 	@Component(id = "userDetails")
 	private Form userDetails;
 
 	@Component(id = "username")
 	private TextField username;
-	
+
 	@Component(id = "passwordChange")
 	private Form passwordChange;
 
@@ -69,14 +70,17 @@ public class AccountSettings {
 	private User user;
 
 	@Property
+	@Validate("required")
 	private String oldPassword;
 
 	@Property
+	@Validate("required")
 	private String newPassword;
 
 	@Property
+	@Validate("required")
 	private String newPasswordConfirmation;
-	
+
 	@Property
 	@Persist("flash")
 	private Boolean passwordChangeSuccess;
@@ -127,13 +131,11 @@ public class AccountSettings {
 	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "passwordChange")
 	void validatePasswordChange() {
 		// first, let's check if old password is ok
-		PasswordEncoder encoder = new ShaPasswordEncoder();
-		String encodedPassword = encoder.encodePassword(oldPassword, this.salt);
+		String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource.getSalt(this.user));
 		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
-			passwordChange.recordError(messages.get("error-old-password-wrong"));	
+			passwordChange.recordError(messages.get("error-old-password-wrong"));
 		}
-		
-		
+
 		// then check if password confirmation is ok
 		if (!newPassword.equals(newPasswordConfirmation)) {
 			passwordChange.recordError(messages.get("error-passwords-dont-match"));
@@ -149,7 +151,7 @@ public class AccountSettings {
 			userDetails.recordError(messages.get("error-authorization-exception"));
 		}
 	}
-	
+
 	public String getTitle() {
 		return this.messages.format("account-settings-title", user.getUsername());
 	}

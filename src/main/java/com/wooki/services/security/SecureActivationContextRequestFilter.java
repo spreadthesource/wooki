@@ -8,8 +8,6 @@ import org.apache.tapestry5.services.ComponentRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Response;
 
-import com.wooki.services.HttpError;
-
 /**
  * Verify that the activation context passed corresponds to an existing
  * activation method. Send 404 error if context method is not available.

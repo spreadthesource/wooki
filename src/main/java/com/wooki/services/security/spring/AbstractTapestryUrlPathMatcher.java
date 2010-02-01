@@ -45,6 +45,8 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 
 	private String encoding;
 
+	private boolean initDone = false;
+
 	/**
 	 * Initialize Tapestry registry.
 	 * 
@@ -55,24 +57,18 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 
 	/**
 	 * Init Tapestry registries and services.
-	 *
+	 * 
 	 */
 	private void init() {
-
-		boolean create = false;
-		synchronized (this) {
-			if (this.tapestryRegistry == null) {
-				create = true;
-			}
+		if (initDone) {
+			return;
 		}
-
-		if (create) {
-			this.tapestryRegistry = (Registry) this.servletContext.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
-			this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
-			this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
-			this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
-			this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
-		}
+		this.tapestryRegistry = (Registry) this.servletContext.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
+		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
+		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
+		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
+		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
+		this.initDone = true;
 	}
 
 	/**

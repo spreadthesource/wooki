@@ -16,6 +16,8 @@
 
 package com.wooki.pages.chapter;
 
+import java.util.List;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
@@ -92,7 +94,13 @@ public class Index extends BookBase {
 
 		this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
 		if (this.getPublication() == null) {
-			return new HttpError(404, "Nothing published not found");
+			return new HttpError(404, "Chapter not found");
+		}
+		
+		// send 404 if trying to see abstract
+		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
+		if (chapterId.equals(chapters.get(0).getId())) {
+			return new HttpError(404, "Chapter not found");
 		}
 
 		return true;

@@ -68,7 +68,7 @@
                             </t:security.ifAuthorOfBook>
                         </t:if>
                     </h3>
-                    <p>
+                    <p class="last-update">
                         <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
                     </p>
                 </li>
@@ -82,7 +82,7 @@
 	                                    <em>(Working copy) </em>
 	                                </t:pagelink>
 			                    </h3>
-			                    <p>
+			                    <p class="last-update">
 			                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
 			                    </p>
 			                </li>

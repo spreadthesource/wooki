@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.junit.BeforeClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -28,7 +27,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -49,6 +47,7 @@ import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.BookActivity;
+import com.wooki.services.SearchEngine;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -59,6 +58,9 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 	@Autowired
 	private BookManager bookManager;
+
+	@Autowired
+	private SearchEngine searchEngine;
 
 	@Autowired
 	private ChapterManager chapterManager;
@@ -85,7 +87,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		ClassPathResource script = new ClassPathResource("reset.sql");
 		SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
 		SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-		
+
 		// Add author to the book
 		User john = new User();
 		john.setEmail("john.doe@gmail.com");
@@ -99,7 +101,8 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Create books
 		Book productBook = bookManager.create("My First Product Book");
 		Book cacheBook = bookManager.create("My Cache Product Book");
-
+		Book wildcardTitle = bookManager.create("!%_");
+		
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook, "Requirements");
 		chapterManager.updateContent(chapterOne.getId(), "<p>You will need �� ...</p>");
@@ -155,7 +158,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Verify book creation activity
 		activities = activityManager.listBookCreationActivity(10);
 		Assert.assertNotNull(activities);
-		Assert.assertEquals(activities.size(), 3);
+		Assert.assertEquals(activities.size(), 4);
 		for (Activity a : activities) {
 			Assert.assertTrue(a instanceof BookActivity);
 		}
@@ -170,14 +173,14 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 	public void testListBookByUser() {
 		List<Book> books = bookManager.listByOwner("john");
 		Assert.assertNotNull(books, "John has written books");
-		Assert.assertEquals(books.size(), 2, "John has one book");
+		Assert.assertEquals(books.size(), 3, "John has one book");
 	}
 
 	@Test
 	public void testOwnerOfBook() {
 		List<Book> books = bookManager.listByOwner("john");
 		Assert.assertNotNull(books, "John has written books");
-		Assert.assertEquals(books.size(), 2, "John has two book");
+		Assert.assertEquals(books.size(), 3, "John has three book");
 		securityCtx.log(this.userManager.findByUsername("john"));
 		securityCtx.isOwnerOfBook(books.get(0).getId());
 	}
@@ -214,8 +217,22 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 	@Test
 	public void testListBooksByTitle() {
 		List<Book> books = bookManager.listByTitle("%Product%");
-		Assert.assertNotNull(books, "John has written books");
+		Assert.assertNotNull(books, "listBytTitle should never return null value but empty list");
 		Assert.assertEquals(books.size(), 2, "John has one book");
+
+		books = this.searchEngine.findBook("Product");
+		Assert.assertNotNull(books, "findBook should never return null value but empty list");
+		Assert.assertEquals(books.size(), 2, "John has one book");
+		
+		books = this.searchEngine.findBook("%");
+		Assert.assertEquals(books.size(), 1, "Wildcard must be escaped from search query");
+
+		books = this.searchEngine.findBook("_");
+		Assert.assertEquals(books.size(), 1, "Wildcard must be escaped from search query");
+
+		books = this.searchEngine.findBook("!");
+		Assert.assertEquals(books.size(), 1, "Wildcard must be escaped from search query");
+		
 	}
 
 	/**
@@ -226,7 +243,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 	public void testListBook() {
 		List<Book> books = bookManager.list();
 		Assert.assertNotNull(books);
-		Assert.assertEquals(books.size(), 2, "There is at two two books");
+		Assert.assertEquals(books.size(), 3, "There is at least three books");
 	}
 
 	/**

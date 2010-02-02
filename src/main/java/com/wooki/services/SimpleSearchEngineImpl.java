@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
+import com.wooki.services.utils.SqlUtils;
 
 /**
  * Basic implementation of SearchService.
@@ -40,7 +41,7 @@ public class SimpleSearchEngineImpl implements SearchEngine {
 		if (queryString == null || "".equals(queryString.trim())) {
 			return new ArrayList<Book>();
 		}
-		return bookManager.listByTitle(queryString);
+		return bookManager.listByTitle("%" + SqlUtils.escapeWildcards(queryString) + "%");
 	}
 
 }

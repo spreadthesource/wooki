@@ -60,8 +60,8 @@ public class BookDAOImpl extends GenericDAOImpl<Book, Long> implements BookDAO {
 	
 	public List<Book> listByTitle(String title) {
 		Query query = this.entityManager.createQuery("from " + getEntityType()
-				+ " b where lower(b.title) like :title and b.deletionDate is null");
-		query.setParameter("title", new String("%" + title + "%").toLowerCase());
+				+ " b where lower(b.title) like :title escape '!' and b.deletionDate is null");
+		query.setParameter("title", new String(title).toLowerCase());
 		return (List<Book>) query.getResultList();
 	}
 

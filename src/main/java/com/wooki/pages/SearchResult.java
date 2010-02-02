@@ -42,7 +42,7 @@ public class SearchResult {
 	private SearchEngine searchService;
 	
 	@Property
-	@Validate("regexp=[^%]*")
+	// @Validate("regexp=[^%]*")
 	private String queryString;
 
 	@Property

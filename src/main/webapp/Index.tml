@@ -47,18 +47,18 @@
 
 	<!-- Block displayed in the index default page -->
     <t:block id="presBlock">
-		<div id="teasing-box">		
+		<div id="teasing-box" >		
 			<div id="teasing" class="radied shadowed x300">
 				<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
-				<p>Read them directly on the website as a PDF ebook. Get active by writing comments or by publishing content. </p>
+				<p>Read them directly on the website, or as a PDF ebook. Get active by writing comments or by publishing content. </p>
 				<t:pagelink t:page="signup" class="radied btn-active">
 				        <p>Signup in 30 seconds.<br />
 				        <em>Create and review documents now</em></p>
 				</t:pagelink>
 			</div>
 		</div>
-		<div class="right-col x460">
-			<t:activity.feed t:userId="user?.id" t:type="prop:activityType"/>
+		<div class="right-col">
+			<t:activity.feed t:userId="user?.id" t:type="prop:activityType" />
 			<t:activity.feed t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
 		</div>
     </t:block>

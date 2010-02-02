@@ -49,8 +49,8 @@ h1, h2, h3, h4, h5, h6 { padding: 5px 0px; }
 h1, h2 { font-family: Georgia, serif; }
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32}
 
-h1 { font-size: 25px; text-align:center; padding:20px; clear:both;}
-h2 { font-size: 23px; }
+h1 { font-size: 28px; text-align:center; padding:20px; clear:both;}
+h2 { font-size: 24px; color: #2F2F32}
 h3 { font-size: 20px; }
 
 /* others */
@@ -102,7 +102,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 
 #signin-box { padding-top:10px; background: url('../img/bubble-signin-top.png') no-repeat 130px 0px; position:absolute; width:200px; display:none; z-index: 29999}
 #signin { color:white; padding: 10px; background:#2F2F32; }
-#signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 18px;}
+#signin h2 { font-family: Helvetica, Arial, sans-serif; font-size: 18px; color:white;}
 #signin label { font-size:12px; }
 #signin td { text-align:left; padding:5px 0px; }
 #signin div { text-align:right }
@@ -174,7 +174,7 @@ abbr { padding-right: 3px; padding-left: 3px; }
 #comments .comment-accessor .commented { background:url("../img/bubble_active.png") no-repeat center; line-height: 25px; height: 25px; width: 40px; text-align:center; } 
 
 /******
- * COMMENT POPUP LINK
+ * COMMENTS
  */
 #comments-popup { padding: 10px; text-align: left; }
 #comments-popup a { text-decoration: none; }
@@ -258,7 +258,7 @@ input.wymupdate { margin-right: 10px; }
 /*****
  * BOOK LAYOUT
  */
-#book { background:#FFFFFF; padding: 10px; }
+#book { background:#FFFFFF; padding: 10px;  line-height:1.35em}
 #book em { color: #6E6D65; font-style: normal; font-size: 16px; }
 #book-wrapper { background:#C9BB9B; padding-left:40px; margin-bottom:20px; }
 
@@ -268,6 +268,17 @@ input.wymupdate { margin-right: 10px; }
 .book-admin ul { list-style: none; }
 .book-admin li { display:inline; padding:0px 10px; }
 .book-admin a { text-decoration: none; color: #6E6D65}
+
+
+#chapter-nav { list-style: none; padding:10px;  }
+#chapter-nav li { display:block; width:25%; }
+#chapter-nav li a { text-decoration:none; }
+#chapter-nav #nav-left { float:left; clear:left; text-align:left; }
+#chapter-nav #nav-right { float:right; clear:right; text-align:right;}
+#chapter-nav #book-root { text-align:center; width:100% ; }
+#chapter-nav h1 {font-size:16px;  padding:0px; margin:0px; display:inline; }
+#chapter-nav h1 a { color:#6E6D65;}
+ 
 
 /* table of contents */
 #table-of-contents { margin: 10px; padding:0px; }

@@ -1,3 +1,5 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html t:type="booklayout" t:title="prop:title"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter" t:bookId="book?.id">
@@ -18,7 +20,7 @@
 			<li>
 				<a t:type="pagelink" t:page="chapter/issues" t:context="allIssuesCtx">All issues</a>
 			</li>
-			<li id="nav-right">
+			<li>
 				<a t:type="pagelink" t:page="chapter/issues" t:context="chapIssuesCtx">Chapter issues</a>
 			</li>
 		</ul>
@@ -26,22 +28,31 @@
 			<p>You are currently viewing the revision "${revision}" of this chapter.</p>
 		</div>
 		<p:else>
-			<ul id="exports" class="nav right-col">
-				<t:ifNotNull test="previous">
-					<li id="nav-left">
+			<ul id="chapter-nav">	
+				<li id="nav-left">
+					<t:ifNotNull test="previous">
 						<a t:type="pagelink" t:page="chapter/index" t:context="previousCtx" title="${previousTitle}">&lt; Previous</a>
-					</li>
-				</t:ifNotNull>
-				<t:ifNotNull test="next">
-					<li id="nav-right">
+						<p:else>
+							&nbsp;
+						</p:else>
+					</t:ifNotNull>
+				</li>			
+				<li id="nav-right" >
+					<t:ifNotNull test="next" >
 						<a t:type="pagelink" t:page="chapter/index" t:context="nextCtx" title="${nextTitle}">Next &gt;</a>
-					</li>
-				</t:ifNotNull>
+						<p:else>
+							&nbsp;
+						</p:else>
+					</t:ifNotNull>
+				</li>
+				<li id="book-root">
+					<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+				</li>
 			</ul>
 		</p:else>
 	</t:if>
 
-	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+	
 	
 	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
 	

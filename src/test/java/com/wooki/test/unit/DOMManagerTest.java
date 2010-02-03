@@ -49,6 +49,8 @@ import org.testng.annotations.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Comment;
 import com.wooki.services.HTMLParser;
@@ -92,15 +94,15 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("xhtmlToLatexConvertor")
 	private Convertor toLatexConvertor;
-	
+
 	@Autowired
 	@Qualifier("docbookToXhtmlConvertor")
 	private Convertor fromDocbookConvertor;
-	
+
 	@Autowired
 	@Qualifier("APTHTMLToDocbookHTMLConvertor")
 	private Convertor fromAptToDocbook;
-	
+
 	@Autowired
 	@Qualifier("htmlParser")
 	private HTMLParser htmlParser;
@@ -154,11 +156,9 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		Resource resource = new ByteArrayResource(result.getBytes());
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
 		logger.debug("Document to xhtml ok");
-		InputStream fo = toFOConvertor
-				.performTransformation(new InputStreamResource(xhtml));
+		InputStream fo = toFOConvertor.performTransformation(new InputStreamResource(xhtml));
 		logger.debug("xhtml to fo ok");
-		InputStream pdf = toPDFConvertor
-				.performTransformation(new InputStreamResource(fo));
+		InputStream pdf = toPDFConvertor.performTransformation(new InputStreamResource(fo));
 		logger.debug("fo to pdf ok");
 		File pdfFile;
 		try {
@@ -189,8 +189,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		Resource resource = new ByteArrayResource(result.getBytes());
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
 		logger.debug("Document to xhtml ok");
-		InputStream apt = toAPTConvertor
-				.performTransformation(new InputStreamResource(xhtml));
+		InputStream apt = toAPTConvertor.performTransformation(new InputStreamResource(xhtml));
 		logger.debug("xhtml to apt ok");
 		File aptFile;
 		try {
@@ -211,9 +210,6 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
 
 	// TODO find a solution for proxy @Test
 	public void testDocbookConversion() {
@@ -260,16 +256,16 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		Book book = htmlParser.getBook();
 		logger.debug("The book title is " + book.getTitle());
-	
+
 	}
-	
+
 	@Test
 	public void testAptConversion() {
 		String result = "   ------\n            Title\n            ------\n            Author\n            ------\n             Date\n\n  Paragraph 1, line 1.\n  Paragraph 1, line 2.\n\n  Paragraph 2, line 1.\n  Paragraph 2, line 2.\n\nSection title\n\n* Sub-section title\n\n** Sub-sub-section title\n\n*** Sub-sub-sub-section title\n\n**** Sub-sub-sub-sub-section title\n\n      * List item 1.\n\n      * List item 2.\n\n        Paragraph contained in list item 2.\n\n            * Sub-list item 1.\n\n            * Sub-list item 2.\n\n      * List item 3.\n        Force end of list:\n\n      []\n\n+------------------------------------------+\nVerbatim text not contained in list item 3\n+------------------------------------------+\n\n      [[1]] Numbered item 1.\n\n                [[A]] Numbered item A.\n\n                [[B]] Numbered item B.\n\n      [[2]] Numbered item 2.\n\n  List numbering schemes: [[1]], [[a]], [[A]], [[i]], [[I]].\n\n      [Defined term 1] of definition list.\n\n      [Defined term 2] of definition list.\n\n+-------------------------------+\nVerbatim text\n                        in a box\n+-------------------------------+\n\n  --- instead of +-- suppresses the box around verbatim text.\n\n[Figure name] Figure caption\n\n*----------*--------------+----------------:\n| Centered | Left-aligned | Right-aligned  |\n| cell 1,1 | cell 1,2     | cell 1,3       |\n*----------*--------------+----------------:\n| cell 2,1 | cell 2,2     | cell 2,3       |\n*----------*--------------+----------------:\nTable caption\n\n  No grid, no caption:\n\n*-----*------*\n cell | cell\n*-----*------*\n cell | cell\n*-----*------*\n\n  Horizontal line:\n\n=======================================================================\n\n^L\n  New page.\n\n  <Italic> font. <<Bold>> font. <<<Monospaced>>> font.\n\n  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.\n  Link to {{{anchor}showing alternate text}}.\n  Link to {{{http://www.pixware.fr}Pixware home page}}.\n\n  Force line\\\n  break.\n\n  Non\\ breaking\\ space.\n\n  Escaped special characters: \\~, \\=, \\-, \\+, \\*, \\[, \\], \\<, \\>, \\{, \\}, \\\\.\n\n  Copyright symbol: \\251, \\xA9, \\u00a9.\n\n~~Commented out.";
 		File aptFile = null;
 		String from = "apt";
 		File out = null;
-		
+
 		try {
 			out = File.createTempFile("fromAptToXHTML", ".html");
 			InputStream apt = new ByteArrayInputStream(result.getBytes());
@@ -292,14 +288,9 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 			}
 			String to = "xhtml";
 			Converter converter = new DefaultConverter();
-			InputFileWrapper input = InputFileWrapper.valueOf(
-					aptFile.getAbsolutePath(), from, "ISO-8859-1", converter
-							.getInputFormats());
+			InputFileWrapper input = InputFileWrapper.valueOf(aptFile.getAbsolutePath(), from, "ISO-8859-1", converter.getInputFormats());
 
-			
-			OutputFileWrapper output = OutputFileWrapper.valueOf(out
-					.getAbsolutePath(), to, "UTF-8", converter
-					.getOutputFormats());
+			OutputFileWrapper output = OutputFileWrapper.valueOf(out.getAbsolutePath(), to, "UTF-8", converter.getOutputFormats());
 
 			converter.convert(input, output);
 		} catch (UnsupportedFormatException e) {
@@ -343,10 +334,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		/** Generate Latex */
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
-		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor
-				.performTransformation(new InputStreamResource(xhtml));
-		InputStream latex = toLatexConvertor
-				.performTransformation(new InputStreamResource(improvedXhtml));
+		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor.performTransformation(new InputStreamResource(xhtml));
+		InputStream latex = toLatexConvertor.performTransformation(new InputStreamResource(improvedXhtml));
 		logger.debug("xhtml to apt ok");
 		File latexFile;
 		try {
@@ -370,10 +359,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testAddIds() {
-		String result = generator
-				.adaptContent(
-						"<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>",
-						null);
+		String result = generator.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>", null);
 		Assert
 				.assertTrue(result
 						.contains("<h2 id=\"b0\" class=\"commentable\">SubTitle</h2><p id=\"b1\" class=\"commentable\">Lorem ipsum</p><h3 id=\"b2\" class=\"commentable\">SubTitle2</h3><p id=\"b3\" class=\"commentable\">Lorem ipsum</p>"));
@@ -398,8 +384,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "2",
-				"Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "2", "Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -417,8 +402,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "0",
-				"Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "0", "Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -436,8 +420,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), null,
-				"Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), null, "Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -455,8 +438,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "0",
-				"Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "0", "Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -474,8 +456,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "1",
-				"Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "1", "Comment must be assigned to previous 'h' element id");
 	}
 
 }

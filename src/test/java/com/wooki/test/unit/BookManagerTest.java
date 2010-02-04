@@ -294,9 +294,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		}
 
 		Object[] result = chapterManager.findPrevious(myProduct.getId(), myProduct.getChapters().get(1).getId());
-		Assert.assertNotNull(result);
-		Assert.assertEquals(result.length, 2);
-		Assert.assertEquals("Abstract", result[1]);
+		Assert.assertNull(result);
 		result = chapterManager.findNext(myProduct.getId(), myProduct.getChapters().get(1).getId());
 		Assert.assertNotNull(result);
 		Assert.assertEquals("Installation", result[1]);

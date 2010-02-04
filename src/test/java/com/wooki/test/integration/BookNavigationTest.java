@@ -43,7 +43,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		int bookId = 1;
 		int chapters = 4;
 
-		for (int chapterId = 1; chapterId < chapters; chapterId++) {
+		for (int chapterId = 2; chapterId < chapters; chapterId++) {
 			checkChapterPage("chapter", bookId, chapterId);
 
 			if (chapterId > 1)

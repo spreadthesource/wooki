@@ -91,11 +91,11 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	 */
 	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
 	public void testAdminChapter() {
-		open("/chapter/1/1");
+		open("/chapter/1/2");
 		waitForPageToLoad();
-		checkChapterTitle("Abstract");
-		Assert.assertTrue(isElementPresent("//a[@href='/chapter/edit/1/1']"), "Edit chapter link is missing");
-		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/1?t:ac=1/1']"), "Remove chapter link is missing.");
+		checkChapterTitle("Collaborative document publishing");
+		Assert.assertTrue(isElementPresent("//a[@href='/chapter/edit/1/2']"), "Edit chapter link is missing");
+		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/2?t:ac=1/2']"), "Remove chapter link is missing.");
 	}
 	
 }

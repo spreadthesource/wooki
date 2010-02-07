@@ -25,12 +25,12 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 		}
 	}
 
-	public AbstractWookiIntegrationTestSuite(String webAppRoot, String browserCommand, String... virtualHosts) {
-		super(webAppRoot, browserCommand, virtualHosts);
-	}
-
-	public AbstractWookiIntegrationTestSuite(String webAppRoot) {
-		this(webAppRoot, defaultBrowser);
+	/**
+	 * Set default browser in function of the OS. 
+	 *
+	 */
+	protected AbstractWookiIntegrationTestSuite() {
+		super("src/main/webapp", defaultBrowser);
 	}
 
 	/**

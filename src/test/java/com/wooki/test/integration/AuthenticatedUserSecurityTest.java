@@ -13,17 +13,14 @@ import org.testng.annotations.Test;
  */
 public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 
-	public AuthenticatedUserSecurityTest() {
-		super("src/main/webapp");
-	}
-
 	/**
 	 * Register a new user, this is the first method to execute in the test.
 	 * 
 	 */
 	@Test
 	public void signup() {
-		open("signup");
+		open("/signup");
+		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=signupForm"), "Cannot load signup page");
 		type("id=username", "john");
 		type("id=fullname", "John Doe");
@@ -39,11 +36,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 */
 	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
 	public void testIndex() {
-		
+
 		open("/userNotExist");
 		waitForPageToLoad();
 		checkNotFound();
-		
+
 		open("/");
 		waitForPageToLoad();
 		checkProfile("john");
@@ -149,7 +146,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 
 	/**
 	 * Logout of the application.
-	 *
+	 * 
 	 */
 	@Test(dependsOnGroups = { "authenticated" })
 	public void testLogout() {

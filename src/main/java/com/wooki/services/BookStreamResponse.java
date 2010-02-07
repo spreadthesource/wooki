@@ -8,30 +8,27 @@ import org.apache.tapestry5.services.Response;
 
 /**
  * Can be used to print a book from an action link.
- *
+ * 
  * @author ccordenier
- *
+ * 
  */
 public class BookStreamResponse implements StreamResponse {
 
-	private final ExportService exportSvc;
-	
-	private final Long bookId;
-	
+	private final InputStream bookStream;
+
 	private final String filename;
-	
-	public BookStreamResponse(ExportService exportSvc, Long bookId, String filename) {
-		this.exportSvc = exportSvc;
-		this.bookId = bookId;
+
+	public BookStreamResponse(String filename, InputStream bookStream) {
 		this.filename = filename;
+		this.bookStream = bookStream;
 	}
-	
+
 	public String getContentType() {
 		return "application/pdf";
 	}
 
 	public InputStream getStream() throws IOException {
-		return this.exportSvc.exportPdf(this.bookId);
+		return this.bookStream;
 	}
 
 	public void prepareResponse(Response response) {

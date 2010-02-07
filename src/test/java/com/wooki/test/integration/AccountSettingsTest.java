@@ -13,10 +13,6 @@ import org.testng.annotations.Test;
  */
 public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 
-	public AccountSettingsTest() {
-		super("src/main/webapp");
-	}
-
 	/**
 	 * Register a new user, this is the first method to execute in the test.
 	 * 
@@ -37,7 +33,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 	/**
 	 * Check index page.
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(groups = { "account" }, dependsOnMethods = { "signup" })
 	public void testUpdatePasswordFailure() {
 
 		open("/accountSettings");
@@ -50,8 +46,8 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 		Assert.assertTrue(isTextPresent("Your old password is incorrect"), "An error message should be displayed with incorrect old password.");
 
 	}
-	
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+
+	@Test(groups = { "account" }, dependsOnMethods = { "signup" })
 	public void testUpdatePasswordSuccess() {
 
 		open("/accountSettings");
@@ -63,6 +59,20 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 		waitForPageToLoad();
 		Assert.assertTrue(isTextPresent("Your password has been updated"), "An flash message should be displayed to inform password change success.");
 
+	}
+
+	/**
+	 * Logout of the application.
+	 * 
+	 */
+	@Test(dependsOnGroups = { "account" })
+	public void testLogout() {
+		open("/index");
+		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
+		click("id=logout");
+		waitForPageToLoad();
+		checkIndex();
 	}
 
 }

@@ -6,15 +6,11 @@ import org.testng.annotations.Test;
 /**
  * This test will verify that an author user has access to all the required
  * elements to edit the book he is owning.
- *
+ * 
  * @author ccordenier
  * 
  */
 public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
-
-	public AuthorUserSecurityTest() {
-		super("src/main/webapp");
-	}
 
 	/**
 	 * Register a new user, this is the first method to execute in the test.
@@ -47,7 +43,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 
 	/**
 	 * Check that an author is authorized to change the state of a comment.
-	 *
+	 * 
 	 */
 	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
 	public void testCommentPopup() {
@@ -58,13 +54,13 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 		// open comment popup
 		click("id=c10");
 		waitForCondition("var popupOpen = selenium.isElementPresent('id=ent-1'); popupOpen==true;", "10000");
-		Assert.assertTrue(isElementPresent("//form[@action='/book/index.commentbubbles.commentdialogcontent.updatestateform/1']"), "Change comment state form is missing.");
+		Assert.assertTrue(isElementPresent("//form[@action='/book/index.commentbubbles.commentdialogcontent.updatestateform/1']"),
+				"Change comment state form is missing.");
 	}
 
-	
 	/**
 	 * Verify that the author has access to the working copy.
-	 *
+	 * 
 	 */
 	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
 	public void testWorkingCopy() {
@@ -72,10 +68,10 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 		waitForPageToLoad();
 		checkBookTitle(BookNavigationTest.BOOK_TITLE);
 	}
-	
+
 	/**
 	 * Verify that the author has access to the edit page.
-	 *
+	 * 
 	 */
 	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
 	public void testEditChapter() {
@@ -85,9 +81,9 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 		Assert.assertTrue(isElementPresent("id=updateTitle"), "Missing update title form");
 		Assert.assertTrue(isElementPresent("id=editChapterForm"), "Missing edit chapter form");
 	}
-	
+
 	/**
-	 * Verify that an author have access to links to modify and delete a chapter 
+	 * Verify that an author have access to links to modify and delete a chapter
 	 */
 	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
 	public void testAdminChapter() {
@@ -96,6 +92,20 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 		checkChapterTitle("Collaborative document publishing");
 		Assert.assertTrue(isElementPresent("//a[@href='/chapter/edit/1/2']"), "Edit chapter link is missing");
 		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/2?t:ac=1/2']"), "Remove chapter link is missing.");
+	}
+
+	/**
+	 * Logout of the application.
+	 * 
+	 */
+	@Test(dependsOnGroups = { "author" })
+	public void testLogout() {
+		open("/index");
+		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
+		click("id=logout");
+		waitForPageToLoad();
+		checkIndex();
 	}
 	
 }

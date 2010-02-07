@@ -183,7 +183,7 @@ public class DOMManagerImpl implements DOMManager {
 	 * @param elt
 	 */
 	private void buildIds(IdAllocator allocator, Element elt, Long prefix) {
-		if (COMMENTABLE.contains(elt.getName())) {
+		if (COMMENTABLE.contains(elt.getName().toLowerCase())) {
 			if (prefix != null) {
 				elt.setAttribute("id", "b" + prefix.toString() + allocator.next());
 			} else {

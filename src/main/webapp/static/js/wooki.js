@@ -405,7 +405,7 @@ jQuery.extend(Tapestry.Initializer,{
 			}.bind(params));
 		}
 	},
-	
+
 	/**
 	 * Implement a simple show hide effect for chapter addition.
 	 *

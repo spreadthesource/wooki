@@ -24,3 +24,9 @@ Ajax Loader image generated with http://www.ajaxload.info/
 ------------------------------------------------
 
 XSLT string library hosted at http://xsltsl.sourceforge.net/ under LGPL
+
+/************************************************
+ * PDF generation
+ 
+FLYING SAUCER XML/CSS RENDERER LICENSE COMMENTS
+https://xhtmlrenderer.dev.java.net/

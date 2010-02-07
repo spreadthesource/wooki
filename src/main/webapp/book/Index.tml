@@ -1,4 +1,9 @@
 <html t:type="booklayout" t:title="prop:book?.title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+    
+    <t:if test="printError">
+    	<t:errors t:messages="prop:printErrors"/>
+    </t:if>
+
     <t:security.ifAuthorOfBook t:bookId="bookId">
         <div id="book-admin" class="book-admin">
             <ul>
@@ -21,7 +26,7 @@
             <a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a>
         </li>
         <li>
-            <a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle">Export PDF</a>
+            <a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle" id="print-link">Export PDF</a>
         </li>
     </ul>
     <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>

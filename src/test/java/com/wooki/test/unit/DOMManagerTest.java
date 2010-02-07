@@ -49,8 +49,6 @@ import org.testng.annotations.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.wooki.domain.biz.BookManager;
-import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Comment;
 import com.wooki.services.HTMLParser;
@@ -78,10 +76,6 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Autowired
 	@Qualifier("xhtmlToAPTConvertor")
 	private Convertor toAPTConvertor;
-
-	@Autowired
-	@Qualifier("FOToPDFConvertor")
-	private Convertor toPDFConvertor;
 
 	@Autowired
 	@Qualifier("documentToXHTMLConvertor")
@@ -131,53 +125,12 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		this.toXHTMLConvertor = toXHTMLConvertor;
 	}
 
-	public Convertor getToPDFConvertor() {
-		return toPDFConvertor;
-	}
-
-	public void setToPDFConvertor(Convertor toPDFConvertor) {
-		this.toPDFConvertor = toPDFConvertor;
-	}
-
 	public Convertor getToAPTConvertor() {
 		return toAPTConvertor;
 	}
 
 	public void setToAPTConvertor(Convertor toAPTConvertor) {
 		this.toAPTConvertor = toAPTConvertor;
-	}
-
-	@Test
-	public void testFOConversion() {
-		String result = /*
-						 * generator .adaptContent(
-						 */"<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>"/* ) */;
-
-		Resource resource = new ByteArrayResource(result.getBytes());
-		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
-		logger.debug("Document to xhtml ok");
-		InputStream fo = toFOConvertor.performTransformation(new InputStreamResource(xhtml));
-		logger.debug("xhtml to fo ok");
-		InputStream pdf = toPDFConvertor.performTransformation(new InputStreamResource(fo));
-		logger.debug("fo to pdf ok");
-		File pdfFile;
-		try {
-			pdfFile = File.createTempFile("wooki", ".pdf");
-			FileOutputStream fos = new FileOutputStream(pdfFile);
-			logger.debug("PDF File is " + pdfFile.getAbsolutePath());
-			byte[] content = null;
-			int available = 0;
-			while ((available = pdf.available()) > 0) {
-				content = new byte[available];
-				pdf.read(content);
-				fos.write(content);
-			}
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	@Test

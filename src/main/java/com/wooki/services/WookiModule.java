@@ -21,7 +21,6 @@ import java.util.List;
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
-import org.apache.tapestry5.internal.services.EndOfRequestEventHub;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -66,11 +65,8 @@ public class WookiModule<T> {
 
 	private final InvalidationEventHub classesInvalidationEventHub;
 
-	private final EndOfRequestEventHub endOfRequestEventHub;
-
-	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub, EndOfRequestEventHub endOfRequestEventHub) {
+	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
 		this.classesInvalidationEventHub = classesInvalidationEventHub;
-		this.endOfRequestEventHub = endOfRequestEventHub;
 	}
 
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
@@ -93,7 +89,6 @@ public class WookiModule<T> {
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
 		binder.bind(WookiViewRefererFilter.class);
-
 	}
 
 	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {

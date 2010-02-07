@@ -13,8 +13,82 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @import url("reset.css");
 
-h1 { page-break-after: always; font-size: 20px; text-align: center; size: A4 landscape; }
-h2 { page-break-before: always; font-size: 16px; }
+/* heading */
+h1, h2, h3, h4, h5, h6, #header span { padding: 5px 0px; }
+
+h1, h2, #header span { font-family: Georgia, serif; }
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { text-decoration: none; color: #2F2F32; border: none; }
+
+h1, #header span { font-size: 28px; text-align:center; padding:20px; clear:both;}
+h2 { font-size: 24px; color: #2F2F32}
+h3 { font-size: 20px; }
+
+p a { text-decoration: none; color: #2F2F32; border: none; }
+
+/* lists */
+ol, ul { list-style-position:outside; padding: 10px 5px; margin:0px 20px; }
+ol { list-style-type:decimal; }
+ul { list-style-type:disc; }
+
+/* table of contents */
+#table-of-contents { margin: 10px; padding:0px; }
+#table-of-contents li { display:block; padding:10px; list-style:none; }
+#table-of-contents h3 { width: 500px; float:left; }
+
+/* others */
+p, blockquote, pre { margin: 5px 0px; padding:5px 0px; }
+quote, blockquote {	font-family: Georgia; font-style: italic;  }
+blockquote, pre { margin-left:30px; padding-left:10px; border-left:1px solid #C9BB9B; }
+pre { font-size:12px; white-space:normal; }
+
+/** Print specifics */
+
+@page {
+
+	size: A4;
+	margin: 1in;
+	padding: 0.25in;
+
+	@top-center {
+	  content: element(current);
+	  width: 100%;
+	}
+
+	@bottom-center {
+	  content: counter(page) "/" counter(pages);
+	  width: 25%;
+	}
+  
+}
+
+@page :first {
+  border: thin solid black;
+  -fs-flow-bottom: none;
+	@bottom-center {
+	  display: none;
+	}
+	@top-center {
+	  display: none;
+	}
+	@top-left {
+	  display: none;
+	}
+	
+}
+
+#pagenumber:before {
+	content: counter(page);
+}
+
+#pagecount:before {
+	content: counter(pages);
+}
+
+h2.breaker { page-break-before: always; }
+
+#header { font-size: 16px; text-align: center; width: 100%; }
+#title { margin-top: 200px; }
+#meta { text-align:center; color:#6E6D65; }
+

@@ -12,10 +12,6 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 
 	public final static String BOOK_TITLE = "The book of Wooki";
 
-	public BookNavigationTest() {
-		super("src/main/webapp");
-	}
-
 	/**
 	 * Check book index
 	 */

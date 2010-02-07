@@ -16,14 +16,17 @@
 
 package com.wooki.pages.book;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.StreamResponse;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
@@ -34,14 +37,17 @@ import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
-import com.wooki.services.ExportService;
 import com.wooki.services.HttpError;
+import com.wooki.services.export.ExportService;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * This page displays a book with its table of contents.
  */
 public class Index extends BookBase {
+
+	@Inject
+	private Messages messages;
 
 	@Inject
 	private BookManager bookManager;
@@ -57,6 +63,10 @@ public class Index extends BookBase {
 
 	@InjectPage
 	private Edit editChapter;
+
+	@Property
+	@Persist(PersistenceConstants.FLASH)
+	private boolean printError;
 
 	@Property
 	private Long bookAbstractId;
@@ -76,7 +86,6 @@ public class Index extends BookBase {
 	@Property
 	private List<Chapter> chaptersInfo;
 
-	@Property
 	private Chapter currentChapter;
 
 	/**
@@ -151,8 +160,18 @@ public class Index extends BookBase {
 	 * @return
 	 */
 	@OnEvent(value = "print")
-	public StreamResponse exportPdf() {
-		return new BookStreamResponse(this.exportService, this.getBookId(), this.getBook().getSlugTitle());
+	public Object exportPdf() {
+		try {
+			InputStream bookStream = this.exportService.exportPdf(this.getBookId());
+			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
+		} catch (Exception ex) {
+			this.printError = true;
+			return this;
+		}
+	}
+
+	public String[] getPrintErrors() {
+		return new String[] { this.messages.get("print-error") };
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -214,6 +233,14 @@ public class Index extends BookBase {
 
 	public Object[] getChapterWorkingCopyCtx() {
 		return new Object[] { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
+	}
+
+	public Chapter getCurrentChapter() {
+		return currentChapter;
+	}
+
+	public void setCurrentChapter(Chapter currentChapter) {
+		this.currentChapter = currentChapter;
 	}
 
 }

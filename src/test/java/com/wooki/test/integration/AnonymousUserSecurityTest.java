@@ -12,10 +12,6 @@ import org.testng.annotations.Test;
  */
 public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 
-	public AnonymousUserSecurityTest() {
-		super("src/main/webapp");
-	}
-
 	/**
 	 * Verify different access type to index page
 	 */
@@ -82,7 +78,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 		open("/book/1");
 		waitForPageToLoad();
 		checkBookTitle("The book of Wooki");
-		
+
 		open("/book/index/1");
 		waitForPageToLoad();
 		checkBookTitle("The book of Wooki");
@@ -106,7 +102,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 	 */
 	@Test
 	public void testEditChapter() {
-		
+
 		open("/chapter/edit/1/1");
 		waitForPageToLoad();
 		checkSignin();

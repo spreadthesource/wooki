@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<head>
+		<title>${book?.title}</title>
+		<link rel="stylesheet" type="text/css" href="file:${printCssPath}" media="print" />
+	</head>
+	<body>
+	    <div style="-fs-page-sequence: start; ">
+	    
+	    	<div id="header" style="position: running(current);"><span>${book?.title}</span></div>
+	    
+	    	<div id="title" style="page-break-after: always;">
+	    		<h1>${book?.title}</h1>
+			    <div id="meta">
+			        <p id="authors">
+			            By
+			            <t:loop source="authors" value="currentUser" index="loopIdx">
+			                ${currentUser.fullname}
+			                <t:if test="isAntepenultiemIteration(loopIdx, authors.size())">
+			                    and
+			                    <p:else>
+			                        <t:unless test="isLastIteration(loopIdx, authors.size())">
+			                            , 
+			                        </t:unless>
+			                    </p:else>
+			                </t:if>
+			            </t:loop>
+			        </p>
+			        <p id="revision">
+			            Published <t:output value="prop:book?.creationDate" t:format="prop:format" />
+			        </p>
+			    </div>	    		
+	    	</div>
+
+			<h2 class="breaker">Abstract</h2>
+			<t:outputRaw value="content" />
+	    
+		    <h2 class="breaker">Table of contents</h2>
+		    
+		    <ol id="table-of-contents">
+		        <t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
+		            <t:if t:test="published">
+		                <li>
+		                    <h3><a href="#chapter${chapterIdx}">${currentChapter.title}</a></h3>
+		                </li>
+		            </t:if>
+		        </t:loop>
+		    </ol>
+		    
+			<t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
+	            <t:if t:test="published">
+					<h2 id="chapter${chapterIdx}" class="breaker">${currentChapter.title}</h2>
+					<t:outputRaw value="lastPublishedContent"/>
+	            </t:if>
+			</t:loop>
+		    
+	    </div>
+	</body>
+</html>

@@ -111,7 +111,7 @@ public class Append {
 			buff.append("Unexcepted error");
 			result.put("errors", true);
 		}
-		
+
 		// Add error messages
 		JSONObject html = new JSONObject();
 		html.put("html", buff.toString());

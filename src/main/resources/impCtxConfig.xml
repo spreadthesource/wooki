@@ -87,6 +87,17 @@
 		</property>
 	</bean>
 
+	<bean id="flyingSaucerInputRenderer" class="com.wooki.services.export.FlyingSaucerInputRender" />
+	<bean id="flyingSaucerPdfConvertor" class="com.wooki.services.parsers.FlyingSaucerPDFConvertor" />
+	
+	<bean id="exportService" class="com.wooki.services.export.ExportServiceImpl">
+		<property name="inputRenderer" ref="flyingSaucerInputRenderer" />
+		<property name="toImprovedXHTML4LatexConvertor" ref="documentToImprovedXHTML4LatexConvertor" />
+		<property name="toLatexConvertor" ref="xhtmlToLatexConvertor"/>
+		<property name="toPdfConvertor" ref="flyingSaucerPdfConvertor" />
+		<property name="toXHTMLConvertor" ref="documentToXHTMLConvertor"/>
+	</bean>
+
 	<bean id="docbookToXhtmlConvertor" class="com.wooki.services.parsers.XHTMLToFormattingObjects">
 		<!--
 			property name="xslStylesheet"
@@ -171,11 +182,10 @@
 		<property name="hostConfiguration" ref="myHostConfig" />
 		<property name="params" ref="httpParams" />
 	</bean>
-	<bean id="FOToPDFConvertor" class="com.wooki.services.parsers.FormattingObjectsToPDF">
-	</bean>
 
 	<bean id="documentToXHTMLConvertor" class="com.wooki.services.parsers.DocumentToXHTML">
 	</bean>
+
 	<!-- Cache definition -->
 	<bean id="cacheManager"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
@@ -185,17 +195,6 @@
 
 	<bean id="htmlParser" class="com.wooki.services.HTMLParser">
 		<property name="entityResolver" ref="docbookToXhtmlConvertor" />
-	</bean>
-
-	<bean id="exportService" class="com.wooki.services.ExportServiceImpl">
-		<property name="bookManager" ref="bookManager" />
-		<property name="chapterManager" ref="chapterManager" />
-		<property name="toFOConvertor" ref="xhtmlToFOConvertor" />
-		<property name="toPDFConvertor" ref="FOToPDFConvertor" />
-		<property name="toXHTMLConvertor" ref="documentToXHTMLConvertor" />
-		<property name="toImprovedXHTMLConvertor" ref="documentToImprovedXHTMLConvertor" />
-		<property name="toImprovedXHTML4LatexConvertor" ref="documentToImprovedXHTML4LatexConvertor" />
-		<property name="toLatexConvertor" ref="xhtmlToLatexConvertor" />
 	</bean>
 
 	<bean id="importService" class="com.wooki.services.ImportServiceImpl">

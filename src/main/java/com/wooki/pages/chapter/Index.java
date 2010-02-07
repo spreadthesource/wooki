@@ -64,11 +64,11 @@ public class Index extends BookBase {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, Long chapterId, String revision) {
 
-		// Setup chapter
-		this.setupChapter(bookId, chapterId);
-
 		this.setViewingRevision(true);
 		this.setRevision(revision);
+		
+		// Setup chapter
+		this.setupChapter(bookId, chapterId);
 
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
 			return new HttpError(403, "Access denied");
@@ -99,7 +99,7 @@ public class Index extends BookBase {
 		
 		// send 404 if trying to see abstract
 		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-		if (chapterId.equals(chapters.get(0).getId())) {
+		if (!this.isViewingRevision() && chapterId.equals(chapters.get(0).getId())) {
 			return new HttpError(404, "Chapter not found");
 		}
 
@@ -182,6 +182,9 @@ public class Index extends BookBase {
 
 	@OnEvent(value = EventConstants.PASSIVATE)
 	public Object[] retrieveBookId() {
+		if(this.getRevision() != null) {
+			return new Object[] { this.getBookId(), this.chapterId, this.getRevision() };	
+		}
 		return new Object[] { this.getBookId(), this.chapterId };
 	}
 

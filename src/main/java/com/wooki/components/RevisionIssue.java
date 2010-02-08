@@ -29,6 +29,10 @@ public class RevisionIssue {
 	@Parameter(required = true, allowNull = false)
 	private Long chapterId;
 	
+	@Parameter
+	@Property
+	private boolean abstractChapter;
+	
 	@Property
 	private List<Comment> comments;
 
@@ -52,6 +56,14 @@ public class RevisionIssue {
 
 	public Object[] getPublishedCtx() {
 		return new Object[] { this.bookId, this.chapterId };
+	}
+
+	public Object[] getAbstractRevisionCtx() {
+		return new Object[] { this.bookId, this.current.getPublication().getId() };
+	}
+
+	public Object[] getAbstractPublishedCtx() {
+		return new Object[] { this.bookId };
 	}
 	
 	public String getStyle() {

@@ -26,8 +26,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	}
 
 	/**
-	 * Set default browser in function of the OS. 
-	 *
+	 * Set default browser in function of the OS.
+	 * 
 	 */
 	protected AbstractWookiIntegrationTestSuite() {
 		super("src/main/webapp", defaultBrowser);
@@ -142,4 +142,27 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 				+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
 	}
 
+	/**
+	 * This method must be called to update a chapter.
+	 * 
+	 */
+	protected void updateChapter(Long bookId, Long chapterId) {
+		open("/chapter/edit/" + bookId + "/" + chapterId);
+		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=editChapterForm"), "Edit form is missing");
+		click("//div[@id='form-submit']/input[@type='submit'][0]");
+	}
+
+	/**
+	 * This method must be called to publish a chapter.
+	 * 
+	 */
+	protected void publishChapter(Long bookId, Long chapterId) {
+		open("/chapter/edit/" + bookId + "/" + chapterId);
+		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=editChapterForm"), "Edit form is missing");
+		click("//div[@id='form-submit']/input[@type='submit'][1]");
+	}
+
+	
 }

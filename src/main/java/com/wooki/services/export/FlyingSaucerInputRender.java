@@ -75,7 +75,7 @@ public class FlyingSaucerInputRender implements ExportInputRenderer, ServletCont
 
 		this.init();
 
-		MarkupWriter writer = factory.newMarkupWriter(new ContentType(encoding));
+		MarkupWriter writer = factory.newMarkupWriter(new ContentType("text/xml", encoding));
 
 		Page full = pageCache.get("book/fullFlyingSaucer");
 		full.getRootElement().triggerContextEvent(EventConstants.ACTIVATE, new ArrayEventContext(typeCoercer, 1), null);

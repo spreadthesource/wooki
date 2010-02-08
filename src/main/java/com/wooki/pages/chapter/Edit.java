@@ -43,7 +43,7 @@ public class Edit extends BookBase {
 
 	@Inject
 	private Block titleBlock;
-	
+
 	@InjectPage
 	private Index index;
 
@@ -68,6 +68,9 @@ public class Edit extends BookBase {
 	@Property
 	private String nextTitle;
 
+	@Property
+	private boolean abstractChapter;
+
 	private boolean publish;
 
 	private boolean cancel;
@@ -88,9 +91,13 @@ public class Edit extends BookBase {
 	@SetupRender
 	public void prepareFormData() {
 		this.data = chapterManager.getLastContent(chapterId);
+		// Check if we are editing the abstract chapter
+		if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0 && this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
+			this.abstractChapter = true;
+		}
 	}
 
-	@OnEvent(value = EventConstants.SUCCESS, component ="updateTitle")
+	@OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
 	public Object updateTitle() {
 		this.chapterManager.update(chapter);
 		return this.titleBlock;

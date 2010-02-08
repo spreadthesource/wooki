@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 
 	/**
-	 * Register a new user, this is the first method to execute in the test.
+	 * Login with an existing user, this is the first method to execute in the test.
 	 * 
 	 */
 	@Test
@@ -53,8 +53,8 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 
 		// open comment popup
 		click("id=c10");
-		waitForCondition("var popupOpen = selenium.isElementPresent('id=ent-1'); popupOpen==true;", "10000");
-		Assert.assertTrue(isElementPresent("//form[@action='/book/index.commentbubbles.commentdialogcontent.updatestateform/1']"),
+		waitForCondition("var popupOpen = selenium.isElementPresent('id=ent-2'); popupOpen==true;", "10000");
+		Assert.assertTrue(isElementPresent("//form[@action='/book/index.commentbubbles.commentdialogcontent.updatestateform/2']"),
 				"Change comment state form is missing.");
 	}
 

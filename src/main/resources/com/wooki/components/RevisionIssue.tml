@@ -2,12 +2,26 @@
 	<t:loop t:source="comments" t:value="current" t:index="loopIdx" t:empty="block:noComments">
 		<li class="${style}">
 			By <a href="#" t:type="pagelink" t:page="index" t:context="${current.user.username}">${current.user.username}</a> <t:lastModifiedFormatter t:time="current.creationDate.time"/>
-			<t:if test="current?.publication.published">
-				in <a href="#" t:type="pagelink" t:page="chapter/index" t:context="publishedCtx" title="${current.publication.id}">Last Publication</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em> 
+			<t:if test="abstractChapter">
+
+				<!-- Abstract is displayed in index page only -->
+				<t:if test="current?.publication.published">
+					in <a href="#" t:type="pagelink" t:page="book/index" t:context="abstractPublishedCtx" title="${current.publication.id}">${message:last-publication-link}</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em> 
+					<p:else>
+						<a href="#" t:type="pagelink" t:page="book/index" t:context="abstractRevisionCtx" title="${current.publication.id}">${message:view-revision-link}</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em>
+					</p:else>
+				</t:if>
+
 				<p:else>
-					<a href="#" t:type="pagelink" t:page="chapter/index" t:context="revisionCtx" title="${current.publication.id}">View revision</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em>
+					<t:if test="current?.publication.published">
+						in <a href="#" t:type="pagelink" t:page="chapter/index" t:context="publishedCtx" title="${current.publication.id}">${message:last-publication-link}</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em> 
+						<p:else>
+							<a href="#" t:type="pagelink" t:page="chapter/index" t:context="revisionCtx" title="${current.publication.id}">${message:view-revision-link}</a>  <em> (Published <t:output value="prop:current?.publication?.creationDate" t:format="prop:format" />)</em>
+						</p:else>
+					</t:if>
 				</p:else>
 			</t:if>
+
 			
 			<blockquote>${current.content}</blockquote>
 		</li>				

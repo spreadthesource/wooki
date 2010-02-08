@@ -47,6 +47,9 @@ public class Issues extends BookBase {
 	@Property
 	private Chapter chapter;
 
+	@Property
+	private int loopIdx;
+	
 	private Long chapterId;
 
 	private String request;
@@ -76,6 +79,15 @@ public class Issues extends BookBase {
 		return null;
 	}
 
+	/**
+	 * Return when displaying issues for first chapter.
+	 *
+	 * @return
+	 */
+	public boolean isAbstractChapter() {
+		return this.loopIdx == 0;
+	}
+	
 	public Object[] getChapterCtx() {
 		return new Object[] { this.getBookId(), this.chapter.getId() };
 	}

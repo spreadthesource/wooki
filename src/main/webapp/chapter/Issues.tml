@@ -3,12 +3,17 @@
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
 
 	<div class="feed section shadowed wrapper">
-
+		
 		<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="bookId">${book?.title}</a></h1>
-	
-		<t:loop t:source="chapters" value="chapter">
-			<h2><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h2>
-			<t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id"/>
+
+		<t:loop t:source="chapters" value="chapter" t:index="loopIdx">
+			<t:if test="abstractChapter">
+				<h2><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${chapter?.title}</a></h2>
+				<p:else>
+					<h2><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h2>
+				</p:else>			
+			</t:if>
+			<t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" t:abstractChapter="prop:abstractChapter"/>
 		</t:loop>
 
 	</div>

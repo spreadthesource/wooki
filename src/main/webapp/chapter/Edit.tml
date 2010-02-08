@@ -36,7 +36,13 @@
 		<div class="form-submit">
 			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="update" title="Modifications will be only visible by authors" />
 			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="publish" title="Modifications will be visible by everyone" />
-			or <a href="#" t:type="pagelink" t:page="chapter/index" t:context="cancelCtx" t:mixins="confirm" t:message="Doing this will discard all your modifications, are you sure ?">Cancel</a>
+			or 
+			<t:if test="abstractChapter">
+				<a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id" t:mixins="confirm" t:message="message:cancel-edit-message">${message:cancel-link}</a>
+				<p:else>
+					<a href="#" t:type="pagelink" t:page="chapter/index" t:context="cancelCtx" t:mixins="confirm" t:message="message:cancel-edit-message">${message:cancel-link}</a>
+				</p:else>
+			</t:if>
 		</div>
 	</form>
 

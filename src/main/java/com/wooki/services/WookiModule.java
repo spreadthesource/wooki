@@ -33,6 +33,7 @@ import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
+import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.services.AssetSource;
@@ -48,6 +49,7 @@ import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.wooki.ActivityType;
+import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.ActivationContextManager;
@@ -147,13 +149,17 @@ public class WookiModule<T> {
 	}
 
 	/**
-	 * Add coercion tuple for paramter types...
+	 * Add coercion tuple for parameter types...
 	 * 
 	 * @param configuration
 	 */
 	public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
-		CoercionTuple<String, ActivityType> tuple = new CoercionTuple<String, ActivityType>(String.class, ActivityType.class, StringToEnumCoercion
-				.create(ActivityType.class));
+		addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion.create(ActivityType.class));
+		addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion.create(AppendPosition.class));
+	}
+
+	private static <S, T> void addTuple(Configuration<CoercionTuple> configuration, Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion) {
+		CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
 		configuration.add(tuple);
 	}
 

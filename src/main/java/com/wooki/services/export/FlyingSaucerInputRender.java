@@ -78,7 +78,7 @@ public class FlyingSaucerInputRender implements ExportInputRenderer, ServletCont
 		MarkupWriter writer = factory.newMarkupWriter(new ContentType("text/xml", encoding));
 
 		Page full = pageCache.get("book/fullFlyingSaucer");
-		full.getRootElement().triggerContextEvent(EventConstants.ACTIVATE, new ArrayEventContext(typeCoercer, 1), null);
+		full.getRootElement().triggerContextEvent(EventConstants.ACTIVATE, new ArrayEventContext(typeCoercer, bookId), null);
 		String name = "wooki.render." + full.getLogger().getName();
 		Logger logger = loggerSource.getLogger(name);
 

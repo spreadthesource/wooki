@@ -2,10 +2,13 @@ package com.wooki.services.security;
 
 import java.io.IOException;
 
+import org.apache.tapestry5.internal.services.PageRenderDispatcher;
+import org.apache.tapestry5.services.ComponentEventLinkEncoder;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Response;
 
 /**
@@ -15,31 +18,28 @@ import org.apache.tapestry5.services.Response;
  * @author ccordenier
  * 
  */
-public class SecureActivationContextRequestFilter implements ComponentRequestFilter {
+public class SecureActivationContextRequestFilter extends PageRenderDispatcher {
 
 	private final ActivationContextManager manager;
 
-	private final Response response;
 
-	public SecureActivationContextRequestFilter(ActivationContextManager manager, Response response) {
+
+	private final ComponentEventLinkEncoder linkEncoder;
+
+	public SecureActivationContextRequestFilter(ActivationContextManager manager, ComponentRequestHandler componentRequestHandler,
+			ComponentEventLinkEncoder linkEncoder) {
+		super(componentRequestHandler, linkEncoder);
+		this.linkEncoder = linkEncoder;
 		this.manager = manager;
-		this.response = response;
 	}
 
-	public void handleComponentEvent(ComponentEventRequestParameters parameters, ComponentRequestHandler handler) throws IOException {
-		if (manager.checkContext(parameters.getContainingPageName(), parameters.getPageActivationContext())) {
-			handler.handleComponentEvent(parameters);
-			return;
-		}
-		this.response.sendError(404, "Resource not found");
-	}
+	@Override
+	public boolean dispatch(Request request, Response response) throws IOException {
+		PageRenderRequestParameters parameters = linkEncoder.decodePageRenderRequest(request);
 
-	public void handlePageRender(PageRenderRequestParameters parameters, ComponentRequestHandler handler) throws IOException {
-		if (manager.checkContext(parameters.getLogicalPageName(), parameters.getActivationContext())) {
-			handler.handlePageRender(parameters);
-			return;
-		}
-		this.response.sendError(404, "Resource not found");
-	}
+		if (manager.checkContext(parameters.getLogicalPageName(), parameters.getActivationContext()))
+			return super.dispatch(request, response);
 
+		return false;
+	}
 }

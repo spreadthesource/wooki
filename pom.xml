@@ -273,6 +273,30 @@
 			<version>2.0.8</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>asm</groupId>
+					<artifactId>asm</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>${jersey.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework</groupId>
+					<artifactId>spring</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<finalName>wooki</finalName>
@@ -478,5 +502,6 @@
 		</hibernate-entitymanager-version>
 		<tapestry-release-version>5.1.0.5</tapestry-release-version>
 		<spring-version>3.0.0.RELEASE</spring-version>
+		<jersey.version>1.1.5</jersey.version>
 	</properties>
 </project>

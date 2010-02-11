@@ -21,7 +21,7 @@ jQuery.extend(Wooki, {
 
 /**
  * JQuery utils
- *
+ * 
  */
 jQuery.fn.outerHtml = function() {
 	return jQuery(jQuery('<div></div>').html(this.clone())).html();
@@ -32,16 +32,16 @@ Tapestry.ElementEffect.none = function(element) {
 };
 
 /**
- * Submit the current for via Ajax and insert result into an element in
- * the page.
- *
+ * Submit the current for via Ajax and insert result into an element in the
+ * page.
+ * 
  */
 Tapestry.Append = Class.create({
 	
 	/**
 	 * Initialize the form to submit via Ajax and add the corresponding
 	 * insertion mechanism in response.
-	 *
+	 * 
 	 */
 	initialize: function(url, element, to, position) {
 	
@@ -58,7 +58,8 @@ Tapestry.Append = Class.create({
 	    this.element.getFormEventManager().preventSubmission = true;
 	
 	    // After the form is validated and prepared, this code will
-	    // process the form submission via an Ajax call.  The original submit event
+	    // process the form submission via an Ajax call. The original submit
+		// event
 	    // will have been cancelled.
 	
 	    this.element.observe(Tapestry.FORM_PROCESS_SUBMIT_EVENT, function() {
@@ -73,7 +74,7 @@ Tapestry.Append = Class.create({
 	
 	},
 	
-	/** 
+	/**
 	 * Execute script and load result content in the target element.
 	 */
 	processReply : function(reply, position) {
@@ -127,7 +128,8 @@ jQuery.extend(Tapestry.Initializer,{
 	},
 	
 	/**
-	 * This method observe a link click event and reset the related form element.
+	 * This method observe a link click event and reset the related form
+	 * element.
 	 * 
 	 */
 	resetFormOnClick : function(lnkId, formId) {
@@ -195,7 +197,7 @@ jQuery.extend(Tapestry.Initializer,{
 	
 	/**
 	 * Open a link url in a new window.
-	 *
+	 * 
 	 */
 	initOpenInWindow : function(param) {
 		if(param == undefined) {
@@ -377,8 +379,8 @@ jQuery.extend(Tapestry.Initializer,{
 	},
 	
 	/**
-	 * Initialize close links in dialog. 
-	 *
+	 * Initialize close links in dialog.
+	 * 
 	 */
 	initCloseLink: function(dialogId) {
         $A($(dialogId).getElementsByClassName("close-dialog")).each(function(closeLnk) {
@@ -408,7 +410,7 @@ jQuery.extend(Tapestry.Initializer,{
 
 	/**
 	 * Implement a simple show hide effect for chapter addition.
-	 *
+	 * 
 	 */
 	initShowHideEffect: function(data) {
 		if(data != undefined) {
@@ -433,6 +435,12 @@ jQuery.extend(Tapestry.Initializer,{
 				return false;
 			});
 		}
+	}
+	
+	/**
+	 * Tooltip box
+	 */
+	tooltip : function(id,content,option) {
 	}
 
 });

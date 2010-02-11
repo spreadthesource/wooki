@@ -39,11 +39,10 @@ import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
-import org.apache.tapestry5.services.ComponentRequestFilter;
+import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
-import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -123,17 +122,7 @@ public class WookiModule<T> {
 		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
 	}
 
-	/**
-	 * Add a filter to secure activation context in request.
-	 * 
-	 * @param filters
-	 * @param manager
-	 * @param response
-	 */
-	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-			Response response) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
-	}
+	
 
 	/**
 	 * Add request that shouldn't generate a referer.
@@ -164,6 +153,33 @@ public class WookiModule<T> {
 	}
 
 	/**
+	 * Contribute GAnalytics plugin to append google analytics javascript to
+	 * generated pages.
+	 * 
+	 * @param configuration
+	 * @param scriptInjector
+	 * @param productionMode
+	 * @param environment
+	 * @param clientInfrastructure
+	 */
+	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
+
+		if (productionMode) {
+			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
+		}
+	}
+    
+    /**
+	 * Override PageRenderDispatcher to secure activation context in request.
+	 */
+    public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration)
+    {
+        configuration.overrideInstance("PageRender", SecureActivationContextRequestFilter.class);
+    }
+    
+
+	/**
 	 * Add jQuery in no conflict mode to default JavaScript Stack
 	 * 
 	 * @param receiver
@@ -187,23 +203,5 @@ public class WookiModule<T> {
 		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
 	};
 
-	/**
-	 * Contribute GAnalytics plugin to append google analytics javascript to
-	 * generated pages.
-	 * 
-	 * @param configuration
-	 * @param scriptInjector
-	 * @param productionMode
-	 * @param environment
-	 * @param clientInfrastructure
-	 */
-	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
-
-		if (productionMode) {
-			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
-		}
-
-	}
 
 }

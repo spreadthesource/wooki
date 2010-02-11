@@ -73,6 +73,7 @@
 				<value>dev/flyingsaucer</value>
 				<value>searchresult</value>
 				<value>error/generic</value>
+				<value>dummy/helloworld</value>
 			</list>
 		</constructor-arg>
 		<property name="encoding" value="${tapestry.charset}" />

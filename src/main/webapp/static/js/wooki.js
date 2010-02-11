@@ -436,12 +436,7 @@ jQuery.extend(Tapestry.Initializer,{
 			});
 		}
 	}
-	
-	/**
-	 * Tooltip box
-	 */
-	tooltip : function(id,content,option) {
-	}
+
 
 });
 

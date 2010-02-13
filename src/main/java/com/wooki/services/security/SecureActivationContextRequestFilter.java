@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.apache.tapestry5.internal.services.PageRenderDispatcher;
 import org.apache.tapestry5.services.ComponentEventLinkEncoder;
-import org.apache.tapestry5.services.ComponentEventRequestParameters;
-import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentRequestHandler;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
 import org.apache.tapestry5.services.Request;

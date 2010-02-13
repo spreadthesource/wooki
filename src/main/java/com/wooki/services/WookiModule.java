@@ -43,6 +43,7 @@ import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
+import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -122,8 +123,6 @@ public class WookiModule<T> {
 		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
 	}
 
-	
-
 	/**
 	 * Add request that shouldn't generate a referer.
 	 * 
@@ -169,15 +168,26 @@ public class WookiModule<T> {
 			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
 		}
 	}
-    
-    /**
+
+	public static void contributeIgnoredPathsFilter(Configuration<String> configuration) {
+		configuration.add(".*/feed");
+	}
+
+	/**
+	 * Will stop the request if the request is: - not an action - not for html
+	 * content type
+	 * 
+	 */
+//	public void contributeRequestHandler(OrderedConfiguration<RequestFilter> configuration) {
+//		configuration.addInstance("IgnoredContentTypes", IgnoredContentTypesFilter.class, "before:*");
+//	}
+
+	/**
 	 * Override PageRenderDispatcher to secure activation context in request.
 	 */
-    public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration)
-    {
-        configuration.overrideInstance("PageRender", SecureActivationContextRequestFilter.class);
-    }
-    
+	public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration) {
+		configuration.overrideInstance("PageRender", SecureActivationContextRequestFilter.class);
+	}
 
 	/**
 	 * Add jQuery in no conflict mode to default JavaScript Stack
@@ -202,6 +212,5 @@ public class WookiModule<T> {
 
 		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
 	};
-
 
 }

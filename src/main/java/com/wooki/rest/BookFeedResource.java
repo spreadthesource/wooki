@@ -42,6 +42,7 @@ public class BookFeedResource {
 	@Autowired
 	private BookManager bookManager;
 
+	@SuppressWarnings("serial")
 	@GET
 	@Produces("application/atom+xml")
 	public Feed getRSS(@PathParam("id") String id) throws IOException, IllegalArgumentException, FeedException {

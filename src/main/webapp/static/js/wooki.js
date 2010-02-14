@@ -329,8 +329,9 @@ jQuery.extend(Tapestry.Initializer,{
 				comment.css('visibility','visible');
 				
 				jQuery(this).bind("mouseenter mouseleave", function(e){
-					jQuery(".comment-accessor .no-comment").css('visibility','hidden');
-				    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').css('visibility', 'visible');
+					jQuery(".comment-accessor .no-comment").removeClass('hover');
+					
+				    jQuery('#' +jQuery(this).attr('id').replace('b','c') + ' .no-comment').addClass('hover').css('visibility', 'visible');
 				});
 			}
 			
@@ -343,7 +344,7 @@ jQuery.extend(Tapestry.Initializer,{
 		});
 		
 		jQuery('#content').bind("mouseleave", function(e){
-			jQuery(".comment-accessor .no-comment").css('visibility','hidden');
+			jQuery(".comment-accessor .no-comment").removeClass('hover');
 		});
 
 		// On dialog close update all the bubbles

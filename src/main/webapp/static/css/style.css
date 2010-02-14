@@ -170,7 +170,8 @@ abbr { padding-right: 3px; padding-left: 3px; }
 
 #comments a { color: #FFD8A1; font-weight: bold; text-decoration: none; }
 #comments .comment-accessor { position:absolute; width:50px; visibility:hidden; display:block; }
-#comments .comment-accessor .no-comment { background:url("../img/bubble_inactive.png") no-repeat center; line-height: 25px; height: 25px; width: 40px; text-align:center; visibility:hidden; }
+#comments .comment-accessor .no-comment { background:url("../img/bubble_marker.png") no-repeat center; line-height: 25px; height: 25px; width: 40px; text-align:center;  }
+#comments .comment-accessor .hover { background:url("../img/bubble_inactive.png") no-repeat center !important }
 #comments .comment-accessor .commented { background:url("../img/bubble_active.png") no-repeat center; line-height: 25px; height: 25px; width: 40px; text-align:center; } 
 
 /******

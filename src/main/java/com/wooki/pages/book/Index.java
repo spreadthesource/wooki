@@ -16,6 +16,7 @@
 
 package com.wooki.pages.book;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -30,15 +31,18 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
+import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.Activity;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
+import com.wooki.services.feeds.ActivityFeedWriter;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -102,12 +106,14 @@ public class Index extends BookBase {
 	 * Setup all the data to display in the book index page.
 	 * 
 	 * @param bookId
+	 * @throws IOException
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBookIndex(Long bookId, String revision) {
+	public Object setupBookIndex(Long bookId, String revision) throws IOException {
 
 		this.setRevision(revision);
 		this.setViewingRevision(true);
+
 
 		// Only authors have access to the last revision
 		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {

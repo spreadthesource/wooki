@@ -3,6 +3,7 @@ package com.wooki.base;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -11,11 +12,14 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.HttpError;
+import com.wooki.services.feeds.ActivityFeedWriter;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -32,6 +36,12 @@ public class BookBase {
 	@Inject
 	private ChapterManager chapterManager;
 
+	@Inject
+	private ActivityManager activityManager;
+
+	@Inject
+	private ActivityFeedWriter<Activity> feedWriter;
+
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;
 
@@ -42,7 +52,7 @@ public class BookBase {
 	private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
 
 	private Publication publication;
-	
+
 	private Book book;
 
 	private Long bookId;
@@ -60,6 +70,15 @@ public class BookBase {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookBase(Long bookId) throws IOException {
 		this.bookId = bookId;
+
+		// ok ok, next step: putting all that in an action method, build a feed
+		// with rome (atom or rss, we've got to choose the one who fit best) and
+		// finally we have to send streamresponse
+		List<Activity> activites = activityManager.listAllBookActivities(bookId);
+		for (Activity activity : activites) {
+			System.out.println("title: " + feedWriter.getTitle(activity));
+			System.out.println("summary: " + feedWriter.getSummary(activity));
+		}
 
 		// Check resource exists
 		this.book = this.bookManager.findById(this.bookId);
@@ -105,7 +124,9 @@ public class BookBase {
 	/**
 	 * This method must be called to initialize the display of a chapter. It can
 	 * be the abstract for the index page or the content of a chapter.
-	 * @param revision TODO
+	 * 
+	 * @param revision
+	 *            TODO
 	 * 
 	 */
 	protected void setupContent() {

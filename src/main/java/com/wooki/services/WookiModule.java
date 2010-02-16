@@ -30,6 +30,7 @@ import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.InjectService;
 import org.apache.tapestry5.ioc.annotations.Match;
 import org.apache.tapestry5.ioc.annotations.SubModule;
@@ -37,6 +38,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
+import org.apache.tapestry5.ioc.services.LazyAdvisor;
 import org.apache.tapestry5.ioc.services.StrategyBuilder;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.util.StrategyRegistry;
@@ -49,6 +51,7 @@ import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
+import org.apache.tapestry5.services.UpdateListenerHub;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -59,11 +62,11 @@ import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.CommentActivity;
-import com.wooki.services.feeds.ActivityFeedWriter;
-import com.wooki.services.feeds.impl.AccountActivityFeedWriter;
-import com.wooki.services.feeds.impl.BookActivityFeedWriter;
-import com.wooki.services.feeds.impl.ChapterActivityFeedWriter;
-import com.wooki.services.feeds.impl.CommentActivityFeedWriter;
+import com.wooki.services.feeds.ActivityFeed;
+import com.wooki.services.feeds.impl.AccountActivityFeed;
+import com.wooki.services.feeds.impl.BookActivityFeed;
+import com.wooki.services.feeds.impl.ChapterActivityFeed;
+import com.wooki.services.feeds.impl.CommentActivityFeed;
 import com.wooki.services.internal.TapestryOverrideModule;
 import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
@@ -73,168 +76,169 @@ import com.wooki.services.security.UserDetailsServiceImpl;
 @SubModule(TapestryOverrideModule.class)
 public class WookiModule<T> {
 
-	/**
-	 * Used to stored the last view page in session.
-	 */
-	public static final String VIEW_REFERER = "tapestry-view.referer";
+    /**
+     * Used to stored the last view page in session.
+     */
+    public static final String VIEW_REFERER = "tapestry-view.referer";
 
-	private final InvalidationEventHub classesInvalidationEventHub;
+    private final InvalidationEventHub classesInvalidationEventHub;
 
-	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
-		this.classesInvalidationEventHub = classesInvalidationEventHub;
-	}
+    public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
+	this.classesInvalidationEventHub = classesInvalidationEventHub;
+    }
 
-	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
-		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
-		conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
-		conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
-	}
+    public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
+	conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+	conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
+	conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
+	conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
+    }
 
-	/**
-	 * Wooki Symbols default
-	 */
-	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
-		configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
-	}
+    /**
+     * Wooki Symbols default
+     */
+    public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+	configuration.add(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
+	configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
+    }
 
-	public static void bind(ServiceBinder binder) {
-		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
-		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
-		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
-		binder.bind(WookiViewRefererFilter.class);
-	}
+    public static void bind(ServiceBinder binder) {
+	binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
+	binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
+	binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
+	binder.bind(WookiViewRefererFilter.class);
+    }
 
-	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
-		// This covers invalidations due to changes to classes
-		classesInvalidationEventHub.addInvalidationListener(service);
+    public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
+	// This covers invalidations due to changes to classes
+	classesInvalidationEventHub.addInvalidationListener(service);
 
-		return service;
-	}
+	return service;
+    }
 
-	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
-		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
-		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
-	}
+    public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
+	providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
+	providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
+    }
 
-	/**
-	 * Store the last view page in session.
-	 */
-	public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
-		filters.add("ViewRefererFilter", vrFilter);
-	}
+    /**
+     * Store the last view page in session.
+     */
+    public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
+	filters.add("ViewRefererFilter", vrFilter);
+    }
 
-	/**
-	 * Allow to return error code instance.
-	 * 
-	 * @param componentInstanceProcessor
-	 * @param configuration
-	 */
-	public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
-			MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
-		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
-	}
+    /**
+     * Allow to return error code instance.
+     * 
+     * @param componentInstanceProcessor
+     * @param configuration
+     */
+    public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
+	    MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
+	configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
+    }
 
-	/**
-	 * Add a filter to secure activation context in request.
-	 * 
-	 * @param filters
-	 * @param manager
-	 * @param response
-	 */
-	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-			Response response) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
-	}
+    /**
+     * Add a filter to secure activation context in request.
+     * 
+     * @param filters
+     * @param manager
+     * @param response
+     */
+    public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager, Response response) {
+	filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
+    }
 
-	/**
-	 * Add request that shouldn't generate a referer.
-	 * 
-	 * @param excludePattern
-	 */
-	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
-		excludePattern.add("signin");
-		excludePattern.add("signup");
-		excludePattern.add(".*edit.*");
-		excludePattern.add("dev.*");
-		excludePattern.add("error.*");
-	}
+    /**
+     * Add request that shouldn't generate a referer.
+     * 
+     * @param excludePattern
+     */
+    public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
+	excludePattern.add("signin");
+	excludePattern.add("signup");
+	excludePattern.add(".*edit.*");
+	excludePattern.add("dev.*");
+	excludePattern.add("error.*");
+    }
 
-	/**
-	 * Add coercion tuple for parameter types...
-	 * 
-	 * @param configuration
-	 */
-	public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
-		addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion.create(ActivityType.class));
-		addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion.create(AppendPosition.class));
-	}
+    /**
+     * Add coercion tuple for parameter types...
+     * 
+     * @param configuration
+     */
+    public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
+	addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion.create(ActivityType.class));
+	addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion.create(AppendPosition.class));
+    }
 
-	private static <S, T> void addTuple(Configuration<CoercionTuple> configuration, Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion) {
-		CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
-		configuration.add(tuple);
-	}
+    private static <S, T> void addTuple(Configuration<CoercionTuple> configuration, Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion) {
+	CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
+	configuration.add(tuple);
+    }
 
-	/**
-	 * Add jQuery in no conflict mode to default JavaScript Stack
-	 * 
-	 * @param receiver
-	 * @throws NoSuchMethodException
-	 * @throws SecurityException
-	 */
-	@SuppressWarnings("unchecked")
-	@Match("ClientInfrastructure")
-	public static void adviseClientInfrastructure(MethodAdviceReceiver receiver, final AssetSource source) throws SecurityException, NoSuchMethodException {
+    /**
+     * Add jQuery in no conflict mode to default JavaScript Stack
+     * 
+     * @param receiver
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     */
+    @SuppressWarnings("unchecked")
+    @Match("ClientInfrastructure")
+    public static void adviseClientInfrastructure(MethodAdviceReceiver receiver, final AssetSource source) throws SecurityException, NoSuchMethodException {
 
-		MethodAdvice advice = new MethodAdvice() {
-			public void advise(Invocation invocation) {
-				invocation.proceed();
-				List<Asset> jsStack = (List<Asset>) invocation.getResult();
-				jsStack.add(source.getClasspathAsset("context:static/js/jquery-1.3.2.min.js"));
-				jsStack.add(source.getClasspathAsset("context:static/js/jquery.noconflict.js"));
-				jsStack.add(source.getClasspathAsset("context:static/js/wooki.js"));
-			}
-		};
-
-		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
+	MethodAdvice advice = new MethodAdvice() {
+	    public void advise(Invocation invocation) {
+		invocation.proceed();
+		List<Asset> jsStack = (List<Asset>) invocation.getResult();
+		jsStack.add(source.getClasspathAsset("context:static/js/jquery-1.3.2.min.js"));
+		jsStack.add(source.getClasspathAsset("context:static/js/jquery.noconflict.js"));
+		jsStack.add(source.getClasspathAsset("context:static/js/wooki.js"));
+	    }
 	};
 
-	/**
-	 * Contribute GAnalytics plugin to append google analytics javascript to
-	 * generated pages.
-	 * 
-	 * @param configuration
-	 * @param scriptInjector
-	 * @param productionMode
-	 * @param environment
-	 * @param clientInfrastructure
-	 */
-	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
+	receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
+    };
 
-		if (productionMode) {
-			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
-		}
+    /**
+     * Contribute GAnalytics plugin to append google analytics javascript to
+     * generated pages.
+     * 
+     * @param configuration
+     * @param scriptInjector
+     * @param productionMode
+     * @param environment
+     * @param clientInfrastructure
+     */
+    public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration, @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
 
+	if (productionMode) {
+	    configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
 	}
 
-	/**
-	 * Strategy for outputting feed content based on activity
-	 */
-	@SuppressWarnings("unchecked")
-	public static ActivityFeedWriter buildActivityFeedWriter(Map<Class, ActivityFeedWriter> configuration,
-			@InjectService("StrategyBuilder") StrategyBuilder builder) {
-		StrategyRegistry<ActivityFeedWriter> registry = StrategyRegistry.newInstance(ActivityFeedWriter.class, configuration);
+    }
 
-		return builder.build(registry);
-	}
+    /**
+     * Strategy for outputting feed content based on activity
+     */
+    @SuppressWarnings("unchecked")
+    public static ActivityFeed buildActivityFeed(Map<Class, ActivityFeed> configuration, @InjectService("StrategyBuilder") StrategyBuilder builder,
+	    @Inject UpdateListenerHub listenerHub) {
 
-	@SuppressWarnings("unchecked")
-	public void contributeActivityFeedWriter(MappedConfiguration<Class, ActivityFeedWriter> configuration) {
-		configuration.addInstance(AccountActivity.class, AccountActivityFeedWriter.class);
-		configuration.addInstance(BookActivity.class, BookActivityFeedWriter.class);
-		configuration.addInstance(ChapterActivity.class, ChapterActivityFeedWriter.class);
-		configuration.addInstance(CommentActivity.class, CommentActivityFeedWriter.class);
-	}
+	StrategyRegistry<ActivityFeed> registry = StrategyRegistry.newInstance(ActivityFeed.class, configuration);
+	ActivityFeed activityFeed = builder.build(registry);
+	listenerHub.addUpdateListener(activityFeed);
+	return activityFeed;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void contributeActivityFeed(MappedConfiguration<Class, ActivityFeed> configuration) {
+	configuration.addInstance(AccountActivity.class, AccountActivityFeed.class);
+	configuration.addInstance(BookActivity.class, BookActivityFeed.class);
+	configuration.addInstance(ChapterActivity.class, ChapterActivityFeed.class);
+	configuration.addInstance(CommentActivity.class, CommentActivityFeed.class);
+    }
+
 }

@@ -19,7 +19,7 @@ import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.HttpError;
-import com.wooki.services.feeds.ActivityFeedWriter;
+import com.wooki.services.feeds.ActivityFeed;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -40,7 +40,7 @@ public class BookBase {
 	private ActivityManager activityManager;
 
 	@Inject
-	private ActivityFeedWriter<Activity> feedWriter;
+	private ActivityFeed<Activity> feedWriter;
 
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;

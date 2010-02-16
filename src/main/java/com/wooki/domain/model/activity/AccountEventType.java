@@ -19,13 +19,13 @@ package com.wooki.domain.model.activity;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 
-import com.wooki.services.utils.LastActivityMessage;
+import com.wooki.services.utils.LastActivityMessages;
 
 public enum AccountEventType {
 
 	JOIN;
 
-	private final static Messages MESSAGES = MessagesImpl.forClass(LastActivityMessage.class);
+	private final static Messages MESSAGES = MessagesImpl.forClass(LastActivityMessages.class);
 
 	@Override
 	public String toString() {

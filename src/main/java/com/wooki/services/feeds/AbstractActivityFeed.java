@@ -54,8 +54,7 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
 	return source.getMessages(bundle, locale.getLocale());
     }
 
-    public void checkForUpdates() {
-	System.out.println("heelo");
+    public void checkForUpdates() { 
 	source.checkForUpdates();
     }
 

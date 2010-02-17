@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -31,15 +32,18 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
+import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.activity.Activity;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
+import com.wooki.services.feeds.ActivityFeed;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -61,6 +65,12 @@ public class Index extends BookBase {
 
     @Inject
     private ExportService exportService;
+
+    @Inject
+    private ActivityManager activityManager;
+
+    @Inject
+    private ActivityFeed<Activity> feedWriter;
 
     @InjectPage
     private Edit editChapter;
@@ -169,6 +179,27 @@ public class Index extends BookBase {
 	    this.printError = true;
 	    return this;
 	}
+    }
+
+    /**
+     * Create the Atom feed of the book activity
+     * 
+     * @throws IOException
+     */
+    @OnEvent(value = "feed")
+    public StreamResponse getFeed() throws IOException {
+	// ok ok, next step: putting all that in an action method, build a feed
+	// with rome (atom or rss, we've got to choose the one who fit best) and
+	// finally we have to send streamresponse
+	List<Activity> activites = activityManager.listAllBookActivities(getBookId());
+	System.out.println("zob");
+	for (Activity activity : activites) {
+	    System.out.println("title: " + feedWriter.getTitle(activity));
+	    System.out.println("summary: " + feedWriter.getSummary(activity));
+	}
+
+	return null;
+
     }
 
     public String[] getPrintErrors() {

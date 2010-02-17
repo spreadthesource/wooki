@@ -11,7 +11,6 @@ import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
 import org.apache.tapestry5.ioc.internal.util.ClasspathResource;
 import org.apache.tapestry5.ioc.services.ClasspathURLConverter;
 import org.apache.tapestry5.ioc.services.ThreadLocale;
-import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.UpdateListener;
 
 import com.wooki.domain.model.activity.Activity;
@@ -55,11 +54,8 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
 	return source.getMessages(bundle, locale.getLocale());
     }
 
-    public InvalidationEventHub getInvalidationEventHub() {
-	return source;
-    }
-
     public void checkForUpdates() {
+	System.out.println("heelo");
 	source.checkForUpdates();
     }
 

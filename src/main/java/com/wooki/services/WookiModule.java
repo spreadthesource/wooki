@@ -38,7 +38,6 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.services.ClasspathResourceSymbolProvider;
 import org.apache.tapestry5.ioc.services.Coercion;
 import org.apache.tapestry5.ioc.services.CoercionTuple;
-import org.apache.tapestry5.ioc.services.LazyAdvisor;
 import org.apache.tapestry5.ioc.services.StrategyBuilder;
 import org.apache.tapestry5.ioc.services.SymbolProvider;
 import org.apache.tapestry5.ioc.util.StrategyRegistry;
@@ -224,21 +223,29 @@ public class WookiModule<T> {
      * Strategy for outputting feed content based on activity
      */
     @SuppressWarnings("unchecked")
-    public static ActivityFeed buildActivityFeed(Map<Class, ActivityFeed> configuration, @InjectService("StrategyBuilder") StrategyBuilder builder,
-	    @Inject UpdateListenerHub listenerHub) {
+    public static ActivityFeed buildActivityFeed(Map<Class, ActivityFeed> configuration, @InjectService("StrategyBuilder") StrategyBuilder builder) {
 
 	StrategyRegistry<ActivityFeed> registry = StrategyRegistry.newInstance(ActivityFeed.class, configuration);
-	ActivityFeed activityFeed = builder.build(registry);
-	listenerHub.addUpdateListener(activityFeed);
-	return activityFeed;
+
+	return builder.build(registry);
     }
 
     @SuppressWarnings("unchecked")
-    public void contributeActivityFeed(MappedConfiguration<Class, ActivityFeed> configuration) {
-	configuration.addInstance(AccountActivity.class, AccountActivityFeed.class);
-	configuration.addInstance(BookActivity.class, BookActivityFeed.class);
-	configuration.addInstance(ChapterActivity.class, ChapterActivityFeed.class);
-	configuration.addInstance(CommentActivity.class, CommentActivityFeed.class);
+    public void contributeActivityFeed(MappedConfiguration<Class, ActivityFeed> configuration, @Inject UpdateListenerHub listenerHub,
+	    @Autobuild AccountActivityFeed accountActivityFeed, @Autobuild BookActivityFeed bookActivityFeed, @Autobuild ChapterActivityFeed chapterActivityFeed,
+	    @Autobuild CommentActivityFeed commentActivityFeed) {
+
+	listenerHub.addUpdateListener(accountActivityFeed);
+	configuration.add(AccountActivity.class, accountActivityFeed);
+
+	listenerHub.addUpdateListener(bookActivityFeed);
+	configuration.add(BookActivity.class, bookActivityFeed);
+
+	listenerHub.addUpdateListener(chapterActivityFeed);
+	configuration.add(ChapterActivity.class, chapterActivityFeed);
+
+	listenerHub.addUpdateListener(commentActivityFeed);
+	configuration.add(CommentActivity.class, commentActivityFeed);
     }
 
 }

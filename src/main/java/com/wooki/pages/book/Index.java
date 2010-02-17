@@ -18,6 +18,7 @@ package com.wooki.pages.book;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -30,11 +31,23 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Response;
+import org.jdom.Document;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
+import com.sun.syndication.feed.atom.Content;
+import com.sun.syndication.feed.atom.Entry;
+import com.sun.syndication.feed.atom.Feed;
+import com.sun.syndication.feed.atom.Link;
+import com.sun.syndication.feed.atom.Person;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.WireFeedOutput;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
@@ -44,6 +57,7 @@ import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.ActivityFeed;
+import com.wooki.services.feeds.AtomStreamResponse;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -185,21 +199,83 @@ public class Index extends BookBase {
      * Create the Atom feed of the book activity
      * 
      * @throws IOException
+     * @throws FeedException
+     * @throws IllegalArgumentException
      */
     @OnEvent(value = "feed")
-    public StreamResponse getFeed() throws IOException {
-	// ok ok, next step: putting all that in an action method, build a feed
-	// with rome (atom or rss, we've got to choose the one who fit best) and
-	// finally we have to send streamresponse
-	List<Activity> activites = activityManager.listAllBookActivities(getBookId());
-	System.out.println("zob");
-	for (Activity activity : activites) {
-	    System.out.println("title: " + feedWriter.getTitle(activity));
-	    System.out.println("summary: " + feedWriter.getSummary(activity));
+    public StreamResponse getFeed() throws IOException, IllegalArgumentException, FeedException {
+	// all the feed construction is made by a third party library called
+	// "ROME". It provides RSS & Atom support
+	final Book book = bookManager.findById(getBookId());
+
+	Feed f = new Feed();
+	f.setTitle("Activity for " + book.getTitle());
+	f.setId(book.getSlugTitle());
+	f.setAlternateLinks(new ArrayList<Link>() {
+	    {
+		add(new Link() {
+		    {
+			setHref("http://????/" + book.getId().toString());
+			setTitle(book.getTitle());
+		    }
+		});
+	    }
+	});
+
+	List<Person> authors = new ArrayList<Person>();
+	for (User user : book.getAuthors()) {
+	    authors.add(toPerson(user));
 	}
 
-	return null;
+	f.setAuthors(authors);
+	f.setUpdated(book.getLastModified());
 
+	List<Entry> entries = new ArrayList<Entry>();
+	for (final Activity activity : activityManager.listAllBookActivities(getBookId())) {
+	    Entry e = new Entry();
+	    e.setAuthors(new ArrayList<Person>() {
+		{
+		    add(toPerson(activity.getUser()));
+		}
+	    });
+
+	    e.setTitle(feedWriter.getTitle(activity));
+	    e.setPublished(activity.getLastModified());
+
+	    e.setContents(new ArrayList<Content>() {
+		{
+		    Content c = new Content();
+		    c.setType(Content.TEXT);
+		    c.setValue(feedWriter.getSummary(activity));
+		    add(c);
+		}
+	    });
+
+	    entries.add(e);
+	}
+
+	f.setEntries(entries);
+
+	// yes, it forces the feed type to atom
+	f.setFeedType("atom_1.0");
+	WireFeedOutput wireFeedOutput = new WireFeedOutput();
+	Document feedDoc = wireFeedOutput.outputJDom(f);
+
+	XMLOutputter outputter = new XMLOutputter();
+	outputter.setFormat(Format.getPrettyFormat());
+
+	// my question is, a Tapestry dispatcher responsible for producing feeds
+	// should be able to do the same na ?
+
+	return new AtomStreamResponse(outputter.outputString(feedDoc));
+    }
+
+    private Person toPerson(User user) {
+	Person person = new Person();
+	person.setName(user.getFullname());
+	person.setUri("http://????/" + user.getUsername());
+	person.setEmail(user.getEmail());
+	return person;
     }
 
     public String[] getPrintErrors() {

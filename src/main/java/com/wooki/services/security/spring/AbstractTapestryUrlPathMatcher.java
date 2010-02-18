@@ -47,6 +47,8 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 
 	private boolean initDone = false;
 
+	private boolean productionMode;
+
 	/**
 	 * Initialize Tapestry registry.
 	 * 
@@ -67,6 +69,7 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
 		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
 		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
+		this.productionMode = Boolean.parseBoolean(this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.PRODUCTION_MODE));
 		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
 		this.initDone = true;
 	}
@@ -148,6 +151,14 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 
 	public void setEncoding(String encoding) {
 		this.encoding = encoding;
+	}
+
+	public boolean isProductionMode() {
+		return productionMode;
+	}
+
+	public void setProductionMode(boolean productionMode) {
+		this.productionMode = productionMode;
 	}
 
 }

@@ -42,7 +42,7 @@ public class TapestryPublicUrlPathMatcher extends AbstractTapestryUrlPathMatcher
 		PageRenderRequestParameters params = this.decodePageRenderRequest(url);
 		if (params != null) {
 			String logicalPageName = params.getLogicalPageName();
-			if (this.publicPages.contains(logicalPageName.toLowerCase())) {
+			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
 				return true;
 			}
 		}
@@ -51,7 +51,7 @@ public class TapestryPublicUrlPathMatcher extends AbstractTapestryUrlPathMatcher
 		ComponentEventRequestParameters actionParams = this.decodeComponentEventRequest(url);
 		if (actionParams != null) {
 			String logicalPageName = actionParams.getContainingPageName();
-			if (this.publicPages.contains(logicalPageName.toLowerCase())) {
+			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
 				return true;
 			}
 		}

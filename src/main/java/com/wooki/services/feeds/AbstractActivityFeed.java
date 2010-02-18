@@ -16,7 +16,15 @@ import org.apache.tapestry5.services.UpdateListener;
 import com.wooki.domain.model.activity.Activity;
 
 @UsesMappedConfiguration(key = Class.class, value = AbstractActivityFeed.class)
-public abstract class AbstractActivityFeed<T extends Activity> implements ActivityFeed<T>, UpdateListener {
+public abstract class AbstractActivityFeed<T extends Activity> implements ActivityFeedWriter<T>,
+        UpdateListener
+
+{
+    private final static String PREFIX = "feedwriter_";
+
+    private final static String SUFFIX_TITLE = "_title";
+
+    private final static String SUFFIX_SUMMARY = "_summary";
 
     private final MessagesBundle bundle;
 
@@ -24,38 +32,63 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
 
     private final ThreadLocale locale;
 
-    public AbstractActivityFeed(@Inject ClasspathURLConverter urlConverter, @Inject ThreadLocale locale) {
-	URLChangeTracker tracker = new URLChangeTracker(urlConverter);
-	this.source = new MessagesSourceImpl(tracker);
-	this.locale = locale;
-	this.bundle = new MessagesBundle() {
-	    private final Resource resource;
+    private final String keyPrefixForTitle;
 
-	    {
-		this.resource = new ClasspathResource("com/wooki/services/utils/LastActivityStrings");
-	    }
+    private final String keyPrefixForSummary;
 
-	    public MessagesBundle getParent() {
-		return null;
-	    }
+    public AbstractActivityFeed(@Inject ClasspathURLConverter urlConverter,
+            @Inject ThreadLocale locale, String className)
+    {
+        URLChangeTracker tracker = new URLChangeTracker(urlConverter);
+        this.source = new MessagesSourceImpl(tracker);
+        this.locale = locale;
+        this.bundle = new MessagesBundle()
+        {
+            private final Resource resource;
 
-	    public Object getId() {
-		return resource.getPath();
-	    }
+            {
+                this.resource = new ClasspathResource(
+                        "com/wooki/services/utils/LastActivityStrings");
+            }
 
-	    public Resource getBaseResource() {
-		return this.resource;
-	    }
-	};
+            public MessagesBundle getParent()
+            {
+                return null;
+            }
 
+            public Object getId()
+            {
+                return resource.getPath();
+            }
+
+            public Resource getBaseResource()
+            {
+                return this.resource;
+            }
+        };
+
+        this.keyPrefixForTitle = PREFIX + className + SUFFIX_TITLE;
+        this.keyPrefixForSummary = PREFIX + className + SUFFIX_SUMMARY;
     }
 
-    public Messages getMessages() {
-	return source.getMessages(bundle, locale.getLocale());
+    public String getKeyForTitle()
+    {
+        return keyPrefixForTitle;
     }
 
-    public void checkForUpdates() { 
-	source.checkForUpdates();
+    public String getKeyForSummary()
+    {
+        return keyPrefixForSummary;
+    }
+
+    public Messages getMessages()
+    {
+        return source.getMessages(bundle, locale.getLocale());
+    }
+
+    public void checkForUpdates()
+    {
+        source.checkForUpdates();
     }
 
 }

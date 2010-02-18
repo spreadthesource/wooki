@@ -31,16 +31,11 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Response;
 import org.jdom.Document;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 
-import com.sun.syndication.feed.atom.Content;
-import com.sun.syndication.feed.atom.Entry;
-import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
-import com.sun.syndication.feed.atom.Person;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.WireFeedOutput;
 import com.wooki.base.BookBase;
@@ -56,8 +51,9 @@ import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
-import com.wooki.services.feeds.ActivityFeed;
+import com.wooki.services.feeds.ActivityFeedWriter;
 import com.wooki.services.feeds.AtomStreamResponse;
+import com.wooki.services.feeds.WookiActivityAtomFeed;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -84,7 +80,7 @@ public class Index extends BookBase {
     private ActivityManager activityManager;
 
     @Inject
-    private ActivityFeed<Activity> feedWriter;
+    private ActivityFeedWriter<Activity> feedWriter;
 
     @InjectPage
     private Edit editChapter;
@@ -208,10 +204,10 @@ public class Index extends BookBase {
 	// "ROME". It provides RSS & Atom support
 	final Book book = bookManager.findById(getBookId());
 
-	Feed f = new Feed();
-	f.setTitle("Activity for " + book.getTitle());
-	f.setId(book.getSlugTitle());
-	f.setAlternateLinks(new ArrayList<Link>() {
+	String title = "Recent activity for " + book.getTitle();
+	String id = book.getSlugTitle();
+
+	List<Link> alternateLinks = new ArrayList<Link>() {
 	    {
 		add(new Link() {
 		    {
@@ -220,62 +216,13 @@ public class Index extends BookBase {
 		    }
 		});
 	    }
-	});
+	};
 
-	List<Person> authors = new ArrayList<Person>();
-	for (User user : book.getAuthors()) {
-	    authors.add(toPerson(user));
-	}
+	List<Activity> activities = activityManager.listAllBookActivities(getBookId());
 
-	f.setAuthors(authors);
-	f.setUpdated(book.getLastModified());
+	WookiActivityAtomFeed atomFeed = new WookiActivityAtomFeed(title, id, alternateLinks, activities, feedWriter);
 
-	List<Entry> entries = new ArrayList<Entry>();
-	for (final Activity activity : activityManager.listAllBookActivities(getBookId())) {
-	    Entry e = new Entry();
-	    e.setAuthors(new ArrayList<Person>() {
-		{
-		    add(toPerson(activity.getUser()));
-		}
-	    });
-
-	    e.setTitle(feedWriter.getTitle(activity));
-	    e.setPublished(activity.getLastModified());
-
-	    e.setContents(new ArrayList<Content>() {
-		{
-		    Content c = new Content();
-		    c.setType(Content.TEXT);
-		    c.setValue(feedWriter.getSummary(activity));
-		    add(c);
-		}
-	    });
-
-	    entries.add(e);
-	}
-
-	f.setEntries(entries);
-
-	// yes, it forces the feed type to atom
-	f.setFeedType("atom_1.0");
-	WireFeedOutput wireFeedOutput = new WireFeedOutput();
-	Document feedDoc = wireFeedOutput.outputJDom(f);
-
-	XMLOutputter outputter = new XMLOutputter();
-	outputter.setFormat(Format.getPrettyFormat());
-
-	// my question is, a Tapestry dispatcher responsible for producing feeds
-	// should be able to do the same na ?
-
-	return new AtomStreamResponse(outputter.outputString(feedDoc));
-    }
-
-    private Person toPerson(User user) {
-	Person person = new Person();
-	person.setName(user.getFullname());
-	person.setUri("http://????/" + user.getUsername());
-	person.setEmail(user.getEmail());
-	return person;
+	return atomFeed.toStreamResponse();
     }
 
     public String[] getPrintErrors() {

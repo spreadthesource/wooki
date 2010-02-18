@@ -61,7 +61,7 @@ import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.CommentActivity;
-import com.wooki.services.feeds.ActivityFeed;
+import com.wooki.services.feeds.ActivityFeedWriter;
 import com.wooki.services.feeds.impl.AccountActivityFeed;
 import com.wooki.services.feeds.impl.BookActivityFeed;
 import com.wooki.services.feeds.impl.ChapterActivityFeed;
@@ -223,15 +223,15 @@ public class WookiModule<T> {
      * Strategy for outputting feed content based on activity
      */
     @SuppressWarnings("unchecked")
-    public static ActivityFeed buildActivityFeed(Map<Class, ActivityFeed> configuration, @InjectService("StrategyBuilder") StrategyBuilder builder) {
+    public static ActivityFeedWriter buildActivityFeedWriter(Map<Class, ActivityFeedWriter> configuration, @InjectService("StrategyBuilder") StrategyBuilder builder) {
 
-	StrategyRegistry<ActivityFeed> registry = StrategyRegistry.newInstance(ActivityFeed.class, configuration);
+	StrategyRegistry<ActivityFeedWriter> registry = StrategyRegistry.newInstance(ActivityFeedWriter.class, configuration);
 
 	return builder.build(registry);
     }
 
     @SuppressWarnings("unchecked")
-    public void contributeActivityFeed(MappedConfiguration<Class, ActivityFeed> configuration, @Inject UpdateListenerHub listenerHub,
+    public void contributeActivityFeedWriter(MappedConfiguration<Class, ActivityFeedWriter> configuration, @Inject UpdateListenerHub listenerHub,
 	    @Autobuild AccountActivityFeed accountActivityFeed, @Autobuild BookActivityFeed bookActivityFeed, @Autobuild ChapterActivityFeed chapterActivityFeed,
 	    @Autobuild CommentActivityFeed commentActivityFeed) {
 

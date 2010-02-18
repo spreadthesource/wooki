@@ -6,8 +6,8 @@ import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
 
 import com.wooki.domain.model.activity.Activity;
 
-@UsesMappedConfiguration(key = Class.class, value = ActivityFeed.class)
-public interface ActivityFeed<T extends Activity> {
+@UsesMappedConfiguration(key = Class.class, value = ActivityFeedWriter.class)
+public interface ActivityFeedWriter<T extends Activity> {
     /**
      * @param activity
      *            the activity to output

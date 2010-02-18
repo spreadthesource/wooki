@@ -31,7 +31,8 @@ import org.apache.tapestry5.json.JSONObject;
 /**
  * Integrate wymeditor as a mixin to be used with textarea.
  */
-@IncludeJavaScriptLibrary("context:/static/js/wymeditor/jquery.wymeditor.pack.js")
+@IncludeJavaScriptLibrary( { "context:/static/js/wymeditor/jquery.wymeditor.pack.js",
+		"context:/static/js/wymeditor/plugins/fullscreen/jquery.wymeditor.fullscreen.js" })
 public class WymEditor {
 
 	@Inject
@@ -45,10 +46,10 @@ public class WymEditor {
 	@Inject
 	@Path("context:/static/js/jquery-1.3.2.min.js")
 	private Asset jQueryPath;
-	
+
 	@Parameter(defaultPrefix = BindingConstants.ASSET)
 	private String wymStyle;
-	
+
 	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki")
 	private String wymSkin;
 
@@ -61,27 +62,26 @@ public class WymEditor {
 	@AfterRender
 	public void attachWymEditor() {
 
-		
 		JSONObject data = new JSONObject();
 		data.put("elt", container.getClientId());
-		
+
 		JSONObject params = new JSONObject();
 		params.put("logoHtml", "");
 
 		if (wymStyle != null) {
 			params.put("stylesheet", wymStyle);
 		}
-		
+
 		params.put("skin", wymSkin);
-		
+
 		// Set parameter for production mode compatibility
 		params.put("basePath", basePath.toClientURL() + "/");
 		params.put("wymPath", wymPath.toClientURL());
 		params.put("jQueryPath", jQueryPath.toClientURL());
 		params.put("classesHtml", "");
-		
+
 		data.put("params", params);
-		
+
 		// Use wymeditor
 		renderSupport.addInit("initWymEdit", data);
 

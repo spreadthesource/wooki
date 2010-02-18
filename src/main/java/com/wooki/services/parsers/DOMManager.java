@@ -47,5 +47,15 @@ public interface DOMManager {
 	 * @param newContent
 	 */
 	void reAssignComment(List<Comment> comments, String content, String newContent);
+	
+	/**
+	 * Generate PDF bookmarks from a document content.
+	 *
+	 * @param content
+	 * @param startIdx TODO
+	 * @param level TODO
+	 * @return
+	 */
+	String generatePdfBookmarks(String content, int startIdx, int level);
 
 }

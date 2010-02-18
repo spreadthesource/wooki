@@ -178,6 +178,81 @@ public class DOMManagerImpl implements DOMManager {
 	}
 
 	/**
+	 * This method can be called to generate bookmarks for PDF.
+	 * 
+	 * @param content
+	 * @return
+	 */
+	public String generatePdfBookmarks(String content, int startIdx, int level) {
+		Document result = new Document();
+		Element root = new Element("bookmarks");
+		result.addContent(root);
+
+		Document doc = parseContent(content);
+		List<Element> children = doc.getRootElement().getChildren();
+
+		int currentIdx = 0;
+		Element currentElt = root;
+		if (children != null) {
+			for (Element child : children) {
+				if (child.getName().startsWith("h")) {
+					int hIdx = this.readIndex(child.getName());
+					// Check if the header should be added to the bookmark list
+					if (hIdx >= startIdx && (hIdx - startIdx) >= 0 && Math.abs(hIdx - currentIdx) <= level) {
+						int navigate = hIdx - startIdx;
+						if (navigate == currentIdx) {
+							Element e = new Element("bookmark");
+							e.setAttribute("name", child.getValue());
+							e.setAttribute("href", "#" + child.getAttributeValue("id"));
+							currentElt.addContent(e);
+						} else {
+							if (navigate > currentIdx) {
+								for (int i = currentIdx; i < navigate; i++) {
+									if (currentElt.getChildren() != null && currentElt.getChildren().size() > 0) {
+										currentElt = (Element) currentElt.getChildren().get(currentElt.getChildren().size() - 1);
+									} else {
+										Element e = new Element("bookmark");
+										e.setAttribute("name", "undefined");
+										currentElt.addContent(e);
+										currentElt = e;
+									}
+								}
+								Element toAdd = new Element("bookmark");
+								toAdd.setAttribute("name", child.getValue());
+								toAdd.setAttribute("href", "#" + child.getAttributeValue("id"));
+								currentElt.addContent(toAdd);
+							} else {
+								for (int i = currentIdx; i > navigate; i--) {
+									currentElt = currentElt.getParentElement();
+								}
+								Element e = new Element("bookmark");
+								e.setAttribute("name", child.getValue());
+								e.setAttribute("href", "#" + child.getAttributeValue("id"));
+								currentElt.addContent(e);
+							}
+						}
+						currentIdx = navigate;
+					}
+				}
+			}
+		}
+
+		// Serialize result
+		return serializeContent(result);
+	}
+
+	/**
+	 * Read header index.
+	 * 
+	 * @param header
+	 * @return
+	 */
+	private int readIndex(String header) {
+		String idx = header.substring(1);
+		return Integer.parseInt(idx);
+	}
+
+	/**
 	 * Recursivily add ids to dom elements.
 	 * 
 	 * @param elt

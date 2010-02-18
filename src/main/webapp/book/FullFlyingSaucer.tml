@@ -5,6 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="file:${printCssPath}" media="print" />
 	</head>
 	<body>
+	
 	    <div style="-fs-page-sequence: start; ">
 	    
 	    	<div id="header" style="position: running(current);"><span>${book?.title}</span></div>
@@ -32,28 +33,31 @@
 			    </div>	    		
 	    	</div>
 
-			<h2 class="breaker">Abstract</h2>
-			<t:outputRaw value="content" />
-	    
-		    <h2 class="breaker">Table of contents</h2>
+			<div id="content">
+			
+				<h2 class="breaker" id="abstract">Abstract</h2>
+				<t:outputRaw value="content" />
 		    
-		    <ol id="table-of-contents">
-		        <t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
+			    <h2 class="breaker" id="toc">Table of contents</h2>
+			    
+			    <ol id="table-of-contents">
+			        <t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
+			            <t:if t:test="published">
+			                <li>
+			                    <h3><a href="#chapter${chapterIdx}">${currentChapter.title}</a></h3>
+			                </li>
+			            </t:if>
+			        </t:loop>
+			    </ol>
+			    
+				<t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
 		            <t:if t:test="published">
-		                <li>
-		                    <h3><a href="#chapter${chapterIdx}">${currentChapter.title}</a></h3>
-		                </li>
+						<h2 id="chapter${chapterIdx}" class="breaker">${currentChapter.title}</h2>
+						<t:outputRaw value="lastPublishedContent"/>
 		            </t:if>
-		        </t:loop>
-		    </ol>
-		    
-			<t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">
-	            <t:if t:test="published">
-					<h2 id="chapter${chapterIdx}" class="breaker">${currentChapter.title}</h2>
-					<t:outputRaw value="lastPublishedContent"/>
-	            </t:if>
-			</t:loop>
-		    
+				</t:loop>
+			
+			</div>
 	    </div>
 	</body>
 </html>

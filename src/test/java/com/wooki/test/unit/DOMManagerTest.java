@@ -134,6 +134,26 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test
+	public void testBookmarks() {
+		String bookmarks = this.generator
+				.generatePdfBookmarks(
+						"<div><h2 id='1'>Chapter 1</h2><h3 id='2'>Chapter 1-1</h3><h3 id='3'>Chapter 1-2</h3><h4 id='4'>Chapter 1-1-1</h4><h3 id='5'>Chapter 1-3</h3><h2 id='6'>Chapter 2</h2></div>",
+						2, 4);
+		Assert
+				.assertEquals(
+						bookmarks,
+						"<bookmark name=\"Chapter 1\" href=\"#1\"><bookmark name=\"Chapter 1-1\" href=\"#2\" /><bookmark name=\"Chapter 1-2\" href=\"#3\"><bookmark name=\"Chapter 1-1-1\" href=\"#4\" /></bookmark><bookmark name=\"Chapter 1-3\" href=\"#5\" /></bookmark><bookmark name=\"Chapter 2\" href=\"#6\" />",
+						"Bookmark generation is wrong");
+
+		bookmarks = this.generator.generatePdfBookmarks("<div><h2 id='1'>Chapter 1</h2><h4 id='2'>Chapter 1-1-1</h4><h2 id='3'>Chapter 2</h2></div>", 2, 4);
+		Assert
+				.assertEquals(
+						bookmarks,
+						"<bookmark name=\"Chapter 1\" href=\"#1\"><bookmark name=\"undefined\"><bookmark name=\"Chapter 1-1-1\" href=\"#2\" /></bookmark></bookmark><bookmark name=\"Chapter 2\" href=\"#3\" />",
+						"Bookmark generation is wrong");
+	}
+
+	@Test
 	public void testAPTConversion() {
 		String result = /*
 						 * generator .adaptContent(

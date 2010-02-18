@@ -147,7 +147,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		User john = userManager.findByUsername("john");
 		securityCtx.log(robink);
 
-		List<Activity> activities = activityManager.listActivityOnUserBooks(10, john.getId());
+		List<Activity> activities = activityManager.listActivityOnUserBooks(0, 10, john.getId());
 		Assert.assertNotNull(activities);
 		Assert.assertTrue(activities.size() > 0);
 		for (Activity a : activities) {
@@ -155,7 +155,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		}
 
 		// Verify john activity on its book
-		activities = activityManager.listActivityOnBook(10, john.getId());
+		activities = activityManager.listActivityOnBook(0, 10, john.getId());
 		Assert.assertNotNull(activities);
 		Assert.assertTrue(activities.size() > 0);
 		for (Activity a : activities) {
@@ -163,7 +163,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		}
 
 		// Verify book creation activity
-		activities = activityManager.listBookCreationActivity(10);
+		activities = activityManager.listBookCreationActivity(0, 10);
 		Assert.assertNotNull(activities);
 		Assert.assertEquals(activities.size(), 4);
 		for (Activity a : activities) {

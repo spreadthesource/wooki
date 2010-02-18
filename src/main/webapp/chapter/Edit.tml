@@ -11,6 +11,7 @@
 		</h2>
 		<div style="display:none;" id="update-title-div">
 			<t:form t:id="updateTitle" class="small-form reset-after-hide" t:zone="updateTitleZone">
+				<t:errors />
 				<table>
 					<tr>
 						<td>
@@ -30,11 +31,12 @@
 	</t:zone>
 	
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
+		<t:errors />
 		<fieldset>
 			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
 		</fieldset>
 		<div class="form-submit">
-			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="update" title="Modifications will be only visible by authors" />
+			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="save" title="Modifications will be only visible by authors" />
 			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="publish" title="Modifications will be visible by everyone" />
 			or 
 			<t:if test="abstractChapter">

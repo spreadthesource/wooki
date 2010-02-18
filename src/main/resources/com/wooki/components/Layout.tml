@@ -17,7 +17,7 @@
 <div id="header">
 
 	<h1 id="wooki">
-		<a href="#" t:type="pagelink" t:page="index">
+		<a href="#" t:type="pagelink" t:page="index" t:context="null">
 			<img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" />
 		</a>
 	</h1>

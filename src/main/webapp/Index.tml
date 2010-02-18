@@ -38,7 +38,7 @@
 					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
 				</ul>
 			</div>
-		  	<t:activity.feed t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity" />
+		  	<t:activity.feed t:clientId="user-public-activity" t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity" />
     	</div>
 
 
@@ -58,8 +58,8 @@
 			</div>
 		</div>
 		<div class="right-col">
-			<t:activity.feed t:userId="user?.id" t:type="prop:activityType" />
-			<t:activity.feed t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
+			<t:activity.feed t:clientId="latest-activity-feed" t:userId="user?.id" t:type="prop:activityType" />
+			<t:activity.feed t:clientId="user-activity-feed" t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
 		</div>
     </t:block>
     

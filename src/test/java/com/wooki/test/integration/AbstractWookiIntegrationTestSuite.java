@@ -34,6 +34,14 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	}
 
 	/**
+	 * Set default browser in function of the OS.
+	 * 
+	 */
+	protected AbstractWookiIntegrationTestSuite(String path) {
+		super(path, defaultBrowser);
+	}
+	
+	/**
 	 * Verify that the returned page corresponds to a resource not found.
 	 * 
 	 * @param text

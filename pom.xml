@@ -454,6 +454,11 @@
 			<url>http://maven.springframework.org/milestone</url>
 		</repository>
 
+		<repository>
+			<id>jboss</id>
+			<url>http://repository.jboss.org/maven2</url>
+		</repository>
+
 	</repositories>
 
 	<pluginRepositories>

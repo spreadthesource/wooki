@@ -41,28 +41,28 @@ public class ActivityManagerImpl implements ActivityManager {
 		return this.activityDao.listAllActivitiesOnBook(bookId);
 	}
 	
-	public List<Activity> listAll(int nbElts) {
-		return this.activityDao.list(nbElts);
+	public List<Activity> listAll(int startIdx, int nbElts) {
+		return this.activityDao.list(startIdx, nbElts);
 	}
 
-	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
-		return this.activityDao.listActivityOnUserBooks(nbElts, userId);
+	public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId) {
+		return this.activityDao.listActivityOnUserBooks(startIdx, nbElts, userId);
 	}
 
-	public List<Activity> listUserActivity(int nbElts, Long userId) {
-		return this.activityDao.listUserActivity(nbElts, userId);
+	public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId) {
+		return this.activityDao.listUserActivity(startIdx, nbElts, userId);
 	}
 
-	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
-		return this.activityDao.listActivityOnBook(nbElements, userId);
+	public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId) {
+		return this.activityDao.listActivityOnBook(startIdx, nbElements, userId);
 	}
 
-	public List<Activity> listBookCreationActivity(int nbElements) {
-		return this.activityDao.listBookCreationActivity(nbElements);
+	public List<Activity> listBookCreationActivity(int startIdx, int nbElements) {
+		return this.activityDao.listBookCreationActivity(startIdx, nbElements);
 	}
 
-	public List<Activity> listAccountActivity(int nbElements) {
-		return this.activityDao.listAccountActivity(nbElements);
+	public List<Activity> listAccountActivity(int startIdx, int nbElements) {
+		return this.activityDao.listAccountActivity(startIdx, nbElements);
 	}
 
 }

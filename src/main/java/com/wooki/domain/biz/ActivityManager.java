@@ -28,36 +28,39 @@ import com.wooki.domain.model.activity.Activity;
  */
 public interface ActivityManager {
 
-	List<Activity> listAll(int nbElts);
+	List<Activity> listAll(int startIdx, int nbElts);
 
 	List<Activity> listAllBookActivities(Long bookId);
 	
-	List<Activity> listUserActivity(int nbElts, Long userId);
+	List<Activity> listUserActivity(int startIdx, int nbElts, Long userId);
 
-	List<Activity> listActivityOnUserBooks(int nbElts, Long userId);
+	List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId);
 
 	/**
 	 * List the book creation activity.
+	 * @param startIdx TODO
 	 * 
 	 * @return
 	 */
-	List<Activity> listBookCreationActivity(int nbElements);
+	List<Activity> listBookCreationActivity(int startIdx, int nbElements);
 
 	/**
 	 * List the activity of a user on its own books.
-	 * 
-	 * @param nbElementsn
+	 * @param startIdx TODO
 	 * @param userId
+	 * @param nbElementsn
+	 * 
 	 * @return
 	 */
-	List<Activity> listActivityOnBook(int nbElements, Long userId);
+	List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId);
 
 	/**
 	 * List the account activity on wooki.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElements
 	 * @param userId
+	 * 
 	 * @return
 	 */
-	List<Activity> listAccountActivity(int nbElements);
+	List<Activity> listAccountActivity(int startIdx, int nbElements);
 }

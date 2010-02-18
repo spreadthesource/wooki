@@ -40,18 +40,16 @@ import com.wooki.services.internal.TapestryOverrideModule;
  * @author ccordenier
  * 
  */
-@SubModule(TapestryOverrideModule.class)
+@SubModule( { TapestryOverrideModule.class })
 public class AppModule {
 
-	public void contributeApplicationDefaults(
-			MappedConfiguration<String, String> conf) {
+	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
 		conf.add(SymbolConstants.PRODUCTION_MODE, "false");
 		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
 	}
-	
-	public void contributeWookiRequestExceptionHandler(
-			MappedConfiguration<Class, String> exceptionMap) {
+
+	public void contributeWookiRequestExceptionHandler(MappedConfiguration<Class, String> exceptionMap) {
 		exceptionMap.add(IllegalArgumentException.class, "IAEReport");
 	}
 
@@ -61,15 +59,10 @@ public class AppModule {
 	 * @param config
 	 * @param requestGlobals
 	 */
-	public static void contributeRequestHandler(
-			OrderedConfiguration<RequestFilter> config,
-			final RequestGlobals requestGlobals) {
+	public static void contributeRequestHandler(OrderedConfiguration<RequestFilter> config, final RequestGlobals requestGlobals) {
 		RequestFilter filter = new RequestFilter() {
-			public boolean service(Request request, Response response,
-					RequestHandler handler) throws IOException {
-				requestGlobals.storeServletRequestResponse(Mockito
-						.mock(HttpServletRequest.class), Mockito
-						.mock(HttpServletResponse.class));
+			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
+				requestGlobals.storeServletRequestResponse(Mockito.mock(HttpServletRequest.class), Mockito.mock(HttpServletResponse.class));
 				return handler.service(request, response);
 			}
 		};

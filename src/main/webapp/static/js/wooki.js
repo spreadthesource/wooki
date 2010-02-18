@@ -266,6 +266,8 @@ jQuery.extend(Tapestry.Initializer,{
 			data.params.containersItems = containersItems;
 			
 			jQuery('#'+data.elt).wymeditor(data.params);
+			jQuery.wymeditors(0).fullscreen();
+
 		}
 	},
 	
@@ -321,7 +323,7 @@ jQuery.extend(Tapestry.Initializer,{
 				
 				Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
 				comment.css({
-					'top': (jQuery(this).position().top) + 'px',
+					'top': (jQuery(this).position().top - 5) + 'px',
 					'left': (jQuery(this).position().left - 50)  + 'px',
 					'height' : jQuery(this).height() + 'px'
 				});
@@ -430,6 +432,36 @@ jQuery.extend(Tapestry.Initializer,{
 				}
 				jQuery("#"+event.data.showLnkId).disabled = false;
 				jQuery("#"+event.data.toShow).slideUp(data.duration);
+				return false;
+			});
+		}
+	},
+	
+	/**
+	 * Init a link that will update a zone with a 
+	 *
+	 */
+	initMoreLink: function(data) {
+		if(data != undefined) {
+			jQuery("#"+data.elt).bind("click", data, function(event) {
+				jQuery("#"+data.loader).show();
+				var successHandler = function(reply) {
+					if (!reply.empty) {
+						if (data.position == "BOTTOM") {
+							jQuery("#" + event.data.zone).append(reply.content);
+						} else {
+							jQuery("#" + event.data.zone).prepend(reply.content);
+						}
+						jQuery("#" + data.elt).attr("href", reply.href);
+						if (!reply.hasMore) {
+							jQuery("#" + data.elt).closest(".more-link").remove();
+						}
+						jQuery("#" + data.loader).hide();
+					} else {
+						jQuery("#" + data.elt).closest(".more-link").remove();
+					}
+				};
+				setTimeout(jQuery.getJSON(jQuery("#" + data.elt).attr("href"), successHandler), 250);
 				return false;
 			});
 		}

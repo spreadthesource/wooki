@@ -35,9 +35,10 @@ import com.wooki.domain.model.activity.CommentActivity;
 @Repository("activityDao")
 public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements ActivityDAO {
 
-	public List<Activity> list(int nbElements) {
+	public List<Activity> list(int startIdx, int nbElements) {
 		Query query = entityManager.createQuery("from " + getEntityType() + " a where a.deletionDate is null order by a.creationDate desc");
 		query.setMaxResults(nbElements);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 
@@ -67,7 +68,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		return query.getResultList();
 	}
 
-	public List<Activity> listActivityOnUserBooks(int nbElts, Long userId) {
+	public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId) {
 		Defense.notNull(userId, "userId");
 		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
 				+ " b join b.users u where u.id=:uid and a.user.id!=:uid and (a.id in (select id from " + BookActivity.class.getName()
@@ -76,19 +77,21 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
 		query.setMaxResults(nbElts);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 
-	public List<Activity> listUserActivity(int nbElts, Long userId) {
+	public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId) {
 		Defense.notNull(userId, "userId");
 		Query query = entityManager.createQuery("select a from " + getEntityType()
 				+ " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
 		query.setParameter("uid", userId);
 		query.setMaxResults(nbElts);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 
-	public List<Activity> listActivityOnBook(int nbElements, Long userId) {
+	public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId) {
 		Defense.notNull(userId, "userId");
 		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
 				+ " b join b.users u where u.id=:uid and a.user.id=:uid and (a.id in (select id from " + BookActivity.class.getName()
@@ -97,22 +100,25 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
 		query.setMaxResults(nbElements);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 
-	public List<Activity> listBookCreationActivity(int nbElements) {
+	public List<Activity> listBookCreationActivity(int startIdx, int nbElements) {
 		Query query = entityManager.createQuery("from " + BookActivity.class.getName()
 				+ " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", BookEventType.CREATE);
 		query.setMaxResults(nbElements);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 
-	public List<Activity> listAccountActivity(int nbElts) {
+	public List<Activity> listAccountActivity(int startIdx, int nbElts) {
 		Query query = entityManager.createQuery("from " + AccountActivity.class.getName()
 				+ " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", AccountEventType.JOIN);
 		query.setMaxResults(nbElts);
+		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
 

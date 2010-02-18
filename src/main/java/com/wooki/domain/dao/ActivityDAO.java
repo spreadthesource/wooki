@@ -54,53 +54,59 @@ public interface ActivityDAO extends GenericDAO<Activity, Long> {
 	
 	/**
 	 * List the last nbElelements activities.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElements
+	 * 
 	 * @return
 	 */
-	List<Activity> list(int nbElements);
+	List<Activity> list(int startIdx, int nbElements);
 
 	/**
 	 * List the book creation activity.
+	 * @param startIdx TODO
 	 * 
 	 * @return
 	 */
-	List<Activity> listBookCreationActivity(int nbElements);
+	List<Activity> listBookCreationActivity(int startIdx, int nbElements);
 
 	/**
 	 * List the activity of a user on its own books.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElementsn
 	 * @param userId
+	 * 
 	 * @return
 	 */
-	List<Activity> listActivityOnBook(int nbElementsn, Long userId);
+	List<Activity> listActivityOnBook(int startIdx, int nbElementsn, Long userId);
 
 	/**
 	 * List the user public activity.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElts
 	 * @param userId
+	 * 
 	 * @return
 	 */
-	List<Activity> listUserActivity(int nbElts, Long userId);
+	List<Activity> listUserActivity(int startIdx, int nbElts, Long userId);
 
 	/**
 	 * List the activity of others users on the current user book.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElts
 	 * @param userId
+	 * 
 	 * @return
 	 */
-	List<Activity> listActivityOnUserBooks(int nbElts, Long userId);
+	List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId);
 
 	/**
 	 * List account activity on wooki.
-	 * 
+	 * @param startIdx TODO
 	 * @param nbElts
 	 * @param userId
+	 * 
 	 * @return
 	 */
-	List<Activity> listAccountActivity(int nbElts);
+	List<Activity> listAccountActivity(int startIdx, int nbElts);
 
 }

@@ -1,18 +1,25 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 
-	<div id="${clientId}" class="feed section shadowed ${size}">
+	<div class="feed section shadowed ${size}">
 		<t:if test="displayBlock">
 			<t:delegate to="titleBlock" />
 			<p:else>
 				<h2>${title}</h2>
 			</p:else>
 		</t:if>
-		<ul>
-	        <t:loop source="activities" value="current" index="loopIdx" empty="block:empty">
-	    		<t:delegate to="activityBlock" />
-			</t:loop>
+		<ul id="${clientId}">
+			<t:delegate t:to="block:activities" />
 		</ul>
+		<t:if test="hasMore">
+			<a t:type="morelink" t:id="moreFeeds" t:first="prop:moreContext" t:zone="prop:clientId">More</a>
+		</t:if>
     </div>
+    
+    <t:block id="activities">
+    	<t:loop source="activities" value="current" index="loopIdx" empty="block:empty">
+	    	<t:delegate to="activityBlock" />
+		</t:loop>
+    </t:block>
 
 	<t:block id="accountActivity">
 		<t:activity.account t:activity="current" t:style="prop:currentStyle" />

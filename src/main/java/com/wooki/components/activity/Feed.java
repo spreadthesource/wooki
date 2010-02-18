@@ -20,12 +20,16 @@ import java.util.List;
 
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
+import org.apache.tapestry5.annotations.Id;
+import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.ActivityType;
+import com.wooki.MoreEventResult;
+import com.wooki.WookiEventConstants;
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.Activity;
@@ -48,7 +52,7 @@ public class Feed<T extends Activity> {
 	@Property
 	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "x460")
 	private String size;
-	
+
 	@Property
 	@Parameter(defaultPrefix = BindingConstants.BLOCK, allowNull = true)
 	private Block titleBlock;
@@ -68,6 +72,10 @@ public class Feed<T extends Activity> {
 
 	@Inject
 	private ActivityManager activityManager;
+
+	@Inject
+	@Id("activities")
+	private Block activitiesBlock;
 
 	@Inject
 	private Block bookActivity;
@@ -90,28 +98,48 @@ public class Feed<T extends Activity> {
 	@Property
 	private int loopIdx;
 
+	@Property
+	private boolean hasMore;
+
+	private int page;
+
 	@SetupRender
 	public void setupActivitiesList() {
+		int startIdx = nbElts * page;
 		if (ActivityType.BOOK_CREATION.equals(type)) {
-			this.activities = this.activityManager.listBookCreationActivity(nbElts);
+			this.activities = this.activityManager.listBookCreationActivity(startIdx, nbElts);
 		} else {
 			if (ActivityType.USER.equals(type)) {
-				this.activities = this.activityManager.listActivityOnBook(nbElts, userId);
+				this.activities = this.activityManager.listActivityOnBook(startIdx, nbElts, userId);
 			} else {
 				if (ActivityType.CO_AUTHOR.equals(type)) {
-					this.activities = this.activityManager.listActivityOnUserBooks(nbElts, userId);
+					this.activities = this.activityManager.listActivityOnUserBooks(startIdx, nbElts, userId);
 				} else {
 					if (ActivityType.USER_PUBLIC.equals(type)) {
-						this.activities = this.activityManager.listUserActivity(nbElts, userId);
+						this.activities = this.activityManager.listUserActivity(startIdx, nbElts, userId);
 					} else {
 						if (ActivityType.ACCOUNT.equals(type)) {
-							this.activities = this.activityManager.listAccountActivity(nbElts);
+							this.activities = this.activityManager.listAccountActivity(startIdx, nbElts);
 						}
 					}
 
 				}
 			}
 		}
+		this.hasMore = this.activities.size() == nbElts;
+	}
+
+	@OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT, component = "moreFeeds")
+	public MoreEventResult moreFeeds(int page) {
+		this.page = page;
+		this.setupActivitiesList();
+		if (this.activities.size() == 0) {
+			return null;
+		}
+		MoreEventResult result = new MoreEventResult();
+		result.setRenderable(this.activitiesBlock);
+		result.setHasMore(this.activities.size() == this.nbElts);
+		return result;
 	}
 
 	/**
@@ -138,14 +166,18 @@ public class Feed<T extends Activity> {
 		return null;
 	}
 
-	public String getCurrentStyle() {
-		return this.loopIdx == 0 ? "first" : null;
+	public int getMoreContext() {
+		return (this.page + this.activities.size() / nbElts);
 	}
-	
+
+	public String getCurrentStyle() {
+		return this.loopIdx == 0 && this.page == 0 ? "first" : null;
+	}
+
 	public boolean isDisplayBlock() {
 		return this.titleBlock != null;
 	}
-	
+
 	public boolean isResourceAvailable() {
 		return !this.current.isResourceUnavailable();
 	}

@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<head>
+		<title>More Link</title>
+	</head>
+	<body>
+	 
+		<ul id="result" />
+
+		<a t:type="morelink" t:zone="result" t:id="morelinktest">More</a>
+
+		<t:block id="display">
+			<t:loop source="values" t:value="current">
+				<li id="elt${current}">${current}</li>
+			</t:loop>
+		</t:block>
+	
+	</body>
+</html>

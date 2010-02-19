@@ -264,7 +264,7 @@
 			<version>R8</version>
 			<type>jar</type>
 			<scope>system</scope>
-			<systemPath>${basedir}/flyingsaucer-R8/core-renderer.jar</systemPath>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/core-renderer.jar</systemPath>
 		</dependency>
 
 		<dependency>

@@ -71,6 +71,7 @@
 				<value>error/generic</value>
 			</list>
 		</constructor-arg>
+		<property name="productionMode" value="${tapestry.production-mode}" />
 		<property name="encoding" value="${tapestry.charset}" />
 	</bean>
 

@@ -69,7 +69,6 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
 		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
 		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
 		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
-		this.productionMode = Boolean.parseBoolean(this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.PRODUCTION_MODE));
 		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
 		this.initDone = true;
 	}

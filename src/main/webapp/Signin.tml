@@ -5,7 +5,7 @@
 
 		<h2>Log on wooki</h2>
 
-    	<form name="loginForm" class="full-form" id="loginForm" action="${loginUrl}" method="POST">
+    	<form name="loginForm" class="full-form" id="loginForm" action="${loginUrl}" method="post">
     		<div class="radied-box basic-content">
 	    		<t:if test="failed">
 	    			<t:errors t:messages="messages" />

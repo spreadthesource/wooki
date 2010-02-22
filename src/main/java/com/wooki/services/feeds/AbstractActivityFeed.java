@@ -67,18 +67,18 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
             }
         };
 
-        this.keyPrefixForTitle = PREFIX + className + SUFFIX_TITLE;
-        this.keyPrefixForSummary = PREFIX + className + SUFFIX_SUMMARY;
+        this.keyPrefixForTitle = PREFIX + className + "_";
+        this.keyPrefixForSummary = PREFIX + className + "_";
     }
 
-    public String getKeyForTitle()
+    public String getKeyForTitle(String event)
     {
-        return keyPrefixForTitle;
+        return keyPrefixForTitle + event + SUFFIX_TITLE;
     }
 
-    public String getKeyForSummary()
+    public String getKeyForSummary(String event)
     {
-        return keyPrefixForSummary;
+        return keyPrefixForSummary + event + SUFFIX_TITLE;
     }
 
     public Messages getMessages()

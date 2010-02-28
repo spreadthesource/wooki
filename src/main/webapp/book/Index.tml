@@ -28,6 +28,9 @@
         <li>
             <a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle" id="print-link">Export PDF</a>
         </li>
+		<li>
+            <a class="feedlink" href="${linkForFeed}"><img src="${asset:context:static/img/rss_15x15.png}"  /> RSS</a>
+        </li>
     </ul>
     <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
     <div id="meta">

@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.StreamResponse;
@@ -29,15 +30,16 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.internal.services.RequestPageCache;
+import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.jdom.Document;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.RequestGlobals;
 
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.WireFeedOutput;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
@@ -52,7 +54,6 @@ import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.ActivityFeedWriter;
-import com.wooki.services.feeds.AtomStreamResponse;
 import com.wooki.services.feeds.WookiActivityAtomFeed;
 import com.wooki.services.security.WookiSecurityContext;
 
@@ -61,241 +62,250 @@ import com.wooki.services.security.WookiSecurityContext;
  */
 public class Index extends BookBase {
 
-    @Inject
-    private Messages messages;
+	@Inject
+	private Messages messages;
 
-    @Inject
-    private BookManager bookManager;
+	@Inject
+	private BookManager bookManager;
 
-    @Inject
-    private ChapterManager chapterManager;
+	@Inject
+	private ChapterManager chapterManager;
 
-    @Inject
-    private WookiSecurityContext securityCtx;
+	@Inject
+	private WookiSecurityContext securityCtx;
 
-    @Inject
-    private ExportService exportService;
+	@Inject
+	private ExportService exportService;
 
-    @Inject
-    private ActivityManager activityManager;
+	@Inject
+	private ActivityManager activityManager;
 
-    @Inject
-    private ActivityFeedWriter<Activity> feedWriter;
+	@Inject
+	private ActivityFeedWriter<Activity> feedWriter;
 
-    @InjectPage
-    private Edit editChapter;
+	@Inject
+	private LinkSource linkSource;
 
-    @Property
-    @Persist(PersistenceConstants.FLASH)
-    private boolean printError;
+	@Inject
+	private RequestPageCache pageCache;
+	
+	@InjectPage
+	private Edit editChapter;
 
-    @Property
-    private Long bookAbstractId;
+	@Property
+	@Persist(PersistenceConstants.FLASH)
+	private boolean printError;
 
-    @Property
-    private String bookAbstractTitle;
+	@Property
+	private Long bookAbstractId;
 
-    @Property
-    private User currentUser;
+	@Property
+	private String bookAbstractTitle;
 
-    @Property
-    private int loopIdx;
+	@Property
+	private User currentUser;
 
-    @Property
-    private List<User> authors;
+	@Property
+	private int loopIdx;
 
-    @Property
-    private List<Chapter> chaptersInfo;
+	@Property
+	private List<User> authors;
 
-    private Chapter currentChapter;
+	@Property
+	private List<Chapter> chaptersInfo;
 
-    /**
-     * Will be set if the author tries to add a new chapter
-     */
-    @Property
-    private String chapterName;
+	private Chapter currentChapter;
 
-    private boolean showWorkingCopyLink;
+	/**
+	 * Will be set if the author tries to add a new chapter
+	 */
+	@Property
+	private String chapterName;
 
-    private boolean bookAuthor;
+	private boolean showWorkingCopyLink;
 
-    /**
-     * Setup all the data to display in the book index page.
-     * 
-     * @param bookId
-     * @throws IOException
-     */
-    @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupBookIndex(Long bookId, String revision) {
+	private boolean bookAuthor;
 
-	this.setRevision(revision);
-	this.setViewingRevision(true);
+	/**
+	 * Setup all the data to display in the book index page.
+	 * 
+	 * @param bookId
+	 * @throws IOException
+	 */
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object setupBookIndex(Long bookId, String revision) {
 
-	// Only authors have access to the last revision
-	if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
-	    return new HttpError(403, "Access denied");
+		this.setRevision(revision);
+		this.setViewingRevision(true);
+
+		// Only authors have access to the last revision
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+			return new HttpError(403, "Access denied");
+		}
+
+		return true;
 	}
 
-	return true;
-    }
+	/**
+	 * Prepare book display.
+	 */
+	@SetupRender
+	public void setupBookDisplay() {
 
-    /**
-     * Prepare book display.
-     */
-    @SetupRender
-    public void setupBookDisplay() {
+		this.authors = this.getBook().getAuthors();
+		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
 
-	this.authors = this.getBook().getAuthors();
-	this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
+		// List chapter infos
+		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
+		this.bookAbstractId = chapters.get(0).getId();
+		this.bookAbstractTitle = chapters.get(0).getTitle();
 
-	// List chapter infos
-	List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-	this.bookAbstractId = chapters.get(0).getId();
-	this.bookAbstractTitle = chapters.get(0).getTitle();
+		if (chapters.size() > 0) {
+			this.chaptersInfo = chapters.subList(1, chapters.size());
+		}
 
-	if (chapters.size() > 0) {
-	    this.chaptersInfo = chapters.subList(1, chapters.size());
+		// Get abstract publication
+		Publication abstractPublication = this.isViewingRevision() ? this.chapterManager.getRevision(this.bookAbstractId, this.getRevision())
+				: this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
+		this.setPublication(abstractPublication);
+
+		// Setup abstract content
+		this.setupContent();
+
 	}
 
-	// Get abstract publication
-	Publication abstractPublication = this.isViewingRevision() ? this.chapterManager.getRevision(this.bookAbstractId, this.getRevision()) : this.chapterManager
-		.getLastPublishedPublication(this.bookAbstractId);
-	this.setPublication(abstractPublication);
-
-	// Setup abstract content
-	this.setupContent();
-
-    }
-
-    @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
-    public Object addNewChapter() {
-	Chapter chapter = bookManager.addChapter(this.getBook(), chapterName);
-	editChapter.setBookId(this.getBookId());
-	editChapter.setChapterId(chapter.getId());
-	return editChapter;
-    }
-
-    /**
-     * Simply export to PDF.
-     * 
-     * @return
-     */
-    @OnEvent(value = "print")
-    public Object exportPdf() {
-	try {
-	    InputStream bookStream = this.exportService.exportPdf(this.getBookId());
-	    return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
-	} catch (Exception ex) {
-	    this.printError = true;
-	    return this;
+	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
+	public Object addNewChapter() {
+		Chapter chapter = bookManager.addChapter(this.getBook(), chapterName);
+		editChapter.setBookId(this.getBookId());
+		editChapter.setChapterId(chapter.getId());
+		return editChapter;
 	}
-    }
 
-    /**
-     * Create the Atom feed of the book activity
-     * 
-     * @throws IOException
-     * @throws FeedException
-     * @throws IllegalArgumentException
-     */
-    @OnEvent(value = "feed")
-    public StreamResponse getFeed() throws IOException, IllegalArgumentException, FeedException {
-	// all the feed construction is made by a third party library called
-	// "ROME". It provides RSS & Atom support
-	final Book book = bookManager.findById(getBookId());
-
-	String title = "Recent activity for " + book.getTitle();
-	String id = book.getSlugTitle();
-
-	List<Link> alternateLinks = new ArrayList<Link>() {
-	    {
-		add(new Link() {
-		    {
-			setHref("http://????/" + book.getId().toString());
-			setTitle(book.getTitle());
-		    }
-		});
-	    }
-	};
-
-	List<Activity> activities = activityManager.listAllBookActivities(getBookId());
-
-	WookiActivityAtomFeed atomFeed = new WookiActivityAtomFeed(title, id, alternateLinks, activities, feedWriter);
-
-	return atomFeed.toStreamResponse();
-    }
-
-    public String[] getPrintErrors() {
-	return new String[] { this.messages.get("print-error") };
-    }
-
-    @OnEvent(value = EventConstants.PASSIVATE)
-    public Long retrieveBookId() {
-	return this.getBookId();
-    }
-
-    public boolean isPublished() {
-	long chapterId = currentChapter.getId();
-
-	Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
-
-	return (publication != null);
-    }
-
-    public boolean isAbstractHasWorkingCopy() {
-	return hasWorkingCopy(this.bookAbstractId);
-    }
-
-    public boolean isShowWorkingCopyLink() {
-	long chapterId = currentChapter.getId();
-	return hasWorkingCopy(chapterId);
-    }
-
-    private final boolean hasWorkingCopy(long chapterId) {
-	Publication publication = this.chapterManager.getRevision(chapterId, ChapterManager.LAST);
-	if (publication != null) {
-	    boolean workingCopy = !publication.isPublished();
-	    return bookAuthor && workingCopy;
+	/**
+	 * Simply export to PDF.
+	 * 
+	 * @return
+	 */
+	@OnEvent(value = "print")
+	public Object exportPdf() {
+		try {
+			InputStream bookStream = this.exportService.exportPdf(this.getBookId());
+			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
+		} catch (Exception ex) {
+			this.printError = true;
+			return this;
+		}
 	}
-	return false;
-    }
 
-    /**
-     * Get edit context for chapter
-     * 
-     * @return
-     */
-    public Object[] getEditCtx() {
-	return new Object[] { this.getBookId(), this.bookAbstractId };
-    }
+	/**
+	 * Create the Atom feed of the book activity
+	 * 
+	 * @throws IOException
+	 * @throws FeedException
+	 * @throws IllegalArgumentException
+	 */
+	@OnEvent(value = "feed")
+	public StreamResponse getFeed() throws IOException, IllegalArgumentException, FeedException {
+		// all the feed construction is made by a third party library called
+		// "ROME". It provides RSS & Atom support
+		Book book = bookManager.findById(getBookId());
 
-    public Object[] getAbstractWorkingCopyCtx() {
-	return new Object[] { this.getBookId(), ChapterManager.LAST };
-    }
+		String title = "Recent activity for " + book.getTitle();
+		String id = book.getSlugTitle();
 
-    public Object[] getIssuesCtx() {
-	return new Object[] { this.getBookId(), "all" };
-    }
+		List<Link> alternateLinks = new ArrayList<Link>();
 
-    /**
-     * Get id to link to chapter display
-     * 
-     * @return
-     */
-    public Object[] getChapterCtx() {
-	return new Object[] { this.getBookId(), this.currentChapter.getId() };
-    }
+		Link linkToSelf = new Link();
+		linkToSelf.setHref(linkSource.createPageRenderLink("book/index", false, getBookId()).toAbsoluteURI());
+		linkToSelf.setTitle(book.getTitle());
 
-    public Object[] getChapterWorkingCopyCtx() {
-	return new Object[] { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
-    }
+		alternateLinks.add(linkToSelf);
 
-    public Chapter getCurrentChapter() {
-	return currentChapter;
-    }
+		List<Activity> activities = activityManager.listAllBookActivities(getBookId());
 
-    public void setCurrentChapter(Chapter currentChapter) {
-	this.currentChapter = currentChapter;
-    }
+		WookiActivityAtomFeed atomFeed = new WookiActivityAtomFeed(title, id, alternateLinks, activities, feedWriter);
+
+		return atomFeed.toStreamResponse();
+	}
+
+	public String getLinkForFeed() {
+		org.apache.tapestry5.Link feedLink = linkSource.createComponentEventLink(pageCache.get("book/index"), null, "feed", false, getBookId());
+		feedLink.addParameter("t:ac", "1");
+		return feedLink.toURI();
+	}
+
+	public String[] getPrintErrors() {
+		return new String[] { this.messages.get("print-error") };
+	}
+
+	@OnEvent(value = EventConstants.PASSIVATE)
+	public Long retrieveBookId() {
+		return this.getBookId();
+	}
+
+	public boolean isPublished() {
+		long chapterId = currentChapter.getId();
+
+		Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+
+		return (publication != null);
+	}
+
+	public boolean isAbstractHasWorkingCopy() {
+		return hasWorkingCopy(this.bookAbstractId);
+	}
+
+	public boolean isShowWorkingCopyLink() {
+		long chapterId = currentChapter.getId();
+		return hasWorkingCopy(chapterId);
+	}
+
+	private final boolean hasWorkingCopy(long chapterId) {
+		Publication publication = this.chapterManager.getRevision(chapterId, ChapterManager.LAST);
+		if (publication != null) {
+			boolean workingCopy = !publication.isPublished();
+			return bookAuthor && workingCopy;
+		}
+		return false;
+	}
+
+	/**
+	 * Get edit context for chapter
+	 * 
+	 * @return
+	 */
+	public Object[] getEditCtx() {
+		return new Object[] { this.getBookId(), this.bookAbstractId };
+	}
+
+	public Object[] getAbstractWorkingCopyCtx() {
+		return new Object[] { this.getBookId(), ChapterManager.LAST };
+	}
+
+	public Object[] getIssuesCtx() {
+		return new Object[] { this.getBookId(), "all" };
+	}
+
+	/**
+	 * Get id to link to chapter display
+	 * 
+	 * @return
+	 */
+	public Object[] getChapterCtx() {
+		return new Object[] { this.getBookId(), this.currentChapter.getId() };
+	}
+
+	public Object[] getChapterWorkingCopyCtx() {
+		return new Object[] { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
+	}
+
+	public Chapter getCurrentChapter() {
+		return currentChapter;
+	}
+
+	public void setCurrentChapter(Chapter currentChapter) {
+		this.currentChapter = currentChapter;
+	}
 
 }

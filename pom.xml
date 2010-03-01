@@ -273,6 +273,14 @@
 			<version>2.0.8</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+
 	</dependencies>
 	<build>
 		<finalName>wooki</finalName>
@@ -441,7 +449,7 @@
 
 		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2/</url>
+			<url>http://repository.jboss.org/maven2</url>
 		</repository>
 
 		<repository>
@@ -452,11 +460,6 @@
 		<repository>
 			<id>springsource maven repo</id>
 			<url>http://maven.springframework.org/milestone</url>
-		</repository>
-
-		<repository>
-			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2</url>
 		</repository>
 
 	</repositories>

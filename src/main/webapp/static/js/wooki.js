@@ -217,19 +217,21 @@ jQuery.extend(Tapestry.Initializer,{
 
 		x = link.position().left + link.width() * 2 - (parseInt(dialog.css('padding-right'))* 2) - dialog.width();
 		y = link.position().top + 5 + link.height() + parseInt(link.css('padding-bottom'));
-		
-		link.toggle(
-			function () {
-				dialog.css({
-					'top': y + 'px',
-					'left': x + 'px',
-					'display': 'block'
-				});
-				
-				jQuery('#signin-username').focus();
-			},
-			function () {
-				dialog.css('display', 'none');
+
+		// Show / Hide the signin dialog in function of its current display state
+		link.bind("click", 
+			function (evt) {
+				if (dialog.css('display') == 'none') {
+					dialog.css({
+						'top': y + 'px',
+						'left': x + 'px',
+						'display': 'block'
+					});
+					jQuery('#signin-username').focus();
+				} else {
+					dialog.css('display', 'none');
+				}
+				return false;
 			});
 		
 		jQuery("#content").bind("click mouseenter", dialog, function(event) {

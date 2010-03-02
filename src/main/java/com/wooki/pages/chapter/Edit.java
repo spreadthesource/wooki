@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,132 +28,149 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
-import com.wooki.pages.book.Index;
 
 /**
  * This page is used to update/publish a chapter of a given book.
  * 
  * @author ccordenier
- * 
  */
-public class Edit extends BookBase {
+public class Edit extends BookBase
+{
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private Block titleBlock;
+    @Inject
+    private Block titleBlock;
 
-	@InjectPage
-	private Index index;
+    @InjectPage
+    private Index index;
 
-	private Long chapterId;
+    private Long chapterId;
 
-	@Property
-	private Chapter chapter;
+    @Property
+    private Chapter chapter;
 
-	@Property
-	@Validate("required")
-	private String data;
+    @Property
+    @Validate("required")
+    private String data;
 
-	@Property
-	private Long previous;
+    @Property
+    private Long previous;
 
-	@Property
-	private String previousTitle;
+    @Property
+    private String previousTitle;
 
-	@Property
-	private Long next;
+    @Property
+    private Long next;
 
-	@Property
-	private String nextTitle;
+    @Property
+    private String nextTitle;
 
-	@Property
-	private boolean abstractChapter;
+    @Property
+    private boolean abstractChapter;
 
-	private boolean publish;
+    private boolean publish;
 
-	private boolean cancel;
+    private boolean cancel;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object onActivate(Long bookId, Long chapterId) {
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object onActivate(Long bookId, Long chapterId)
+    {
 
-		this.chapterId = chapterId;
-		this.chapter = chapterManager.findById(chapterId);
+	this.chapterId = chapterId;
+	this.chapter = chapterManager.findById(chapterId);
 
-		if (this.chapter == null) {
-			return redirectToBookIndex();
-		}
-
-		return null;
+	if (this.chapter == null)
+	{
+	    return redirectToBookIndex();
 	}
 
-	@SetupRender
-	public void prepareFormData() {
-		this.data = chapterManager.getLastContent(chapterId);
-		// Check if we are editing the abstract chapter
-		if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0 && this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
-			this.abstractChapter = true;
-		}
-	}
+	return null;
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
-	public Object updateTitle() {
-		this.chapterManager.update(chapter);
-		return this.titleBlock;
+    @SetupRender
+    public void prepareFormData()
+    {
+	this.data = chapterManager.getLastContent(chapterId);
+	// Check if we are editing the abstract chapter
+	if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0 && this.getBook().getChapters().get(0).getId().equals(this.chapterId))
+	{
+	    this.abstractChapter = true;
 	}
+    }
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public Object[] retrieveIds() {
-		return new Object[] { this.getBookId(), this.chapterId };
+    @OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
+    public Object updateTitle()
+    {
+	this.chapterManager.update(chapter);
+	return this.titleBlock;
+    }
+
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public Object[] retrieveIds()
+    {
+	return new Object[] { this.getBookId(), this.chapterId };
+    }
+
+    /**
+     * Used to check which submit button has been clicked
+     */
+    public void onPublish()
+    {
+	this.publish = true;
+    }
+
+    /**
+     * Used to check which submit button has been clicked
+     */
+    public void onUpdate()
+    {
+	this.publish = false;
+    }
+
+    public void onCancel()
+    {
+	this.cancel = true;
+    }
+
+    /**
+     * Update content and publish if requested.
+     * 
+     * @return The book index page
+     */
+    @OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
+    public Object updateChapter()
+    {
+	if (!cancel)
+	{
+	    chapterManager.updateContent(chapterId, data);
+	    if (publish)
+	    {
+		chapterManager.publishChapter(chapterId);
+	    }
 	}
+	Chapter chapter = chapterManager.findById(chapterId);
+	System.out.println(this.getBookId());
+	index.setupChapter(this.getBookId(), chapterId, chapterManager.LAST);
+	index.setRevision(chapterManager.LAST);
 
-	/**
-	 * Used to check which submit button has been clicked
-	 */
-	public void onPublish() {
-		this.publish = true;
-	}
+	return index;
+    }
 
-	/**
-	 * Used to check which submit button has been clicked
-	 */
-	public void onUpdate() {
-		this.publish = false;
-	}
+    public Object[] getCancelCtx()
+    {
+	return new Object[] { this.getBookId(), this.chapterId };
+    }
 
-	public void onCancel() {
-		this.cancel = true;
-	}
+    public Long getChapterId()
+    {
+	return chapterId;
+    }
 
-	/**
-	 * Update content and publish if requested.
-	 * 
-	 * @return The book index page
-	 */
-	@OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
-	public Object updateChapter() {
-		if (!cancel) {
-			chapterManager.updateContent(chapterId, data);
-			if (publish) {
-				chapterManager.publishChapter(chapterId);
-			}
-		}
-
-		index.setBookId(this.getBookId());
-		return index;
-	}
-
-	public Object[] getCancelCtx() {
-		return new Object[] { this.getBookId(), this.chapterId };
-	}
-
-	public Long getChapterId() {
-		return chapterId;
-	}
-
-	public void setChapterId(Long chapterId) {
-		this.chapterId = chapterId;
-	}
+    public void setChapterId(Long chapterId)
+    {
+	this.chapterId = chapterId;
+    }
 
 }

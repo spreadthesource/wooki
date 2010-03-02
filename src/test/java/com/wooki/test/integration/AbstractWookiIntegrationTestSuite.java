@@ -18,7 +18,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 			defaultBrowser = "*safari";
 		} else {
 			if (os.contains("Windows")) {
-				defaultBrowser = "*iexplore";
+				defaultBrowser = "*googlechrome";
 			} else {
 				defaultBrowser = "*firefox";
 			}

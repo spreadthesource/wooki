@@ -24,4 +24,6 @@ public interface WookiSymbolsConstants {
 	static final String WOOKI_SALT = "wooki.salt";
 	
 	public static final String GANALYTICS_KEY = "wooki.ganalytics-key";
+	
+	public static final String UPLOAD_DIR = "wooki.upload-dir";
 }

@@ -16,14 +16,9 @@
 
 package com.wooki.test.unit;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.StringBufferInputStream;
 import java.util.List;
 
 import javax.sql.DataSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -34,8 +29,6 @@ import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.w3c.dom.Document;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
@@ -112,7 +105,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook, "Requirements");
-		chapterManager.updateContent(chapterOne.getId(), "<p>You will need �� ...</p>");
+		chapterManager.updateContent(chapterOne.getId(), "<p>You will need éé ...</p>");
 
 		Chapter chapterTwo = bookManager.addChapter(productBook, "Installation");
 		chapterManager.updateContent(chapterTwo.getId(), "<p>First you have to set environment variables...</p>");
@@ -335,7 +328,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Verify chapter content
 		// Chapter chapterOne = chapters.get(1);
 		// Assert.assertEquals(new String(chapterOne.getContent()),
-		// "<p>You will need �� ...</p>");
+		// "<p>You will need éé ...</p>");
 	}
 
 	@Test
@@ -352,7 +345,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		// Verify chapter content
 		Chapter chapterOne = chapters.get(1);
 		// Assert.assertTrue(new String(chapterOne.getContent())
-		// .contains("<p>You will need �� ...</p>"));
+		// .contains("<p>You will need éé ...</p>"));
 	}
 
 	/**
@@ -436,7 +429,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 	 */
 	@Test
 	public void testPublication() {
-
+		System.setProperty("file.encoding", "ISO-8859-1");
 		Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");
 
@@ -448,12 +441,11 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertNull(published, "No revision has been published.");
 
 		// Update content and publish
-		chapterManager.updateAndPublishContent(chapters.get(0).getId(), "<p>Tapestry is totally amazing</p>");
+		chapterManager.updateAndPublishContent(chapters.get(0).getId(), "<p>Tapestry is totally amazing éàê</p>");
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0).getId());
 		Publication publication = chapterManager.getLastPublishedPublication(chapters.get(0).getId());
 		Assert.assertNotNull(published, "No revision has been published.");
-		Assert.assertEquals(published, "<p id=\"b" + publication.getId() + "0\" class=\"commentable\">Tapestry is totally amazing</p>");
-
+		Assert.assertEquals(published, "<p id=\"b" + publication.getId() + "0\" class=\"commentable\">Tapestry is totally amazing éàê</p>");
 	}
 }

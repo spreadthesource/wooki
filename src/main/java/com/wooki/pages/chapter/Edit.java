@@ -16,6 +16,8 @@
 
 package com.wooki.pages.chapter;
 
+import java.io.IOException;
+
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -24,11 +26,15 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.upload.services.MultipartDecoder;
+import org.apache.tapestry5.upload.services.UploadedFile;
+import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
+import com.wooki.services.UploadMediaService;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -37,6 +43,12 @@ import com.wooki.pages.book.Index;
  * 
  */
 public class Edit extends BookBase {
+
+	@Inject
+	private UploadMediaService uploadMedia;
+
+	@Inject
+	private MultipartDecoder decoder;
 
 	@Inject
 	private ChapterManager chapterManager;
@@ -92,7 +104,8 @@ public class Edit extends BookBase {
 	public void prepareFormData() {
 		this.data = chapterManager.getLastContent(chapterId);
 		// Check if we are editing the abstract chapter
-		if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0 && this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
+		if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0
+				&& this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
 			this.abstractChapter = true;
 		}
 	}
@@ -142,6 +155,23 @@ public class Edit extends BookBase {
 
 		index.setBookId(this.getBookId());
 		return index;
+	}
+
+	/**
+	 * Upload image.
+	 * 
+	 * @return
+	 */
+	@OnEvent(value = "uploadImage")
+	public Object uploadFile() {
+		try {
+			UploadedFile attachment = decoder.getFileUpload("attachment");
+			String path = this.uploadMedia.uploadMedia(attachment);
+			return new TextStreamResponse("text/html", path);
+		} catch (IOException ioEx) {
+			ioEx.printStackTrace();
+		}
+		return null;
 	}
 
 	public Object[] getCancelCtx() {

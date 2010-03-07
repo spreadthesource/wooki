@@ -168,7 +168,7 @@ jQuery.extend(Tapestry.Initializer,{
         element = $(element);
 
         $T(element).zoneId = zoneId;
-        
+                
         element.observe("click", function(event)
         {
             Event.stop(event);
@@ -179,7 +179,9 @@ jQuery.extend(Tapestry.Initializer,{
 
             if (!zoneObject) return;
 
-            setTimeout(function() { zoneObject.updateFromURL(url); }, 250);
+            setTimeout(function() { 
+            	zoneObject.updateFromURL(url);
+            }, 250);
                         
         });
     },
@@ -246,6 +248,9 @@ jQuery.extend(Tapestry.Initializer,{
 	 */
 	initJQueryDialog : function(data) {
 		jQuery('#'+data.elt).dialog(data.params);
+		jQuery('#'+data.elt).find(".close-dialog").click(function() {
+			jQuery("#"+data.elt).dialog('close');
+        });
 	},
 
 	/**
@@ -269,7 +274,7 @@ jQuery.extend(Tapestry.Initializer,{
 			
 			jQuery('#'+data.elt).wymeditor(data.params);
 			jQuery.wymeditors(0).fullscreen();
-
+			jQuery.wymeditors(0).uploadImageDialog();
 		}
 	},
 	
@@ -385,11 +390,9 @@ jQuery.extend(Tapestry.Initializer,{
 	 *
 	 */
 	initCloseLink: function(dialogId) {
-        $A($(dialogId).getElementsByClassName("close-dialog")).each(function(closeLnk) {
-        	closeLnk.observe("click", function() {
-        		jQuery("#"+dialogId).dialog('close');
-        	});
-        });
+        jQuery('#'+dialogId).find(".close-dialog").click(function() {
+			jQuery("#"+dialogId).dialog('close');
+        }); 
 	},
 	
 	/**
@@ -467,6 +470,10 @@ jQuery.extend(Tapestry.Initializer,{
 				return false;
 			});
 		}
+	},
+	
+	initUploadDialog : function(param) {
+		
 	}
 
 });

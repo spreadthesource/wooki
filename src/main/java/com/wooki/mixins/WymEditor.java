@@ -18,6 +18,8 @@ package com.wooki.mixins;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.ComponentResources;
+import org.apache.tapestry5.Link;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
@@ -25,6 +27,7 @@ import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Path;
 import org.apache.tapestry5.corelib.components.TextArea;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 
@@ -32,7 +35,8 @@ import org.apache.tapestry5.json.JSONObject;
  * Integrate wymeditor as a mixin to be used with textarea.
  */
 @IncludeJavaScriptLibrary( { "context:/static/js/wymeditor/jquery.wymeditor.pack.js",
-		"context:/static/js/wymeditor/plugins/fullscreen/jquery.wymeditor.fullscreen.js" })
+		"context:/static/js/wymeditor/plugins/fullscreen/jquery.wymeditor.fullscreen.js",
+		"context:/static/js/wymeditor/plugins/upload-image-dialog/jquery.wymeditor.upload-image-dialog.js", "context:/static/js/ajaxupload.js" })
 public class WymEditor {
 
 	@Inject
@@ -46,6 +50,9 @@ public class WymEditor {
 	@Inject
 	@Path("context:/static/js/jquery-1.3.2.min.js")
 	private Asset jQueryPath;
+
+	@Inject
+	private ComponentResources resources;
 
 	@Parameter(defaultPrefix = BindingConstants.ASSET)
 	private String wymStyle;
@@ -80,10 +87,22 @@ public class WymEditor {
 		params.put("jQueryPath", jQueryPath.toClientURL());
 		params.put("classesHtml", "");
 
+		Link uploadActionLink = resources.getPage().getComponentResources().createEventLink("uploadImage");
+		params.put("uploadAction", uploadActionLink.toAbsoluteURI());
+
+		// Add activation context
+		String activationContext = uploadActionLink.getParameterValue(InternalConstants.PAGE_CONTEXT_NAME);
+		if (activationContext != null) {
+			JSONObject uploadDatas = new JSONObject();
+			uploadDatas.put(InternalConstants.PAGE_CONTEXT_NAME, activationContext);
+			params.put("uploadDatas", uploadDatas);
+		}
+
 		data.put("params", params);
 
 		// Use wymeditor
 		renderSupport.addInit("initWymEdit", data);
 
 	}
+
 }

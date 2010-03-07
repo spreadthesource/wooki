@@ -40,6 +40,7 @@ import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
+import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
@@ -70,94 +71,7 @@ public class WookiModule<T> {
 	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
 		this.classesInvalidationEventHub = classesInvalidationEventHub;
 	}
-
-	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
-		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
-		conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
-		conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
-	}
-
-	/**
-	 * Wooki Symbols default
-	 */
-	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
-		configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
-	}
-
-	public static void bind(ServiceBinder binder) {
-		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
-		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
-		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
-		binder.bind(WookiViewRefererFilter.class);
-	}
-
-	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
-		// This covers invalidations due to changes to classes
-		classesInvalidationEventHub.addInvalidationListener(service);
-
-		return service;
-	}
-
-	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
-		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
-		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
-	}
-
-	/**
-	 * Store the last view page in session.
-	 */
-	public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
-		filters.add("ViewRefererFilter", vrFilter);
-	}
-
-	/**
-	 * Allow to return error code instance.
-	 * 
-	 * @param componentInstanceProcessor
-	 * @param configuration
-	 */
-	public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
-			MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
-		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
-	}
-
-	/**
-	 * Add a filter to secure activation context in request.
-	 * 
-	 * @param filters
-	 * @param manager
-	 * @param response
-	 */
-	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-			Response response) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
-	}
-
-	/**
-	 * Add request that shouldn't generate a referer.
-	 * 
-	 * @param excludePattern
-	 */
-	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
-		excludePattern.add("signin");
-		excludePattern.add("signup");
-		excludePattern.add(".*edit.*");
-		excludePattern.add("dev.*");
-		excludePattern.add("error.*");
-	}
-
-	/**
-	 * Add coercion tuple for parameter types...
-	 * 
-	 * @param configuration
-	 */
-	public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
-		addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion.create(ActivityType.class));
-		addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion.create(AppendPosition.class));
-	}
-
+	
 	private static <S, T> void addTuple(Configuration<CoercionTuple> configuration, Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion) {
 		CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
 		configuration.add(tuple);
@@ -185,6 +99,99 @@ public class WookiModule<T> {
 		};
 
 		receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
+	}
+
+	public static void bind(ServiceBinder binder) {
+		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
+		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
+		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
+		binder.bind(UploadMediaService.class, UploadMediaServiceImpl.class);
+		binder.bind(WookiViewRefererFilter.class);
+	}
+
+	/**
+	 * Add a filter to secure activation context in request.
+	 * 
+	 * @param filters
+	 * @param manager
+	 * @param response
+	 */
+	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
+			Response response) {
+		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
+	}
+
+	/**
+	 * Wooki Symbols default
+	 */
+	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
+		configuration.add(WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE, "error/unhandledbrowser");
+		configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
+	}
+
+
+	public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration) {
+		configuration.addInstance("UploadedAsset", UploadedAssetDispatcher.class, "before:Asset");
+	}
+
+	/**
+	 * Store the last view page in session.
+	 */
+	public static void contributePageRenderRequestHandler(OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter) {
+		filters.add("ViewRefererFilter", vrFilter);
+	}
+
+	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
+		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
+		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
+	}
+
+	/**
+	 * Add coercion tuple for parameter types...
+	 * 
+	 * @param configuration
+	 */
+	public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration) {
+		addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion.create(ActivityType.class));
+		addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion.create(AppendPosition.class));
+	}
+
+	/**
+	 * Add request that shouldn't generate a referer.
+	 * 
+	 * @param excludePattern
+	 */
+	public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern) {
+		excludePattern.add("signin");
+		excludePattern.add("signup");
+		excludePattern.add(".*edit.*");
+		excludePattern.add("dev.*");
+		excludePattern.add("error.*");
+	}
+
+	public ActivationContextManager buildActivationContextManager(@Autobuild ActivationContextManagerImpl service) {
+		// This covers invalidations due to changes to classes
+		classesInvalidationEventHub.addInvalidationListener(service);
+
+		return service;
+	}
+
+	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
+		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
+		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
+		conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
+		conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
+	}
+
+	/**
+	 * Allow to return error code instance.
+	 * 
+	 * @param componentInstanceProcessor
+	 * @param configuration
+	 */
+	public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
+			MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
+		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
 	};
 
 	/**

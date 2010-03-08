@@ -21,33 +21,26 @@ WYMeditor.editor.prototype.uploadImageDialog = function() {
 		action: wym._options.uploadAction,
 		name: 'attachment',
 		data: wym._options.uploadDatas,
+		responseType: 'json',
 		onSubmit : function(file, ext) {
-							
 			 if (! (ext && /^(jpg|png|jpeg|gif)$/i.test(ext))){
                  // extension is not allowed
                  alert('Error: invalid file extension');
                  // cancel upload
                  return false;
 			 }
-			
 		},
-		onComplete: function(file, response){
+		onComplete: function(file, response) {
 
-			// window.clearInterval(interval);
-						
-			// enable upload button
-			// this.enable();
-			
 			// Add uploaded file link
 			var sStamp = wym.uniqueStamp();
 			
 	        wym._exec(WYMeditor.INSERT_IMAGE, sStamp);
 
 			jQuery("img[src$=" + sStamp + "]", wym._doc.body)
-            	.attr(WYMeditor.SRC, response)
+            	.attr(WYMeditor.SRC, response.path)
             	.attr(WYMeditor.TITLE, file)
             	.attr(WYMeditor.ALT, file);
-			
 		}
 	});
 	

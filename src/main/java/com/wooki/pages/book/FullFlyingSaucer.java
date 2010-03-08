@@ -16,16 +16,23 @@
 
 package com.wooki.pages.book;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Context;
+import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
+import com.wooki.WookiSymbolsConstants;
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.services.UploadedAssetDispatcher;
 import com.wooki.services.parsers.DOMManager;
 
 /**
@@ -38,6 +45,9 @@ public class FullFlyingSaucer extends Index {
 	private Context context;
 
 	@Inject
+	private Request request;
+
+	@Inject
 	private ChapterManager chapterManager;
 
 	@Inject
@@ -46,6 +56,10 @@ public class FullFlyingSaucer extends Index {
 	@Inject
 	private DOMManager domManager;
 
+	@Inject
+	@Symbol(WookiSymbolsConstants.UPLOAD_DIR)
+	private String uploadDir;
+
 	@Property
 	private int chapterIdx;
 
@@ -53,8 +67,17 @@ public class FullFlyingSaucer extends Index {
 		return this.context.getRealFile("/static/css/print.css").getAbsolutePath();
 	}
 
+	@Override
+	public String getContent() {
+		String abstractContent = super.getContent();
+		return applyGlobalReplaces(abstractContent);
+	}
+
 	public String getLastPublishedContent() {
-		return this.chapterManager.getLastPublishedContent(this.getCurrentChapter().getId());
+		String result = this.chapterManager.getLastPublishedContent(this.getCurrentChapter().getId());
+
+		// TODO find a cleaner way to transform image URLs
+		return applyGlobalReplaces(result);
 	}
 
 	@AfterRender
@@ -64,12 +87,24 @@ public class FullFlyingSaucer extends Index {
 			logger.error("An errors has occured during bookmarks generation.");
 			return;
 		}
-		
+
 		// Generate and add bookmarks
 		String bookmarksDom = this.domManager.generatePdfBookmarks(body.toString(), 2, 4);
 		if (bookmarksDom != null && !"".equals(bookmarksDom)) {
 			Element bookmarks = writer.getDocument().find("html/head").element("bookmarks");
 			bookmarks.raw(bookmarksDom);
 		}
+	}
+
+	/**
+	 * TODO Better the global replace chain for future work.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	private String applyGlobalReplaces(String input) {
+		// Apply global replace for images
+		String result = input.replaceAll(String.format("%s%s", request.getContextPath(), UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
+		return result;
 	}
 }

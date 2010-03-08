@@ -25,7 +25,9 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.apache.tapestry5.util.TextStreamResponse;
@@ -164,14 +166,17 @@ public class Edit extends BookBase {
 	 */
 	@OnEvent(value = "uploadImage")
 	public Object uploadFile() {
+		JSONObject result = new JSONObject();
 		try {
 			UploadedFile attachment = decoder.getFileUpload("attachment");
 			String path = this.uploadMedia.uploadMedia(attachment);
-			return new TextStreamResponse("text/html", path);
+			result.put("ioError", "false");
+			result.put("path", path);
 		} catch (IOException ioEx) {
+			result.put("ioError", "true");
 			ioEx.printStackTrace();
 		}
-		return null;
+		return new TextStreamResponse("text/html", result.toString());
 	}
 
 	public Object[] getCancelCtx() {

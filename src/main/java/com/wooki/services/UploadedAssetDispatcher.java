@@ -11,7 +11,7 @@ import com.wooki.WookiRequestConstants;
 
 public class UploadedAssetDispatcher implements Dispatcher {
 
-	private static final String PATH_PREFIX = RequestConstants.ASSET_PATH_PREFIX + WookiRequestConstants.UPLOADED_FOLDER;
+	public static final String PATH_PREFIX = RequestConstants.ASSET_PATH_PREFIX + WookiRequestConstants.UPLOADED_FOLDER;
 
 	private final UploadMediaService streamer;
 

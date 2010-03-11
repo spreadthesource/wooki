@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +33,7 @@ import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.dao.PublicationDAO;
 import com.wooki.domain.exception.AuthorizationException;
+import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
@@ -65,6 +68,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 	@Autowired
 	private WookiSecurityContext securityCtx;
+
+	private Logger logger = LoggerFactory.getLogger(ChapterManagerImpl.class);
 
 	@Transactional(readOnly = false)
 	public Comment addComment(Long publicationId, String content, String domId) {
@@ -155,6 +160,15 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 		Publication published = publicationDao.findLastRevision(chapterId);
 
+		// Adapt content
+		String content = null;
+		try {
+			content = domManager.adaptContent(published.getContent(), published.getId());
+		} catch (PublicationXmlException pxEx) {
+			logger.error("Unable to publish document", pxEx);
+			throw pxEx;
+		}
+
 		// Check that the logged user is an author of the book
 		User author = securityCtx.getAuthor();
 
@@ -167,7 +181,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
 		// Publish the last revision
 		published.setLastModified(Calendar.getInstance().getTime());
-		String content = domManager.adaptContent(published.getContent(), published.getId());
 		published.setContent(content);
 		published.setPublished(true);
 

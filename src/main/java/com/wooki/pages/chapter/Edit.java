@@ -16,27 +16,32 @@
 
 package com.wooki.pages.chapter;
 
-import java.io.IOException;
-
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
-import org.apache.tapestry5.internal.InternalConstants;
+import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.Symbol;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.upload.services.MultipartDecoder;
-import org.apache.tapestry5.upload.services.UploadedFile;
+import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Chapter;
 import com.wooki.pages.book.Index;
-import com.wooki.services.UploadMediaService;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -44,13 +49,9 @@ import com.wooki.services.UploadMediaService;
  * @author ccordenier
  * 
  */
+@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
+@IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
 public class Edit extends BookBase {
-
-	@Inject
-	private UploadMediaService uploadMedia;
-
-	@Inject
-	private MultipartDecoder decoder;
 
 	@Inject
 	private ChapterManager chapterManager;
@@ -58,8 +59,21 @@ public class Edit extends BookBase {
 	@Inject
 	private Block titleBlock;
 
+	@Inject
+	private Messages messages;
+
+	@Inject
+	private Request request;
+	
+	@InjectComponent
+	private Form editChapterForm;
+
 	@InjectPage
 	private Index index;
+
+	@Inject
+	@Symbol(UploadSymbols.FILESIZE_MAX)
+	private long maxFileSize;
 
 	private Long chapterId;
 
@@ -148,35 +162,26 @@ public class Edit extends BookBase {
 	 */
 	@OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
 	public Object updateChapter() {
-		if (!cancel) {
+		
+		// If autosave then save and return
+		if(request.isXHR()) {
 			chapterManager.updateContent(chapterId, data);
-			if (publish) {
-				chapterManager.publishChapter(chapterId);
-			}
+			return null;
 		}
-
-		index.setBookId(this.getBookId());
-		return index;
-	}
-
-	/**
-	 * Upload image.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = "uploadImage")
-	public Object uploadFile() {
-		JSONObject result = new JSONObject();
+		
 		try {
-			UploadedFile attachment = decoder.getFileUpload("attachment");
-			String path = this.uploadMedia.uploadMedia(attachment);
-			result.put("ioError", "false");
-			result.put("path", path);
-		} catch (IOException ioEx) {
-			result.put("ioError", "true");
-			ioEx.printStackTrace();
+			if (!cancel) {
+				chapterManager.updateContent(chapterId, data);
+				if (publish) {
+					chapterManager.publishChapter(chapterId);
+				}
+			}
+			index.setBookId(this.getBookId());
+			return index;
+		} catch (PublicationXmlException pxEx) {
+			editChapterForm.recordError(messages.get("publication-exception"));
+			return this;
 		}
-		return new TextStreamResponse("text/html", result.toString());
 	}
 
 	public Object[] getCancelCtx() {
@@ -189,6 +194,21 @@ public class Edit extends BookBase {
 
 	public void setChapterId(Long chapterId) {
 		this.chapterId = chapterId;
+	}
+
+	/**
+	 * Handle upload exception
+	 * 
+	 * @param ex
+	 * @return
+	 */
+	public Object onUploadException(FileUploadException ex) {
+		JSONObject result = new JSONObject();
+		JSONArray message = new JSONArray();
+		result.put("error", true);
+		message.put(messages.format("upload-exception", maxFileSize / 1024));
+		result.put("messages", message);
+		return new TextStreamResponse("text/html", result.toString());
 	}
 
 }

@@ -92,7 +92,6 @@ public class FlyingSaucer {
 			dos.flush();
 			printWriter.flush();
 
-			System.out.println(new String(dos.toByteArray()));
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 			Document doc = builder.parse(new ByteArrayInputStream(new String(dos.toByteArray()).getBytes(encoding)));
 			ITextRenderer renderer = new ITextRenderer();
@@ -182,7 +181,7 @@ public class FlyingSaucer {
 
 		}
 		buffer.append("</div></body></html>");
-		System.out.println(buffer.toString());
+		
 		// parse our markup into an xml Document
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

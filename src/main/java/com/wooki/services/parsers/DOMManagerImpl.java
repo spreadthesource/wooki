@@ -18,6 +18,8 @@ package com.wooki.services.parsers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Set;
 
@@ -27,11 +29,14 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
+import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Comment;
 
 public class DOMManagerImpl implements DOMManager {
@@ -79,6 +84,7 @@ public class DOMManagerImpl implements DOMManager {
 
 	public String adaptContent(String content, Long prefix) {
 		StringBuffer result = new StringBuffer();
+		result.append("<?xml version=\"1.0\" encoding=\"" + this.getCharacterEncoding() + "\"?>");
 		result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(ID_START).append("=\"0\">");
 		result.append(content);
 		result.append("</").append(CHAPTER_ROOT_NODE).append(">");
@@ -303,16 +309,17 @@ public class DOMManagerImpl implements DOMManager {
 			SAXBuilder builder = new SAXBuilder();
 			builder.setValidation(false);
 			builder.setIgnoringElementContentWhitespace(true);
-			Document doc = builder.build(new StringInputStream(new String(content.getBytes(getCharacterEncoding()))));
+			Document doc = builder.build(new StringReader(content));
 			return doc;
 		} catch (JDOMException jdEx) {
 			logger.error("Error during document parsing", jdEx);
+			throw new PublicationXmlException("An parsing error has occured during document analysis", jdEx);
 		} catch (IOException ioEx) {
 			logger.error("Error while reading parse document", ioEx);
+			// Return null in case of errors
+			throw new PublicationXmlException("An io error has occured during document analysis", ioEx);
 		}
 
-		// Return null in case of errros
-		return null;
 	}
 
 	/**
@@ -323,7 +330,7 @@ public class DOMManagerImpl implements DOMManager {
 	 */
 	private String serializeContent(Document doc) {
 
-		XMLOutputter output = new XMLOutputter();
+		XMLOutputter output = new XMLOutputter(Format.getPrettyFormat().setEncoding(this.getCharacterEncoding()));
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			if (doc != null) {
@@ -335,7 +342,7 @@ public class DOMManagerImpl implements DOMManager {
 				}
 			}
 			bos.flush();
-			return new String(bos.toByteArray(), getCharacterEncoding());
+			return new String(bos.toByteArray(), this.getCharacterEncoding());
 		} catch (IOException ioEx) {
 			logger.error("Error during document serialization", ioEx);
 			return "";

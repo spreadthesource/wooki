@@ -16,6 +16,7 @@
 
 package com.wooki.test.unit;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -102,7 +103,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Book productBook = bookManager.create("My First Product Book");
 		Book cacheBook = bookManager.create("My Cache Product Book");
 		Book wildcardTitle = bookManager.create("!%_");
-		
+
 		// Create new chapters and modify its content
 		Chapter chapterOne = bookManager.addChapter(productBook, "Requirements");
 		chapterManager.updateContent(chapterOne.getId(), "<p>You will need éé ...</p>");
@@ -111,7 +112,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		chapterManager.updateContent(chapterTwo.getId(), "<p>First you have to set environment variables...</p>");
 
 	}
-	
+
 	@Test
 	public void testActivity() throws UserAlreadyException, UserNotFoundException, UserAlreadyOwnerException {
 		User robink = new User();
@@ -223,7 +224,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		books = this.searchEngine.findBook("Product");
 		Assert.assertNotNull(books, "findBook should never return null value but empty list");
 		Assert.assertEquals(books.size(), 2, "John has one book");
-		
+
 		books = this.searchEngine.findBook("%");
 		Assert.assertEquals(books.size(), 1, "Wildcard must be escaped from search query");
 
@@ -232,7 +233,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 		books = this.searchEngine.findBook("!");
 		Assert.assertEquals(books.size(), 1, "Wildcard must be escaped from search query");
-		
+
 	}
 
 	/**
@@ -426,10 +427,27 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 	/**
 	 * Verify if publication mechanism creates the good entities and content.
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
 	@Test
-	public void testPublication() {
+	public void testPublicationIso() {
 		System.setProperty("file.encoding", "ISO-8859-1");
+		this.testPublication();
+	}
+
+	/**
+	 * Verify if publication mechanism creates the good entities and content.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	@Test
+	public void testPublicationUtf() {
+		System.setProperty("file.encoding", "UTF-8");
+		this.testPublication();
+	}
+
+	public void testPublication() {
 		Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");
 
@@ -441,7 +459,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		Assert.assertNull(published, "No revision has been published.");
 
 		// Update content and publish
-		chapterManager.updateAndPublishContent(chapters.get(0).getId(), "<p>Tapestry is totally amazing éàê</p>");
+		chapterManager.updateAndPublishContent(chapters.get(0).getId(), new String("<p>Tapestry is totally amazing éàê</p>"));
 		chapterManager.publishChapter(chapters.get(0).getId());
 		published = chapterManager.getLastPublishedContent(chapters.get(0).getId());
 		Publication publication = chapterManager.getLastPublishedPublication(chapters.get(0).getId());

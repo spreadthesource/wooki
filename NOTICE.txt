@@ -32,6 +32,10 @@ Ajax Loader image generated with http://www.ajaxload.info/
 XSLT string library hosted at http://xsltsl.sourceforge.net/ under LGPL
 
 ------------------------------------------------
+
+jQuery Timer plugin v0.1 at http://www.mattptr.net under BSD License
+
+------------------------------------------------
 ------------------------------------------------
 
 PDF generation

@@ -27,7 +27,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.json.JSONObject;
 
-@IncludeJavaScriptLibrary({ "context:/static/js/jquery.notifyBar.js", "context:/static/js/error.js" })
+@IncludeJavaScriptLibrary({ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
 public class Full {
 

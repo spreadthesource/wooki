@@ -46,6 +46,7 @@ import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
+import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -117,8 +118,8 @@ public class WookiModule<T> {
 	 * @param response
 	 */
 	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-			Response response) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
+			Response response, MultipartDecoder decoder) {
+		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response, decoder));
 	}
 
 	/**

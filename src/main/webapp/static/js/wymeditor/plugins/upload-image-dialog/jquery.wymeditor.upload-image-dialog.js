@@ -1,5 +1,6 @@
 //Extend WYMeditor
 WYMeditor.editor.prototype.uploadImageDialog = function() {
+
 	var wym = this;
 
 	// construct the button's html
@@ -10,9 +11,7 @@ WYMeditor.editor.prototype.uploadImageDialog = function() {
 			+ "</a></li>";
 
 	// add the button to the tools box
-	jQuery(wym._box).find(
-			wym._options.toolsSelector + wym._options.toolsListSelector)
-			.append(html);
+	jQuery(html).insertAfter(jQuery(wym._box).find(wym._options.toolsSelector + wym._options.toolsListSelector + " .wym_tools_image"));
 
 	var button = jQuery(wym._box).find('li.wym_upload_image a');
 	
@@ -29,18 +28,38 @@ WYMeditor.editor.prototype.uploadImageDialog = function() {
                  // cancel upload
                  return false;
 			 }
+			 
+			 // Display ajaxloader picture
+			 button.css("background", "url(" 
+					 + wym._options.ajaxLoader
+					 + ") no-repeat 2px 4px");
+			 
 		},
 		onComplete: function(file, response) {
-
-			// Add uploaded file link
-			var sStamp = wym.uniqueStamp();
 			
-	        wym._exec(WYMeditor.INSERT_IMAGE, sStamp);
+			if(!response.error) {
+				// Add uploaded file link
+				var sStamp = wym.uniqueStamp();
+	
+				wym._exec(WYMeditor.INSERT_IMAGE, sStamp);
+	
+				jQuery("img[src$=" + sStamp + "]", wym._doc.body)
+	            	.attr(WYMeditor.SRC, response.path)
+	            	.attr(WYMeditor.TITLE, file)
+	            	.attr(WYMeditor.ALT, file);
+			}
+			
+			// Restore icon state
+			button.css("background", "url(" 
+					+ wym._options.basePath
+					+ "plugins/upload-image-dialog/picture_link.png) no-repeat 2px 4px");
 
-			jQuery("img[src$=" + sStamp + "]", wym._doc.body)
-            	.attr(WYMeditor.SRC, response.path)
-            	.attr(WYMeditor.TITLE, file)
-            	.attr(WYMeditor.ALT, file);
+			// Display result message
+			if (response.error) {
+				Tapestry.Initializer.initFlashMessage(response, "error-list", "wooki-error");
+			} else {
+				Tapestry.Initializer.initFlashMessage(response, "flash-list", "wooki-flash");;
+			}
 		}
 	});
 	

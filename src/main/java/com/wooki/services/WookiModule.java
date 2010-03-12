@@ -40,11 +40,13 @@ import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
+import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.MarkupRendererFilter;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
+import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -90,6 +92,7 @@ public class WookiModule<T> {
 		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
+		binder.bind(UploadMediaService.class, UploadMediaServiceImpl.class);
 		binder.bind(WookiViewRefererFilter.class);
 	}
 
@@ -100,6 +103,10 @@ public class WookiModule<T> {
 		return service;
 	}
 
+	public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration) {
+		configuration.addInstance("UploadedAsset", UploadedAssetDispatcher.class, "before:Asset");
+	}
+	
 	public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers) {
 		providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider("config/tapestry.properties"));
 		providers.add("springSecurity", new ClasspathResourceSymbolProvider("config/security.properties"));
@@ -131,8 +138,8 @@ public class WookiModule<T> {
 	 * @param response
 	 */
 	public static void contributeComponentRequestHandler(OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-			Response response) {
-		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response));
+			Response response, MultipartDecoder decoder) {
+		filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(manager, response, decoder));
 	}
 
 	/**

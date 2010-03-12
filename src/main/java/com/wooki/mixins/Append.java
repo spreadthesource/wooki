@@ -93,7 +93,8 @@ public class Append {
 		PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
 		linker.addStylesheetLink(assetSource.getContextAsset("context:/static/css/jquery.notifyBar.css", request.getLocale()).toClientURL(), null);
 		linker.addScriptLink(assetSource.getContextAsset("/static/js/jquery.notifyBar.js", request.getLocale()).toClientURL());
-		linker.addScriptLink(assetSource.getContextAsset("/static/js/error.js", request.getLocale()).toClientURL());
+		linker.addScriptLink(assetSource.getContextAsset("context:/static/js/notifybar.js", request.getLocale()).toClientURL());
+		linker.addScriptLink(assetSource.getContextAsset("/static/js/notifybar.js", request.getLocale()).toClientURL());
 
 		JSONObject result = new JSONObject();
 		StringBuffer buff = new StringBuffer();

@@ -17,11 +17,17 @@
 package com.wooki;
 
 public interface WookiSymbolsConstants {
-	static final String ERROR_UNHANDLED_BROWSER_PAGE = "wooki.unhandled-browser-name";
-
-	static final String ERROR_WOOKI_EXCEPTION_REPORT = "wooki.exception-report";
 	
-	static final String WOOKI_SALT = "wooki.salt";
+	public static final String ERROR_UNHANDLED_BROWSER_PAGE = "wooki.unhandled-browser-name";
+
+	public static final String ERROR_WOOKI_EXCEPTION_REPORT = "wooki.exception-report";
+	
+	public static final String WOOKI_SALT = "wooki.salt";
+	
+	public static final String WOOKI_AUTOSAVE_INTERVAL = "wooki.autosave-interval";
 	
 	public static final String GANALYTICS_KEY = "wooki.ganalytics-key";
+	
+	public static final String UPLOAD_DIR = "wooki.upload-dir";
+
 }

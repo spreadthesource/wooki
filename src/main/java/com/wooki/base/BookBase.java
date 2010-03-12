@@ -128,7 +128,6 @@ public class BookBase {
 	}
 
 	public void setBookId(Long bookId) {
-	    System.out.println("setbookid");
 		this.bookId = bookId;
 	}
 

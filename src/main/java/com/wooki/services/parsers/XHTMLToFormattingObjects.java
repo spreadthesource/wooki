@@ -260,7 +260,6 @@ public class XHTMLToFormattingObjects implements Convertor, URIResolver, EntityR
 				try {
 					httpClient.executeMethod(get);
 					byte[] body = get.getResponseBody();
-					// System.out.println(new String(body));
 					Element element = new Element(newUrl, body);
 					cache.put(element);
 					toReturn = new StreamSource(new BufferedInputStream(new ByteArrayInputStream(body)));

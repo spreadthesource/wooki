@@ -28,7 +28,7 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/error.js" })
+@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
 public class Errors {
 

@@ -57,5 +57,5 @@ public interface DOMManager {
 	 * @return
 	 */
 	String generatePdfBookmarks(String content, int startIdx, int level);
-
+	
 }

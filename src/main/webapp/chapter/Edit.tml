@@ -33,7 +33,7 @@
 	<form t:type="form" t:id="editChapterForm" t:autofocus="false">
 		<t:errors />
 		<fieldset>
-			<input t:type="textarea" t:id="data" t:mixins="wymeditor" />
+			<input t:type="textarea" t:id="data" t:mixins="wymeditor" t:uploadImageDialogId="uploadImageDialogId"/>
 		</fieldset>
 		<div class="form-submit">
 			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="save" title="Modifications will be only visible by authors" />

@@ -138,7 +138,7 @@ public class CommentDialogContent {
 	@AfterRender
 	public void initReminder() {
 		support.addInit("initBlockReminder", domId);
-		support.addInit("initCloseLink", this.dialogId);
+		support.addInit("initCloseLink", dialogId);
 	}
 
 }

@@ -18,13 +18,11 @@ package com.wooki.services.parsers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
-import org.apache.tools.ant.filters.StringInputStream;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -35,7 +33,6 @@ import org.jdom.xpath.XPath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Comment;
 

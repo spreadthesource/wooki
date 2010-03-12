@@ -141,8 +141,9 @@ public class Index extends BookBase {
 			if (isShowAdmin()) {
 				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, this.getBookId(), this.chapterId));
 
-				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("book/index"), null, "print", false, this.getBookId(), this.chapterId);
+				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false, this.getBookId(), this.chapterId);
 				delete.setConfirm(true);
+				delete.getLink().addParameter("t:ac", "1");
 				getAdminActions().add(delete);
 			}
 		}

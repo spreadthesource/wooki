@@ -37,7 +37,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 
 		open("chapter/issues/1/all");
 		waitForPageToLoad();
-		click("//div[@id='content']//ul[1]//a[2]");
+		click("//div[@id='content']//ul[2]//a[2]");
 		waitForPageToLoad();
 		checkBookTitle(BookNavigationTest.BOOK_TITLE);		
 	}
@@ -62,7 +62,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 		// Click on the link to the revision
 		open("chapter/issues/1/all");
 		waitForPageToLoad();
-		click("//div[@id='content']//ul[2]//a[2]");
+		click("//div[@id='content']//ul[3]//a[2]");
 		waitForPageToLoad();
 		checkChapterTitle("Collaborative document publishing");
 		

@@ -146,8 +146,8 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 		Assert.assertTrue(isElementPresent("id=content"), "Could not load chapter " + chapterId + " book " + bookId);
 
 		// check if there is a chapter title
-		Assert.assertEquals(1, this.getXpathCount("//div[@id='content']//h2"), "Could not find chapter title : "
-				+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
+		Assert.assertEquals(1, this.getXpathCount("//div[@id='content']//h3"), "Could not find chapter title : "
+				+ this.getXpathCount("//div[@id='content']//h3") + " h3 tag found");
 	}
 
 	/**

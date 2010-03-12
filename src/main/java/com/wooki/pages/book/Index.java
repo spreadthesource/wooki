@@ -32,6 +32,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
+import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
@@ -176,7 +177,10 @@ public class Index extends BookBase {
 		}
 
 		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
-		getMenu().add(createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false));
+
+		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false);
+		print.getLink().addParameter("t:ac", "1");
+		getMenu().add(print);
 
 	}
 

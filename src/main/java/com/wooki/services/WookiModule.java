@@ -75,7 +75,7 @@ public class WookiModule<T> {
 
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
 		conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-		conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
+		conf.add(SymbolConstants.APPLICATION_VERSION, "0.2-b1");
 		conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
 		conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
 	}

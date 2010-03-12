@@ -78,7 +78,6 @@ public class BookBase {
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookBase(Long bookId) throws IOException {
-		System.out.println("activate : " + bookId);
 		this.bookId = bookId;
 
 		// Check resource exists

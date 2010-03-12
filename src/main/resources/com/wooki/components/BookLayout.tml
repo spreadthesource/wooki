@@ -1,16 +1,17 @@
-<html t:type="layout" t:title="inherit:title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-    
-	<div id="book-wrapper" class="shadowed">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+   	<html t:type="layout" t:title="inherit:title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+   
+	<t:bookmenu t:items="inherit:menu" />
+	<t:bookmenu t:items="inherit:adminActions" t:class="book-admin" id="adminMenu"/>
+ <ul id="book-menu-placeholder" class="book-menu"><li>&nbsp;</li>
+    </ul>
 
-		<div id="book" class="radied">
-		
-			<div id="book-toolbar">
-			
-			</div>
-		
-	    	<t:body/>
-		</div>
-
+    <div class="clearer" />
+    <div id="book-wrapper" class="shadowed radied" >
+        <div id="book" class="radied">
+            <t:booknavigation t:id="bookNavigation" />
+            <t:body/>
+        </div>
     </div>
-    
 </html>

@@ -1,35 +1,8 @@
-<html t:type="booklayout" t:title="prop:book?.title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
-    
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html t:type="booklayout" t:title="prop:book?.title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
     <t:if test="printError">
-    	<t:errors t:messages="prop:printErrors"/>
-    </t:if>
-
-    <t:security.ifAuthorOfBook t:bookId="bookId">
-        <div id="book-admin" class="book-admin">
-            <ul>
-                <t:if t:test="abstractHasWorkingCopy">
-                    <li>
-                        <a t:type="pagelink" t:page="book" t:context="prop:abstractWorkingCopyCtx">Working Copy</a>
-                    </li>
-                </t:if>
-                <li>
-                    <a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit Abstract</a>
-                </li>
-                <li>
-                    <a t:type="pagelink" t:page="book/settings" t:context="prop:bookId">Settings</a>
-                </li>
-            </ul>
-        </div>
-    </t:security.ifAuthorOfBook>
-    <ul id="exports" class="nav right-col">
-        <li>
-            <a t:type="pagelink" t:page="chapter/issues" t:context="prop:issuesCtx">Issues</a>
-        </li>
-        <li>
-            <a t:type="eventlink" t:event="print" t:name="prop:book.slugTitle" id="print-link">Export PDF</a>
-        </li>
-    </ul>
-    <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+        <t:errors t:messages="prop:printErrors"/>
+    </t:if><h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
     <div id="meta">
         <p id="authors">
             By
@@ -48,15 +21,10 @@
         <p id="revision">
             Published <t:output value="prop:book?.creationDate" t:format="prop:format" />
         </p>
-    </div>
-    <t:outputRaw value="content" />
-    
+    </div><t:outputRaw value="content" />
     <t:unless t:test="last">
-    	<t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
-    </t:unless>
-
-    <h2>Table of contents</h2>
-    
+        <t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
+    </t:unless><h2>Table of contents</h2>
     <ol id="table-of-contents">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
@@ -78,19 +46,18 @@
                     </p>
                 </li>
                 <p:else>
-                	<t:security.ifAuthorOfBook t:bookId="bookId">
-                		<t:if t:test="showWorkingCopyLink">
-			                <li>
-			                    <h3>
-		                        	<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
-	                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-	                                    <em>(Working copy) </em>
-	                                </t:pagelink>
-			                    </h3>
-			                    <p class="last-update">
-			                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-			                    </p>
-			                </li>
+                    <t:security.ifAuthorOfBook t:bookId="bookId">
+                        <t:if t:test="showWorkingCopyLink">
+                            <li>
+                                <h3><span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+                                    <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+                                        <em>(Working copy) </em>
+                                    </t:pagelink>
+                                </h3>
+                                <p class="last-update">
+                                    <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+                                </p>
+                            </li>
                         </t:if>
                     </t:security.ifAuthorOfBook>
                 </p:else>

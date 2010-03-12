@@ -26,6 +26,8 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
@@ -61,6 +63,12 @@ public class Index extends BookBase {
 	@Inject
 	private ExportService exportService;
 
+	@Inject
+	private LinkSource linkSource;
+
+	@Inject
+	private RequestPageCache pageCache;
+
 	@InjectPage
 	private Edit editChapter;
 
@@ -93,6 +101,10 @@ public class Index extends BookBase {
 	 */
 	@Property
 	private String chapterName;
+
+	private Long firstChapterId;
+
+	private String firstChapterTitle;
 
 	private boolean showWorkingCopyLink;
 
@@ -132,8 +144,15 @@ public class Index extends BookBase {
 		this.bookAbstractId = chapters.get(0).getId();
 		this.bookAbstractTitle = chapters.get(0).getTitle();
 
+		Object[] firstChapterData = chapterManager.findNext(getBookId(), this.bookAbstractId);
+		if (firstChapterData != null) {
+			this.firstChapterId = (Long) firstChapterData[0];
+			this.firstChapterTitle = (String) firstChapterData[1];
+		}
+
 		if (chapters.size() > 0) {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
+
 		}
 
 		// Get abstract publication
@@ -144,6 +163,27 @@ public class Index extends BookBase {
 		// Setup abstract content
 		this.setupContent();
 
+	}
+
+	@SetupRender
+	public void setupMenus() {
+		if (securityCtx.isAuthorOfBook(getBookId())) {
+			if (isAbstractHasWorkingCopy()) {
+				getAdminActions().add(createPageMenuItem("Working Copy", "book", false, this.getBookId(), ChapterManager.LAST));
+			}
+			getAdminActions().add(createPageMenuItem("Edit introduction", "chapter/edit", false, this.getBookId(), this.bookAbstractId));
+			getAdminActions().add(createPageMenuItem("Settings", "book/settings", false, this.getBookId()));
+		}
+
+		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
+		getMenu().add(createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false));
+
+	}
+
+	@SetupRender
+	public void setupNav() {
+		if ((firstChapterId != null) && (firstChapterTitle != null))
+			setRight(createPageMenuItem(firstChapterTitle + " >", "chapter/index", false, getBookId(), firstChapterId));
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -203,23 +243,6 @@ public class Index extends BookBase {
 			return bookAuthor && workingCopy;
 		}
 		return false;
-	}
-
-	/**
-	 * Get edit context for chapter
-	 * 
-	 * @return
-	 */
-	public Object[] getEditCtx() {
-		return new Object[] { this.getBookId(), this.bookAbstractId };
-	}
-
-	public Object[] getAbstractWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), ChapterManager.LAST };
-	}
-
-	public Object[] getIssuesCtx() {
-		return new Object[] { this.getBookId(), "all" };
 	}
 
 	/**

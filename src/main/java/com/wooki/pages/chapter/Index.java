@@ -22,9 +22,11 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
+import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.services.HttpError;
@@ -35,182 +37,186 @@ import com.wooki.services.security.WookiSecurityContext;
  * 
  * @author ccordenier
  */
-public class Index extends BookBase
-{
+public class Index extends BookBase {
 
-    @Inject
-    private ChapterManager chapterManager;
+	@Inject
+	private ChapterManager chapterManager;
 
-    @Inject
-    private WookiSecurityContext securityCtx;
+	@Inject
+	private WookiSecurityContext securityCtx;
 
-    private Long chapterId;
+	@Inject
+	private RequestPageCache pageCache;
 
-    @Property
-    private Chapter chapter;
+	private Long chapterId;
 
-    @Property
-    private Long previous;
+	@Property
+	private Chapter chapter;
 
-    @Property
-    private String previousTitle;
+	@Property
+	private Long previous;
 
-    @Property
-    private Long next;
+	@Property
+	private String previousTitle;
 
-    @Property
-    private String nextTitle;
+	@Property
+	private Long next;
 
-    @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupChapter(Long bookId, Long chapterId, String revision)
-    {
+	@Property
+	private String nextTitle;
 
-	this.setViewingRevision(true);
-	this.setRevision(revision);
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object setupChapter(Long bookId, Long chapterId, String revision) {
 
-	// Setup chapter
-	this.setupChapter(bookId, chapterId);
+		this.setViewingRevision(true);
+		this.setRevision(revision);
 
-	if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId())))
-	{
-	    return new HttpError(403, "Access denied");
+		// Setup chapter
+		this.setupChapter(bookId, chapterId);
+
+		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
+			return new HttpError(403, "Access denied");
+		}
+
+		this.setPublication(this.chapterManager.getRevision(chapterId, revision));
+		if (this.getPublication() == null) {
+			return new HttpError(404, "Revision not found");
+		}
+
+		return true;
 	}
 
-	this.setPublication(this.chapterManager.getRevision(chapterId, revision));
-	if (this.getPublication() == null)
-	{
-	    return new HttpError(404, "Revision not found");
+	@OnEvent(value = EventConstants.ACTIVATE)
+	public Object setupChapter(Long bookId, Long chapterId) {
+		this.setBookId(bookId);
+
+		// Get book related information
+		this.chapterId = chapterId;
+		this.chapter = this.chapterManager.findById(chapterId);
+		if (this.chapter == null) {
+			return new HttpError(404, "Chapter not found");
+		}
+
+		this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
+		if (this.getPublication() == null) {
+			return new HttpError(404, "Chapter not found");
+		}
+
+		// send 404 if trying to see abstract
+		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
+		if (!this.isViewingRevision() && chapterId.equals(chapters.get(0).getId())) {
+			return new HttpError(404, "Chapter not found");
+		}
+
+		return true;
 	}
 
-	return true;
-    }
+	@SetupRender
+	public Object setupDisplay() {
 
-    @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupChapter(Long bookId, Long chapterId)
-    {
-	this.setBookId(bookId);
+		this.setupContent();
 
-	// Get book related information
-	this.chapterId = chapterId;
-	this.chapter = this.chapterManager.findById(chapterId);
-	if (this.chapter == null)
-	{
-	    return new HttpError(404, "Chapter not found");
+		if (!this.isViewingRevision()) {
+			// Prepare previous and next links
+			Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
+			if (data != null && data.length == 2) {
+				this.previous = (Long) data[0];
+				this.previousTitle = (String) data[1];
+			}
+
+			data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
+			if (data != null && data.length == 2) {
+				this.next = (Long) data[0];
+				this.nextTitle = (String) data[1];
+			}
+		}
+
+		return null;
+
 	}
 
-	this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
-	if (this.getPublication() == null)
-	{
-	    return new HttpError(404, "Chapter not found");
+	@SetupRender
+	public void setupMenus() {
+		if (securityCtx.isAuthorOfBook(getBookId())) {
+			if (isShowAdmin()) {
+				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, this.getBookId(), this.chapterId));
+
+				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("book/index"), null, "print", false, this.getBookId(), this.chapterId);
+				delete.setConfirm(true);
+				getAdminActions().add(delete);
+			}
+		}
+		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), Issues.ALL));
+		getMenu().add(createPageMenuItem("Feedback on this chapter only", "chapter/issues", false, this.getBookId(), this.chapterId));
 	}
 
-	// send 404 if trying to see abstract
-	List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-	if (!this.isViewingRevision() && chapterId.equals(chapters.get(0).getId()))
-	{
-	    return new HttpError(404, "Chapter not found");
+	@SetupRender
+	public void setupNav() {
+		if ((previous != null) && (previousTitle != null)) {
+			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
+		}
+		else {
+			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+		}
+
+		if ((next != null) && (nextTitle != null))
+			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
+		
+		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
 	}
 
-	return true;
-    }
-
-    @SetupRender
-    public Object setupDisplay()
-    {
-
-	this.setupContent();
-
-	if (!this.isViewingRevision())
-	{
-	    // Prepare previous and next links
-	    Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
-	    if (data != null && data.length == 2)
-	    {
-		this.previous = (Long) data[0];
-		this.previousTitle = (String) data[1];
-	    }
-
-	    data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
-	    if (data != null && data.length == 2)
-	    {
-		this.next = (Long) data[0];
-		this.nextTitle = (String) data[1];
-	    }
+	@OnEvent(value = "delete")
+	public Object deleteChapter(Long boodId, Long chapterId) {
+		this.chapterManager.remove(chapterId);
+		return this.redirectToBookIndex();
 	}
 
-	return null;
-
-    }
-
-    @OnEvent(value = "delete")
-    public Object deleteChapter(Long boodId, Long chapterId)
-    {
-	this.chapterManager.remove(chapterId);
-	return this.redirectToBookIndex();
-    }
-
-    public String getTitle()
-    {
-	return this.getBook().getTitle() + " - " + this.chapter.getTitle();
-    }
-
-    public Object[] getEditCtx()
-    {
-	return new Object[] { this.getBookId(), this.chapterId };
-    }
-
-    public Object[] getAllIssuesCtx()
-    {
-	return new Object[] { this.getBookId(), Issues.ALL };
-    }
-
-    public Object[] getChapIssuesCtx()
-    {
-	return new Object[] { this.getBookId(), this.chapterId };
-    }
-
-    /**
-     * Get context for previous link.
-     * 
-     * @return Book id, previous chapter id and revision
-     */
-    public Object[] getPreviousCtx()
-    {
-	if (this.isViewingRevision())
-	{
-	    return new Object[] { this.getBookId(), this.previous, ChapterManager.LAST };
+	public String getTitle() {
+		return this.getBook().getTitle() + " - " + this.chapter.getTitle();
 	}
-	return new Object[] { this.getBookId(), this.previous };
-    }
 
-    /**
-     * Get context for next link.
-     * 
-     * @return Book id, previous chapter id and revision
-     */
-    public Object[] getNextCtx()
-    {
-	if (this.isViewingRevision())
-	{
-	    return new Object[] { this.getBookId(), this.next, ChapterManager.LAST };
+	public Object[] getAllIssuesCtx() {
+		return new Object[] { this.getBookId(), Issues.ALL };
 	}
-	return new Object[] { this.getBookId(), this.next };
-    }
 
-    public boolean isShowAdmin()
-    {
-	return !this.isViewingRevision() || ChapterManager.LAST.equals(this.getRevision());
-    }
-
-    @OnEvent(value = EventConstants.PASSIVATE)
-    public Object[] retrieveBookId()
-    {
-	System.out.println("there");
-	if (this.getRevision() != null)
-	{
-	    return new Object[] { this.getBookId(), this.chapterId, this.getRevision() };
+	public Object[] getChapIssuesCtx() {
+		return new Object[] { this.getBookId(), this.chapterId };
 	}
-	return new Object[] { this.getBookId(), this.chapterId };
-    }
+
+	/**
+	 * Get context for previous link.
+	 * 
+	 * @return Book id, previous chapter id and revision
+	 */
+	public Object[] getPreviousCtx() {
+		if (this.isViewingRevision()) {
+			return new Object[] { this.getBookId(), this.previous, ChapterManager.LAST };
+		}
+		return new Object[] { this.getBookId(), this.previous };
+	}
+
+	/**
+	 * Get context for next link.
+	 * 
+	 * @return Book id, previous chapter id and revision
+	 */
+	public Object[] getNextCtx() {
+		if (this.isViewingRevision()) {
+			return new Object[] { this.getBookId(), this.next, ChapterManager.LAST };
+		}
+		return new Object[] { this.getBookId(), this.next };
+	}
+
+	public boolean isShowAdmin() {
+		return !this.isViewingRevision() || ChapterManager.LAST.equals(this.getRevision());
+	}
+
+	@OnEvent(value = EventConstants.PASSIVATE)
+	public Object[] retrieveBookId() {
+		if (this.getRevision() != null) {
+			return new Object[] { this.getBookId(), this.chapterId, this.getRevision() };
+		}
+		return new Object[] { this.getBookId(), this.chapterId };
+	}
 
 }

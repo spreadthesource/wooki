@@ -1,72 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html t:type="booklayout" t:title="prop:title"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:bookId="book?.id">
-
-	<t:security.ifAuthorOfBook t:bookId="bookId">
-		<t:if test="showAdmin">
-			<div id="book-admin" class="book-admin">
-				<ul>
-					<li><a t:type="pagelink" t:page="chapter/edit" t:context="prop:editCtx">Edit</a></li>
-					<li><a t:type="eventlink" t:event="delete" t:context="prop:editCtx" t:mixins="confirm">Delete</a></li>
-				</ul>
-			</div>
-		</t:if>
-	</t:security.ifAuthorOfBook>
-
-	<t:if test="viewingRevision">
-		<ul id="issues-links" class="nav right-col">
-			<li>
-				<a t:type="pagelink" t:page="chapter/issues" t:context="allIssuesCtx">All issues</a>
-			</li>
-			<li>
-				<a t:type="pagelink" t:page="chapter/issues" t:context="chapIssuesCtx">Chapter issues</a>
-			</li>
-		</ul>
-		<div class="info">
-			<p>You are currently viewing the revision "${revision}" of this chapter.</p>
-		</div>
-		<p:else>
-			<ul id="chapter-nav">	
-				<li id="nav-left">
-					<t:ifNotNull test="previous">
-						<a t:type="pagelink" t:page="chapter/index" t:context="previousCtx" title="${previousTitle}">&lt; Previous</a>
-						<p:else>
-							&nbsp;
-						</p:else>
-					</t:ifNotNull>
-				</li>			
-				<li id="nav-right" >
-					<t:ifNotNull test="next" >
-						<a t:type="pagelink" t:page="chapter/index" t:context="nextCtx" title="${nextTitle}">Next &gt;</a>
-						<p:else>
-							&nbsp;
-						</p:else>
-					</t:ifNotNull>
-				</li>
-				<li id="book-root">
-					<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
-				</li>
-			</ul>
-		</p:else>
-	</t:if>
-
-	
-	
-	<h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
-	
-	<t:ifNotNull t:test="content">
-		<t:outputRaw value="content" />
-		<p:else>
-			This chapter is still empty. Please come back later to see if the author have written something.
-		</p:else>
-	</t:ifNotNull>
-
-	<!-- Attach bubble to content -->
-	<t:unless t:test="last">
-		<t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
-	</t:unless>
-
-
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html t:type="booklayout" t:title="prop:title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:bookId="book?.id" t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
+    <t:if test="viewingRevision">
+        <div class="info">
+            <p>
+                You are currently viewing the revision "${revision}" of this chapter.
+            </p>
+        </div>
+    </t:if>
+    <h2 class="entry-title"><a href="#" rel="bookmark" title="Permalink to this PAGE">${chapter?.title}</a></h2>
+    <t:ifNotNull t:test="content">
+        <t:outputRaw value="content" />
+        <p:else>
+            This chapter is still empty. Please come back later to see if the author have written something.
+        </p:else>
+    </t:ifNotNull>
+    <!-- Attach bubble to content -->
+    <t:unless t:test="last">
+        <t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
+    </t:unless>
 </html>

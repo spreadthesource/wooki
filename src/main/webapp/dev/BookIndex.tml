@@ -1,14 +1,6 @@
-<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:adminActions="adminActions" t:menu="menu">
 
-  <div class="book-admin">
-  	<ul>
-  		<li><a href="#">Settings</a></li>
-  	</ul>
-  </div>
-  
-  <ul id="exports" class="nav right-col">
-  	<li><a href="#">Download PDF</a></li>
-  </ul>	
+
 		
   <h1><a href="#" >Wooki : When writing meet social web</a></h1>
   

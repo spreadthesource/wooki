@@ -6,6 +6,20 @@
     <t:block id="userBlock">
     
     	<div class="left-col">
+	        <div class="info section shadowed x460">
+				<h2>${user.username} <em>(${user.fullname})</em></h2>
+				<ul>
+					<li><span>Username</span>${user.username}</li>
+					<t:security.ifLoggedIn>	
+						<li><span>Email</span>${user.email}</li>
+					</t:security.ifLoggedIn>	
+					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
+				</ul>
+			</div>
+		  	<t:activity.feed t:clientId="user-public-activity" t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity" />
+    	</div>
+
+    	<div class="right-col">
 			<div id="author-feed" class="feed section shadowed x300">
 	            <h2>Books</h2>
 	            <ul>
@@ -27,21 +41,6 @@
 	            </ul>
 	    	</div>
 		</div>
-    	<div class="right-col">
-	        <div class="info section shadowed x460">
-				<h2>${user.username} <em>(${user.fullname})</em></h2>
-				<ul>
-					<li><span>Username</span>${user.username}</li>
-					<t:security.ifLoggedIn>	
-						<li><span>Email</span>${user.email}</li>
-					</t:security.ifLoggedIn>	
-					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
-				</ul>
-			</div>
-		  	<t:activity.feed t:clientId="user-public-activity" t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity" />
-    	</div>
-
-
 
     </t:block>          
 

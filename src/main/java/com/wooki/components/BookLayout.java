@@ -16,14 +16,26 @@
 
 package com.wooki.components;
 
+import java.util.List;
+
 import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 
 import com.wooki.base.LayoutBase;
+import com.wooki.base.components.BookMenuItem;
 
 public class BookLayout extends LayoutBase {
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value="message:index-message" )
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
 	private String title;
-	
+
+	@Parameter
+	private List<BookMenuItem> menu;
+
+	@Parameter
+	private List<BookMenuItem> adminActions;
+
+	@Component(id="bookNavigation",publishParameters = "left,right,center")
+	private BookNavigation bookNavigation;
 }

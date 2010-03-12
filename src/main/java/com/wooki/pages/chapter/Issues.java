@@ -22,11 +22,13 @@ import java.util.List;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Display all the comment for a given chapter.
@@ -41,6 +43,9 @@ public class Issues extends BookBase {
 	@Inject
 	private ChapterManager chapterManager;
 
+	@Inject
+	private WookiSecurityContext securityCtx;
+
 	@Property
 	private List<Chapter> chapters;
 
@@ -49,11 +54,17 @@ public class Issues extends BookBase {
 
 	@Property
 	private int loopIdx;
-	
+
 	private Long chapterId;
 
 	private String request;
-	
+
+	@SetupRender
+	public void setupNav() {
+		setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+	}
+
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, String request) {
 
@@ -81,13 +92,13 @@ public class Issues extends BookBase {
 
 	/**
 	 * Return when displaying issues for first chapter.
-	 *
+	 * 
 	 * @return
 	 */
 	public boolean isAbstractChapter() {
 		return this.loopIdx == 0;
 	}
-	
+
 	public Object[] getChapterCtx() {
 		return new Object[] { this.getBookId(), this.chapter.getId() };
 	}

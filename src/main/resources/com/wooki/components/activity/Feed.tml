@@ -11,7 +11,9 @@
 			<t:delegate t:to="block:activities" />
 		</ul>
 		<t:if test="hasMore">
+			<div class="center">
 			<a t:type="morelink" t:id="moreFeeds" t:first="prop:moreContext" t:zone="prop:clientId">More</a>
+			</div>
 		</t:if>
     </div>
     

@@ -31,7 +31,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 		waitForPageToLoad();
 		Assert.assertTrue(isTextPresent("Abstract"));
 		Assert.assertTrue(isTextPresent("Last Publication"));
-		click("//div[@id='content']//h2[1]/a");
+		click("//div[@id='content']//h3[1]/a");
 		waitForPageToLoad();
 		checkBookTitle(BookNavigationTest.BOOK_TITLE);
 
@@ -55,7 +55,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 		Assert.assertTrue(isTextPresent("Last Publication"));
 		
 		// Click on the link to last publication (default)
-		click("//div[@id='content']//h2[2]/a");
+		click("//div[@id='content']//h3[2]/a");
 		waitForPageToLoad();
 		checkChapterTitle("Collaborative document publishing");
 

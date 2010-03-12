@@ -1,21 +1,14 @@
-<html t:type="layout"
-	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id" t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
 
-	<div class="feed section shadowed wrapper">
-		
-		<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="bookId">${book?.title}</a></h1>
-
-		<t:loop t:source="chapters" value="chapter" t:index="loopIdx">
-			<t:if test="abstractChapter">
-				<h2><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${chapter?.title}</a></h2>
-				<p:else>
-					<h2><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h2>
-				</p:else>			
-			</t:if>
-			<t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" t:abstractChapter="prop:abstractChapter"/>
-		</t:loop>
-
-	</div>
-		
+    <h2>Issues</h2>
+    <t:loop t:source="chapters" value="chapter" t:index="loopIdx">
+        <t:if test="abstractChapter">
+            <h3><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${chapter?.title}</a></h3>
+            <p:else>
+                <h3><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h3>
+            </p:else>
+        </t:if>
+        <t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" t:abstractChapter="prop:abstractChapter"/>
+    </t:loop>
 </html>

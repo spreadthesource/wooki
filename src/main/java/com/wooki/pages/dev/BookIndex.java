@@ -16,19 +16,34 @@
 
 package com.wooki.pages.dev;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.annotations.OnEvent;
+import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
+
+import com.wooki.base.components.BookMenuItem;
 
 public class BookIndex {
 	@Inject
 	@Symbol(SymbolConstants.PRODUCTION_MODE)
 	private boolean productionMode;
+	
+	@Property
+	private List<BookMenuItem> menu;
+
+	@Property
+	private List<BookMenuItem> adminActions;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	private Object redirect() {
+		adminActions = new ArrayList<BookMenuItem>();
+		menu = new ArrayList<BookMenuItem>();
+		
 		if (productionMode)
 			return com.wooki.pages.Index.class;
 		

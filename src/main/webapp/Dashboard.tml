@@ -14,8 +14,13 @@
 	</t:if>
 
 	<div class="clearer" />
-
 	<div class="left-col">
+		<t:zone id="feedZone" t:update="none" t:show="none">
+				<t:delegate to="feed" />
+		</t:zone>
+	</div>
+
+	<div class="right-col">
 		<div id="user-books" class="feed section shadowed x300">
 			<h2>Create a new Book</h2>
 			<form t:type="form" t:id="createBookForm" class="small-form">
@@ -41,7 +46,7 @@
 	       	</ul>
 	    </div>
 		<div id="collaborator-feed" class="feed section shadowed x300">
-	    	<h2>Your collaborations</h2>
+	    	<h2>Collaborations</h2>
             <ul>
             	<t:loop source="userCollaborations" value="currentBook" t:empty="block:noBooks" t:index="loopIdx">
                     <li class="${style}">
@@ -69,11 +74,7 @@
 		</div>
 	</t:block>
 
-	<div class="right-col">
-		<t:zone id="feedZone" t:update="none" t:show="none">
-				<t:delegate to="feed" />
-		</t:zone>
-	</div>
+
 
 	<t:block id="coAuthor">
 		<t:activity.feed t:type="co_author" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />

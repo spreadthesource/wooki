@@ -77,7 +77,7 @@ public class MoreLink extends AbstractLink {
 			return;
 
 		Link link = resources.createEventLink(EventConstants.ACTION, first);
-		writer.element("div", "class", "more-link");
+		writer.element("div", "class", "more-link radied");
 		writeLink(writer, link);
 
 		loader = renderSupport.allocateClientId("loader");

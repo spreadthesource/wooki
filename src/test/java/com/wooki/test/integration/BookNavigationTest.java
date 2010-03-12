@@ -40,7 +40,14 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		int chapters = 4;
 
 		for (int chapterId = 2; chapterId < chapters; chapterId++) {
-			checkChapterPage("chapter", bookId, chapterId);
+			open("chapter/" + bookId + "/" + chapterId);
+			waitForPageToLoad();
+
+			Assert.assertTrue(isElementPresent("id=content"), "Could not load chapter " + chapterId + " book " + bookId);
+
+			// check if there is a chapter title
+			Assert.assertEquals(1, this.getXpathCount("//div[@id='content']//h2"), "Could not find chapter title : "
+					+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
 
 			if (chapterId > 1)
 				Assert.assertTrue(isElementPresent("id=nav-left"), "Could not find previous nav link for chapter " + chapterId + ", book " + bookId);
@@ -66,8 +73,8 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite {
 		Assert.assertTrue(isElementPresent("id=content"), "Could not load issues page");
 
 		// check if there is a chapter title
-		Assert.assertEquals(chapters, this.getXpathCount("//div[@id='content']//h2"), "Could not find exepected number of chapters : "
-				+ this.getXpathCount("//div[@id='content']//h2") + " h2 tag found");
+		Assert.assertEquals(chapters, this.getXpathCount("//div[@id='content']//h3"), "Could not find exepected number of chapters : "
+				+ this.getXpathCount("//div[@id='content']//h3") + " h3 tag found");
 
 		for (int chapterId = 1; chapterId < chapters; chapterId++) {
 			checkChapterPage("chapter/issues", bookId, chapterId);

@@ -22,9 +22,11 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.base.BookBase;
+import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.services.HttpError;
@@ -43,6 +45,8 @@ public class Index extends BookBase {
 	@Inject
 	private WookiSecurityContext securityCtx;
 
+	@Inject
+	private RequestPageCache pageCache;
 	private Long chapterId;
 
 	@Property
@@ -130,6 +134,37 @@ public class Index extends BookBase {
 
 	}
 
+	@SetupRender
+	public void setupMenus() {
+		if (securityCtx.isAuthorOfBook(getBookId())) {
+			if (isShowAdmin()) {
+				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, this.getBookId(), this.chapterId));
+
+				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false, this.getBookId(), this.chapterId);
+				delete.setConfirm(true);
+				delete.getLink().addParameter("t:ac", "1");
+				getAdminActions().add(delete);
+			}
+		}
+		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), Issues.ALL));
+		getMenu().add(createPageMenuItem("Feedback on this chapter only", "chapter/issues", false, this.getBookId(), this.chapterId));
+	}
+
+	@SetupRender
+	public void setupNav() {
+		if ((previous != null) && (previousTitle != null)) {
+			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
+		}
+		else {
+			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+		}
+
+		if ((next != null) && (nextTitle != null))
+			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
+		
+		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+	}
+
 	@OnEvent(value = "delete")
 	public Object deleteChapter(Long boodId, Long chapterId) {
 		this.chapterManager.remove(chapterId);
@@ -138,10 +173,6 @@ public class Index extends BookBase {
 
 	public String getTitle() {
 		return this.getBook().getTitle() + " - " + this.chapter.getTitle();
-	}
-
-	public Object[] getEditCtx() {
-		return new Object[] { this.getBookId(), this.chapterId };
 	}
 
 	public Object[] getAllIssuesCtx() {

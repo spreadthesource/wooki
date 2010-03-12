@@ -321,10 +321,11 @@ jQuery.extend(Tapestry.Initializer, {
 				
 				jQuery("#" + comId).append("<div class=\"no-comment\">&nbsp;</div>");
 				
+				
 				Tapestry.Initializer.openJQueryAjaxDialogOnClick(comId, data.zoneId, data.dialogId, data.url.replace('blockId', blockId) );
 				comment.css({
-					'top': (jQuery(this).position().top - 5) + 'px',
-					'left': (jQuery(this).position().left - 50)  + 'px',
+					'top': (jQuery(this).offset().top - 5) + 'px',
+					'left': (jQuery("#book-wrapper").offset().left)  + 'px',
 					'height' : jQuery(this).height() + 'px'
 				});
 				

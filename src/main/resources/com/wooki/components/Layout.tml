@@ -42,7 +42,7 @@
 		</form>
 	</div>
 
-	<ul class="nav right-col" id="nav">
+	<ul class="nav right-col shadowed" id="nav">
 		<t:security.ifLoggedIn>
 			<li><a href="#" t:type="pagelink" t:page="index" t:context="username"><strong>${username}</strong></a></li>
 			<li><a href="#" t:type="pagelink" t:page="dashboard">Dashboard</a></li>

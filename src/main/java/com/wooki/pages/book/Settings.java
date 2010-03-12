@@ -85,6 +85,12 @@ public class Settings extends BookBase {
 		return prepareCtx();
 	}
 
+	@SetupRender
+	public void setupNav() {
+		setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+	}
+
 	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT)
 	public void prepareAddAuthor() {
 		this.prepareCtx();
@@ -147,7 +153,7 @@ public class Settings extends BookBase {
 	public String getStyle() {
 		return this.rowIndex == 0 ? "first" : null;
 	}
-	
+
 	public Object[] getRemoveAuthorCtx() {
 		return new Object[] { this.getBookId(), this.currentAuthor.getId() };
 	}

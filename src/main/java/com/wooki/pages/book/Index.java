@@ -179,7 +179,6 @@ public class Index extends BookBase {
 		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
 
 		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false);
-		print.getLink().addParameter("t:ac", "1");
 		getMenu().add(print);
 
 	}
@@ -207,6 +206,7 @@ public class Index extends BookBase {
 	public Object exportPdf() {
 		try {
 			InputStream bookStream = this.exportService.exportPdf(this.getBookId());
+			System.out.println(getBookId());
 			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
 		} catch (Exception ex) {
 			this.printError = true;

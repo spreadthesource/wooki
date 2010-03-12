@@ -138,30 +138,28 @@ public class Index extends BookBase {
 	public void setupMenus() {
 		if (securityCtx.isAuthorOfBook(getBookId())) {
 			if (isShowAdmin()) {
-				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, this.getBookId(), this.chapterId));
+				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, getBookId(), chapterId));
 
-				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false, this.getBookId(), this.chapterId);
+				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false	);
 				delete.setConfirm(true);
-				delete.getLink().addParameter("t:ac", "1");
 				getAdminActions().add(delete);
 			}
 		}
 		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), Issues.ALL));
-		getMenu().add(createPageMenuItem("Feedback on this chapter only", "chapter/issues", false, this.getBookId(), this.chapterId));
+		getMenu().add(createPageMenuItem("Feedback on this chapter only", "chapter/issues", false, getBookId(), chapterId));
 	}
 
 	@SetupRender
 	public void setupNav() {
 		if ((previous != null) && (previousTitle != null)) {
 			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
-		}
-		else {
+		} else {
 			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
 		}
 
 		if ((next != null) && (nextTitle != null))
 			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
-		
+
 		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
 	}
 

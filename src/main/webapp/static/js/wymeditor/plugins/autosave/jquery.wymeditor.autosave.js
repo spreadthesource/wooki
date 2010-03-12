@@ -2,31 +2,31 @@
 WYMeditor.editor.prototype.autosave = function() {
 
 	var wym = this;
-
-	var html = "<li class='wym_autosave' style='display: none'>"
-		+ "<p>Saving <img src='"+ wym._options.ajaxLoader +"' />"
-		+ "</p></li>";
-
-	//add the button to the tools box
-	jQuery(wym._box)
-	    .find(wym._options.toolsSelector + wym._options.toolsListSelector)
-	    .append(html);
 	
-	jQuery.timer(5000, function(timer){
-		
-		jQuery(".wym_autosave").toggle();
-		
+	var interval = wym._options.autosaveInterval;
+	var once =  wym._options.autosaveInterval == -1;
+	
+	if (once) {
+		interval = 10000;
+	}
+	
+	jQuery.timer(interval, function(timer){
+				
 		// Update and download
 		wym.update();
 		var form = jQuery("#" + wym._options.formId);
 		form[0].sendAjaxRequest(form.attr("action"), {
-			successHandler: function() {
-				jQuery(".wym_autosave").toggle();
+			onSuccess: function(transport) {
+				jQuery(".form-submit").append("<span class=\"autosave\">(" + transport.responseJSON.message + ")</span>");
 			},
-			failureHandler: function() {
-				jQuery(".wym_autosave").toggle();
+			onFailure: function() {
+				jQuery(".form-submit").append("<span class=\"autosave\">(Last auto saved failed)</span>");
 			}
 		});
+		
+		if (once) {
+			timer.stop();
+		}
 
 	});
 	

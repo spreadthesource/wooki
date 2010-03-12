@@ -16,6 +16,9 @@
 
 package com.wooki.pages.chapter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
@@ -37,6 +40,7 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
+import com.ibm.icu.util.Calendar;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.exception.PublicationXmlException;
@@ -99,6 +103,8 @@ public class Edit extends BookBase {
 	@Property
 	private boolean abstractChapter;
 
+	private DateFormat format = new SimpleDateFormat("hh:mm");
+	
 	private boolean publish;
 
 	private boolean cancel;
@@ -166,7 +172,9 @@ public class Edit extends BookBase {
 		// If autosave then save and return
 		if(request.isXHR()) {
 			chapterManager.updateContent(chapterId, data);
-			return null;
+			JSONObject result = new JSONObject();
+			result.put("message", messages.format("autosave-success", format.format(Calendar.getInstance().getTime())));
+			return result;
 		}
 		
 		try {

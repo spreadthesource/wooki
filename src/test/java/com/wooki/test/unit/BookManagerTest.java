@@ -447,6 +447,17 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 		this.testPublication();
 	}
 
+	/**
+	 * Verify if publication mechanism creates the good entities and content.
+	 * 
+	 * @throws UnsupportedEncodingException
+	 */
+	@Test
+	public void testPublicationCp() {
+		System.setProperty("file.encoding", "cp1252");
+		this.testPublication();
+	}
+
 	public void testPublication() {
 		Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
 		Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");

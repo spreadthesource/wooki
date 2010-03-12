@@ -40,7 +40,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	protected AbstractWookiIntegrationTestSuite(String path) {
 		super(path, defaultBrowser);
 	}
-	
+
 	/**
 	 * Verify that the returned page corresponds to a resource not found.
 	 * 
@@ -172,5 +172,4 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 		click("//div[@id='form-submit']/input[@type='submit'][1]");
 	}
 
-	
 }

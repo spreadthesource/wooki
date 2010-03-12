@@ -91,7 +91,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 		waitForPageToLoad();
 		checkChapterTitle("Collaborative document publishing");
 		Assert.assertTrue(isElementPresent("//a[@href='/chapter/edit/1/2']"), "Edit chapter link is missing");
-		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/2?t:ac=1']"), "Remove chapter link is missing.");
+		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/2?t:ac=1/2']"), "Remove chapter link is missing."); 
 	}
 
 	/**

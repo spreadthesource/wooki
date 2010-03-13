@@ -139,8 +139,7 @@ public class Index extends BookBase {
 		if (securityCtx.isAuthorOfBook(getBookId())) {
 			if (isShowAdmin()) {
 				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, getBookId(), chapterId));
-
-				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false	);
+				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false);
 				delete.setConfirm(true);
 				getAdminActions().add(delete);
 			}
@@ -164,8 +163,8 @@ public class Index extends BookBase {
 	}
 
 	@OnEvent(value = "delete")
-	public Object deleteChapter(Long boodId, Long chapterId) {
-		this.chapterManager.remove(chapterId);
+	public Object deleteChapter() {
+		this.chapterManager.remove(this.chapterId);
 		return this.redirectToBookIndex();
 	}
 

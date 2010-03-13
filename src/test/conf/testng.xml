@@ -1,8 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="tibook Application Test Suite" annotations="1.5">
+<suite name="Wooki Application Test Suite" annotations="1.5" parallel="false">
+
+	<test name="Integration Tests" parallel="false">
+        <packages>
+            <package name="com.wooki.test.integration" />
+        </packages>
+    </test>
+
     <test name="Unit Tests">
         <packages>
-            <package name="com.wooki.test"/>
+            <package name="com.wooki.test.unit" />
         </packages>
     </test>
 </suite>

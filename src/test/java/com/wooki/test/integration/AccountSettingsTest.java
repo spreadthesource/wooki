@@ -1,6 +1,7 @@
 package com.wooki.test.integration;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -33,7 +34,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 	/**
 	 * Check index page.
 	 */
-	@Test(groups = { "account" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testUpdatePasswordFailure() {
 
 		open("/accountSettings");
@@ -47,7 +48,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 
 	}
 
-	@Test(groups = { "account" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testUpdatePasswordSuccess() {
 
 		open("/accountSettings");
@@ -65,14 +66,16 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 	 * Logout of the application.
 	 * 
 	 */
-	@Test(dependsOnGroups = { "account" })
-	public void testLogout() {
+	@AfterClass(alwaysRun = true)
+	@Override
+	public void cleanup() throws Exception {
 		open("/index");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
 		click("id=logout");
 		waitForPageToLoad();
 		checkIndex();
+		super.cleanup();
 	}
 
 }

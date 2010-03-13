@@ -2,7 +2,9 @@ package com.wooki.test.integration;
 
 import org.apache.tapestry5.test.AbstractIntegrationTestSuite;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
+@Test(sequential=true)
 public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSuite {
 
 	/**
@@ -29,7 +31,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * Set default browser in function of the OS.
 	 * 
 	 */
-	protected AbstractWookiIntegrationTestSuite() {
+	public AbstractWookiIntegrationTestSuite() {
 		super("src/main/webapp", defaultBrowser);
 	}
 
@@ -37,7 +39,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * Set default browser in function of the OS.
 	 * 
 	 */
-	protected AbstractWookiIntegrationTestSuite(String path) {
+	public AbstractWookiIntegrationTestSuite(String path) {
 		super(path, defaultBrowser);
 	}
 
@@ -139,7 +141,7 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * @param bookId
 	 * @param chapterId
 	 */
-	public void checkChapterPage(String prefix, int bookId, int chapterId) {
+	protected void checkChapterPage(String prefix, int bookId, int chapterId) {
 		open(prefix + "/" + bookId + "/" + chapterId);
 		waitForPageToLoad();
 

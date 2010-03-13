@@ -28,6 +28,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -113,6 +114,14 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
 
 	}
 
+	@AfterClass
+	public void resetDb() {
+		// Reset datas
+		ClassPathResource script = new ClassPathResource("reset.sql");
+		SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
+		SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+	}
+	
 	@Test
 	public void testActivity() throws UserAlreadyException, UserNotFoundException, UserAlreadyOwnerException {
 		User robink = new User();

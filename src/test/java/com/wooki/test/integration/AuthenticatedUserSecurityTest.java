@@ -1,6 +1,7 @@
 package com.wooki.test.integration;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -22,19 +23,19 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 		open("/signup");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=signupForm"), "Cannot load signup page");
-		type("id=username", "john");
-		type("id=fullname", "John Doe");
-		type("id=email", "John.Doe@gmail.com");
+		type("id=username", "author");
+		type("id=fullname", "Author Doe");
+		type("id=email", "author@gmail.com");
 		type("id=password", "mylongpassword");
 		click("//form[@id='signupForm']//input[@type='submit']");
 		waitForPageToLoad();
-		checkDashboard("john");
+		checkDashboard("author");
 	}
 
 	/**
 	 * Check index page.
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testIndex() {
 
 		open("/userNotExist");
@@ -43,11 +44,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 
 		open("/");
 		waitForPageToLoad();
-		checkProfile("john");
+		checkProfile("author");
 
 		open("/index");
 		waitForPageToLoad();
-		checkProfile("john");
+		checkProfile("author");
 
 		open("/ccordenier");
 		waitForPageToLoad();
@@ -63,11 +64,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 * Test access to dashboard.
 	 * 
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testDashboard() {
 		open("/dashboard");
 		waitForPageToLoad();
-		checkDashboard("john");
+		checkDashboard("author");
 
 		// Try to delete a book that exist but that john does not own
 		open("/dashboard:removebook/1");
@@ -84,11 +85,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 * Test access to dashboard.
 	 * 
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testAccountSettings() {
 		open("/accountSettings");
 		waitForPageToLoad();
-		checkAccountSettings("john");
+		checkAccountSettings("author");
 
 		// Bad URL
 		open("/accountSettings/1");
@@ -99,7 +100,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	/**
 	 * Verify that the user cannot delete a comment when he is not the owner
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testComment() {
 		open("/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1");
 		checkAccessDenied();
@@ -110,7 +111,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	 * book.
 	 * 
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testBookIndex() {
 		open("/book/1");
 		waitForPageToLoad();
@@ -127,34 +128,36 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	/**
 	 * When the user is authenticated, it should not be able to see signin.
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testSignin() {
 		open("/signin");
 		waitForPageToLoad();
-		checkProfile("john");
+		checkProfile("author");
 	}
 
 	/**
 	 * When the user is authenticated, it should not be able to see signup.
 	 */
-	@Test(groups = { "authenticated" }, dependsOnMethods = { "signup" })
+	@Test(dependsOnMethods = { "signup" })
 	public void testSignup() {
 		open("/signup");
 		waitForPageToLoad();
-		checkProfile("john");
+		checkProfile("author");
 	}
 
 	/**
 	 * Logout of the application.
 	 * 
 	 */
-	@Test(dependsOnGroups = { "authenticated" })
-	public void testLogout() {
+	@Override
+	@AfterClass(alwaysRun = true)
+	public void cleanup() throws Exception {
 		open("/index");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
 		click("id=logout");
 		waitForPageToLoad();
 		checkIndex();
+		super.cleanup();
 	}
 }

@@ -54,6 +54,7 @@ import org.apache.tapestry5.services.UpdateListenerHub;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.sun.syndication.feed.atom.Feed;
 import com.wooki.ActivityType;
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
@@ -136,6 +137,7 @@ public class WookiModule<T> {
 	public void contributeComponentEventResultProcessor(@Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
 			MappedConfiguration<Class, ComponentEventResultProcessor> configuration) {
 		configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
+		configuration.addInstance(Feed.class, FeedResultProcessor.class);
 	}
 
 	/**

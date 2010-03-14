@@ -16,14 +16,9 @@
 
 package com.wooki.test.unit;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.StringBufferInputStream;
 import java.util.List;
 
 import javax.sql.DataSource;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -34,8 +29,6 @@ import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.w3c.dom.Document;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;

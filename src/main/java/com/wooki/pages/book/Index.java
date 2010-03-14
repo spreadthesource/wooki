@@ -21,10 +21,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
-import org.apache.tapestry5.StreamResponse;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -32,11 +30,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.internal.services.RequestPageCache;
-import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Request;
-import org.apache.tapestry5.services.RequestGlobals;
 
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
@@ -88,7 +83,7 @@ public class Index extends BookBase {
 
 	@Inject
 	private RequestPageCache pageCache;
-	
+
 	@InjectPage
 	private Edit editChapter;
 
@@ -206,7 +201,7 @@ public class Index extends BookBase {
 	 * @throws IllegalArgumentException
 	 */
 	@OnEvent(value = "feed")
-	public StreamResponse getFeed() throws IOException, IllegalArgumentException, FeedException {
+	public Object getFeed() throws IOException, IllegalArgumentException, FeedException {
 		// all the feed construction is made by a third party library called
 		// "ROME". It provides RSS & Atom support
 		Book book = bookManager.findById(getBookId());
@@ -226,7 +221,7 @@ public class Index extends BookBase {
 
 		WookiActivityAtomFeed atomFeed = new WookiActivityAtomFeed(title, id, alternateLinks, activities, feedWriter);
 
-		return atomFeed.toStreamResponse();
+		return atomFeed;
 	}
 
 	public String getLinkForFeed() {

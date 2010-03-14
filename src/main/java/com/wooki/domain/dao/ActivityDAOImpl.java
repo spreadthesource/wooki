@@ -43,7 +43,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> listAllActivitiesOnComment(Long commentId) {
 		Defense.notNull(commentId, "commentId");
-		Query query = entityManager.createQuery("from " + CommentActivity.class.getName() + " ca where ca.comment.id=:cid");
+		Query query = entityManager.createQuery("from " + CommentActivity.class.getName() + " ca where ca.comment.id=:cid order by ca.creationDate desc");
 		query.setParameter("cid", commentId);
 		return query.getResultList();
 	}
@@ -52,7 +52,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		Defense.notNull(chapterId, "chapterId");
 		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from " + CommentActivity.class.getName()
 				+ " coa where coa.comment.publication.chapter.id=:cid) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.id=:cid) ");
+				+ " ca where ca.chapter.id=:cid) order by a.creationDate desc");
 		query.setParameter("cid", chapterId);
 		return query.getResultList();
 	}
@@ -62,7 +62,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from "
 				+ BookActivity.class.getName() + " ba where ba.book.id=:bid) or a.id in (select id from " + CommentActivity.class.getName()
 				+ " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.book.id=:bid) ");
+				+ " ca where ca.chapter.book.id=:bid) order by a.creationDate desc");
 		query.setParameter("bid", bookId);
 		return query.getResultList();
 	}

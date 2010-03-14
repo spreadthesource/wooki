@@ -1,6 +1,7 @@
 package com.wooki.test.integration;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -64,6 +65,22 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 		click("//div[@id='content']//ul[3]//a[2]");
 		waitForPageToLoad();
 		checkChapterTitle("Collaborative document publishing");
+	}
+
+	/**
+	 * Logout of the application.
+	 * 
+	 */
+	@Override
+	@AfterClass(alwaysRun = true)
+	public void cleanup() throws Exception {
+		open("/index");
+		waitForPageToLoad();
+		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
+		click("id=logout");
+		waitForPageToLoad();
+		checkIndex();
+		super.cleanup();
 	}
 
 }

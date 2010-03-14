@@ -17,7 +17,7 @@
 
 -->
 
-<project name="Generated site for tibook">
+<project name="Generated site for wooki">
 
     <publishDate format="dd MMM yyyy"/>
 
@@ -25,7 +25,7 @@
 
     <body>
 
-        <menu name="tibook Project">
+        <menu name="Wooki Project">
             <item name="About" href="index.html"/>
         </menu>
 

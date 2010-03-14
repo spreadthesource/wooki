@@ -1,6 +1,7 @@
 package com.wooki.test.integration;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 /**
@@ -30,7 +31,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	/**
 	 * Check index page.
 	 */
-	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
+	@Test(dependsOnMethods = { "signin" })
 	public void testIndex() {
 		open("/book/1");
 		waitForPageToLoad();
@@ -45,7 +46,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	 * Check that an author is authorized to change the state of a comment.
 	 * 
 	 */
-	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
+	@Test(dependsOnMethods = { "signin" })
 	public void testCommentPopup() {
 		open("/book/1");
 		waitForPageToLoad();
@@ -62,7 +63,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	 * Verify that the author has access to the working copy.
 	 * 
 	 */
-	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
+	@Test(dependsOnMethods = { "signin" })
 	public void testWorkingCopy() {
 		open("/book/1/last");
 		waitForPageToLoad();
@@ -73,7 +74,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	 * Verify that the author has access to the edit page.
 	 * 
 	 */
-	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
+	@Test(dependsOnMethods = { "signin" })
 	public void testEditChapter() {
 		open("/chapter/edit/1/1");
 		waitForPageToLoad();
@@ -85,27 +86,29 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite {
 	/**
 	 * Verify that an author have access to links to modify and delete a chapter
 	 */
-	@Test(groups = { "author" }, dependsOnMethods = { "signin" })
+	@Test(dependsOnMethods = { "signin" })
 	public void testAdminChapter() {
 		open("/chapter/1/2");
 		waitForPageToLoad();
 		checkChapterTitle("Collaborative document publishing");
 		Assert.assertTrue(isElementPresent("//a[@href='/chapter/edit/1/2']"), "Edit chapter link is missing");
-		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete/1/2?t:ac=1/2']"), "Remove chapter link is missing."); 
+		Assert.assertTrue(isElementPresent("//a[@href='/chapter/index:delete?t:ac=1/2']"), "Remove chapter link is missing."); 
 	}
 
 	/**
 	 * Logout of the application.
 	 * 
 	 */
-	@Test(dependsOnGroups = { "author" })
-	public void testLogout() {
+	@AfterClass(alwaysRun = true)
+	@Override
+	public void cleanup() throws Exception {
 		open("/index");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");
 		click("id=logout");
 		waitForPageToLoad();
 		checkIndex();
+		super.cleanup();
 	}
 	
 }

@@ -16,9 +16,6 @@
 
 package com.wooki.pages.book;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Meta;
@@ -103,8 +100,11 @@ public class FullFlyingSaucer extends Index {
 	 * @return
 	 */
 	private String applyGlobalReplaces(String input) {
-		// Apply global replace for images
-		String result = input.replaceAll(String.format("%s%s", request.getContextPath(), UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
-		return result;
+		if (input != null) {
+			// Apply global replace for images
+			String result = input.replaceAll(String.format("%s%s", request.getContextPath(), UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
+			return result;
+		}
+		return "";
 	}
 }

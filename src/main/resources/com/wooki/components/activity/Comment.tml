@@ -1,6 +1,6 @@
 <t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	<li class="${style}">
-		<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em> has ${activity.type} a comment </em> <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
+		<a href="#" t:type="pagelink" t:page="Index" t:context="activity?.user?.username">${activity?.user?.username}</a> <em> has  ${getActivityLabel(activity.type)} a comment </em> <t:lastModifiedFormatter t:time="activity.creationDate?.time" />
 		on <a href="#" t:type="pagelink" t:page="chapter/Index" t:context="chapterCtx">${activity?.comment?.publication?.chapter?.title}</a> in <a href="#" t:type="pagelink" t:page="book/Index" t:context="activity?.comment?.publication?.chapter?.book?.id">${activity?.comment?.publication?.chapter?.book?.title}</a>
 		<blockquote>
 			${activity?.comment?.content}

@@ -46,18 +46,19 @@
                     </p>
                 </li>
                 <p:else>
-                    <t:security.ifAuthorOfBook t:bookId="bookId">
-                        <t:if t:test="showWorkingCopyLink">
-                            <li>
-                                <h3><span class="inactive">${currentChapter.title} <em>(not published) </em></span>
-                                    <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-                                        <em>(Working copy) </em>
-                                    </t:pagelink>
-                                </h3>
-                                <p class="last-update">
-                                    <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-                                </p>
-                            </li>
+                	<t:security.ifAuthorOfBook t:bookId="bookId">
+                		<t:if t:test="showWorkingCopyLink">
+			                <li>
+			                    <h3>
+		                        	<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
+	                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+	                                    <em>(Working copy) </em>
+	                                </t:pagelink>
+			                    </h3>
+			                    <p class="last-update">
+			                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+			                    </p>
+			                </li>
                         </t:if>
                     </t:security.ifAuthorOfBook>
                 </p:else>

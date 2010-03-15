@@ -94,9 +94,12 @@ abbr { padding-right: 3px; padding-left: 3px; }
 
 /* nav */
 .nav { list-style: none; padding:10px; }
-.nav li { display:inline; padding:0px 5px; }
+.nav li { display:inline; padding:0px 5px; white-space: nowrap;  }
+.nav li img {vertical-align: text-bottom;}
 .nav a { text-decoration: none; }
 .nav li.last { border-right: 1px solid #6E6D65; }
+
+
 
 /*****
  * HEADER

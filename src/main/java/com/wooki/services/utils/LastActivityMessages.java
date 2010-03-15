@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,18 +21,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.Messages;
-import org.apache.tapestry5.ioc.internal.util.MessagesImpl;
 
 /**
  * Utility class used to display elements in the last activity window.
  * 
  * @author ccordenier
- * 
  */
-public class LastActivityMessage {
+public class LastActivityMessages {
 
-	private final static Messages MESSAGES = MessagesImpl.forClass(LastActivityMessage.class);
-	
 	/**
 	 * Return a string (human) representation of the period since the last
 	 * activity.
@@ -40,33 +36,25 @@ public class LastActivityMessage {
 	 * @param lastActivity
 	 * @return
 	 */
-	public static String getActivityPeriod(long lastActivity) {
+	public static String getActivityPeriod(long lastActivity, Messages messages) {
 
 		String result = "";
-		DateFormat formatter = new SimpleDateFormat(MESSAGES.get("date"));
-		
+		DateFormat formatter = new SimpleDateFormat(messages.get("date"));
+
 		long now = System.currentTimeMillis();
 
 		long period = (now - lastActivity) / 1000;
 
 		if (period < 60) {
-			result = MESSAGES.get("few-seconds-ago");
+			result = messages.get("few-seconds-ago");
+		} else if ((period / 60) < 60) {
+			result = String.format(messages.get("minutes-ago"), (period / 60));
+		} else if ((period / 60 / 60) < 24) {
+			result = String.format(messages.get("hours-ago"), (period / 60 / 60));
+		} else if ((period / 60 / 60 / 24) < 5) {
+			result = String.format(messages.get("days-ago"), (period / 60 / 60 / 24));
 		} else {
-			if ((period / 60) < 60) {
-				result = String.format(MESSAGES.get("minutes-ago"), (period / 60));
-			} else {
-				if ((period / 60 / 60) < 24) {
-					result = String.format(MESSAGES.get("hours-ago"),
-							(period / 60 / 60));
-				} else {
-					if ((period / 60 / 60 / 24) < 5) {
-						result = String.format(MESSAGES.get("days-ago"),
-								(period / 60 / 60 / 24));
-					} else {
-						result = formatter.format(new Date(lastActivity));
-					}
-				}
-			}
+			result = formatter.format(new Date(lastActivity));
 		}
 
 		return result;

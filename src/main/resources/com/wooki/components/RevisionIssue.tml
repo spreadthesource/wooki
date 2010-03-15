@@ -1,6 +1,6 @@
 <ul xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
 	<t:loop t:source="comments" t:value="current" t:index="loopIdx" t:empty="block:noComments">
-		<li class="${style}">
+		<li class="${style}" id="c${current.id}">
 			By <a href="#" t:type="pagelink" t:page="index" t:context="${current.user.username}">${current.user.username}</a> <t:lastModifiedFormatter t:time="current.creationDate.time"/>
 			<t:if test="abstractChapter">
 

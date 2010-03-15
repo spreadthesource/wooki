@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,11 +16,16 @@
 
 package com.wooki.pages.book;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -31,6 +36,10 @@ import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.sun.syndication.feed.atom.Feed;
+import com.sun.syndication.feed.atom.Link;
+import com.sun.syndication.io.FeedException;
+import com.wooki.ActivityType;
 import com.wooki.base.BookBase;
 import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.BookManager;
@@ -42,6 +51,7 @@ import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
+import com.wooki.services.feeds.FeedProducer;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -68,7 +78,13 @@ public class Index extends BookBase {
 	private LinkSource linkSource;
 
 	@Inject
+	private ComponentResources resources;
+
+	@Inject
 	private RequestPageCache pageCache;
+
+	@Inject
+	private FeedProducer feedProducer;
 
 	@InjectPage
 	private Edit editChapter;
@@ -115,6 +131,7 @@ public class Index extends BookBase {
 	 * Setup all the data to display in the book index page.
 	 * 
 	 * @param bookId
+	 * @throws IOException
 	 */
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupBookIndex(Long bookId, String revision) {
@@ -132,7 +149,6 @@ public class Index extends BookBase {
 
 	/**
 	 * Prepare book display.
-	 * 
 	 */
 	@SetupRender
 	public void setupBookDisplay() {
@@ -175,18 +191,21 @@ public class Index extends BookBase {
 			getAdminActions().add(createPageMenuItem("Edit introduction", "chapter/edit", false, this.getBookId(), this.bookAbstractId));
 			getAdminActions().add(createPageMenuItem("Settings", "book/settings", false, this.getBookId()));
 		}
-
 		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
-
 		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false);
 		getMenu().add(print);
-
 	}
 
 	@SetupRender
 	public void setupNav() {
 		if ((firstChapterId != null) && (firstChapterTitle != null))
 			setRight(createPageMenuItem(firstChapterTitle + " >", "chapter/index", false, getBookId(), firstChapterId));
+	}
+
+	@AfterRender
+	public void addFeedLink(MarkupWriter writer) {
+		org.apache.tapestry5.Link feedLink = this.resources.createEventLink("feed");
+		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), feedLink, writer);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -212,6 +231,36 @@ public class Index extends BookBase {
 			this.printError = true;
 			return this;
 		}
+	}
+
+	/**
+	 * Create the Atom feed of the book activity
+	 * 
+	 * @throws IOException
+	 * @throws FeedException
+	 * @throws IllegalArgumentException
+	 */
+	@OnEvent(value = "feed")
+	public Feed getFeed() throws IOException, IllegalArgumentException, FeedException {
+
+		String title = this.messages.format("recent-activity", this.getBook().getTitle());
+		String id = this.getBook().getSlugTitle();
+
+		List<Link> alternateLinks = new ArrayList<Link>();
+
+		Link linkToSelf = new Link();
+		linkToSelf.setHref(linkSource.createPageRenderLink("book/index", false, getBookId()).toAbsoluteURI());
+		linkToSelf.setTitle(this.getBook().getTitle());
+
+		alternateLinks.add(linkToSelf);
+
+		return this.feedProducer.produceFeed(ActivityType.BOOK, id, title, alternateLinks, this.getBookId());
+	}
+
+	public String getLinkForFeed() {
+		org.apache.tapestry5.Link feedLink = linkSource.createComponentEventLink(pageCache.get("book/index"), null, "feed", false, getBookId());
+		feedLink.addParameter("t:ac", "1");
+		return feedLink.toURI();
 	}
 
 	public String[] getPrintErrors() {
@@ -247,6 +296,23 @@ public class Index extends BookBase {
 			return bookAuthor && workingCopy;
 		}
 		return false;
+	}
+
+	/**
+	 * Get edit context for chapter
+	 * 
+	 * @return
+	 */
+	public Object[] getEditCtx() {
+		return new Object[] { this.getBookId(), this.bookAbstractId };
+	}
+
+	public Object[] getAbstractWorkingCopyCtx() {
+		return new Object[] { this.getBookId(), ChapterManager.LAST };
+	}
+
+	public Object[] getIssuesCtx() {
+		return new Object[] { this.getBookId(), "all" };
 	}
 
 	/**

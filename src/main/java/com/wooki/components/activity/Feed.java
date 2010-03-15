@@ -5,7 +5,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-// 	http://www.apache.org/licenses/LICENSE-2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -41,7 +41,6 @@ import com.wooki.domain.model.activity.CommentActivity;
  * Display activities.
  * 
  * @author ccordenier
- * 
  */
 public class Feed<T extends Activity> {
 
@@ -71,11 +70,11 @@ public class Feed<T extends Activity> {
 	private Long userId;
 
 	@Inject
-	private ActivityManager activityManager;
-
-	@Inject
 	@Id("activities")
 	private Block activitiesBlock;
+
+	@Inject
+	private ActivityManager activityManager;
 
 	@Inject
 	private Block bookActivity;
@@ -96,10 +95,10 @@ public class Feed<T extends Activity> {
 	private Activity current;
 
 	@Property
-	private int loopIdx;
+	private boolean hasMore;
 
 	@Property
-	private boolean hasMore;
+	private int loopIdx;
 
 	private int page;
 
@@ -108,25 +107,15 @@ public class Feed<T extends Activity> {
 		int startIdx = nbElts * page;
 		if (ActivityType.BOOK_CREATION.equals(type)) {
 			this.activities = this.activityManager.listBookCreationActivity(startIdx, nbElts);
-		} else {
-			if (ActivityType.USER.equals(type)) {
-				this.activities = this.activityManager.listActivityOnBook(startIdx, nbElts, userId);
-			} else {
-				if (ActivityType.CO_AUTHOR.equals(type)) {
-					this.activities = this.activityManager.listActivityOnUserBooks(startIdx, nbElts, userId);
-				} else {
-					if (ActivityType.USER_PUBLIC.equals(type)) {
-						this.activities = this.activityManager.listUserActivity(startIdx, nbElts, userId);
-					} else {
-						if (ActivityType.ACCOUNT.equals(type)) {
-							this.activities = this.activityManager.listAccountActivity(startIdx, nbElts);
-						}
-					}
-
-				}
-			}
+		} else if (ActivityType.USER.equals(type)) {
+			this.activities = this.activityManager.listActivityOnBook(startIdx, nbElts, userId);
+		} else if (ActivityType.CO_AUTHOR.equals(type)) {
+			this.activities = this.activityManager.listActivityOnUserBooks(startIdx, nbElts, userId);
+		} else if (ActivityType.USER_PUBLIC.equals(type)) {
+			this.activities = this.activityManager.listUserActivity(startIdx, nbElts, userId);
+		} else if (ActivityType.ACCOUNT.equals(type)) {
+			this.activities = this.activityManager.listAccountActivity(startIdx, nbElts);
 		}
-		this.hasMore = this.activities.size() == nbElts;
 	}
 
 	@OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT, component = "moreFeeds")
@@ -150,18 +139,12 @@ public class Feed<T extends Activity> {
 	public Block getActivityBlock() {
 		if (current instanceof ChapterActivity) {
 			return this.chapterActivity;
-		} else {
-			if (current instanceof BookActivity) {
-				return this.bookActivity;
-			} else {
-				if (current instanceof CommentActivity) {
-					return this.commentActivity;
-				} else {
-					if (current instanceof AccountActivity) {
-						return this.accountActivity;
-					}
-				}
-			}
+		} else if (current instanceof AccountActivity) {
+			return this.accountActivity;
+		} else if (current instanceof BookActivity) {
+			return this.bookActivity;
+		} else if (current instanceof CommentActivity) {
+			return commentActivity;
 		}
 		return null;
 	}

@@ -8,10 +8,12 @@ import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -260,4 +262,8 @@ public class BookBase {
 		this.right = right;
 	}
 
+	public void addFeedLink(String title, Link feedLink, MarkupWriter writer) {
+		Element head = writer.getDocument().find("html/head");
+		head.element("link", "type", "application/atom+xml", "title", title, "rel", "alternate", "href", feedLink.toAbsoluteURI());
+	}
 }

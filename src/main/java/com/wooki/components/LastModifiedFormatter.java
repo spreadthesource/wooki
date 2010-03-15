@@ -23,9 +23,11 @@ import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.services.ServicesMessages;
 import com.wooki.services.utils.DateUtils;
-import com.wooki.services.utils.LastActivityMessage;
+import com.wooki.services.utils.LastActivityMessages;
 
 /**
  * Display a date using with a more user friendly format.
@@ -35,6 +37,9 @@ import com.wooki.services.utils.LastActivityMessage;
  */
 public class LastModifiedFormatter {
 
+	@Inject
+	private ServicesMessages messages;
+	
 	@Parameter(required = true, allowNull = false)
 	private long time;
 
@@ -44,7 +49,7 @@ public class LastModifiedFormatter {
 	@BeginRender
 	public void displayDate(MarkupWriter writer) {
 		writer.element("abbr", "title", DateUtils.getLastModified().format(new Date(time)), "class", className);
-		writer.write(LastActivityMessage.getActivityPeriod(time));
+		writer.write(LastActivityMessages.getActivityPeriod(time, messages.getMessages()));
 	}
 
 	@AfterRender

@@ -208,31 +208,29 @@ public class DOMManagerImpl implements DOMManager {
 							e.setAttribute("name", child.getValue());
 							e.setAttribute("href", "#" + child.getAttributeValue("id"));
 							currentElt.addContent(e);
-						} else {
-							if (navigate > currentIdx) {
-								for (int i = currentIdx; i < navigate; i++) {
-									if (currentElt.getChildren() != null && currentElt.getChildren().size() > 0) {
-										currentElt = (Element) currentElt.getChildren().get(currentElt.getChildren().size() - 1);
-									} else {
-										Element e = new Element("bookmark");
-										e.setAttribute("name", "undefined");
-										currentElt.addContent(e);
-										currentElt = e;
-									}
+						} else if (navigate > currentIdx) {
+							for (int i = currentIdx; i < navigate; i++) {
+								if (currentElt.getChildren() != null && currentElt.getChildren().size() > 0) {
+									currentElt = (Element) currentElt.getChildren().get(currentElt.getChildren().size() - 1);
+								} else {
+									Element e = new Element("bookmark");
+									e.setAttribute("name", "undefined");
+									currentElt.addContent(e);
+									currentElt = e;
 								}
-								Element toAdd = new Element("bookmark");
-								toAdd.setAttribute("name", child.getValue());
-								toAdd.setAttribute("href", "#" + child.getAttributeValue("id"));
-								currentElt.addContent(toAdd);
-							} else {
-								for (int i = currentIdx; i > navigate; i--) {
-									currentElt = currentElt.getParentElement();
-								}
-								Element e = new Element("bookmark");
-								e.setAttribute("name", child.getValue());
-								e.setAttribute("href", "#" + child.getAttributeValue("id"));
-								currentElt.addContent(e);
 							}
+							Element toAdd = new Element("bookmark");
+							toAdd.setAttribute("name", child.getValue());
+							toAdd.setAttribute("href", "#" + child.getAttributeValue("id"));
+							currentElt.addContent(toAdd);
+						} else {
+							for (int i = currentIdx; i > navigate; i--) {
+								currentElt = currentElt.getParentElement();
+							}
+							Element e = new Element("bookmark");
+							e.setAttribute("name", child.getValue());
+							e.setAttribute("href", "#" + child.getAttributeValue("id"));
+							currentElt.addContent(e);
 						}
 						currentIdx = navigate;
 					}

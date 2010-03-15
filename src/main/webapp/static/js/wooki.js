@@ -339,6 +339,30 @@ jQuery.extend(Tapestry.Initializer, {
 			
 		});
 		
+		// Re-position bubbles on window resize
+		jQuery(window).bind("resize", function() {
+			// Iterate through commentable block to create corresponding comment elt
+			jQuery('.commentable').each(function(i) {
+			
+				// Add element
+				blockId = jQuery(this).attr('id');
+				
+				if(blockId != "") {
+					comId = blockId.replace('b','c');
+					comment = jQuery("#" + comId);
+					
+					if(comment != undefined) {
+						comment.css({
+							'top': (jQuery(this).offset().top - 5) + 'px',
+							'left': (jQuery("#book-wrapper").offset().left)  + 'px',
+							'height' : jQuery(this).height() + 'px'
+						});
+					}
+				}
+				
+			});
+		});
+		
 		// Set all the node that has comments
 		jQuery.each(data, function(i, val) {
 			comId = i.replace('b','c');

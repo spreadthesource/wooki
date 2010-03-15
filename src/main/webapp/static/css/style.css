@@ -69,8 +69,8 @@ abbr { padding-right: 3px; padding-left: 3px; }
 .shadowed, .box, .section { box-shadow: 0px 0px 10px rgba(47,47,50,0.4); -webkit-box-shadow: 0px 0px 10px rgba(47,47,50,0.4); -moz-box-shadow: 0px 0px 10px rgba(47,47,50,0.4);}
 
 .btn-active { border: 1px solid #FF7351; background:#FF7351; color:#FFD8A1; text-shadow:0px -1px 1px rgba(0,0,0,0.25);  border-top: 1px solid rgba(255,255,255, 0.25); border-bottom: 1px solid rgba(0,0,0,0.25); }
-.more-link {  width:100%; background:none; border: 1px solid #FF7351;}
-.more-link a { padding: 5px; text-align: center; text-decoration: none; display:block; color:#FF7351; font-size:14px;  }
+.more-link {  width:100%; background:none; border: 1px solid #FF7351; padding: 10px; }
+.more-link a { text-align: center; text-decoration: none; color:#FF7351; font-size:14px;  }
 
 /* section and positioning */
 .section { background: white; padding:10px; margin-bottom:10px;}

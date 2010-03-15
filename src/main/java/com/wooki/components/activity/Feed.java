@@ -116,6 +116,7 @@ public class Feed<T extends Activity> {
 		} else if (ActivityType.ACCOUNT.equals(type)) {
 			this.activities = this.activityManager.listAccountActivity(startIdx, nbElts);
 		}
+		this.hasMore = this.activities.size() == nbElts;
 	}
 
 	@OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT, component = "moreFeeds")

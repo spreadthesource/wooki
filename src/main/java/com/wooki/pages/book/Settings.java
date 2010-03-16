@@ -20,6 +20,8 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -27,6 +29,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
+import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.WookiEventConstants;
@@ -57,7 +60,10 @@ public class Settings extends BookBase {
 
 	@Inject
 	private Block authorRow;
-
+	
+	@Inject
+	private Messages messages;
+	
 	@InjectComponent
 	private Form addAuthorForm;
 
@@ -89,6 +95,11 @@ public class Settings extends BookBase {
 	public void setupNav() {
 		setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
 		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+	}
+
+	@AfterRender
+	public void addFeedLink(MarkupWriter writer) {
+		super.addFeedLink("book/index", messages.format("recent-activity", this.getBook().getTitle()), writer, this.getBookId());
 	}
 
 	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT)

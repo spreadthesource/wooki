@@ -200,7 +200,7 @@ public class Index extends BookBase {
 
 	@AfterRender
 	public void addFeedLink(MarkupWriter writer) {
-		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), writer);
+		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), writer, this.getBookId());
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -235,7 +235,9 @@ public class Index extends BookBase {
 	 * @throws IllegalArgumentException
 	 */
 	@OnEvent(value = "feed")
-	public Feed getFeed() throws IOException, IllegalArgumentException, FeedException {
+	public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException {
+
+		this.setupBookBase(bookId);
 
 		String title = this.messages.format("recent-activity", this.getBook().getTitle());
 		String id = this.getBook().getSlugTitle();

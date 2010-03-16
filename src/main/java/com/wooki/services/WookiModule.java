@@ -29,6 +29,7 @@ import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.MethodAdvice;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
+import org.apache.tapestry5.ioc.Resource;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Autobuild;
 import org.apache.tapestry5.ioc.annotations.Inject;
@@ -238,9 +239,9 @@ public class WookiModule<T> {
 	 * Build messages catalog service for services.
 	 * 
 	 */
-	public ServicesMessages buildServicesMessages(@Inject ClasspathURLConverter urlConverter, @Inject ThreadLocale locale, @Inject LinkSource linkSource,
-			@Inject UpdateListenerHub listenerHub) {
-		ServicesMessages messages = new ServicesMessagesImpl(urlConverter, locale, linkSource);
+	public ServicesMessages buildServicesMessages(@Symbol(SymbolConstants.APPLICATION_CATALOG) Resource appCatalogResource,
+			@Inject ClasspathURLConverter urlConverter, @Inject ThreadLocale locale, @Inject LinkSource linkSource, @Inject UpdateListenerHub listenerHub) {
+		ServicesMessages messages = new ServicesMessagesImpl(appCatalogResource, urlConverter, locale, linkSource);
 		listenerHub.addUpdateListener(messages);
 		return messages;
 	}

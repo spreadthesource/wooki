@@ -30,7 +30,7 @@ import com.wooki.services.utils.DateUtils;
  * @author ccordenier
  * 
  */
-public class BookBase extends AbstractPage {
+public class BookBase {
 
 	@Inject
 	private BookManager bookManager;

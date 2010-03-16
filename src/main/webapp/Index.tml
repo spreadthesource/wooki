@@ -2,6 +2,8 @@
 		
     <t:delegate to="userCtx" />
 
+	<t:feedlink t:titleKey="recent-creation-activity" />
+
 	<!-- Block displayed when there is logged user or a profile requested -->    
     <t:block id="userBlock">
     

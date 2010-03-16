@@ -21,9 +21,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -47,7 +45,6 @@ import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
-import com.wooki.services.ServicesMessages;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
@@ -60,9 +57,6 @@ public class Index extends BookBase {
 	@Inject
 	private Messages messages;
 
-	@Inject
-	private ServicesMessages servicesMessages;
-	
 	@Inject
 	private BookManager bookManager;
 
@@ -197,11 +191,6 @@ public class Index extends BookBase {
 	public void setupNav() {
 		if ((firstChapterId != null) && (firstChapterTitle != null))
 			setRight(createPageMenuItem(firstChapterTitle + " >", "chapter/index", false, getBookId(), firstChapterId));
-	}
-
-	@AfterRender
-	public void addFeedLink(MarkupWriter writer) {
-		super.addFeedLink(servicesMessages.getMessages().format("recent-activity", this.getBook().getTitle()), writer, this.getBookId());
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")

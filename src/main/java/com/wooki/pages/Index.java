@@ -16,25 +16,33 @@
 
 package com.wooki.pages;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.RenderSupport;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
+import com.sun.syndication.feed.atom.Feed;
+import com.sun.syndication.io.FeedException;
+import com.wooki.ActivityType;
 import com.wooki.base.AbstractPage;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
 import com.wooki.services.HttpError;
+import com.wooki.services.ServicesMessages;
+import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -66,11 +74,14 @@ public class Index extends AbstractPage {
 	private Block userBlock;
 
 	@Inject
-	private RenderSupport support;
-
-	@Inject
 	private Messages messages;
 
+	@Inject
+	private ServicesMessages servicesMessages;
+	
+	@Inject
+	private FeedSource feedSource;
+	
 	@Property
 	private List<Book> userBooks;
 
@@ -137,6 +148,16 @@ public class Index extends AbstractPage {
 		return null;
 	}
 
+	@OnEvent(value = "feed")
+	public Feed getFeed() throws IOException, IllegalArgumentException, FeedException {
+		return feedSource.produceFeed(ActivityType.BOOK_CREATION);
+	}
+	
+	@AfterRender
+	public void addFeedLink(MarkupWriter writer) {
+		super.addFeedLink(this.servicesMessages.getMessages().get("front-feed-title"), writer);
+	}
+	
 	public String getTitle() {
 		if (this.user != null) {
 			return messages.format("profile-title", this.user.getUsername());

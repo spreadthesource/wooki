@@ -47,6 +47,7 @@ import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
+import com.wooki.services.ServicesMessages;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
@@ -59,6 +60,9 @@ public class Index extends BookBase {
 	@Inject
 	private Messages messages;
 
+	@Inject
+	private ServicesMessages servicesMessages;
+	
 	@Inject
 	private BookManager bookManager;
 
@@ -197,7 +201,7 @@ public class Index extends BookBase {
 
 	@AfterRender
 	public void addFeedLink(MarkupWriter writer) {
-		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), writer, this.getBookId());
+		super.addFeedLink(servicesMessages.getMessages().format("recent-activity", this.getBook().getTitle()), writer, this.getBookId());
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")

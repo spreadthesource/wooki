@@ -44,11 +44,11 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 
 		open("/");
 		waitForPageToLoad();
-		checkProfile("author");
+		checkIndex();
 
 		open("/index");
 		waitForPageToLoad();
-		checkProfile("author");
+		checkIndex();
 
 		open("/ccordenier");
 		waitForPageToLoad();
@@ -132,7 +132,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	public void testSignin() {
 		open("/signin");
 		waitForPageToLoad();
-		checkProfile("author");
+		checkIndex();
 	}
 
 	/**
@@ -142,7 +142,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
 	public void testSignup() {
 		open("/signup");
 		waitForPageToLoad();
-		checkProfile("author");
+		checkIndex();
 	}
 
 	/**

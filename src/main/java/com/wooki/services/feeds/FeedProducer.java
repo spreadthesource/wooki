@@ -14,7 +14,6 @@ import com.wooki.ActivityType;
  */
 public interface FeedProducer {
 
-
 	/**
 	 * Produces a feed, if ids are needed to access to the list related entities
 	 * then pass it as parameters.
@@ -22,6 +21,6 @@ public interface FeedProducer {
 	 * @param ids
 	 * @return
 	 */
-	Feed produceFeed(ActivityType type, String id, String title, List<Link> altLinks, Long... ids);
+	Feed produceFeed(ActivityType type, String id, String title, List<Link> altLinks, Long... context);
 
 }

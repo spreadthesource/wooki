@@ -37,7 +37,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 
 	public List<Activity> list(int startIdx, int nbElements) {
 		Query query = entityManager.createQuery("from " + getEntityType() + " a where a.deletionDate is null order by a.creationDate desc");
-		query.setMaxResults(nbElements);
+		this.setMaxResults(query,nbElements);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
@@ -76,7 +76,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
 				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
-		query.setMaxResults(nbElts);
+		this.setMaxResults(query,nbElts);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
@@ -86,7 +86,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		Query query = entityManager.createQuery("select a from " + getEntityType()
 				+ " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
 		query.setParameter("uid", userId);
-		query.setMaxResults(nbElts);
+		this.setMaxResults(query,nbElts);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
@@ -99,7 +99,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
 				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
 		query.setParameter("uid", userId);
-		query.setMaxResults(nbElements);
+		this.setMaxResults(query,nbElements);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
@@ -108,7 +108,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		Query query = entityManager.createQuery("from " + BookActivity.class.getName()
 				+ " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", BookEventType.CREATE);
-		query.setMaxResults(nbElements);
+		this.setMaxResults(query,nbElements);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}
@@ -117,7 +117,7 @@ public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements A
 		Query query = entityManager.createQuery("from " + AccountActivity.class.getName()
 				+ " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
 		query.setParameter("type", AccountEventType.JOIN);
-		query.setMaxResults(nbElts);
+		this.setMaxResults(query,nbElts);
 		query.setFirstResult(startIdx);
 		return query.getResultList();
 	}

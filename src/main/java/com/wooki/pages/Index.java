@@ -29,7 +29,7 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
 
-import com.wooki.ActivityType;
+import com.wooki.base.AbstractPage;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.Book;
@@ -45,7 +45,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * @author ccordenier
  * 
  */
-public class Index {
+public class Index extends AbstractPage {
 
 	@Inject
 	private BookManager bookManager;
@@ -55,6 +55,9 @@ public class Index {
 
 	@Inject
 	private UserManager userManager;
+
+	@Inject
+	private Block homeBlock;
 
 	@Inject
 	private Block presBlock;
@@ -67,7 +70,7 @@ public class Index {
 
 	@Inject
 	private Messages messages;
-	
+
 	@Property
 	private List<Book> userBooks;
 
@@ -86,6 +89,9 @@ public class Index {
 	@Property
 	private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
 
+	@Property
+	private Block userCtx;
+
 	@Inject
 	private Request request;
 
@@ -97,12 +103,11 @@ public class Index {
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public boolean setupListBook() {
 		if (securityCtx.isLoggedIn()) {
-			this.user = securityCtx.getAuthor();
-			this.userBooks = bookManager.listByOwner(user.getUsername());
-			this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
-			return true;
+			this.userCtx = this.homeBlock;
+		} else {
+			this.userCtx = this.presBlock;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -118,16 +123,10 @@ public class Index {
 		if (this.user == null) {
 			return new HttpError(404, "User not found");
 		}
+		this.userCtx = userBlock;
 		this.userBooks = this.bookManager.listByOwner(username);
 		this.userCollaborations = this.bookManager.listByCollaborator(username);
 		return true;
-	}
-
-	public String getTitle() {
-		if (this.user != null) {
-			return messages.format("profile-title", this.user.getUsername()); 
-		}
-		return messages.get("index-message");
 	}
 
 	@OnEvent(value = EventConstants.PASSIVATE)
@@ -138,24 +137,16 @@ public class Index {
 		return null;
 	}
 
+	public String getTitle() {
+		if (this.user != null) {
+			return messages.format("profile-title", this.user.getUsername());
+		}
+		return messages.get("index-message");
+	}
+
 	public boolean isDisplayMessage() {
 		String userAgent = request.getHeader("User-Agent");
 		return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null) : false;
-	}
-
-	public ActivityType getActivityType() {
-		if (user == null) {
-			return ActivityType.BOOK_CREATION;
-		}
-		return ActivityType.USER_PUBLIC;
-	}
-
-	public Block getUserCtx() {
-		if (this.user == null) {
-			return presBlock;
-		} else {
-			return userBlock;
-		}
 	}
 
 	public String getStyle() {

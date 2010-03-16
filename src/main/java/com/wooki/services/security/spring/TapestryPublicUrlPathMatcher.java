@@ -38,19 +38,21 @@ public class TapestryPublicUrlPathMatcher extends AbstractTapestryUrlPathMatcher
 	 */
 	public boolean matches(String url) {
 
+		// Secure actions request
+		ComponentEventRequestParameters actionParams = this.decodeComponentEventRequest(url);
+		if (actionParams != null) {
+			String logicalPageName = actionParams.getActivePageName();
+			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 		// Secure Render request
 		PageRenderRequestParameters params = this.decodePageRenderRequest(url);
 		if (params != null) {
 			String logicalPageName = params.getLogicalPageName();
-			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
-				return true;
-			}
-		}
-
-		// Secure actions request
-		ComponentEventRequestParameters actionParams = this.decodeComponentEventRequest(url);
-		if (actionParams != null) {
-			String logicalPageName = actionParams.getContainingPageName();
 			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
 				return true;
 			}

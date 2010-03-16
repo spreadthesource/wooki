@@ -6,19 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
-import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
-import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.internal.structure.Page;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.ComponentSource;
 
 import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.BookManager;
@@ -34,7 +30,7 @@ import com.wooki.services.utils.DateUtils;
  * @author ccordenier
  * 
  */
-public class BookBase {
+public class BookBase extends AbstractPage {
 
 	@Inject
 	private BookManager bookManager;
@@ -44,12 +40,6 @@ public class BookBase {
 
 	@Inject
 	private LinkSource linkSource;
-
-	@Inject
-	private ComponentResources resources;
-
-	@Inject
-	private ComponentSource source;
 
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;
@@ -268,21 +258,6 @@ public class BookBase {
 
 	public void setRight(BookMenuItem right) {
 		this.right = right;
-	}
-
-	public void addFeedLink(String pageName, String title, MarkupWriter writer, Object... context) {
-		Link feedLink = this.source.getPage(pageName).getComponentResources().createEventLink("feed", context);
-		writeFeed(title, writer, feedLink);
-	}
-
-	public void addFeedLink(String title, MarkupWriter writer, Object... context) {
-		Link feedLink = resources.createEventLink("feed", context);
-		writeFeed(title, writer, feedLink);
-	}
-
-	private void writeFeed(String title, MarkupWriter writer, Link feedLink) {
-		Element head = writer.getDocument().find("html/head");
-		head.element("link", "type", "application/atom+xml", "title", title, "rel", "alternate", "href", feedLink.toAbsoluteURI());
 	}
 
 }

@@ -165,7 +165,6 @@ public class Index extends BookBase {
 
 		if (chapters.size() > 0) {
 			this.chaptersInfo = chapters.subList(1, chapters.size());
-
 		}
 
 		// Get abstract publication

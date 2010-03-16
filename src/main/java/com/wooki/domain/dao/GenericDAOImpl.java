@@ -78,12 +78,18 @@ public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> impl
 		return resultList;
 	}
 
+	public String getEntityType() {
+		return entityType.getName();
+	}
+
 	protected Session getSession() {
 		return (Session) entityManager.getDelegate();
 	}
 
-	public String getEntityType() {
-		return entityType.getName();
+	protected void setMaxResults(Query query, int max) {
+		if (max > 0) {
+			query.setMaxResults(max);
+		}
 	}
 
 }

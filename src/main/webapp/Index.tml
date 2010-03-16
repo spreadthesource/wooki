@@ -16,7 +16,7 @@
 					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
 				</ul>
 			</div>
-		  	<t:activity.feed t:clientId="user-public-activity" t:userId="user?.id" t:type="prop:activityType" t:title="Public Activity" />
+		  	<t:activity.feed t:clientId="user-public-activity" t:userId="user?.id" t:type="literal:USER_PUBLIC" t:title="Public Activity" />
     	</div>
 
     	<div class="right-col">
@@ -57,11 +57,16 @@
 			</div>
 		</div>
 		<div class="right-col">
-			<t:activity.feed t:clientId="latest-activity-feed" t:userId="user?.id" t:type="prop:activityType" />
+			<t:activity.feed t:clientId="latest-activity-feed" t:userId="user?.id" t:type="BOOK_CREATION" />
 			<t:activity.feed t:clientId="user-activity-feed" t:userId="user?.id" t:type="ACCOUNT" t:title="Latest Authors"/>
 		</div>
     </t:block>
     
+    <t:block t:id="homeBlock">
+		<t:activity.feed t:type="BOOK_CREATION" t:size="literal:auto" />
+		<t:activity.feed t:type="ACCOUNT" t:size="literal:auto" t:title="Latest Authors"/>
+	</t:block>
+
     <t:block id="noBooks">
     	<li class="first">No books available</li>
     </t:block>

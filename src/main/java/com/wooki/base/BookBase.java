@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
@@ -42,6 +43,9 @@ public class BookBase {
 
 	@Inject
 	private LinkSource linkSource;
+
+	@Inject
+	private ComponentResources resources;
 
 	@InjectPage
 	private com.wooki.pages.book.Index bookIndex;
@@ -262,7 +266,8 @@ public class BookBase {
 		this.right = right;
 	}
 
-	public void addFeedLink(String title, Link feedLink, MarkupWriter writer) {
+	public void addFeedLink(String title, MarkupWriter writer) {
+		Link feedLink = resources.createEventLink("feed");
 		Element head = writer.getDocument().find("html/head");
 		head.element("link", "type", "application/atom+xml", "title", title, "rel", "alternate", "href", feedLink.toAbsoluteURI());
 	}

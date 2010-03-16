@@ -21,7 +21,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.PersistenceConstants;
@@ -76,9 +75,6 @@ public class Index extends BookBase {
 
 	@Inject
 	private LinkSource linkSource;
-
-	@Inject
-	private ComponentResources resources;
 
 	@Inject
 	private RequestPageCache pageCache;
@@ -192,7 +188,7 @@ public class Index extends BookBase {
 			getAdminActions().add(createPageMenuItem("Settings", "book/settings", false, this.getBookId()));
 		}
 		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
-		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "print", false);
+		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "pdf", false);
 		getMenu().add(print);
 	}
 
@@ -204,8 +200,7 @@ public class Index extends BookBase {
 
 	@AfterRender
 	public void addFeedLink(MarkupWriter writer) {
-		org.apache.tapestry5.Link feedLink = this.resources.createEventLink("feed");
-		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), feedLink, writer);
+		super.addFeedLink(messages.format("recent-activity", this.getBook().getTitle()), writer);
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -221,11 +216,10 @@ public class Index extends BookBase {
 	 * 
 	 * @return
 	 */
-	@OnEvent(value = "print")
+	@OnEvent(value = "pdf")
 	public Object exportPdf() {
 		try {
 			InputStream bookStream = this.exportService.exportPdf(this.getBookId());
-			System.out.println(getBookId());
 			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
 		} catch (Exception ex) {
 			this.printError = true;

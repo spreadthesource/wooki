@@ -6,6 +6,7 @@ import org.apache.tapestry5.ioc.annotations.Autobuild;
 
 import com.wooki.ActivityType;
 import com.wooki.services.feeds.impl.FeedSourceImpl;
+import com.wooki.services.feeds.impl.FrontFeedProducer;
 import com.wooki.services.feeds.impl.SingleBookFeedProducer;
 
 /**
@@ -25,8 +26,11 @@ public class FeedModule {
 	 * 
 	 * @param configuration
 	 */
-	public void contributeFeedSource(MappedConfiguration<ActivityType, FeedProducer> configuration, @Autobuild SingleBookFeedProducer singleBook) {
+	public void contributeFeedSource(MappedConfiguration<ActivityType, FeedProducer> configuration, 
+			@Autobuild SingleBookFeedProducer singleBook,
+			@Autobuild FrontFeedProducer front) {
 		configuration.add(ActivityType.BOOK, singleBook);
+		configuration.add(ActivityType.BOOK_CREATION, front);
 	}
 
 }

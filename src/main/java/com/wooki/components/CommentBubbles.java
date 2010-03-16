@@ -117,7 +117,7 @@ public class CommentBubbles {
 		// Add update link
 		Link lnk = resources.createEventLink("displayComment",
 				this.publicationId, "blockId");
-		bubble.put("url", lnk.toRedirectURI());
+		bubble.put("url", lnk.toAbsoluteURI());
 		bubble.put("zoneId", commentList.getClientId());
 		bubble.put("dialogId", commentDialog.getClientId());
 		bubble.put("updateUrl", resources.createEventLink("updateBubbles", this.publicationId).toAbsoluteURI());

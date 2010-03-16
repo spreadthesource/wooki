@@ -18,9 +18,9 @@ import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
 
 /**
- * Define a base utili
+ * Define a base utility for feed producing.
  * 
- * @author a136316
+ * @author ccordenier
  * 
  */
 public abstract class AbstractFeedProducer implements FeedProducer {

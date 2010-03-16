@@ -1,17 +1,23 @@
 package com.wooki.services.feeds;
 
-import java.util.List;
-
-import com.wooki.domain.model.activity.Activity;
+import com.sun.syndication.feed.atom.Feed;
+import com.wooki.ActivityType;
 
 /**
- * Use to extract the list of activities to fill a Feed.
+ * Defines a object that can generate a Feed with its description.
  * 
  * @author ccordenier
  * 
  */
 public interface FeedSource {
 
-	List<Activity> getActivities(Long... ids);
+	/**
+	 * Produces a feed, if ids are needed to access to the list related entities
+	 * then pass it as parameters.
+	 * 
+	 * @param ids
+	 * @return
+	 */
+	Feed produceFeed(ActivityType type, Long... context);
 
 }

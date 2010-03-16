@@ -18,7 +18,6 @@ package com.wooki.pages.book;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -36,7 +35,6 @@ import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.io.FeedException;
 import com.wooki.ActivityType;
 import com.wooki.base.BookBase;
@@ -50,7 +48,7 @@ import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.export.ExportService;
-import com.wooki.services.feeds.FeedProducer;
+import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -80,7 +78,7 @@ public class Index extends BookBase {
 	private RequestPageCache pageCache;
 
 	@Inject
-	private FeedProducer feedProducer;
+	private FeedSource feedSource;
 
 	@InjectPage
 	private Edit editChapter;
@@ -235,21 +233,7 @@ public class Index extends BookBase {
 	 */
 	@OnEvent(value = "feed")
 	public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException {
-
-		this.setupBookBase(bookId);
-
-		String title = this.messages.format("recent-activity", this.getBook().getTitle());
-		String id = this.getBook().getSlugTitle();
-
-		List<Link> alternateLinks = new ArrayList<Link>();
-
-		Link linkToSelf = new Link();
-		linkToSelf.setHref(linkSource.createPageRenderLink("book/index", false, getBookId()).toAbsoluteURI());
-		linkToSelf.setTitle(this.getBook().getTitle());
-
-		alternateLinks.add(linkToSelf);
-
-		return this.feedProducer.produceFeed(ActivityType.BOOK, id, title, alternateLinks, this.getBookId());
+		return feedSource.produceFeed(ActivityType.BOOK, bookId);
 	}
 
 	public String getLinkForFeed() {

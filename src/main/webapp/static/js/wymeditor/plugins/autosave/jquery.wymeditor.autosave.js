@@ -17,10 +17,10 @@ WYMeditor.editor.prototype.autosave = function() {
 		var form = jQuery("#" + wym._options.formId);
 		form[0].sendAjaxRequest(form.attr("action"), {
 			onSuccess: function(transport) {
-				jQuery(".form-submit").append("<span class=\"autosave\">(" + transport.responseJSON.message + ")</span>");
+				jQuery("." + wym._options.autosaveStatus).append("<span class=\"autosave\">(" + transport.responseJSON.message + ")</span>");
 			},
 			onFailure: function() {
-				jQuery(".form-submit").append("<span class=\"autosave\">(Last auto saved failed)</span>");
+				jQuery("." + wym._options.autosaveStatus).append("<span class=\"autosave\">(Last auto saved failed)</span>");
 			}
 		});
 		

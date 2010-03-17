@@ -94,6 +94,9 @@ public class WymEditor {
 	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki")
 	private String wymSkin;
 
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wym-autosave")
+	private String autosaveStatus;
+	
 	@InjectContainer
 	private TextArea container;
 
@@ -122,7 +125,7 @@ public class WymEditor {
 		params.put("ajaxLoader", ajaxLoader.toClientURL());
 		params.put("formId", support.getClientId());
 		params.put("autosaveInterval", autosaveInterval);
-
+		params.put("autosaveStatus", autosaveStatus);
 
 		Link uploadActionLink = resources.createEventLink("uploadImage");
 		params.put("uploadAction", uploadActionLink.toAbsoluteURI());

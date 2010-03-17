@@ -19,8 +19,6 @@ package com.wooki.pages.chapter;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;

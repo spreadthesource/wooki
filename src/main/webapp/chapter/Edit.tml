@@ -1,8 +1,6 @@
 <html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id" t:menu="menu" t:adminActions="adminActions">
-
-	<h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id"  t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
 	
 	<t:block t:id="titleBlock">
 		<h2 class="title-with-link">

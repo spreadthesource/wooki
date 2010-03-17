@@ -119,10 +119,10 @@ public class WymEditor {
 		params.put("basePath", basePath.toClientURL() + "/");
 		params.put("wymPath", wymPath.toClientURL());
 		params.put("jQueryPath", jQueryPath.toClientURL());
-		params.put("classesHtml", "");
 		params.put("ajaxLoader", ajaxLoader.toClientURL());
 		params.put("formId", support.getClientId());
 		params.put("autosaveInterval", autosaveInterval);
+
 
 		Link uploadActionLink = resources.createEventLink("uploadImage");
 		params.put("uploadAction", uploadActionLink.toAbsoluteURI());

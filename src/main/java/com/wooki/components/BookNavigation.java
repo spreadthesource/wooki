@@ -62,9 +62,9 @@ public class BookNavigation {
 			writer.writeRaw("&nbsp;");
 			return;
 		}
-		
+
 		String id = renderSupport.allocateClientId("chapter-nav-item-link");
-		
+
 		writer.element("a", "href", item.getLink().toString(), "id", id);
 		writer.write(item.getName());
 		writer.end();
@@ -72,6 +72,9 @@ public class BookNavigation {
 		if (item.isConfirm()) {
 			JSONObject params = new JSONObject();
 			params.put("lnkId", id);
+
+			if (item.getConfirmMsg() != null)
+				params.put("message", item.getConfirmMsg());
 
 			renderSupport.addInit("initConfirm", params);
 		}

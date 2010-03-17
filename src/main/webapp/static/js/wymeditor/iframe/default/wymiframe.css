@@ -26,7 +26,7 @@ Theme inspired from kuler scheme : http://kuler.adobe.com/#themeID/617195
 */
 
 body {
-	background: #FFD8A1;
+	background-color: #fff;
 	font-family: Helvetica;
 	font-size: 14px;
 }
@@ -99,3 +99,4 @@ body {
     font-size: 12px !important;
     font-weight: normal; }
  
+

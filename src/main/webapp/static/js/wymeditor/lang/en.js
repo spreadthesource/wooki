@@ -37,8 +37,8 @@ WYMeditor.STRINGS['en'] = {
     Preview:          'Preview',
     Paste_From_Word:  'Paste from Word',
     Tools:            'Tools',
-    Containers:       'Containers',
-    Classes:          'Classes',
+    Containers:       'Text format',
+    Classes:          'Styles',
     Status:           'Status',
     Source_Code:      'Source code'
 };

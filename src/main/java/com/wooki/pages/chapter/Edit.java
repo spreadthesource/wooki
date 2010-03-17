@@ -130,6 +130,29 @@ public class Edit extends BookBase {
 		}
 	}
 
+	@SetupRender
+	public void setupNav() {
+		if ((previous != null) && (previousTitle != null)) {
+			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
+			getLeft().setConfirm(true);
+			getLeft().setConfirmMsg("Cancel edition?");
+		} else {
+			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+			getLeft().setConfirm(true);
+			getLeft().setConfirmMsg("Cancel edition?");
+		}
+
+		if ((next != null) && (nextTitle != null)) {
+			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
+			getRight().setConfirm(true);
+			getRight().setConfirmMsg("Cancel edition?");
+		}
+
+		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+		getCenter().setConfirm(true);
+		getCenter().setConfirmMsg("Cancel edition?");
+	}
+
 	@OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
 	public Object updateTitle() {
 		this.chapterManager.update(chapter);

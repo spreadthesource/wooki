@@ -8,6 +8,8 @@ public class BookMenuItem {
 	private Link link;
 	
 	private boolean confirm;
+	
+	private String confirmMsg;
 
 	public BookMenuItem(String name, Link link) {
 		this.name = name;
@@ -36,5 +38,13 @@ public class BookMenuItem {
 
 	public boolean isConfirm() {
 		return confirm;
+	}
+
+	public void setConfirmMsg(String confirmMsg) {
+		this.confirmMsg = confirmMsg;
+	}
+
+	public String getConfirmMsg() {
+		return confirmMsg;
 	}
 }

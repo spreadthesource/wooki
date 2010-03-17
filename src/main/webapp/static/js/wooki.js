@@ -263,6 +263,30 @@ jQuery.extend(Tapestry.Initializer, {
 		                      {'name': 'BLOCKQUOTE', 'title': 'Blockquote', 'css': 'wym_containers_blockquote'},
 		                      {'name': 'TH', 'title': 'Table_Header', 'css': 'wym_containers_th'}];
 			data.params.containersItems = containersItems;
+			data.params.classesItems = 	[
+			                           	 {'name': 'date', 'title': 'PARA: Date', 'expr': 'p'},
+			                             {'name': 'hidden-note', 'title': 'PARA: Hidden note', 'expr': '*'}
+			                           ];
+			
+			data.params.boxHtml =  "<div class='wym_box'>"
+	              + "<div class='wym_area_top'>" 
+	              + WYMeditor.TOOLS
+	              + "<div class='clearer' />"
+	              + WYMeditor.CONTAINERS
+	              + WYMeditor.CLASSES
+	              + "</div>"
+	              + "<div class='wym_area_left'></div>"
+	              + "<div class='wym_area_right'>"
+	              + "</div>"
+	              + "<div class='wym_area_main'>"
+	              + WYMeditor.HTML
+	              + WYMeditor.IFRAME
+	              + WYMeditor.STATUS
+	              + "</div>"
+	              + "<div class='wym_area_bottom'>"
+	              + "</div>"
+	              + "</div>";
+
 			
 			jQuery('#'+data.elt).wymeditor(data.params);
 			jQuery.wymeditors(0).fullscreen();

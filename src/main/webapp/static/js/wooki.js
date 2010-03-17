@@ -271,9 +271,9 @@ jQuery.extend(Tapestry.Initializer, {
 			data.params.boxHtml =  "<div class='wym_box'>"
 	              + "<div class='wym_area_top'>" 
 	              + WYMeditor.TOOLS
-	              + "<div class='clearer' />"
+	              //+ "<div class='clearer' />"
 	              + WYMeditor.CONTAINERS
-	              + WYMeditor.CLASSES
+	              //+ WYMeditor.CLASSES
 	              + "</div>"
 	              + "<div class='wym_area_left'></div>"
 	              + "<div class='wym_area_right'>"

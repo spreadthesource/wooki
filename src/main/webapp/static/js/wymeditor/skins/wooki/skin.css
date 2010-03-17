@@ -69,7 +69,7 @@ Theme inspired from kuler scheme : http://kuler.adobe.com/#themeID/617195
         .wym_skin_wooki .wym_panel h2           { display: block; }
 
     /*option: add this class to a section to make it render as a dropdown menu*/
-		.wym_skin_wooki .wym_dropdown           { width:150px; padding: 0; border:1px solid #C9BB9B; float:left; margin:5px 10px 5px 0px; }
+		.wym_skin_wooki .wym_dropdown           { width:150px; padding: 0; border:1px solid #C9BB9B; float:right ; margin:5px 10px 5px 0px; }
         .wym_skin_wooki .wym_dropdown h2        { padding:5px; display:block; font-family: Helvetica, Arial, sans-serif; font-size: 18px;}
         .wym_skin_wooki .wym_dropdown ul        { width:150px;  display: none; position: absolute; background: white; padding:5px; border: solid #C9BB9B; border-width: 1px 1px 1px 1px; margin-left:-2px; }
         .wym_skin_wooki .wym_dropdown:hover ul,

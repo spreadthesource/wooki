@@ -36,12 +36,20 @@ public interface UserManager {
 	void addUser(User user) throws UserAlreadyException;
 
 	/**
-	 * Verify that a user exists.
+	 * Get a user by its username.
 	 * 
 	 * @param username
 	 * @return
 	 */
 	User findByUsername(String username);
+
+	/**
+	 * Get a user by its id.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	User findById(Long userId);
 
 	/**
 	 * Get the list of user whos name starts with prefix.

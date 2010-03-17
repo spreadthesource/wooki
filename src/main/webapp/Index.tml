@@ -2,10 +2,11 @@
 		
     <t:delegate to="userCtx" />
 
-	<t:feedlink t:titleKey="recent-creation-activity" />
 
 	<!-- Block displayed when there is logged user or a profile requested -->    
     <t:block id="userBlock">
+    
+    	<t:feedlink t:event="userfeed" t:titleKey="recent-user-activity" t:titleFormat="user?.username" t:context="user?.id" />
     
     	<div class="left-col">
 	        <div class="info section shadowed x460">
@@ -48,6 +49,7 @@
 
 	<!-- Block displayed in the index default page -->
     <t:block id="presBlock">
+       	<t:feedlink t:titleKey="recent-creation-activity" t:context="user?.id" />
 		<div id="teasing-box" >		
 			<div id="teasing" class="radied shadowed x300">
 				<p>Wooki is a fantastic tool to write and publish documents with the possibility of letting others reviewing it.</p>
@@ -65,6 +67,7 @@
     </t:block>
     
     <t:block t:id="homeBlock">
+       	<t:feedlink t:titleKey="recent-creation-activity" />    
 		<t:activity.feed t:type="BOOK_CREATION" t:size="literal:auto" />
 		<t:activity.feed t:type="ACCOUNT" t:size="literal:auto" t:title="Latest Authors"/>
 	</t:block>

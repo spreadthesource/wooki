@@ -21,7 +21,6 @@ import java.util.Date;
 import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +70,11 @@ public class UserManagerImpl implements UserManager {
 
 	public User findByUsername(String username) {
 		return authorDao.findByUsername(username);
+	}
+
+	public User findById(Long userId) {
+		Defense.notNull(userId, "userId");
+		return authorDao.findById(userId);
 	}
 
 	public String[] listUserNames(String prefix) {

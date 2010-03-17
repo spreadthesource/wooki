@@ -33,7 +33,7 @@ public class FrontFeedProducer extends AbstractFeedProducer {
 	 */
 	public Feed produce(Long... context) {
 
-		String title = this.messages.getMessages().format("recent-activity", messages.getMessages().get("recent-creation-activity"));
+		String title = messages.getMessages().get("recent-creation-activity");
 		String id = "wooki-public";
 
 		List<Link> alternateLinks = new ArrayList<Link>();

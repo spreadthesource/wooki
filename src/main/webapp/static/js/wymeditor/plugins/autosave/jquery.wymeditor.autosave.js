@@ -17,9 +17,15 @@ WYMeditor.editor.prototype.autosave = function() {
 		var form = jQuery("#" + wym._options.formId);
 		form[0].sendAjaxRequest(form.attr("action"), {
 			onSuccess: function(transport) {
+				if(jQuery("span.autosave") != undefined) {
+					jQuery("span.autosave").remove();
+				}
 				jQuery("." + wym._options.autosaveStatus).append("<span class=\"autosave\">(" + transport.responseJSON.message + ")</span>");
 			},
 			onFailure: function() {
+				if(jQuery("span.autosave") != undefined) {
+					jQuery("span.autosave").remove();
+				}
 				jQuery("." + wym._options.autosaveStatus).append("<span class=\"autosave\">(Last auto saved failed)</span>");
 			}
 		});

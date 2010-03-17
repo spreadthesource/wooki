@@ -140,6 +140,11 @@ public class Index {
 		return null;
 	}
 
+	@OnEvent(value = "userfeed")
+	public Feed getUserFeed(Long userId) throws IOException, IllegalArgumentException, FeedException {
+		return feedSource.produceFeed(ActivityType.USER_PUBLIC, userId);
+	}
+	
 	@OnEvent(value = "feed")
 	public Feed getFeed() throws IOException, IllegalArgumentException, FeedException {
 		return feedSource.produceFeed(ActivityType.BOOK_CREATION);

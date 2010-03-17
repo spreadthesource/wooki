@@ -14,6 +14,9 @@ import org.apache.tapestry5.services.ComponentSource;
 
 public class FeedLink extends AbstractLink {
 
+	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "feed")
+	private String event;
+
 	/**
 	 * The logical name of the page to link to.
 	 */
@@ -51,7 +54,7 @@ public class FeedLink extends AbstractLink {
 	void createLink(MarkupWriter writer) {
 		ComponentResources containerResources = resources.isBound("page") ? source.getComponent(page).getComponentResources() : resources
 				.getContainerResources();
-		Link link = containerResources.createEventLink("feed", context);
+		Link link = containerResources.createEventLink(event, context);
 		String title = resources.isBound("titleFormat") ? this.messages.format(titleKey, titleFormat) : this.messages.get(titleKey);
 
 		// Add link to the header

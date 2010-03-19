@@ -22,14 +22,16 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
-import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.BookMenuItem;
+import com.wooki.LinkType;
+import com.wooki.NavLinkPosition;
 import com.wooki.base.BookBase;
-import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.services.HttpError;
+import com.wooki.services.LinkSupport;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -46,8 +48,7 @@ public class Index extends BookBase {
 	private WookiSecurityContext securityCtx;
 
 	@Inject
-	private RequestPageCache pageCache;
-	private Long chapterId;
+	private LinkSupport linkSupport;
 
 	@Property
 	private Chapter chapter;
@@ -63,6 +64,8 @@ public class Index extends BookBase {
 
 	@Property
 	private String nextTitle;
+
+	private Long chapterId;
 
 	@OnEvent(value = EventConstants.ACTIVATE)
 	public Object setupChapter(Long bookId, Long chapterId, String revision) {
@@ -138,28 +141,29 @@ public class Index extends BookBase {
 	public void setupMenus() {
 		if (securityCtx.isAuthorOfBook(getBookId())) {
 			if (isShowAdmin()) {
-				getAdminActions().add(createPageMenuItem("Edit content", "chapter/edit", false, getBookId(), chapterId));
-				BookMenuItem delete = createEventMenuItem("Delete", pageCache.get("chapter/index"), null, "delete", false);
+				linkSupport.createPageMenuItem(LinkType.ADMIN, "Edit content", "chapter/edit", getBookId(), chapterId);
+				BookMenuItem delete = linkSupport.createEventMenuItem(LinkType.ADMIN, "Delete", "chapter/index", "delete");
 				delete.setConfirm(true);
-				getAdminActions().add(delete);
 			}
 		}
-		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), Issues.ALL));
-		getMenu().add(createPageMenuItem("Feedback on this chapter only", "chapter/issues", false, getBookId(), chapterId));
+		linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this.getBookId(), Issues.ALL);
+		linkSupport.createPageMenuItem(LinkType.MENU, "Feedback on this chapter only", "chapter/issues", false, getBookId(), chapterId);
+
+		// Add RSS link
+		BookMenuItem rss = linkSupport.createEventMenuItem(LinkType.MENU, "RSS Feed", "book/index", "feed", this.getBookId());
 	}
 
 	@SetupRender
 	public void setupNav() {
 		if ((previous != null) && (previousTitle != null)) {
-			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
+			this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< " + previousTitle, "chapter/index", getBookId(), previous);
 		} else {
-			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
+			this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
 		}
-
-		if ((next != null) && (nextTitle != null))
-			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
-
-		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+		if ((next != null) && (nextTitle != null)) {
+			this.linkSupport.createNavLink(NavLinkPosition.RIGHT, nextTitle + " >", "chapter/index", getBookId(), next);
+		}
+		this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
 	}
 
 	@OnEvent(value = "delete")

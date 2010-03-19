@@ -65,6 +65,16 @@ public class FullFlyingSaucer extends Index {
 	}
 
 	@Override
+	public void setupMenus() {
+		// Empty in print mode
+	}
+
+	@Override
+	public void setupNav() {
+		// Empty for print version
+	}
+
+	@Override
 	public String getContent() {
 		String abstractContent = super.getContent();
 		return applyGlobalReplaces(abstractContent);

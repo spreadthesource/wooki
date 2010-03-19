@@ -30,6 +30,7 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.NavLinkPosition;
 import com.wooki.WookiEventConstants;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
@@ -39,6 +40,7 @@ import com.wooki.domain.exception.UserAlreadyOwnerException;
 import com.wooki.domain.exception.UserNotFoundException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
+import com.wooki.services.LinkSupport;
 import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
@@ -61,6 +63,9 @@ public class Settings extends BookBase {
 
 	@Inject
 	private Messages messages;
+
+	@Inject
+	private LinkSupport linkSupport;
 
 	@InjectComponent
 	private Form addAuthorForm;
@@ -91,8 +96,8 @@ public class Settings extends BookBase {
 
 	@SetupRender
 	public void setupNav() {
-		setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
-		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+		this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
+		this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
 	}
 
 	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT)

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wooki</groupId>
 	<artifactId>wooki</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<packaging>war</packaging>
 	<name>Wooki : Collaborative Writing</name>
 	<dependencies>
@@ -424,20 +424,23 @@
 			This repository is only needed if the Tapestry released artifacts
 			haven't made it to the central Maven repository yet.
 		-->
-		<repository>
+		<!--repository>
 			<id>tapestry</id>
 			<url>http://tapestry.formos.com/maven-repository/</url>
-		</repository>
+		</repository-->
 
 		<!--
 			This repository is only needed when the tapestry-release-version is a
 			snapshot release.
 		-->
-		<repository>
+		<!--repository>
 			<id>tapestry-snapshots</id>
 			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</repository>
-
+		</repository-->
+		<repository>
+<id>apache-snapshots</id>
+<url>http://repository.apache.org/content/groups/snapshots-group</url>
+</repository>
 		<repository>
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
@@ -477,10 +480,10 @@
 			As above, this can be commented out when access to the snapshot
 			version of a Tapestry Maven plugin is not required.
 		-->
-		<pluginRepository>
+		<!--pluginRepository>
 			<id>tapestry-snapshots</id>
 			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</pluginRepository>
+		</pluginRepository-->
 
 	</pluginRepositories>
 
@@ -491,7 +494,7 @@
 		<hibernate-annotations-version>3.3.1.GA</hibernate-annotations-version>
 		<hibernate-entitymanager-version>3.3.2.GA
 		</hibernate-entitymanager-version>
-		<tapestry-release-version>5.1.0.5</tapestry-release-version>
+		<tapestry-release-version>5.2.0-SNAPSHOT</tapestry-release-version>
 		<spring-version>3.0.0.RELEASE</spring-version>
 	</properties>
 </project>

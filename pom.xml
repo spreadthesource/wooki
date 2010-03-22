@@ -13,60 +13,34 @@
 			<artifactId>tapestry-core</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
-		<!--
-			A dependency on either JUnit or TestNG is required, or the surefire
-			plugin (which runs the tests) will fail, preventing Maven from
-			packaging the WAR. Tapestry includes a large number of testing
-			facilities designed for use with TestNG (http://testng.org/), so it's
-			recommended.
-		-->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>5.8</version>
-			<classifier>jdk15</classifier>
-			<scope>test</scope>
-		</dependency>
 
-		<dependency>
-			<groupId>org.easymock</groupId>
-			<artifactId>easymock</artifactId>
-			<version>2.4</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!--
-			tapestry-test will conflict with RunJettyRun inside Eclipse.
-			tapestry-test brings in Selenium, which is based on Jetty 5.1;
-			RunJettyRun uses Jetty 6. <dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-test</artifactId>
-			<version>${tapestry-release-version}</version> <scope>test</scope>
-			</dependency>
-		-->
-
-		<!--
-			Provided by the servlet container, but sometimes referenced in the
-			application code.
-		-->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-upload</artifactId>
+			<version>${tapestry-release-version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -162,6 +136,24 @@
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>5.8</version>
+			<classifier>jdk15</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>2.4</version>
+			<scope>test</scope>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.jdom</groupId>
@@ -272,11 +264,7 @@
 			<artifactId>itext</artifactId>
 			<version>2.0.8</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.tapestry</groupId>
-			<artifactId>tapestry-upload</artifactId>
-			<version>5.1.0.5</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>rome</groupId>
@@ -420,27 +408,16 @@
 
 	<repositories>
 
-		<!--
-			This repository is only needed if the Tapestry released artifacts
-			haven't made it to the central Maven repository yet.
-		-->
-		<!--repository>
-			<id>tapestry</id>
-			<url>http://tapestry.formos.com/maven-repository/</url>
-		</repository-->
-
-		<!--
-			This repository is only needed when the tapestry-release-version is a
-			snapshot release.
-		-->
-		<!--repository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</repository-->
 		<repository>
-<id>apache-snapshots</id>
-<url>http://repository.apache.org/content/groups/snapshots-group</url>
-</repository>
+			<id>apache</id>
+			<url>http://repository.apache.org/</url>
+		</repository>
+
+		<repository>
+			<id>apache-snapshots</id>
+			<url>http://repository.apache.org/snapshots</url>
+		</repository>
+
 		<repository>
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
@@ -475,16 +452,6 @@
 	</repositories>
 
 	<pluginRepositories>
-
-		<!--
-			As above, this can be commented out when access to the snapshot
-			version of a Tapestry Maven plugin is not required.
-		-->
-		<!--pluginRepository>
-			<id>tapestry-snapshots</id>
-			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
-		</pluginRepository-->
-
 	</pluginRepositories>
 
 	<properties>
@@ -494,7 +461,7 @@
 		<hibernate-annotations-version>3.3.1.GA</hibernate-annotations-version>
 		<hibernate-entitymanager-version>3.3.2.GA
 		</hibernate-entitymanager-version>
-		<tapestry-release-version>5.2.0-SNAPSHOT</tapestry-release-version>
 		<spring-version>3.0.0.RELEASE</spring-version>
+		<tapestry-release-version>5.2.0-SNAPSHOT</tapestry-release-version>
 	</properties>
 </project>

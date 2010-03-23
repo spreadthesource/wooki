@@ -18,6 +18,7 @@ package com.wooki.services.security;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.ChapterDAO;
@@ -50,9 +51,9 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 	}
 
 	public User getAuthor() {
-		Long id = this.getId();
-		if (id != null) {
-			return userDao.findById(id);
+		String username = this.getUsername();
+		if (username != null) {
+			return userDao.findByUsername(username);
 		}
 		return null;
 	}
@@ -100,20 +101,8 @@ public class WookiSecurityContextImpl implements WookiSecurityContext {
 	public String getUsername() {
 		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
 				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
-			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
-				return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-			} else {
-				return null;
-			}
-		}
-		return null;
-	}
-	
-	private Long getId() {
-		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
-				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
-			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
-				return ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
+				return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
 			} else {
 				return null;
 			}

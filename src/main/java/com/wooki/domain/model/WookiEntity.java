@@ -66,4 +66,6 @@ public abstract class WookiEntity {
 		this.deletionDate = deletionDate;
 	}
 	
+	abstract public Long getId();
+	
 }

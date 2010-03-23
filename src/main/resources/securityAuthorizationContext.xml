@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+
+		Copyright 2009 Robin Komiwes, Bruno Verachten, Christophe Cordenier
+
+		Licensed under the Apache License, Version 2.0 (the "License"); you
+		may not use this file except in compliance with the License. You may
+		obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0 Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License.
+	-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+
+	<!-- Define permissions -->
+	<bean id="administrationPermission"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField"
+			value="org.springframework.security.acls.domain.BasePermission.ADMINISTRATION" />
+	</bean>
+
+	<bean id="readPermission"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField"
+			value="org.springframework.security.acls.domain.BasePermission.READ" />
+	</bean>
+
+	<bean id="writePermission"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField"
+			value="org.springframework.security.acls.domain.BasePermission.WRITE" />
+	</bean>
+
+	<bean id="deletePermission"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField"
+			value="org.springframework.security.acls.domain.BasePermission.DELETE" />
+	</bean>
+
+	<!--
+		An access decision voter that reads ACL_OBJECT_READ configuration
+		settings
+	-->
+	<bean id="aclObjectReadVoter" class="org.springframework.security.acls.AclEntryVoter">
+		<constructor-arg ref="aclService" />
+		<constructor-arg value="ACL_OBJECT_READ" />
+		<constructor-arg>
+			<list>
+				<ref local="administrationPermission" />
+				<ref local="readPermission" />
+			</list>
+		</constructor-arg>
+		<property name="processDomainObjectClass"
+			value="com.wooki.domain.model.WookiEntity" />
+	</bean>
+
+	<!--
+		An access decision voter that reads ACL_OBJECT_WRITE configuration
+		settings
+	-->
+	<bean id="aclObjectWriteVoter" class="org.springframework.security.acls.AclEntryVoter">
+		<constructor-arg ref="aclService" />
+		<constructor-arg value="ACL_OBJECT_WRITE" />
+		<constructor-arg>
+			<list>
+				<ref local="administrationPermission" />
+				<ref local="writePermission" />
+			</list>
+		</constructor-arg>
+		<property name="processDomainObjectClass"
+			value="com.wooki.domain.model.WookiEntity" />
+	</bean>
+
+	<!--
+		An access decision voter that reads ACL_CONTACT_DELETE configuration
+		settings
+	-->
+	<bean id="aclObjectDeleteVoter" class="org.springframework.security.acls.AclEntryVoter">
+		<constructor-arg ref="aclService" />
+		<constructor-arg value="ACL_OBJECT_DELETE" />
+		<constructor-arg>
+			<list>
+				<ref local="administrationPermission" />
+				<ref local="deletePermission" />
+			</list>
+		</constructor-arg>
+		<property name="processDomainObjectClass"
+			value="com.wooki.domain.model.WookiEntity" />
+	</bean>
+
+	<!--
+		An access decision voter that reads ACL_CONTACT_ADMIN configuration
+		settings
+	-->
+	<bean id="aclObjectAdminVoter" class="org.springframework.security.acls.AclEntryVoter">
+		<constructor-arg ref="aclService" />
+		<constructor-arg value="ACL_OBJECT_ADMIN" />
+		<constructor-arg>
+			<list>
+				<ref local="administrationPermission" />
+			</list>
+		</constructor-arg>
+		<property name="processDomainObjectClass"
+			value="com.wooki.domain.model.WookiEntity" />
+	</bean>
+
+	<bean id="aclService"
+		class="org.springframework.security.acls.jdbc.JdbcMutableAclService">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="lookupStrategy" />
+		<constructor-arg ref="aclCache" />
+	</bean>
+
+	<bean id="lookupStrategy"
+		class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
+		<constructor-arg ref="dataSource" />
+		<constructor-arg ref="aclCache" />
+		<constructor-arg ref="aclAuthorizationStrategy" />
+		<constructor-arg>
+			<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="aclCache"
+		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
+		<constructor-arg>
+			<bean class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+				<property name="cacheManager">
+					<bean class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+				</property>
+				<property name="cacheName" value="aclCache" />
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="aclAuthorizationStrategy"
+		class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+					<constructor-arg value="ROLE_ADMIN" />
+				</bean>
+				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+					<constructor-arg value="ROLE_ADMIN" />
+				</bean>
+				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+					<constructor-arg value="ROLE_ADMIN" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- Define the role hierarchy -->
+	<bean id="roleHierarchy"
+		class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+		<property name="hierarchy">
+			<value>
+				ROLE_ADMIN > ROLE_AUTHOR
+            </value>
+		</property>
+	</bean>
+
+
+</beans>

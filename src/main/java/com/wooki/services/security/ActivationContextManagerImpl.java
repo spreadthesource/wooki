@@ -36,7 +36,7 @@ public class ActivationContextManagerImpl implements ActivationContextManager, I
 	 * @param clazz
 	 * @return
 	 */
-	private ActivationContextDefinition getDefinition(String pageName, Class clazz) {
+	private ActivationContextDefinition getDefinition(String pageName, Class<?> clazz) {
 
 		synchronized (this.definition) {
 			if (definition.containsKey(pageName)) {

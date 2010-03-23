@@ -16,17 +16,7 @@
 
 package com.wooki.domain.biz;
 
-import java.io.UnsupportedEncodingException;
 
 public abstract class AbstractManager {
 
-	protected static final String toStringWithCharset(byte[] content, String charset) {
-		try {
-			return new String(content, charset);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
 }

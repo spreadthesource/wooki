@@ -16,6 +16,7 @@
 
 package com.wooki.domain.biz;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
@@ -29,7 +30,9 @@ import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.model.Authority;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.WookiGrantedAuthority;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.services.security.WookiSecurityContext;
@@ -46,7 +49,7 @@ public class UserManagerImpl implements UserManager {
 	private SaltSource saltSource;
 
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
 	public void addUser(User author) throws UserAlreadyException {
 
@@ -59,6 +62,9 @@ public class UserManagerImpl implements UserManager {
 		author.setCreationDate(new Date());
 		author.setPassword(this.passwordEncoder.encodePassword(pass, this.saltSource.getSalt(author)));
 		authorDao.create(author);
+
+		// Add default Author Role
+		author.setGrantedAuthorities(Arrays.asList(new Authority[] { new Authority(WookiGrantedAuthority.ROLE_AUTHOR.getAuthority()) }));
 
 		AccountActivity aa = new AccountActivity();
 		aa.setCreationDate(Calendar.getInstance().getTime());
@@ -102,7 +108,7 @@ public class UserManagerImpl implements UserManager {
 		return user;
 	}
 
-	@Transactional(readOnly=false)
+	@Transactional(readOnly = false)
 	public User updatePassword(User user, String oldPassword, String newPassword) throws AuthorizationException {
 		Defense.notNull(user, "user");
 		Defense.notNull(oldPassword, "oldPassword");
@@ -112,11 +118,11 @@ public class UserManagerImpl implements UserManager {
 			throw new AuthorizationException("Action not authorized");
 		}
 
-		String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource.getSalt(user)) ;
+		String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource.getSalt(user));
 		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
 			throw new AuthorizationException();
 		}
-		
+
 		user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource.getSalt(user)));
 		this.securityCtx.log(authorDao.update(user));
 

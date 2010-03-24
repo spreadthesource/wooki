@@ -26,7 +26,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
-import com.wooki.base.components.BookMenuItem;
+import com.wooki.BookMenuItem;
 
 public class BookIndex {
 	@Inject

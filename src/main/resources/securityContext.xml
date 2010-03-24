@@ -149,6 +149,7 @@
 
 	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
 		<constructor-arg ref="userManager" />
+		<constructor-arg ref="roleHierarchy" />
 	</bean>
 
 	<bean id="wookiAuthenticationManager"
@@ -203,8 +204,9 @@
 		class="org.springframework.security.web.context.SecurityContextPersistenceFilter">
 	</bean>
 
-	<bean id="wookiFilterSecurityMeta" class="org.springframework.security.config.http.FilterInvocationSecurityMetadataSourceParser">
-		
+	<bean id="wookiFilterSecurityMeta"
+		class="org.springframework.security.config.http.FilterInvocationSecurityMetadataSourceParser">
+
 	</bean>
 
 	<!--
@@ -220,8 +222,9 @@
 		</property>
 		<property name="rejectPublicInvocations" value="true" />
 		<property name="securityMetadataSource">
-			<security:filter-security-metadata-source path-type="ant" lowercase-comparisons="true">
-				<security:intercept-url pattern="/**" access="ROLE_Author" />
+			<security:filter-security-metadata-source
+				path-type="ant" lowercase-comparisons="true">
+				<security:intercept-url pattern="/**" access="ROLE_AUTHOR" />
 			</security:filter-security-metadata-source>
 		</property>
 	</bean>

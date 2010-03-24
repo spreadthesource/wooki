@@ -41,10 +41,13 @@ import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.ibm.icu.util.Calendar;
+import com.wooki.BookMenuItem;
+import com.wooki.NavLinkPosition;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Chapter;
+import com.wooki.services.LinkSupport;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -66,6 +69,9 @@ public class Edit extends BookBase {
 
 	@Inject
 	private Request request;
+
+	@Inject
+	private LinkSupport linkSupport;
 
 	@InjectComponent
 	private Form editChapterForm;
@@ -128,29 +134,42 @@ public class Edit extends BookBase {
 				&& this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
 			this.abstractChapter = true;
 		}
+		
+		// Prepare previous and next links
+		Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
+		if (data != null && data.length == 2) {
+			this.previous = (Long) data[0];
+			this.previousTitle = (String) data[1];
+		}
+
+		data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
+		if (data != null && data.length == 2) {
+			this.next = (Long) data[0];
+			this.nextTitle = (String) data[1];
+		}
 	}
 
 	@SetupRender
 	public void setupNav() {
 		if ((previous != null) && (previousTitle != null)) {
-			setLeft(createPageMenuItem("< " + previousTitle, "chapter/index", false, getBookId(), previous));
-			getLeft().setConfirm(true);
-			getLeft().setConfirmMsg("Cancel edition?");
+			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< " + previousTitle, "chapter/index", getBookId(), previous);
+			item.setConfirm(true);
+			item.setConfirmMsg("Cancel edition?");
 		} else {
-			setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
-			getLeft().setConfirm(true);
-			getLeft().setConfirmMsg("Cancel edition?");
+			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
+			item.setConfirm(true);
+			item.setConfirmMsg("Cancel edition?");
 		}
 
 		if ((next != null) && (nextTitle != null)) {
-			setRight(createPageMenuItem(nextTitle + " >", "chapter/index", false, getBookId(), next));
-			getRight().setConfirm(true);
-			getRight().setConfirmMsg("Cancel edition?");
+			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.RIGHT, nextTitle + " >", "chapter/index", getBookId(), next);
+			item.setConfirm(true);
+			item.setConfirmMsg("Cancel edition?");
 		}
 
-		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
-		getCenter().setConfirm(true);
-		getCenter().setConfirmMsg("Cancel edition?");
+		BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
+		item.setConfirm(true);
+		item.setConfirmMsg("Cancel edition?");
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")

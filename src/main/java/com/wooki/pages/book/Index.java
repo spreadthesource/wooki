@@ -27,16 +27,16 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
-import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
 import com.wooki.ActivityType;
+import com.wooki.BookMenuItem;
+import com.wooki.LinkType;
+import com.wooki.NavLinkPosition;
 import com.wooki.base.BookBase;
-import com.wooki.base.components.BookMenuItem;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
@@ -45,6 +45,7 @@ import com.wooki.domain.model.User;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
+import com.wooki.services.LinkSupport;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
@@ -70,13 +71,10 @@ public class Index extends BookBase {
 	private ExportService exportService;
 
 	@Inject
-	private LinkSource linkSource;
-
-	@Inject
-	private RequestPageCache pageCache;
-
-	@Inject
 	private FeedSource feedSource;
+
+	@Inject
+	private LinkSupport linkSupport;
 
 	@InjectPage
 	private Edit editChapter;
@@ -177,20 +175,23 @@ public class Index extends BookBase {
 	public void setupMenus() {
 		if (securityCtx.isAuthorOfBook(getBookId())) {
 			if (isAbstractHasWorkingCopy()) {
-				getAdminActions().add(createPageMenuItem("Working Copy", "book", false, this.getBookId(), ChapterManager.LAST));
+				linkSupport.createPageMenuItem(LinkType.MENU, "Working Copy", "book", this.getBookId(), ChapterManager.LAST);
 			}
-			getAdminActions().add(createPageMenuItem("Edit introduction", "chapter/edit", false, this.getBookId(), this.bookAbstractId));
-			getAdminActions().add(createPageMenuItem("Settings", "book/settings", false, this.getBookId()));
+			linkSupport.createPageMenuItem(LinkType.ADMIN, "Edit introduction", "chapter/edit", this.getBookId(), this.bookAbstractId);
+			linkSupport.createPageMenuItem(LinkType.ADMIN, "Settings", "book/settings", this.getBookId());
 		}
-		getMenu().add(createPageMenuItem("All feedback", "chapter/issues", false, this.getBookId(), "all"));
-		BookMenuItem print = createEventMenuItem("Download PDF", pageCache.get("book/index"), null, "pdf", false);
-		getMenu().add(print);
+		linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this.getBookId(), "all");
+		linkSupport.createEventMenuItem(LinkType.MENU, "Download PDF", "book/index", "pdf");
+		
+		// Add RSS link
+		BookMenuItem rss = linkSupport.createEventMenuItem(LinkType.MENU, "RSS Feed", "book/index", "feed", this.getBookId());
 	}
 
 	@SetupRender
 	public void setupNav() {
-		if ((firstChapterId != null) && (firstChapterTitle != null))
-			setRight(createPageMenuItem(firstChapterTitle + " >", "chapter/index", false, getBookId(), firstChapterId));
+		if ((firstChapterId != null) && (firstChapterTitle != null)) {
+			linkSupport.createNavLink(NavLinkPosition.RIGHT, firstChapterTitle + " >", "chapter/index", getBookId(), firstChapterId);
+		}
 	}
 
 	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
@@ -213,6 +214,7 @@ public class Index extends BookBase {
 			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
 		} catch (Exception ex) {
 			this.printError = true;
+			ex.printStackTrace();
 			return this;
 		}
 	}
@@ -227,12 +229,6 @@ public class Index extends BookBase {
 	@OnEvent(value = "feed")
 	public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException {
 		return feedSource.produceFeed(ActivityType.BOOK, bookId);
-	}
-
-	public String getLinkForFeed() {
-		org.apache.tapestry5.Link feedLink = linkSource.createComponentEventLink(pageCache.get("book/index"), null, "feed", false, getBookId());
-		feedLink.addParameter("t:ac", "1");
-		return feedLink.toURI();
 	}
 
 	public String[] getPrintErrors() {

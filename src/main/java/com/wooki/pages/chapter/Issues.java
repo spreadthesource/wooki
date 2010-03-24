@@ -25,10 +25,11 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.NavLinkPosition;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
-import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.LinkSupport;
 
 /**
  * Display all the comment for a given chapter.
@@ -44,7 +45,7 @@ public class Issues extends BookBase {
 	private ChapterManager chapterManager;
 
 	@Inject
-	private WookiSecurityContext securityCtx;
+	private LinkSupport linkSupport;
 
 	@Property
 	private List<Chapter> chapters;
@@ -61,8 +62,8 @@ public class Issues extends BookBase {
 
 	@SetupRender
 	public void setupNav() {
-		setLeft(createPageMenuItem("< Table of content", "book/index", false, getBookId()));
-		setCenter(createPageMenuItem(getBook().getTitle(), "book/index", false, getBookId()));
+		this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
+		this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
 	}
 
 	@OnEvent(value = EventConstants.ACTIVATE)

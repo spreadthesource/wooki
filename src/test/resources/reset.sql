@@ -8,5 +8,7 @@ delete from Publication
 delete from BookAuthor
 delete from Chapter
 delete from Book
+delete from UserAuthority
+delete from Authority
 delete from User
 delete from CommentLabel

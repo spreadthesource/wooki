@@ -23,9 +23,10 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd http://www.springframework.org/schema/tx 
            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
-	<import resource="classpath:appCtxConfig.xml" />
-	<import resource="classpath:impCtxConfig.xml" />
-	<import resource="classpath:securityCtxConfig.xml" />
+	<import resource="classpath:dataContext.xml" />
+	<import resource="classpath:printContext.xml" />
+	<import resource="classpath:securityContext.xml" />
+	<import resource="classpath:securityAuthorizationContext.xml" />
 	<import resource="classpath:searchEngine.xml" />
 
 </beans>

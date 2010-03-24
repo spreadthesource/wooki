@@ -20,9 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.tapestry5.Asset;
+import org.apache.tapestry5.MarkupWriter;
+import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
 import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -50,8 +53,12 @@ import org.apache.tapestry5.services.ComponentClasses;
 import org.apache.tapestry5.services.ComponentEventResultProcessor;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.Dispatcher;
+import org.apache.tapestry5.services.Environment;
+import org.apache.tapestry5.services.EnvironmentalShadowBuilder;
 import org.apache.tapestry5.services.InvalidationEventHub;
+import org.apache.tapestry5.services.MarkupRenderer;
 import org.apache.tapestry5.services.MarkupRendererFilter;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
@@ -90,8 +97,15 @@ public class WookiModule<T> {
 
 	private final InvalidationEventHub classesInvalidationEventHub;
 
-	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub) {
+	private final EnvironmentalShadowBuilder environmentalBuilder;
+
+	private final Environment environment;
+
+	public WookiModule(@ComponentClasses InvalidationEventHub classesInvalidationEventHub, Environment environment,
+			EnvironmentalShadowBuilder environmentalBuilder) {
 		this.classesInvalidationEventHub = classesInvalidationEventHub;
+		this.environmentalBuilder = environmentalBuilder;
+		this.environment = environment;
 	}
 
 	public void contributeApplicationDefaults(MappedConfiguration<String, String> conf) {
@@ -107,6 +121,10 @@ public class WookiModule<T> {
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
 		binder.bind(UploadMediaService.class, UploadMediaServiceImpl.class);
 		binder.bind(WookiViewRefererFilter.class);
+	}
+
+	public LinkSupport buildLinkSupport() {
+		return environmentalBuilder.build(LinkSupport.class);
 	}
 
 	/**
@@ -227,11 +245,27 @@ public class WookiModule<T> {
 	 * @param clientInfrastructure
 	 */
 	public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode) {
+			@Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode, final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
+			final RequestPageCache pageCache) {
 
 		if (productionMode) {
 			configuration.addInstance("GAnalyticsScript", GAnalyticsScriptsInjector.class, "after:RenderSupport");
 		}
+
+		// Add general links support
+		configuration.add("MenuSupport", new MarkupRendererFilter() {
+			public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer) {
+				RenderSupport renderSupport = environment.peek(RenderSupport.class);
+				LinkSupport linkSupport = new LinkSupportImpl(linkSource, pageLinkSource, pageCache, renderSupport);
+				environment.push(LinkSupport.class, linkSupport);
+				try {
+					renderer.renderMarkup(writer);
+					linkSupport.commit(writer);
+				} finally {
+					environment.pop(LinkSupport.class);
+				}
+			}
+		}, "after:RenderSupport");
 
 	}
 

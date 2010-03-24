@@ -16,7 +16,8 @@
 
 package com.wooki.domain.model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -26,7 +27,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
@@ -56,6 +59,10 @@ public class User extends WookiEntity implements UserDetails {
 
 	@Column(nullable = false)
 	private String email;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "UserAuthority")
+    private List<Authority> authorities = new LinkedList<Authority>();
 
 	private String password;
 
@@ -108,7 +115,18 @@ public class User extends WookiEntity implements UserDetails {
 	}
 
 	public List<GrantedAuthority> getAuthorities() {
-		return Arrays.asList(new GrantedAuthority[] { new GrantedAuthorityImpl("ROLE_Author") });
+		if (this.authorities != null) {
+			ArrayList<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
+			for (Authority auth : this.authorities) {
+				result.add(new GrantedAuthorityImpl(auth.getAuthority()));
+			}
+			return result;
+		}
+		return null;
+	}
+
+	public void setGrantedAuthorities(List<Authority> grantedAuthorities) {
+		this.authorities = grantedAuthorities;
 	}
 
 	public boolean isAccountNonExpired() {

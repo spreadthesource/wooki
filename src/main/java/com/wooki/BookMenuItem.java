@@ -1,4 +1,4 @@
-package com.wooki.base.components;
+package com.wooki;
 
 import org.apache.tapestry5.Link;
 
@@ -11,6 +11,8 @@ public class BookMenuItem {
 	
 	private String confirmMsg;
 
+	private String assetPath;
+	
 	public BookMenuItem(String name, Link link) {
 		this.name = name;
 		this.link = link;
@@ -46,5 +48,13 @@ public class BookMenuItem {
 
 	public String getConfirmMsg() {
 		return confirmMsg;
+	}
+
+	public String getAssetPath() {
+		return assetPath;
+	}
+
+	public void setAssetPath(String assetPath) {
+		this.assetPath = assetPath;
 	}
 }

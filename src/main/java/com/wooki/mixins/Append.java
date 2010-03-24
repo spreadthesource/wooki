@@ -24,18 +24,19 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.BindParameter;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.MixinAfter;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.components.Form;
-import org.apache.tapestry5.internal.InternalComponentResources;
 import org.apache.tapestry5.internal.services.PartialMarkupDocumentLinker;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.JavascriptSupport;
 
 /**
  * Append content instead of replacing it.
@@ -54,11 +55,17 @@ public class Append {
 	@Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
 	private String to;
 
+	@BindParameter
+	private Object[] context;
+
 	@Inject
 	private AssetSource assetSource;
 
 	@Inject
 	private RenderSupport support;
+
+	@Inject
+	private JavascriptSupport javascriptSupport;
 
 	@Inject
 	private Request request;
@@ -73,13 +80,29 @@ public class Append {
 	 */
 	@AfterRender
 	public void append() {
-		ComponentResources formResources = Component.class.cast(form).getComponentResources();
+		ComponentResources formResources = Component.class.cast(form)
+				.getComponentResources();
+
 		if (formResources.isBound("zone")) {
-			throw new IllegalStateException("'Append' mixin cannot be used if 'zone' parameter is set on form");
+			throw new IllegalStateException(
+					"'Append' mixin cannot be used if 'zone' parameter is set on form");
 		}
-		Object[] context = (Object[]) InternalComponentResources.class.cast(formResources).getParameterConduit("context").get();
-		Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
-		support.addInit("appendToZone", link.toAbsoluteURI(), form.getClientId(), to, position);
+		// this should not be needed anymore
+		/*
+		 * Object[] context = (Object[])
+		 * InternalComponentResources.class.cast(formResources
+		 * ).ggetParameterAccess("context").read(new Object[] {}.getClass());
+		 */
+		Link link = formResources.createFormEventLink(EventConstants.ACTION,
+				context);
+
+		JSONObject params = new JSONObject();
+		params.put("link", link.toAbsoluteURI());
+		params.put("form", form.getClientId());
+		params.put("element", to);
+		params.put("position", position);
+
+		javascriptSupport.addInitializerCall("appendToZone", params);
 	}
 
 	/**
@@ -91,10 +114,17 @@ public class Append {
 	public Object checkErrors() {
 
 		PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
-		linker.addStylesheetLink(assetSource.getContextAsset("context:/static/css/jquery.notifyBar.css", request.getLocale()).toClientURL(), null);
-		linker.addScriptLink(assetSource.getContextAsset("/static/js/jquery.notifyBar.js", request.getLocale()).toClientURL());
-		linker.addScriptLink(assetSource.getContextAsset("context:/static/js/notifybar.js", request.getLocale()).toClientURL());
-		linker.addScriptLink(assetSource.getContextAsset("/static/js/notifybar.js", request.getLocale()).toClientURL());
+		linker.addStylesheetLink(assetSource
+				.getContextAsset("context:/static/css/jquery.notifyBar.css",
+						request.getLocale()).toClientURL(), null);
+		linker.addScriptLink(assetSource.getContextAsset(
+				"/static/js/jquery.notifyBar.js", request.getLocale())
+				.toClientURL());
+		linker.addScriptLink(assetSource.getContextAsset(
+				"context:/static/js/notifybar.js", request.getLocale())
+				.toClientURL());
+		linker.addScriptLink(assetSource.getContextAsset(
+				"/static/js/notifybar.js", request.getLocale()).toClientURL());
 
 		JSONObject result = new JSONObject();
 		StringBuffer buff = new StringBuffer();
@@ -116,7 +146,8 @@ public class Append {
 		// Add error messages
 		JSONObject html = new JSONObject();
 		html.put("html", buff.toString());
-		linker.addScript(String.format("Tapestry.Initializer.initErrorMessage(%s);", html.toString()));
+		linker.addScript(String.format(
+				"Tapestry.Initializer.initErrorMessage(%s);", html.toString()));
 
 		linker.commit(result);
 		return result;

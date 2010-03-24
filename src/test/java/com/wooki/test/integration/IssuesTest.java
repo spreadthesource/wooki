@@ -73,7 +73,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite {
 	 */
 	@Override
 	@AfterClass(alwaysRun = true)
-	public void cleanup() throws Exception {
+	public void cleanup() {
 		open("/index");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");

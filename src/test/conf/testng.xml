@@ -1,15 +1,19 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Wooki Application Test Suite" annotations="1.5" parallel="false">
+<suite name="Wooki Application Test Suite" annotations="1.5"
+	parallel="false">
 
 	<test name="Integration Tests" parallel="false">
-        <packages>
-            <package name="com.wooki.test.integration" />
-        </packages>
-    </test>
+		<packages>
+			<package name="com.wooki.test.integration" />
+		</packages>
+		<classes>
+			<class name="org.apache.tapestry5.test.SeleniumLauncher" />
+		</classes>
+	</test>
 
-    <test name="Unit Tests">
-        <packages>
-            <package name="com.wooki.test.unit" />
-        </packages>
-    </test>
+	<test name="Unit Tests">
+		<packages>
+			<package name="com.wooki.test.unit" />
+		</packages>
+	</test>
 </suite>

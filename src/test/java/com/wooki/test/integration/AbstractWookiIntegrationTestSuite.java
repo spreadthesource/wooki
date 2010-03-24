@@ -1,13 +1,14 @@
 package com.wooki.test.integration;
 
-import org.apache.tapestry5.test.AbstractIntegrationTestSuite;
+
+import org.apache.tapestry5.test.SeleniumTestCase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 @Test(sequential=true)
-public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSuite {
-
-	/**
+public class AbstractWookiIntegrationTestSuite extends SeleniumTestCase {
+ 
+	/** 
 	 * Default browser used to launch tests.
 	 * 
 	 */
@@ -31,17 +32,17 @@ public class AbstractWookiIntegrationTestSuite extends AbstractIntegrationTestSu
 	 * Set default browser in function of the OS.
 	 * 
 	 */
-	public AbstractWookiIntegrationTestSuite() {
+	/*public AbstractWookiIntegrationTestSuite() {
 		super("src/main/webapp", defaultBrowser);
-	}
+	}*/
 
 	/**
 	 * Set default browser in function of the OS.
 	 * 
 	 */
-	public AbstractWookiIntegrationTestSuite(String path) {
+	/*public AbstractWookiIntegrationTestSuite(String path) {
 		super(path, defaultBrowser);
-	}
+	}*/
 
 	/**
 	 * Verify that the returned page corresponds to a resource not found.

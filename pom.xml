@@ -27,12 +27,12 @@
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>test</scope>
-			<exclusions>
+			<!-- exclusions>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium.server</groupId>
 					<artifactId>selenium-server</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions -->
 		</dependency>
 
 		<dependency>
@@ -56,22 +56,6 @@
 			<scope>test</scope>
 			<classifier>jdk15</classifier>
 		</dependency>
-
-		<dependency>
-			<groupId>org.seleniumhq.selenium.server</groupId>
-			<artifactId>selenium-server</artifactId>
-			<version>1.0.1</version>
-			<classifier>standalone</classifier>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
-            <artifactId>selenium-java-client-driver</artifactId>
-            <version>1.0.1</version>
-            <scope>test</scope>
-        </dependency>
-
 
 		<dependency>
 			<groupId>org.easymock</groupId>
@@ -428,7 +412,7 @@
 
 		<repository>
 			<id>apache-snapshots</id>
-			<url>http://repository.apache.org/snapshots</url>
+			<url>http://repository.apache.org/snapshots/</url>
 		</repository>
 
 		<repository>

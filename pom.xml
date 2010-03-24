@@ -142,7 +142,6 @@
 			<version>${spring-version}</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
@@ -157,8 +156,6 @@
 			<version>2.4</version>
 			<scope>test</scope>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.jdom</groupId>
@@ -415,17 +412,28 @@
 
 		<repository>
 			<id>apache</id>
-			<url>http://repository.apache.org/</url>
+			<url>https://repository.apache.org/content/groups/public/</url>
+			<snapshots>
+				<enabled>false</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
+			</snapshots>
 		</repository>
 
 		<repository>
 			<id>apache-snapshots</id>
-			<url>http://repository.apache.org/snapshots</url>
+			<url>https://repository.apache.org/content/groups/snapshots-group/</url>
+			<releases>
+				<enabled>false</enabled>
+				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
 		</repository>
 
 		<repository>
 			<id>codehaus.snapshots</id>
 			<url>http://snapshots.repository.codehaus.org</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
 		</repository>
 
 		<repository>
@@ -441,7 +449,7 @@
 
 		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2</url>
+			<url>http://repository.jboss.org/maven2/</url>
 		</repository>
 
 		<repository>

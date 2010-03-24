@@ -77,7 +77,7 @@ public class Append {
 		if (formResources.isBound("zone")) {
 			throw new IllegalStateException("'Append' mixin cannot be used if 'zone' parameter is set on form");
 		}
-		Object[] context = (Object[]) InternalComponentResources.class.cast(formResources).getParameterAccess("context").read(new Object[] {}.getClass());
+		Object[] context = (Object[]) InternalComponentResources.class.cast(formResources).getParameterConduit("context").get();
 		Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
 		support.addInit("appendToZone", link.toAbsoluteURI(), form.getClientId(), to, position);
 	}

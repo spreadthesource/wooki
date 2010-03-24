@@ -13,6 +13,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.ioc.internal.util.ClasspathResource;
 import org.apache.tapestry5.ioc.services.ClasspathURLConverter;
 import org.apache.tapestry5.ioc.services.ThreadLocale;
+import org.apache.tapestry5.services.messages.PropertiesFileParser;
 
 public class ServicesMessagesImpl implements ServicesMessages {
 
@@ -25,10 +26,10 @@ public class ServicesMessagesImpl implements ServicesMessages {
 	private final Resource appCatalogResource;
 
 	public ServicesMessagesImpl(@Symbol(SymbolConstants.APPLICATION_CATALOG) final Resource appCatalogResource, @Inject ClasspathURLConverter urlConverter,
-			@Inject ThreadLocale locale, @Inject LinkSource linkSource) {
+			@Inject ThreadLocale locale, @Inject LinkSource linkSource, @Inject PropertiesFileParser propertyFileParser) {
 		URLChangeTracker tracker = new URLChangeTracker(urlConverter);
 		this.appCatalogResource = appCatalogResource;
-		this.source = new MessagesSourceImpl(tracker);
+		this.source = new MessagesSourceImpl(tracker, propertyFileParser);
 		this.locale = locale;
 		this.bundle = new MessagesBundle() {
 			private final Resource resource;

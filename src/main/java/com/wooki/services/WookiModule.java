@@ -63,6 +63,7 @@ import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
 import org.apache.tapestry5.services.UpdateListenerHub;
+import org.apache.tapestry5.services.messages.PropertiesFileParser;
 import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -274,8 +275,8 @@ public class WookiModule<T> {
 	 * 
 	 */
 	public ServicesMessages buildServicesMessages(@Symbol(SymbolConstants.APPLICATION_CATALOG) Resource appCatalogResource,
-			@Inject ClasspathURLConverter urlConverter, @Inject ThreadLocale locale, @Inject LinkSource linkSource, @Inject UpdateListenerHub listenerHub) {
-		ServicesMessages messages = new ServicesMessagesImpl(appCatalogResource, urlConverter, locale, linkSource);
+			@Inject ClasspathURLConverter urlConverter, @Inject ThreadLocale locale, @Inject LinkSource linkSource, @Inject UpdateListenerHub listenerHub, @Inject PropertiesFileParser fileParse) {
+		ServicesMessages messages = new ServicesMessagesImpl(appCatalogResource, urlConverter, locale, linkSource, fileParse);
 		listenerHub.addUpdateListener(messages);
 		return messages;
 	}

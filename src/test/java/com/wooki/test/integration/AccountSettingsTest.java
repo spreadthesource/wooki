@@ -68,7 +68,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite {
 	 */
 	@AfterClass(alwaysRun = true)
 	@Override
-	public void cleanup() throws Exception {
+	public void cleanup() {
 		open("/index");
 		waitForPageToLoad();
 		Assert.assertTrue(isElementPresent("id=logout"), "Authenticated user should be able to logout");

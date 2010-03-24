@@ -32,10 +32,12 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.internal.InternalComponentResources;
 import org.apache.tapestry5.internal.services.PartialMarkupDocumentLinker;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.JavascriptSupport;
 
 /**
  * Append content instead of replacing it.
@@ -59,6 +61,9 @@ public class Append {
 
 	@Inject
 	private RenderSupport support;
+	
+	@Inject
+	private JavascriptSupport javascriptSupport;
 
 	@Inject
 	private Request request;
@@ -79,7 +84,14 @@ public class Append {
 		}
 		Object[] context = (Object[]) InternalComponentResources.class.cast(formResources).getParameterAccess("context").read(new Object[] {}.getClass());
 		Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
-		support.addInit("appendToZone", link.toAbsoluteURI(), form.getClientId(), to, position);
+		
+		JSONArray params = new JSONArray();
+		params.put(link.toAbsoluteURI());
+		params.put(form.getClientId());
+		params.put(to);
+		params.put(position);
+		
+		javascriptSupport.addInitializerCall("appendToZone", params);
 	}
 
 	/**

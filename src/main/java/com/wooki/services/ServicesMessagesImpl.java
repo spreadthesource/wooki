@@ -28,7 +28,7 @@ public class ServicesMessagesImpl implements ServicesMessages {
 			@Inject ThreadLocale locale, @Inject LinkSource linkSource) {
 		URLChangeTracker tracker = new URLChangeTracker(urlConverter);
 		this.appCatalogResource = appCatalogResource;
-		this.source = new MessagesSourceImpl(tracker);
+		this.source = null;//new MessagesSourceImpl(tracker, propertiesFileParser); 
 		this.locale = locale;
 		this.bundle = new MessagesBundle() {
 			private final Resource resource;

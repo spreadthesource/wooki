@@ -30,127 +30,127 @@ import com.wooki.domain.model.User;
  * Manager interface to manipulate DAO Interaction.
  * 
  * @author ccordenier
- * 
  */
-public interface BookManager {
+public interface BookManager
+{
 
-	/**
-	 * Create a new book instance with basic properties initialized.
-	 * 
-	 * @param title
-	 *            The title of the book
-	 * @return
-	 */
-	Book create(String title);
+    /**
+     * Create a new book instance with basic properties initialized.
+     * 
+     * @param title
+     *            The title of the book
+     * @return
+     */
+    Book create(String title);
 
-	/**
-	 * Remove the book. 
-	 *
-	 * @param bookId
-	 */
-	void remove(Long bookId);
-	
-	/**
-	 * Update book.
-	 *
-	 * @param book
-	 * @return
-	 */
-	Book updateTitle(Book book) throws TitleAlreadyInUseException;
+    /**
+     * Remove the book.
+     * 
+     * @param bookId
+     */
+    void remove(Long bookId);
 
-	/**
-	 * Add an author to a given book, author must exist before calling this
-	 * method.
-	 * 
-	 * @param book
-	 *            Book must exists in DB before a call to this method.
-	 * @param title
-	 *            The tile for the new chapter.
-	 * @param username
-	 *            TODO
-	 * @return TODO
-	 */
-	User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException ;
-	
-	/**
-	 * Remove an author from a book.
-	 */
-	void removeAuthor(Book book, Long authorId);
+    /**
+     * Update book.
+     * 
+     * @param book
+     * @return
+     */
+    Book updateTitle(Book book) throws TitleAlreadyInUseException;
 
-	/**
-	 * Check if the user is author of a book.
-	 *
-	 * @param book
-	 * @param username
-	 * @return
-	 */
-	boolean isAuthor(Book book, String username);
-	
-	/**
-	 * Add a chapter to a given book.
-	 * 
-	 * @param book
-	 *            Book must exists in DB before a call to this method.
-	 * @param title
-	 *            The tile for the new chapter.
-	 * @param username
-	 *            TODO
-	 */
-	Chapter addChapter(Book book, String title) throws AuthorizationException;
+    /**
+     * Add an author to a given book, author must exist before calling this method.
+     * 
+     * @param book
+     *            Book must exists in DB before a call to this method.
+     * @param title
+     *            The tile for the new chapter.
+     * @param username
+     *            TODO
+     * @return TODO
+     */
+    User addAuthor(Book book, String username) throws UserNotFoundException,
+            UserAlreadyOwnerException;
 
-	/**
-	 * Get the book abstract chapter (first item in the list)
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	Chapter getBookAbstract(Book book);
+    /**
+     * Remove an author from a book.
+     */
+    void removeAuthor(Book book, Long authorId);
 
-	/**
-	 * Get a book from it short name.
-	 * 
-	 * @param title
-	 * @return
-	 */
-	Book findById(Long id);
-	
-	/**
-	 * Get a book from it short name.
-	 * 
-	 * @param title
-	 * @return
-	 */
-	Book findBookBySlugTitle(String title);
+    /**
+     * Check if the user is author of a book.
+     * 
+     * @param book
+     * @param username
+     * @return
+     */
+    boolean isAuthor(Book book, String username);
 
-	/**
-	 * Return the list of existing books.
-	 * 
-	 * @return
-	 */
-	List<Book> list();
+    /**
+     * Add a chapter to a given book.
+     * 
+     * @param book
+     *            Book must exists in DB before a call to this method.
+     * @param title
+     *            The tile for the new chapter.
+     * @param username
+     *            TODO
+     */
+    Chapter addChapter(Book book, String title) throws AuthorizationException;
 
-	/**
-	 * List the books of an author.
-	 * 
-	 * @param userName
-	 * @return
-	 */
-	List<Book> listByOwner(String userName);
+    /**
+     * Get the book abstract chapter (first item in the list)
+     * 
+     * @param bookId
+     * @return
+     */
+    Chapter getBookAbstract(Book book);
 
-	/**
-	 * List all the book on which a user has collaborated.
-	 *
-	 * @param userName
-	 * @return
-	 */
-	List<Book> listByCollaborator(String userName);
-	
-	/**
-	 * Find all the books matching a title.
-	 * 
-	 * @param title
-	 * @return
-	 */
-	public List<Book> listByTitle(String title);
+    /**
+     * Get a book from it short name.
+     * 
+     * @param title
+     * @return
+     */
+    Book findById(Long id);
+
+    /**
+     * Get a book from it short name.
+     * 
+     * @param title
+     * @return
+     */
+    Book findBookBySlugTitle(String title);
+
+    /**
+     * Return the list of existing books.
+     * 
+     * @return
+     */
+    List<Book> list();
+
+    /**
+     * List the books of an author.
+     * 
+     * @param userName
+     * @return
+     */
+    List<Book> listByOwner(String userName);
+
+    /**
+     * List all the book on which a user has collaborated.
+     * 
+     * @param userName
+     * @return
+     */
+    List<Book> listByCollaborator(String userName);
+
+    /**
+     * Find all the books matching a title.
+     * 
+     * @param title
+     * @return
+     */
+    public List<Book> listByTitle(String title);
 
 }

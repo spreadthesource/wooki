@@ -26,28 +26,33 @@ import com.wooki.domain.model.Comment;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "COMMENT_ACTIVITY_ID")
-public class CommentActivity extends Activity {
+public class CommentActivity extends Activity
+{
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
-	private Comment comment;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Comment comment;
 
-	private CommentEventType type;
+    private CommentEventType type;
 
-	public Comment getComment() {
-		return comment;
-	}
+    public Comment getComment()
+    {
+        return comment;
+    }
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
-	}
+    public void setComment(Comment comment)
+    {
+        this.comment = comment;
+    }
 
-	public CommentEventType getType() {
-		return type;
-	}
+    public CommentEventType getType()
+    {
+        return type;
+    }
 
-	public void setType(CommentEventType type) {
-		this.type = type;
-	}
+    public void setType(CommentEventType type)
+    {
+        this.type = type;
+    }
 
 }

@@ -28,25 +28,29 @@ import com.wooki.domain.model.activity.ChapterEventType;
  * Display activities.
  * 
  * @author ccordenier
- * 
  */
-public class Chapter extends AbstractActivity {
+public class Chapter extends AbstractActivity
+{
 
-	@Property
-	@Parameter(allowNull = false, required = true)
-	private ChapterActivity activity;
+    @Property
+    @Parameter(allowNull = false, required = true)
+    private ChapterActivity activity;
 
-	public Object[] getChapterCtx() {
-		return new Object[] { activity.getChapter().getBook().getId(), activity.getChapter().getId() };
-	}
+    public Object[] getChapterCtx()
+    {
+        return new Object[]
+        { activity.getChapter().getBook().getId(), activity.getChapter().getId() };
+    }
 
-	public boolean isDisplayLink() {
-		return ChapterEventType.PUBLISHED.equals(activity.getType());
-	}
+    public boolean isDisplayLink()
+    {
+        return ChapterEventType.PUBLISHED.equals(activity.getType());
+    }
 
-	@SetupRender
-	public boolean checkByPass() {
-		return !this.activity.isResourceUnavailable();
-	}
+    @SetupRender
+    public boolean checkByPass()
+    {
+        return !this.activity.isResourceUnavailable();
+    }
 
 }

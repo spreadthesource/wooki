@@ -26,12 +26,12 @@ import com.wooki.domain.model.activity.AccountActivity;
  * Display activities.
  * 
  * @author ccordenier
- * 
  */
-public class Account extends AbstractActivity {
+public class Account extends AbstractActivity
+{
 
-	@Property
-	@Parameter(allowNull = false, required = true)
-	private AccountActivity activity;
+    @Property
+    @Parameter(allowNull = false, required = true)
+    private AccountActivity activity;
 
 }

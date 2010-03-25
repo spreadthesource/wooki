@@ -20,25 +20,28 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Request;
 
-public class SecurityUrlSourceImpl implements SecurityUrlSource {
+public class SecurityUrlSourceImpl implements SecurityUrlSource
+{
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@Inject
-	@Symbol("loginFilterProcessesUrl")
-	private String loginUrl;
+    @Inject
+    @Symbol("loginFilterProcessesUrl")
+    private String loginUrl;
 
-	@Inject
-	@Symbol("logoutFilterProcessUrl")
-	private String logoutUrl;
+    @Inject
+    @Symbol("logoutFilterProcessUrl")
+    private String logoutUrl;
 
-	public String getLoginUrl() {
-		return request.getContextPath() + loginUrl;
-	}
+    public String getLoginUrl()
+    {
+        return request.getContextPath() + loginUrl;
+    }
 
-	public String getLogoutUrl() {
-		return request.getContextPath() + logoutUrl;
-	}
+    public String getLogoutUrl()
+    {
+        return request.getContextPath() + logoutUrl;
+    }
 
 }

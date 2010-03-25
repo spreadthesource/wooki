@@ -22,17 +22,19 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.wooki.services.security.WookiSecurityContext;
 
-public class LayoutBase {
+public class LayoutBase
+{
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Property
-	private String username;
+    @Property
+    private String username;
 
-	@SetupRender
-	private void setupUsername() {
-		this.username = this.securityCtx.getUsername();
-	}
+    @SetupRender
+    private void setupUsername()
+    {
+        this.username = this.securityCtx.getUsername();
+    }
 
 }

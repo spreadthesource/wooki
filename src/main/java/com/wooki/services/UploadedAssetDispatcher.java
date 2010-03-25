@@ -9,29 +9,32 @@ import org.apache.tapestry5.services.Response;
 
 import com.wooki.WookiRequestConstants;
 
-public class UploadedAssetDispatcher implements Dispatcher {
+public class UploadedAssetDispatcher implements Dispatcher
+{
 
-	public static final String PATH_PREFIX = RequestConstants.ASSET_PATH_PREFIX + WookiRequestConstants.UPLOADED_FOLDER;
+    public static final String PATH_PREFIX = RequestConstants.ASSET_PATH_PREFIX
+            + WookiRequestConstants.UPLOADED_FOLDER;
 
-	private final UploadMediaService streamer;
+    private final UploadMediaService streamer;
 
-	public UploadedAssetDispatcher(UploadMediaService streamer) {
-		this.streamer = streamer;
-	}
+    public UploadedAssetDispatcher(UploadMediaService streamer)
+    {
+        this.streamer = streamer;
+    }
 
-	public boolean dispatch(Request request, Response response) throws IOException {
-		String path = request.getPath();
+    public boolean dispatch(Request request, Response response) throws IOException
+    {
+        String path = request.getPath();
 
-		if (!path.startsWith(PATH_PREFIX))
-			return false;
+        if (!path.startsWith(PATH_PREFIX)) return false;
 
-		// PATH_PREFIX includes the slash.
+        // PATH_PREFIX includes the slash.
 
-		String fileName = path.substring(PATH_PREFIX.length());
+        String fileName = path.substring(PATH_PREFIX.length());
 
-		streamer.streamMedia(fileName);
+        streamer.streamMedia(fileName);
 
-		return true;
-	}
+        return true;
+    }
 
 }

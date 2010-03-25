@@ -27,23 +27,25 @@ import com.wooki.domain.model.activity.CommentActivity;
  * Display activities.
  * 
  * @author ccordenier
- * 
  */
-public class Comment extends AbstractActivity {
+public class Comment extends AbstractActivity
+{
 
-	@Property
-	@Parameter(allowNull = false, required = true)
-	private CommentActivity activity;
+    @Property
+    @Parameter(allowNull = false, required = true)
+    private CommentActivity activity;
 
-	public Object[] getChapterCtx() {
-		return new Object[] {
-				activity.getComment().getPublication().getChapter().getBook()
-						.getId(), activity.getComment().getPublication().getChapter().getId() };
-	}
+    public Object[] getChapterCtx()
+    {
+        return new Object[]
+        { activity.getComment().getPublication().getChapter().getBook().getId(),
+                activity.getComment().getPublication().getChapter().getId() };
+    }
 
-	@SetupRender
-	public boolean checkByPass() {
-		return !this.activity.isResourceUnavailable(); 
-	}
-	
+    @SetupRender
+    public boolean checkByPass()
+    {
+        return !this.activity.isResourceUnavailable();
+    }
+
 }

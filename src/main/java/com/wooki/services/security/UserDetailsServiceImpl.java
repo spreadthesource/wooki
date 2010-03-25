@@ -30,22 +30,25 @@ import com.wooki.domain.model.User;
  * Custom implementation of use details service for spring security.
  * 
  * @author ccordenier
- * 
  */
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService
+{
 
-	private final UserManager userManager;
+    private final UserManager userManager;
 
-	private final RoleHierarchy roleHierarchy;
+    private final RoleHierarchy roleHierarchy;
 
-	public UserDetailsServiceImpl(UserManager userManager, RoleHierarchy roleHierarchy) {
-		this.userManager = userManager;
-		this.roleHierarchy = roleHierarchy;
-	}
+    public UserDetailsServiceImpl(UserManager userManager, RoleHierarchy roleHierarchy)
+    {
+        this.userManager = userManager;
+        this.roleHierarchy = roleHierarchy;
+    }
 
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-		User user = userManager.findByUsername(username);
-		return new UserDetailsWrapper(user, roleHierarchy);
-	}
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,
+            DataAccessException
+    {
+        User user = userManager.findByUsername(username);
+        return new UserDetailsWrapper(user, roleHierarchy);
+    }
 
 }

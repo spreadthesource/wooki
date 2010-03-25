@@ -4,16 +4,17 @@ import org.springframework.security.core.GrantedAuthority;
 
 /**
  * This enum defines the list of granted authorities used in Wooki Application.
- *
- * @author ccordenier
  * 
+ * @author ccordenier
  */
-public enum WookiGrantedAuthority implements GrantedAuthority {
+public enum WookiGrantedAuthority implements GrantedAuthority
+{
 
-	ROLE_AUTHOR, ROLE_ADMIN;
+    ROLE_AUTHOR, ROLE_ADMIN;
 
-	public String getAuthority() {
-		return this.toString();
-	}
+    public String getAuthority()
+    {
+        return this.toString();
+    }
 
 }

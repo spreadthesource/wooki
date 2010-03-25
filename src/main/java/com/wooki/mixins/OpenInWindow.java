@@ -28,33 +28,34 @@ import org.apache.tapestry5.json.JSONObject;
 
 /**
  * Open the link in a new window.
- *
+ * 
  * @author ccordenier
- *
  */
 @MixinAfter
-public class OpenInWindow {
+public class OpenInWindow
+{
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value="componentResources.id")
-	private String name;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "componentResources.id")
+    private String name;
 
-	@Parameter(defaultPrefix= BindingConstants.LITERAL, value="directories=no,location=no,menubar=no,resizable=yes,toolbar=no")
-	private String options;
-	
-	@Inject
-	private RenderSupport renderSupport;
-	
-	@InjectContainer
-	private AbstractLink link;
-	
-	@AfterRender
-	public void initLink() {
-		JSONObject param = new JSONObject();
-		param.put("elt", link.getClientId());
-		param.put("url", link.getLink().toAbsoluteURI());
-		param.put("name", name);
-		param.put("options", options);
-		renderSupport.addInit("initOpenInWindow", param);
-	}
-	
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "directories=no,location=no,menubar=no,resizable=yes,toolbar=no")
+    private String options;
+
+    @Inject
+    private RenderSupport renderSupport;
+
+    @InjectContainer
+    private AbstractLink link;
+
+    @AfterRender
+    public void initLink()
+    {
+        JSONObject param = new JSONObject();
+        param.put("elt", link.getClientId());
+        param.put("url", link.getLink().toAbsoluteURI());
+        param.put("name", name);
+        param.put("options", options);
+        renderSupport.addInit("initOpenInWindow", param);
+    }
+
 }

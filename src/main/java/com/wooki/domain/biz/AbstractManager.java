@@ -16,7 +16,7 @@
 
 package com.wooki.domain.biz;
 
-
-public abstract class AbstractManager {
+public abstract class AbstractManager
+{
 
 }

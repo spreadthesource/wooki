@@ -2,59 +2,71 @@ package com.wooki;
 
 import org.apache.tapestry5.Link;
 
-public class BookMenuItem {
-	private String name;
+public class BookMenuItem
+{
+    private String name;
 
-	private Link link;
-	
-	private boolean confirm;
-	
-	private String confirmMsg;
+    private Link link;
 
-	private String assetPath;
-	
-	public BookMenuItem(String name, Link link) {
-		this.name = name;
-		this.link = link;
-	}
+    private boolean confirm;
 
-	public String getName() {
-		return name;
-	}
+    private String confirmMsg;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    private String assetPath;
 
-	public Link getLink() {
-		return link;
-	}
+    public BookMenuItem(String name, Link link)
+    {
+        this.name = name;
+        this.link = link;
+    }
 
-	public void setLink(Link link) {
-		this.link = link;
-	}
+    public String getName()
+    {
+        return name;
+    }
 
-	public void setConfirm(boolean confirm) {
-		this.confirm = confirm;
-	}
+    public void setName(String name)
+    {
+        this.name = name;
+    }
 
-	public boolean isConfirm() {
-		return confirm;
-	}
+    public Link getLink()
+    {
+        return link;
+    }
 
-	public void setConfirmMsg(String confirmMsg) {
-		this.confirmMsg = confirmMsg;
-	}
+    public void setLink(Link link)
+    {
+        this.link = link;
+    }
 
-	public String getConfirmMsg() {
-		return confirmMsg;
-	}
+    public void setConfirm(boolean confirm)
+    {
+        this.confirm = confirm;
+    }
 
-	public String getAssetPath() {
-		return assetPath;
-	}
+    public boolean isConfirm()
+    {
+        return confirm;
+    }
 
-	public void setAssetPath(String assetPath) {
-		this.assetPath = assetPath;
-	}
+    public void setConfirmMsg(String confirmMsg)
+    {
+        this.confirmMsg = confirmMsg;
+    }
+
+    public String getConfirmMsg()
+    {
+        return confirmMsg;
+    }
+
+    public String getAssetPath()
+    {
+        return assetPath;
+    }
+
+    public void setAssetPath(String assetPath)
+    {
+        this.assetPath = assetPath;
+    }
 }

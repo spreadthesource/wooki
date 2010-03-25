@@ -12,27 +12,28 @@ import org.apache.tapestry5.services.FormSupport;
  * Generally used with cancel link in forms.
  * 
  * @author ccordenier
- * 
  */
 @MixinAfter
-public class ResetFormOnClick {
+public class ResetFormOnClick
+{
 
-	@Inject
-	private RenderSupport renderSupport;
+    @Inject
+    private RenderSupport renderSupport;
 
-	@Inject
-	private FormSupport formSupport;
+    @Inject
+    private FormSupport formSupport;
 
-	@InjectContainer
-	private ClientElement container;
+    @InjectContainer
+    private ClientElement container;
 
-	/**
-	 * Simply bind the input element to submit the enclosing form on change
-	 * event.
-	 */
-	@AfterRender
-	public void addSubmitOnChange() {
-		renderSupport.addInit("resetFormOnClick", container.getClientId(), formSupport.getClientId());
-	}
+    /**
+     * Simply bind the input element to submit the enclosing form on change event.
+     */
+    @AfterRender
+    public void addSubmitOnChange()
+    {
+        renderSupport.addInit("resetFormOnClick", container.getClientId(), formSupport
+                .getClientId());
+    }
 
 }

@@ -10,22 +10,23 @@ import com.wooki.services.ServicesMessages;
  * Base class for activity components.
  * 
  * @author ccordenier
- * 
  */
-public class AbstractActivity {
+public class AbstractActivity
+{
 
-	@Inject
-	private ServicesMessages messages;
+    @Inject
+    private ServicesMessages messages;
 
-	@Parameter
-	private boolean resourceAvailable;
+    @Parameter
+    private boolean resourceAvailable;
 
-	@Property
-	@Parameter(value = "")
-	private String style;
+    @Property
+    @Parameter(value = "")
+    private String style;
 
-	public String getActivityLabel(String type) {
-		return messages.getMessages().get(type);
-	}
+    public String getActivityLabel(String type)
+    {
+        return messages.getMessages().get(type);
+    }
 
 }

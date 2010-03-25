@@ -20,18 +20,18 @@ import java.io.InputStream;
 
 /**
  * Export book service, will provide different format, pdf...
- *
+ * 
  * @author ccordenier
- *
  */
-public interface ExportService {
+public interface ExportService
+{
 
-	/**
-	 * Export book to PDF.
-	 *
-	 * @param bookId
-	 * @return
-	 */
-	InputStream exportPdf(Long bookId);
-	
+    /**
+     * Export book to PDF.
+     * 
+     * @param bookId
+     * @return
+     */
+    InputStream exportPdf(Long bookId);
+
 }

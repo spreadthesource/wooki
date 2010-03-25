@@ -26,30 +26,34 @@ import org.springframework.stereotype.Repository;
 import com.wooki.domain.model.User;
 
 @Repository("userDao")
-public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO {
+public class UserDAOImpl extends GenericDAOImpl<User, Long> implements UserDAO
+{
 
-	public User findByUsername(String username) {
-		Defense.notNull(username, "username");
-		Query query = this.entityManager.createQuery("from "
-				+ this.getEntityType() + " u where lower(u.username)=:un");
-		query.setParameter("un", username.toLowerCase());
-		try {
-			return (User) query.getSingleResult();
-		} catch (RuntimeException re) {
-			return null;
-		}
-	}
+    public User findByUsername(String username)
+    {
+        Defense.notNull(username, "username");
+        Query query = this.entityManager.createQuery("from " + this.getEntityType()
+                + " u where lower(u.username)=:un");
+        query.setParameter("un", username.toLowerCase());
+        try
+        {
+            return (User) query.getSingleResult();
+        }
+        catch (RuntimeException re)
+        {
+            return null;
+        }
+    }
 
-	public String[] listUserNames(String prefix) {
-		Defense.notNull(prefix, "prefix");
-		Query query = this.entityManager.createQuery("select u.username from "
-				+ this.getEntityType() + " u where lower(u.username) like :un");
-		query.setParameter("un", prefix.toLowerCase() + "%");
-		List<String> result = (List<String>) query.getResultList();
-		if (result != null) {
-			return result.toArray(new String[0]);
-		}
-		return new String[] {};
-	}
+    public String[] listUserNames(String prefix)
+    {
+        Defense.notNull(prefix, "prefix");
+        Query query = this.entityManager.createQuery("select u.username from "
+                + this.getEntityType() + " u where lower(u.username) like :un");
+        query.setParameter("un", prefix.toLowerCase() + "%");
+        List<String> result = (List<String>) query.getResultList();
+        if (result != null) { return result.toArray(new String[0]); }
+        return new String[] {};
+    }
 
 }

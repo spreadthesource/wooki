@@ -28,62 +28,72 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
+@IncludeJavaScriptLibrary(
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
-public class Errors {
+public class Errors
+{
 
-	@Parameter
-	private String[] messages;
+    @Parameter
+    private String[] messages;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	// Allow null so we can generate a better error message if missing
-	@Environmental(false)
-	private ValidationTracker tracker;
+    // Allow null so we can generate a better error message if missing
+    @Environmental(false)
+    private ValidationTracker tracker;
 
-	private String errorListId;
+    private String errorListId;
 
-	void beginRender(MarkupWriter writer) {
+    void beginRender(MarkupWriter writer)
+    {
 
-		List<String> errors = null;
+        List<String> errors = null;
 
-		if (tracker == null && messages != null) {
-			errors = Arrays.asList(messages);
-		} else {
-			errors = tracker.getErrors();
-		}
+        if (tracker == null && messages != null)
+        {
+            errors = Arrays.asList(messages);
+        }
+        else
+        {
+            errors = tracker.getErrors();
+        }
 
-		if (errors != null && !errors.isEmpty()) {
+        if (errors != null && !errors.isEmpty())
+        {
 
-			errorListId = support.allocateClientId("error-list");
+            errorListId = support.allocateClientId("error-list");
 
-			writer.element("div", "style", "display:none;", "id", errorListId);
+            writer.element("div", "style", "display:none;", "id", errorListId);
 
-			// Only write out the <UL> if it will contain <LI> elements. An
-			// empty <UL> is not
-			// valid XHTML.
-			writer.element("div", "class", "error-list shadowed");
-			writer.element("ul", "class", "wrapper");
+            // Only write out the <UL> if it will contain <LI> elements. An
+            // empty <UL> is not
+            // valid XHTML.
+            writer.element("div", "class", "error-list shadowed");
+            writer.element("ul", "class", "wrapper");
 
-			for (String message : errors) {
-				writer.element("li");
-				writer.write(message);
-				writer.end();
-			}
+            for (String message : errors)
+            {
+                writer.element("li");
+                writer.write(message);
+                writer.end();
+            }
 
-			writer.end(); // ul
-			writer.end(); // ul
-			writer.end(); // div
-		}
+            writer.end(); // ul
+            writer.end(); // ul
+            writer.end(); // div
+        }
 
-	}
+    }
 
-	// Add javascript
-	void afterRender() {
-		if (errorListId != null) {
-			support.addInit("initErrorBox", this.errorListId);
-		}
-	}
+    // Add javascript
+    void afterRender()
+    {
+        if (errorListId != null)
+        {
+            support.addInit("initErrorBox", this.errorListId);
+        }
+    }
 
 }

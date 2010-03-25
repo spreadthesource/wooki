@@ -31,45 +31,49 @@ import org.apache.tapestry5.services.RequestGlobals;
  * Add a cookie to store the last permitted view URL.
  * 
  * @author ccordenier
- * 
  */
-public class WookiViewRefererFilter implements PageRenderRequestFilter {
+public class WookiViewRefererFilter implements PageRenderRequestFilter
+{
 
-	private final Pattern[] ignoredPatterns;
+    private final Pattern[] ignoredPatterns;
 
-	@Inject
-	private Cookies cookieService;
+    @Inject
+    private Cookies cookieService;
 
-	@Inject
-	private RequestGlobals request;
+    @Inject
+    private RequestGlobals request;
 
-	public WookiViewRefererFilter(Collection<String> configuration) {
-		ignoredPatterns = new Pattern[configuration.size()];
+    public WookiViewRefererFilter(Collection<String> configuration)
+    {
+        ignoredPatterns = new Pattern[configuration.size()];
 
-		int i = 0;
+        int i = 0;
 
-		for (String regexp : configuration) {
-			Pattern p = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
+        for (String regexp : configuration)
+        {
+            Pattern p = Pattern.compile(regexp, Pattern.CASE_INSENSITIVE);
 
-			ignoredPatterns[i++] = p;
-		}
-	}
+            ignoredPatterns[i++] = p;
+        }
+    }
 
-	public void handle(PageRenderRequestParameters parameters, PageRenderRequestHandler handler) throws IOException {
-		
-		// Handle request
-		handler.handle(parameters);
+    public void handle(PageRenderRequestParameters parameters, PageRenderRequestHandler handler)
+            throws IOException
+    {
 
-		// Verify if the cookie must view URL must be registered.
-		for (Pattern p : ignoredPatterns) {
-			if (p.matcher(parameters.getLogicalPageName()).matches()) {
-				return;
-			}
-		}
+        // Handle request
+        handler.handle(parameters);
 
-		// Write referer cookie value
-		cookieService.writeCookieValue(WookiModule.VIEW_REFERER, request.getHTTPServletRequest().getRequestURL().toString(), 1800);
+        // Verify if the cookie must view URL must be registered.
+        for (Pattern p : ignoredPatterns)
+        {
+            if (p.matcher(parameters.getLogicalPageName()).matches()) { return; }
+        }
 
-	}
+        // Write referer cookie value
+        cookieService.writeCookieValue(WookiModule.VIEW_REFERER, request.getHTTPServletRequest()
+                .getRequestURL().toString(), 1800);
+
+    }
 
 }

@@ -20,24 +20,22 @@ import java.util.List;
 
 import com.wooki.domain.model.Book;
 
-
 /**
- * Provide method to implements search method on wookis resources. So the user
- * can provide an implementation in function of its environment and the indexing
- * tools available.
+ * Provide method to implements search method on wookis resources. So the user can provide an
+ * implementation in function of its environment and the indexing tools available.
  * 
  * @author ccordenier
- * 
  */
-public interface SearchEngine {
+public interface SearchEngine
+{
 
-	/**
-	 * List the books.
-	 *
-	 * @param queryString the search query string.
-	 *
-	 * @return
-	 */
-	public List<Book> findBook(String queryString);
-	
+    /**
+     * List the books.
+     * 
+     * @param queryString
+     *            the search query string.
+     * @return
+     */
+    public List<Book> findBook(String queryString);
+
 }

@@ -54,216 +54,254 @@ import com.wooki.services.LinkSupport;
  * 
  * @author ccordenier
  */
-@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
+@IncludeJavaScriptLibrary(
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
-public class Edit extends BookBase {
+public class Edit extends BookBase
+{
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private Block titleBlock;
+    @Inject
+    private Block titleBlock;
 
-	@Inject
-	private Messages messages;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@Inject
-	private LinkSupport linkSupport;
+    @Inject
+    private LinkSupport linkSupport;
 
-	@InjectComponent
-	private Form editChapterForm;
+    @InjectComponent
+    private Form editChapterForm;
 
-	@InjectPage
-	private Index index;
+    @InjectPage
+    private Index index;
 
-	@Inject
-	@Symbol(UploadSymbols.FILESIZE_MAX)
-	private long maxFileSize;
+    @Inject
+    @Symbol(UploadSymbols.FILESIZE_MAX)
+    private long maxFileSize;
 
-	private Long chapterId;
+    private Long chapterId;
 
-	@Property
-	private Chapter chapter;
+    @Property
+    private Chapter chapter;
 
-	@Property
-	@Validate("required")
-	private String data;
+    @Property
+    @Validate("required")
+    private String data;
 
-	@Property
-	private Long previous;
+    @Property
+    private Long previous;
 
-	@Property
-	private String previousTitle;
+    @Property
+    private String previousTitle;
 
-	@Property
-	private Long next;
+    @Property
+    private Long next;
 
-	@Property
-	private String nextTitle;
+    @Property
+    private String nextTitle;
 
-	@Property
-	private boolean abstractChapter;
+    @Property
+    private boolean abstractChapter;
 
-	private DateFormat format = new SimpleDateFormat("hh:mm");
+    private DateFormat format = new SimpleDateFormat("hh:mm");
 
-	private boolean publish;
+    private boolean publish;
 
-	private boolean cancel;
+    private boolean cancel;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object onActivate(Long bookId, Long chapterId) {
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object onActivate(Long bookId, Long chapterId)
+    {
 
-		this.chapterId = chapterId;
-		this.chapter = chapterManager.findById(chapterId);
+        this.chapterId = chapterId;
+        this.chapter = chapterManager.findById(chapterId);
 
-		if (this.chapter == null) {
-			return redirectToBookIndex();
-		}
+        if (this.chapter == null) { return redirectToBookIndex(); }
 
-		return null;
-	}
+        return null;
+    }
 
-	@SetupRender
-	public void prepareFormData() {
-		this.data = chapterManager.getLastContent(chapterId);
-		// Check if we are editing the abstract chapter
-		if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0
-				&& this.getBook().getChapters().get(0).getId().equals(this.chapterId)) {
-			this.abstractChapter = true;
-		}
-		
-		// Prepare previous and next links
-		Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
-		if (data != null && data.length == 2) {
-			this.previous = (Long) data[0];
-			this.previousTitle = (String) data[1];
-		}
+    @SetupRender
+    public void prepareFormData()
+    {
+        this.data = chapterManager.getLastContent(chapterId);
+        // Check if we are editing the abstract chapter
+        if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0
+                && this.getBook().getChapters().get(0).getId().equals(this.chapterId))
+        {
+            this.abstractChapter = true;
+        }
 
-		data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
-		if (data != null && data.length == 2) {
-			this.next = (Long) data[0];
-			this.nextTitle = (String) data[1];
-		}
-	}
+        // Prepare previous and next links
+        Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
+        if (data != null && data.length == 2)
+        {
+            this.previous = (Long) data[0];
+            this.previousTitle = (String) data[1];
+        }
 
-	@SetupRender
-	public void setupNav() {
-		if ((previous != null) && (previousTitle != null)) {
-			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< " + previousTitle, "chapter/index", getBookId(), previous);
-			item.setConfirm(true);
-			item.setConfirmMsg("Cancel edition?");
-		} else {
-			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
-			item.setConfirm(true);
-			item.setConfirmMsg("Cancel edition?");
-		}
+        data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
+        if (data != null && data.length == 2)
+        {
+            this.next = (Long) data[0];
+            this.nextTitle = (String) data[1];
+        }
+    }
 
-		if ((next != null) && (nextTitle != null)) {
-			BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.RIGHT, nextTitle + " >", "chapter/index", getBookId(), next);
-			item.setConfirm(true);
-			item.setConfirmMsg("Cancel edition?");
-		}
+    @SetupRender
+    public void setupNav()
+    {
+        if ((previous != null) && (previousTitle != null))
+        {
+            BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< "
+                    + previousTitle, "chapter/index", getBookId(), previous);
+            item.setConfirm(true);
+            item.setConfirmMsg("Cancel edition?");
+        }
+        else
+        {
+            BookMenuItem item = this.linkSupport.createNavLink(
+                    NavLinkPosition.LEFT,
+                    "< Table of content",
+                    "book/index",
+                    getBookId());
+            item.setConfirm(true);
+            item.setConfirmMsg("Cancel edition?");
+        }
 
-		BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
-		item.setConfirm(true);
-		item.setConfirmMsg("Cancel edition?");
-	}
+        if ((next != null) && (nextTitle != null))
+        {
+            BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.RIGHT, nextTitle
+                    + " >", "chapter/index", getBookId(), next);
+            item.setConfirm(true);
+            item.setConfirmMsg("Cancel edition?");
+        }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
-	public Object updateTitle() {
-		this.chapterManager.update(chapter);
-		return this.titleBlock;
-	}
+        BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook()
+                .getTitle(), "book/index", getBookId());
+        item.setConfirm(true);
+        item.setConfirmMsg("Cancel edition?");
+    }
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public Object[] retrieveIds() {
-		return new Object[] { this.getBookId(), this.chapterId };
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
+    public Object updateTitle()
+    {
+        this.chapterManager.update(chapter);
+        return this.titleBlock;
+    }
 
-	/**
-	 * Used to check which submit button has been clicked
-	 */
-	public void onPublish() {
-		this.publish = true;
-	}
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public Object[] retrieveIds()
+    {
+        return new Object[]
+        { this.getBookId(), this.chapterId };
+    }
 
-	/**
-	 * Used to check which submit button has been clicked
-	 */
-	public void onUpdate() {
-		this.publish = false;
-	}
+    /**
+     * Used to check which submit button has been clicked
+     */
+    public void onPublish()
+    {
+        this.publish = true;
+    }
 
-	/**
-	 * Update content and publish if requested.
-	 * 
-	 * @return The book index page
-	 */
-	@OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
-	public Object updateChapter() {
+    /**
+     * Used to check which submit button has been clicked
+     */
+    public void onUpdate()
+    {
+        this.publish = false;
+    }
 
-		// If autosave then save and return
-		if (request.isXHR()) {
-			chapterManager.updateContent(chapterId, data);
-			JSONObject result = new JSONObject();
-			result.put("message", messages.format("autosave-success", format.format(Calendar.getInstance().getTime())));
-			return result;
-		}
+    /**
+     * Update content and publish if requested.
+     * 
+     * @return The book index page
+     */
+    @OnEvent(value = EventConstants.SUCCESS, component = "editChapterForm")
+    public Object updateChapter()
+    {
 
-		try {
-			if (!cancel) {
-				chapterManager.updateContent(chapterId, data);
-				if (publish) {
-					chapterManager.publishChapter(chapterId);
-				}
-			}
+        // If autosave then save and return
+        if (request.isXHR())
+        {
+            chapterManager.updateContent(chapterId, data);
+            JSONObject result = new JSONObject();
+            result.put("message", messages.format("autosave-success", format.format(Calendar
+                    .getInstance().getTime())));
+            return result;
+        }
 
-			index.setBookId(this.getBookId());
+        try
+        {
+            if (!cancel)
+            {
+                chapterManager.updateContent(chapterId, data);
+                if (publish)
+                {
+                    chapterManager.publishChapter(chapterId);
+                }
+            }
 
-			if (publish) {
-				index.setupChapter(this.getBookId(), chapterId);
-			} else {
-				index.setupChapter(this.getBookId(), chapterId, ChapterManager.LAST);
-				index.setRevision(ChapterManager.LAST);
-			}
+            index.setBookId(this.getBookId());
 
-			return index;
+            if (publish)
+            {
+                index.setupChapter(this.getBookId(), chapterId);
+            }
+            else
+            {
+                index.setupChapter(this.getBookId(), chapterId, ChapterManager.LAST);
+                index.setRevision(ChapterManager.LAST);
+            }
 
-		} catch (PublicationXmlException pxEx) {
-			editChapterForm.recordError(messages.get("publication-exception"));
-			return this;
-		}
+            return index;
 
-	}
+        }
+        catch (PublicationXmlException pxEx)
+        {
+            editChapterForm.recordError(messages.get("publication-exception"));
+            return this;
+        }
 
-	public Object[] getCancelCtx() {
-		return new Object[] { this.getBookId(), this.chapterId };
-	}
+    }
 
-	public Long getChapterId() {
-		return chapterId;
-	}
+    public Object[] getCancelCtx()
+    {
+        return new Object[]
+        { this.getBookId(), this.chapterId };
+    }
 
-	public void setChapterId(Long chapterId) {
-		this.chapterId = chapterId;
-	}
+    public Long getChapterId()
+    {
+        return chapterId;
+    }
 
-	/**
-	 * Handle upload exception
-	 * 
-	 * @param ex
-	 * @return
-	 */
-	public Object onUploadException(FileUploadException ex) {
-		JSONObject result = new JSONObject();
-		JSONArray message = new JSONArray();
-		result.put("error", true);
-		message.put(messages.format("upload-exception", maxFileSize / 1024));
-		result.put("messages", message);
-		return new TextStreamResponse("text/html", result.toString());
-	}
+    public void setChapterId(Long chapterId)
+    {
+        this.chapterId = chapterId;
+    }
+
+    /**
+     * Handle upload exception
+     * 
+     * @param ex
+     * @return
+     */
+    public Object onUploadException(FileUploadException ex)
+    {
+        JSONObject result = new JSONObject();
+        JSONArray message = new JSONArray();
+        result.put("error", true);
+        message.put(messages.format("upload-exception", maxFileSize / 1024));
+        result.put("messages", message);
+        return new TextStreamResponse("text/html", result.toString());
+    }
 
 }

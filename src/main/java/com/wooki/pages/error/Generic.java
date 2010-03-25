@@ -20,12 +20,13 @@ public class Generic implements ExceptionReporter
      */
     public Link getIndexPage()
     {
-	return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+        return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
     }
 
-	public void reportException(Throwable exception) {
-		// TODO : log the exception. Send an alert by email to the admin?
-		
-	}
+    public void reportException(Throwable exception)
+    {
+        // TODO : log the exception. Send an alert by email to the admin?
+
+    }
 
 }

@@ -38,79 +38,93 @@ import com.wooki.WookiSymbolsConstants;
 import com.wooki.domain.exception.AuthorizationException;
 
 /**
- * Extends default exception handler to allow routing of exception. Default
- * exception page is the Tapestry's default one.
+ * Extends default exception handler to allow routing of exception. Default exception page is the
+ * Tapestry's default one.
  */
-public class WookiRequestExceptionHandler implements RequestExceptionHandler {
-	private Map<Class, String> exceptionMap;
+public class WookiRequestExceptionHandler implements RequestExceptionHandler
+{
+    private Map<Class, String> exceptionMap;
 
-	private final RequestPageCache pageCache;
+    private final RequestPageCache pageCache;
 
-	private final ComponentClassResolver classResolver;
+    private final ComponentClassResolver classResolver;
 
-	private final PageResponseRenderer renderer;
+    private final PageResponseRenderer renderer;
 
-	private final Logger logger;
+    private final Logger logger;
 
-	private String pageName;
+    private String pageName;
 
-	private final String wookiErrorPage;
+    private final String wookiErrorPage;
 
-	private final Response response;
+    private final Response response;
 
-	private final boolean productionMode;
+    private final boolean productionMode;
 
-	public WookiRequestExceptionHandler(Map<Class, String> exceptionMap, RequestPageCache pageCache, ComponentClassResolver classResolver,
-			PageResponseRenderer renderer, Logger logger, @Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) String pageName,
-			@Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
-			@Inject @Symbol(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT) String wookiErrorPage, Response response) {
-		this.exceptionMap = exceptionMap;
-		this.pageCache = pageCache;
-		this.renderer = renderer;
-		this.logger = logger;
-		this.pageName = pageName;
-		this.response = response;
-		this.classResolver = classResolver;
-		this.productionMode = productionMode;
-		this.wookiErrorPage = wookiErrorPage;
-	}
+    public WookiRequestExceptionHandler(
+            Map<Class, String> exceptionMap,
+            RequestPageCache pageCache,
+            ComponentClassResolver classResolver,
+            PageResponseRenderer renderer,
+            Logger logger,
+            @Inject @Symbol(SymbolConstants.EXCEPTION_REPORT_PAGE) String pageName,
+            @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
+            @Inject @Symbol(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT) String wookiErrorPage,
+            Response response)
+    {
+        this.exceptionMap = exceptionMap;
+        this.pageCache = pageCache;
+        this.renderer = renderer;
+        this.logger = logger;
+        this.pageName = pageName;
+        this.response = response;
+        this.classResolver = classResolver;
+        this.productionMode = productionMode;
+        this.wookiErrorPage = wookiErrorPage;
+    }
 
-	public void handleRequestException(Throwable exception) throws IOException {
+    public void handleRequestException(Throwable exception) throws IOException
+    {
 
-		String exceptionPage = this.pageName;
+        String exceptionPage = this.pageName;
 
-		if (this.productionMode) {
-			exceptionPage = wookiErrorPage;
-		}
+        if (this.productionMode)
+        {
+            exceptionPage = wookiErrorPage;
+        }
 
-		logger.error("An exception has occured", exception);
+        logger.error("An exception has occured", exception);
 
-		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		response.setHeader("X-Tapestry-ErrorMessage", InternalUtils.toMessage(exception));
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        response.setHeader("X-Tapestry-ErrorMessage", InternalUtils.toMessage(exception));
 
-		// Access denied when the operation is not authorized
-		if (exception.getCause() instanceof AuthorizationException) {
-			response.sendError(403, "Access denied");
-		}
+        // Access denied when the operation is not authorized
+        if (exception.getCause() instanceof AuthorizationException)
+        {
+            response.sendError(403, "Access denied");
+        }
 
-		// Check if there is an existing a page that correspond to the root
-		// exception
-		if (exception.getCause() != null && this.exceptionMap.containsKey(exception.getCause().getClass())) {
-			String page = this.exceptionMap.get(exception.getCause().getClass());
-			if (classResolver.isPageName(page)) {
-				exceptionPage = page;
-			}
-		}
+        // Check if there is an existing a page that correspond to the root
+        // exception
+        if (exception.getCause() != null
+                && this.exceptionMap.containsKey(exception.getCause().getClass()))
+        {
+            String page = this.exceptionMap.get(exception.getCause().getClass());
+            if (classResolver.isPageName(page))
+            {
+                exceptionPage = page;
+            }
+        }
 
-		Page page = pageCache.get(exceptionPage);
+        Page page = pageCache.get(exceptionPage);
 
-		ExceptionReporter rootComponent = (ExceptionReporter) page.getRootComponent();
+        ExceptionReporter rootComponent = (ExceptionReporter) page.getRootComponent();
 
-		// Let the page set up for the new exception.
+        // Let the page set up for the new exception.
 
-		rootComponent.reportException(exception);
+        rootComponent.reportException(exception);
 
-		renderer.renderPageResponse(page);
-	}
+        renderer.renderPageResponse(page);
+    }
 
 }

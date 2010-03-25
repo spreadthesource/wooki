@@ -24,56 +24,54 @@ import com.wooki.domain.model.Book;
  * DAO in charge of the Book
  * 
  * @author ccordenier
- * 
  */
-public interface BookDAO extends GenericDAO<Book, Long> {
+public interface BookDAO extends GenericDAO<Book, Long>
+{
 
-	/**
-	 * 
-	 * @param title
-	 * @return
-	 */
-	Book findBookBySlugTitle(String title);
+    /**
+     * @param title
+     * @return
+     */
+    Book findBookBySlugTitle(String title);
 
-	/**
-	 * List book with similar title.
-	 * 
-	 * @param title
-	 * @return
-	 */
-	List<Book> listByTitle(String title);
+    /**
+     * List book with similar title.
+     * 
+     * @param title
+     * @return
+     */
+    List<Book> listByTitle(String title);
 
-	/**
-	 * List the book own by one author
-	 * 
-	 * @param id
-	 * @return
-	 */
-	List<Book> listByOwner(Long id);
+    /**
+     * List the book own by one author
+     * 
+     * @param id
+     * @return
+     */
+    List<Book> listByOwner(Long id);
 
-	/**
-	 * List all the book on which a user has worked.
-	 *
-	 * @param id
-	 * @return
-	 */
-	List<Book> listByCollaborator(Long id);
-	
-	/**
-	 * Verify if an author owns a book. An author has lesser privileges than the
-	 * owner.
-	 * 
-	 * @return
-	 */
-	boolean isAuthor(Long bookId, String username);
+    /**
+     * List all the book on which a user has worked.
+     * 
+     * @param id
+     * @return
+     */
+    List<Book> listByCollaborator(Long id);
 
-	/**
-	 * Check if the user is owner of the book, this will allow him to modify
-	 * book settings and list of authors.
-	 * 
-	 * @param bookId
-	 * @param username
-	 * @return
-	 */
-	boolean isOwner(Long bookId, String username);
+    /**
+     * Verify if an author owns a book. An author has lesser privileges than the owner.
+     * 
+     * @return
+     */
+    boolean isAuthor(Long bookId, String username);
+
+    /**
+     * Check if the user is owner of the book, this will allow him to modify book settings and list
+     * of authors.
+     * 
+     * @param bookId
+     * @param username
+     * @return
+     */
+    boolean isOwner(Long bookId, String username);
 }

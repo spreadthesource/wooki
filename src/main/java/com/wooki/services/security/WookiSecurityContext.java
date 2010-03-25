@@ -22,61 +22,59 @@ import com.wooki.domain.model.User;
  * Contains authorization and security behavior of wooki.
  * 
  * @author ccordenier
- * 
  */
-public interface WookiSecurityContext {
+public interface WookiSecurityContext
+{
 
-	void log(User user);
+    void log(User user);
 
-	/**
-	 * Check if a user is logged in.
-	 * 
-	 * @return
-	 */
-	boolean isLoggedIn();
+    /**
+     * Check if a user is logged in.
+     * 
+     * @return
+     */
+    boolean isLoggedIn();
 
-	/**
-	 * Get the logged username : No DB access, only the security context is
-	 * accessed.
-	 * 
-	 * @return
-	 */
-	String getUsername();
+    /**
+     * Get the logged username : No DB access, only the security context is accessed.
+     * 
+     * @return
+     */
+    String getUsername();
 
-	/**
-	 * Get the name of the logged user.
-	 * 
-	 * @return
-	 */
-	User getAuthor();
+    /**
+     * Get the name of the logged user.
+     * 
+     * @return
+     */
+    User getAuthor();
 
-	/**
-	 * Check if the logged in user is author of a book.
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	boolean isAuthorOfBook(Long bookId);
+    /**
+     * Check if the logged in user is author of a book.
+     * 
+     * @param bookId
+     * @return
+     */
+    boolean isAuthorOfBook(Long bookId);
 
-	/**
-	 * Check if the logged in user is author of a book.
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	boolean isAuthorOfChapter(Long chapterId);
+    /**
+     * Check if the logged in user is author of a book.
+     * 
+     * @param bookId
+     * @return
+     */
+    boolean isAuthorOfChapter(Long chapterId);
 
-	
-	/**
-	 * Check if the logged user is owner of the book.
-	 * 
-	 * @return
-	 */
-	boolean isOwnerOfBook(Long bookId);
+    /**
+     * Check if the logged user is owner of the book.
+     * 
+     * @return
+     */
+    boolean isOwnerOfBook(Long bookId);
 
-	/**
-	 * Check if the user is author of a comment
-	 */
-	boolean isAuthorOfComment(Long commentId);
+    /**
+     * Check if the user is author of a comment
+     */
+    boolean isAuthorOfComment(Long commentId);
 
 }

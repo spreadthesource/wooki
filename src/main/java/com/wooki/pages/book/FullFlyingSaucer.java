@@ -35,86 +35,102 @@ import com.wooki.services.parsers.DOMManager;
 /**
  * This page displays a book with its table of contents.
  */
-@Meta(value = { "content-type=text/xml" })
-public class FullFlyingSaucer extends Index {
+@Meta(value =
+{ "content-type=text/xml" })
+public class FullFlyingSaucer extends Index
+{
 
-	@Inject
-	private Context context;
+    @Inject
+    private Context context;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private DOMManager domManager;
+    @Inject
+    private DOMManager domManager;
 
-	@Inject
-	@Symbol(WookiSymbolsConstants.UPLOAD_DIR)
-	private String uploadDir;
+    @Inject
+    @Symbol(WookiSymbolsConstants.UPLOAD_DIR)
+    private String uploadDir;
 
-	@Property
-	private int chapterIdx;
+    @Property
+    private int chapterIdx;
 
-	public String getPrintCssPath() {
-		return this.context.getRealFile("/static/css/print.css").getAbsolutePath();
-	}
+    public String getPrintCssPath()
+    {
+        return this.context.getRealFile("/static/css/print.css").getAbsolutePath();
+    }
 
-	@Override
-	public void setupMenus() {
-		// Empty in print mode
-	}
+    @Override
+    public void setupMenus()
+    {
+        // Empty in print mode
+    }
 
-	@Override
-	public void setupNav() {
-		// Empty for print version
-	}
+    @Override
+    public void setupNav()
+    {
+        // Empty for print version
+    }
 
-	@Override
-	public String getContent() {
-		String abstractContent = super.getContent();
-		return applyGlobalReplaces(abstractContent);
-	}
+    @Override
+    public String getContent()
+    {
+        String abstractContent = super.getContent();
+        return applyGlobalReplaces(abstractContent);
+    }
 
-	public String getLastPublishedContent() {
-		String result = this.chapterManager.getLastPublishedContent(this.getCurrentChapter().getId());
+    public String getLastPublishedContent()
+    {
+        String result = this.chapterManager.getLastPublishedContent(this.getCurrentChapter()
+                .getId());
 
-		// TODO find a cleaner way to transform image URLs
-		return applyGlobalReplaces(result);
-	}
+        // TODO find a cleaner way to transform image URLs
+        return applyGlobalReplaces(result);
+    }
 
-	@AfterRender
-	public void generateBookmarks(MarkupWriter writer) {
-		Element body = writer.getDocument().getElementById("content");
-		if (body == null) {
-			logger.error("An errors has occured during bookmarks generation.");
-			return;
-		}
+    @AfterRender
+    public void generateBookmarks(MarkupWriter writer)
+    {
+        Element body = writer.getDocument().getElementById("content");
+        if (body == null)
+        {
+            logger.error("An errors has occured during bookmarks generation.");
+            return;
+        }
 
-		// Generate and add bookmarks
-		String bookmarksDom = this.domManager.generatePdfBookmarks(body.toString(), 2, 4);
-		if (bookmarksDom != null && !"".equals(bookmarksDom)) {
-			Element bookmarks = writer.getDocument().find("html/head").element("bookmarks");
-			bookmarks.raw(bookmarksDom);
-		}
-	}
+        // Generate and add bookmarks
+        String bookmarksDom = this.domManager.generatePdfBookmarks(body.toString(), 2, 4);
+        if (bookmarksDom != null && !"".equals(bookmarksDom))
+        {
+            Element bookmarks = writer.getDocument().find("html/head").element("bookmarks");
+            bookmarks.raw(bookmarksDom);
+        }
+    }
 
-	/**
-	 * TODO Better the global replace chain for future work.
-	 * 
-	 * @param input
-	 * @return
-	 */
-	private String applyGlobalReplaces(String input) {
-		if (input != null) {
-			// Apply global replace for images
-			String result = input.replaceAll(String.format("%s%s", request.getContextPath(), UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
-			return result;
-		}
-		return "";
-	}
+    /**
+     * TODO Better the global replace chain for future work.
+     * 
+     * @param input
+     * @return
+     */
+    private String applyGlobalReplaces(String input)
+    {
+        if (input != null)
+        {
+            // Apply global replace for images
+            String result = input.replaceAll(String.format(
+                    "%s%s",
+                    request.getContextPath(),
+                    UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
+            return result;
+        }
+        return "";
+    }
 }

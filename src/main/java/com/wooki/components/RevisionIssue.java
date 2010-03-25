@@ -16,58 +16,68 @@ import com.wooki.services.utils.DateUtils;
  * Display comments and revision for a given chapter.
  * 
  * @author ccordenier
- * 
  */
-public class RevisionIssue {
+public class RevisionIssue
+{
 
-	@Inject
-	private CommentManager commentManager;
+    @Inject
+    private CommentManager commentManager;
 
-	@Parameter(required = true, allowNull = false)
-	private Long bookId;
-	
-	@Parameter(required = true, allowNull = false)
-	private Long chapterId;
-	
-	@Parameter
-	@Property
-	private boolean abstractChapter;
-	
-	@Property
-	private List<Comment> comments;
+    @Parameter(required = true, allowNull = false)
+    private Long bookId;
 
-	@Property
-	private Comment current;
+    @Parameter(required = true, allowNull = false)
+    private Long chapterId;
 
-	@Property
-	private int loopIdx;
-	
-	@Property
-	private SimpleDateFormat format = DateUtils.getLastModified(); 
-	
-	@SetupRender
-	public void listComments() {
-		this.comments = this.commentManager.listForChapter(this.chapterId);
-	}
+    @Parameter
+    @Property
+    private boolean abstractChapter;
 
-	public Object[] getRevisionCtx() {
-		return new Object[] { this.bookId, this.chapterId, this.current.getPublication().getId() };
-	}
+    @Property
+    private List<Comment> comments;
 
-	public Object[] getPublishedCtx() {
-		return new Object[] { this.bookId, this.chapterId };
-	}
+    @Property
+    private Comment current;
 
-	public Object[] getAbstractRevisionCtx() {
-		return new Object[] { this.bookId, this.current.getPublication().getId() };
-	}
+    @Property
+    private int loopIdx;
 
-	public Object[] getAbstractPublishedCtx() {
-		return new Object[] { this.bookId };
-	}
-	
-	public String getStyle() {
-		return this.loopIdx == 0 ? "first" : null;
-	}
+    @Property
+    private SimpleDateFormat format = DateUtils.getLastModified();
+
+    @SetupRender
+    public void listComments()
+    {
+        this.comments = this.commentManager.listForChapter(this.chapterId);
+    }
+
+    public Object[] getRevisionCtx()
+    {
+        return new Object[]
+        { this.bookId, this.chapterId, this.current.getPublication().getId() };
+    }
+
+    public Object[] getPublishedCtx()
+    {
+        return new Object[]
+        { this.bookId, this.chapterId };
+    }
+
+    public Object[] getAbstractRevisionCtx()
+    {
+        return new Object[]
+        { this.bookId, this.current.getPublication().getId() };
+    }
+
+    public Object[] getAbstractPublishedCtx()
+    {
+        return new Object[]
+        { this.bookId };
+    }
+
+    public String getStyle()
+    {
+        return this.loopIdx == 0 ? "first" : null;
+    }
 
 }

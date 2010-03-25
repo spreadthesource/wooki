@@ -24,43 +24,46 @@ import com.wooki.domain.model.activity.Activity;
  * Use to handle activities on wikies element to follow history.
  * 
  * @author ccordenier
- * 
  */
-public interface ActivityManager {
+public interface ActivityManager
+{
 
-	List<Activity> listAll(int startIdx, int nbElts);
+    List<Activity> listAll(int startIdx, int nbElts);
 
-	List<Activity> listAllBookActivities(Long bookId);
-	
-	List<Activity> listUserActivity(int startIdx, int nbElts, Long userId);
+    List<Activity> listAllBookActivities(Long bookId);
 
-	List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId);
+    List<Activity> listUserActivity(int startIdx, int nbElts, Long userId);
 
-	/**
-	 * List the book creation activity.
-	 * @param startIdx TODO
-	 * 
-	 * @return
-	 */
-	List<Activity> listBookCreationActivity(int startIdx, int nbElements);
+    List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId);
 
-	/**
-	 * List the activity of a user on its own books.
-	 * @param startIdx TODO
-	 * @param userId
-	 * @param nbElementsn
-	 * 
-	 * @return
-	 */
-	List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId);
+    /**
+     * List the book creation activity.
+     * 
+     * @param startIdx
+     *            TODO
+     * @return
+     */
+    List<Activity> listBookCreationActivity(int startIdx, int nbElements);
 
-	/**
-	 * List the account activity on wooki.
-	 * @param startIdx TODO
-	 * @param nbElements
-	 * @param userId
-	 * 
-	 * @return
-	 */
-	List<Activity> listAccountActivity(int startIdx, int nbElements);
+    /**
+     * List the activity of a user on its own books.
+     * 
+     * @param startIdx
+     *            TODO
+     * @param userId
+     * @param nbElementsn
+     * @return
+     */
+    List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId);
+
+    /**
+     * List the account activity on wooki.
+     * 
+     * @param startIdx
+     *            TODO
+     * @param nbElements
+     * @param userId
+     * @return
+     */
+    List<Activity> listAccountActivity(int startIdx, int nbElements);
 }

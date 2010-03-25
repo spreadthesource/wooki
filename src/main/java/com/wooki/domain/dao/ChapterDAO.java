@@ -24,60 +24,61 @@ import com.wooki.domain.model.Chapter;
  * Handle Chapter persistence.
  * 
  * @author ccordenier
- *
  */
-public interface ChapterDAO extends GenericDAO<Chapter, Long> {
-	
-	/**
-	 * Check if the user is author of the parent book of a chapter. 
-	 *
-	 * @param chapterId
-	 * @return
-	 */
-	boolean isAuthor(Long chapterId, String username);
-	
-	
-	/**
-	 * Find previous and next chapter. 
-	 *
-	 * @param bookId
-	 * @param chapterId
-	 * @return
-	 */
-	List<Object[]> findNext(Long bookId, Long chapterId);
+public interface ChapterDAO extends GenericDAO<Chapter, Long>
+{
 
-	/**
-	 * Find previous publish chapter.
-	 *
-	 * @param bookId
-	 * @param chapterId
-	 * @return
-	 */
-	List<Object[]> findPrevious(Long bookId, Long chapterId);
-	
-	/**
-	 * List existing chapter for a given book.
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	List<Chapter> listChapters(Long bookId);
+    /**
+     * Check if the user is author of the parent book of a chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    boolean isAuthor(Long chapterId, String username);
 
-	/**
-	 * List information chapter, do not load chapter content.
-	 *
-	 * @param bookId
-	 * @return
-	 */
-	List<Chapter> listChapterInfo(Long bookId);
-	
-	/**
-	 * List the last modified elements.
-	 *
-	 * @param id The id of the book
-	 * @param nbElts The number of elements to return
-	 * @return
-	 */
-	List<Chapter> listLastModified(Long id, int nbElts);
+    /**
+     * Find previous and next chapter.
+     * 
+     * @param bookId
+     * @param chapterId
+     * @return
+     */
+    List<Object[]> findNext(Long bookId, Long chapterId);
+
+    /**
+     * Find previous publish chapter.
+     * 
+     * @param bookId
+     * @param chapterId
+     * @return
+     */
+    List<Object[]> findPrevious(Long bookId, Long chapterId);
+
+    /**
+     * List existing chapter for a given book.
+     * 
+     * @param bookId
+     * @return
+     */
+    List<Chapter> listChapters(Long bookId);
+
+    /**
+     * List information chapter, do not load chapter content.
+     * 
+     * @param bookId
+     * @return
+     */
+    List<Chapter> listChapterInfo(Long bookId);
+
+    /**
+     * List the last modified elements.
+     * 
+     * @param id
+     *            The id of the book
+     * @param nbElts
+     *            The number of elements to return
+     * @return
+     */
+    List<Chapter> listLastModified(Long id, int nbElts);
 
 }

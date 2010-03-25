@@ -41,95 +41,107 @@ import org.springframework.security.web.FilterInvocation;
  * This voter will be used to secure URL access authorization.
  * 
  * @author ccordenier
- * 
  */
-public class TapestryResourceVoter implements AccessDecisionVoter {
+public class TapestryResourceVoter implements AccessDecisionVoter
+{
 
-	private Map<String, TapestryResourceAccessController> ac = CollectionFactory.newCaseInsensitiveMap();
+    private Map<String, TapestryResourceAccessController> ac = CollectionFactory
+            .newCaseInsensitiveMap();
 
-	private Registry tapestryRegistry;
+    private Registry tapestryRegistry;
 
-	private RequestGlobals globals;
+    private RequestGlobals globals;
 
-	private ComponentEventLinkEncoder encoder;
+    private ComponentEventLinkEncoder encoder;
 
-	private String applicationCharset;
+    private String applicationCharset;
 
-	private SessionPersistedObjectAnalyzer spoa;
+    private SessionPersistedObjectAnalyzer spoa;
 
-	public TapestryResourceVoter(Map<String, TapestryResourceAccessController> configuration) {
-		if (configuration != null) {
-			for (String key : configuration.keySet()) {
-				ac.put(key, configuration.get(key));
-			}
-		}
-	}
+    public TapestryResourceVoter(Map<String, TapestryResourceAccessController> configuration)
+    {
+        if (configuration != null)
+        {
+            for (String key : configuration.keySet())
+            {
+                ac.put(key, configuration.get(key));
+            }
+        }
+    }
 
-	public boolean supports(ConfigAttribute attribute) {
-		if (attribute.getAttribute() != null) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public boolean supports(ConfigAttribute attribute)
+    {
+        if (attribute.getAttribute() != null)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
-	/**
-	 * Initialize tapestry context for spring security.
-	 * 
-	 * @param ctx
-	 */
-	private void initTapestry(ServletContext ctx) {
-		this.tapestryRegistry = (Registry) ctx.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
-		this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
-		this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
-		this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class).valueForSymbol(SymbolConstants.CHARSET);
-		this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
-	}
+    /**
+     * Initialize tapestry context for spring security.
+     * 
+     * @param ctx
+     */
+    private void initTapestry(ServletContext ctx)
+    {
+        this.tapestryRegistry = (Registry) ctx.getAttribute(TapestryFilter.REGISTRY_CONTEXT_NAME);
+        this.encoder = this.tapestryRegistry.getService(ComponentEventLinkEncoder.class);
+        this.spoa = this.tapestryRegistry.getService(SessionPersistedObjectAnalyzer.class);
+        this.applicationCharset = this.tapestryRegistry.getService(SymbolSource.class)
+                .valueForSymbol(SymbolConstants.CHARSET);
+        this.globals = this.tapestryRegistry.getService(RequestGlobals.class);
+    }
 
-	/**
-	 * This implementation supports any type of class, because it does not query
-	 * the presented secure object.
-	 * 
-	 * @param clazz
-	 *            the secure object
-	 * 
-	 * @return always <code>true</code>
-	 */
-	public boolean supports(Class<?> clazz) {
-		if (clazz == FilterInvocation.class) {
-			return true;
-		}
-		return false;
-	}
+    /**
+     * This implementation supports any type of class, because it does not query the presented
+     * secure object.
+     * 
+     * @param clazz
+     *            the secure object
+     * @return always <code>true</code>
+     */
+    public boolean supports(Class<?> clazz)
+    {
+        if (clazz == FilterInvocation.class) { return true; }
+        return false;
+    }
 
-	public int vote(Authentication authentication, Object object, Collection<ConfigAttribute> attributes) {
-		// Use Tapestry services to analyze the URL
-		FilterInvocation fi = FilterInvocation.class.cast(object);
-		if (tapestryRegistry == null) {
-			initTapestry(fi.getHttpRequest().getSession().getServletContext());
-		}
-		RequestImpl request = new RequestImpl(fi.getHttpRequest(), applicationCharset, spoa);
-		globals.storeRequestResponse(request, null);
+    public int vote(Authentication authentication, Object object,
+            Collection<ConfigAttribute> attributes)
+    {
+        // Use Tapestry services to analyze the URL
+        FilterInvocation fi = FilterInvocation.class.cast(object);
+        if (tapestryRegistry == null)
+        {
+            initTapestry(fi.getHttpRequest().getSession().getServletContext());
+        }
+        RequestImpl request = new RequestImpl(fi.getHttpRequest(), applicationCharset, spoa);
+        globals.storeRequestResponse(request, null);
 
-		// Secure Render request
-		PageRenderRequestParameters params = this.encoder.decodePageRenderRequest(request);
-		if (params != null) {
-			String logicalPageName = params.getLogicalPageName();
-			if (this.ac.containsKey(logicalPageName)) {
-				return this.ac.get(logicalPageName).isViewAuthorized(params) ? ACCESS_GRANTED : ACCESS_DENIED;
-			}
-		}
+        // Secure Render request
+        PageRenderRequestParameters params = this.encoder.decodePageRenderRequest(request);
+        if (params != null)
+        {
+            String logicalPageName = params.getLogicalPageName();
+            if (this.ac.containsKey(logicalPageName)) { return this.ac.get(logicalPageName)
+                    .isViewAuthorized(params) ? ACCESS_GRANTED : ACCESS_DENIED; }
+        }
 
-		// Secure action request
-		ComponentEventRequestParameters actionParams = this.encoder.decodeComponentEventRequest(request);
-		if (actionParams != null) {
-			String logicalPageName = actionParams.getContainingPageName();
-			if (this.ac.containsKey(logicalPageName)) {
-				return this.ac.get(logicalPageName).isActionAuthorized(actionParams) ? ACCESS_GRANTED : ACCESS_DENIED;
-			}
-		}
+        // Secure action request
+        ComponentEventRequestParameters actionParams = this.encoder
+                .decodeComponentEventRequest(request);
+        if (actionParams != null)
+        {
+            String logicalPageName = actionParams.getContainingPageName();
+            if (this.ac.containsKey(logicalPageName)) { return this.ac.get(logicalPageName)
+                    .isActionAuthorized(actionParams) ? ACCESS_GRANTED : ACCESS_DENIED; }
+        }
 
-		return ACCESS_GRANTED;
-	}
+        return ACCESS_GRANTED;
+    }
 
 }

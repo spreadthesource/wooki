@@ -1,5 +1,6 @@
 package com.wooki;
 
-public class GAnalyticsScriptsMessages {
+public class GAnalyticsScriptsMessages
+{
 
 }

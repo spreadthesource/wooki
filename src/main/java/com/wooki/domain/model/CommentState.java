@@ -16,14 +16,15 @@
 
 package com.wooki.domain.model;
 
+public enum CommentState
+{
 
-public enum CommentState {
+    OPEN, FIXED, REFUSED, REJECTED;
 
-	OPEN, FIXED, REFUSED, REJECTED;
+    @Override
+    public String toString()
+    {
+        return super.toString().toLowerCase();
+    }
 
-	@Override
-	public String toString() {
-		return super.toString().toLowerCase();
-	}
-	
 }

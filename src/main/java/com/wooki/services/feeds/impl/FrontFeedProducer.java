@@ -18,33 +18,36 @@ import com.wooki.services.feeds.ActivityFeedWriter;
  * Produces the feed for a single book.
  * 
  * @author ccordenier
- * 
  */
-public class FrontFeedProducer extends AbstractFeedProducer {
+public class FrontFeedProducer extends AbstractFeedProducer
+{
 
-	public FrontFeedProducer(@Inject LinkSource linkSource, @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-			@Inject ActivityManager activityManager) {
-		super(linkSource, activityFeed, messages, activityManager);
-	}
+    public FrontFeedProducer(@Inject LinkSource linkSource,
+            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
+            @Inject ActivityManager activityManager)
+    {
+        super(linkSource, activityFeed, messages, activityManager);
+    }
 
-	/**
-	 * Read book definition and generate corresponding feed.
-	 *
-	 */
-	public Feed produce(Long... context) {
+    /**
+     * Read book definition and generate corresponding feed.
+     */
+    public Feed produce(Long... context)
+    {
 
-		String title = messages.getMessages().get("recent-creation-activity");
-		String id = "wooki-public";
+        String title = messages.getMessages().get("recent-creation-activity");
+        String id = "wooki-public";
 
-		List<Link> alternateLinks = new ArrayList<Link>();
+        List<Link> alternateLinks = new ArrayList<Link>();
 
-		Link linkToSelf = new Link();
-		linkToSelf.setHref(lnkSource.createPageRenderLink("index", false).toAbsoluteURI());
-		linkToSelf.setTitle(messages.getMessages().get("front-feed-title"));
+        Link linkToSelf = new Link();
+        linkToSelf.setHref(lnkSource.createPageRenderLink("index", false).toAbsoluteURI());
+        linkToSelf.setTitle(messages.getMessages().get("front-feed-title"));
 
-		alternateLinks.add(linkToSelf);
+        alternateLinks.add(linkToSelf);
 
-		return super.fillFeed(id, title, alternateLinks, this.activityManager.listBookCreationActivity(0, -1));
-	}
+        return super.fillFeed(id, title, alternateLinks, this.activityManager
+                .listBookCreationActivity(0, -1));
+    }
 
 }

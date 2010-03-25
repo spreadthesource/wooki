@@ -37,122 +37,140 @@ import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Provide the ability to changes user account settings , like password, name,
- * username and so on.
+ * Provide the ability to changes user account settings , like password, name, username and so on.
  */
-public class AccountSettings {
+public class AccountSettings
+{
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Inject
-	private UserManager userManager;
+    @Inject
+    private UserManager userManager;
 
-	@Inject
-	private Messages messages;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private SaltSource saltSource;
+    @Inject
+    private SaltSource saltSource;
 
-	@Inject
-	private PasswordEncoder passwordEncoder;
+    @Inject
+    private PasswordEncoder passwordEncoder;
 
-	@Component(id = "userDetails")
-	private Form userDetails;
+    @Component(id = "userDetails")
+    private Form userDetails;
 
-	@Component(id = "username")
-	private TextField username;
+    @Component(id = "username")
+    private TextField username;
 
-	@Component(id = "passwordChange")
-	private Form passwordChange;
+    @Component(id = "passwordChange")
+    private Form passwordChange;
 
-	@Property
-	private User user;
+    @Property
+    private User user;
 
-	@Property
-	@Validate("required")
-	private String oldPassword;
+    @Property
+    @Validate("required")
+    private String oldPassword;
 
-	@Property
-	@Validate("required")
-	private String newPassword;
+    @Property
+    @Validate("required")
+    private String newPassword;
 
-	@Property
-	@Validate("required")
-	private String newPasswordConfirmation;
+    @Property
+    @Validate("required")
+    private String newPasswordConfirmation;
 
-	@Property
-	@Persist("flash")
-	private Boolean passwordChangeSuccess;
+    @Property
+    @Persist("flash")
+    private Boolean passwordChangeSuccess;
 
-	/**
-	 * Set current user if someone has logged in.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupUser() {
-		if (securityCtx.isLoggedIn()) {
-			this.user = securityCtx.getAuthor();
-			return true;
-		}
-		return Signin.class;
-	}
+    /**
+     * Set current user if someone has logged in.
+     * 
+     * @return
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupUser()
+    {
+        if (securityCtx.isLoggedIn())
+        {
+            this.user = securityCtx.getAuthor();
+            return true;
+        }
+        return Signin.class;
+    }
 
-	@SetupRender
-	public Object setupUserSettings() {
-		if (this.user == null) {
-			return false;
-		}
-		return true;
-	}
+    @SetupRender
+    public Object setupUserSettings()
+    {
+        if (this.user == null) { return false; }
+        return true;
+    }
 
-	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "userDetails")
-	void validateUserDetailsChange() {
-		User userByUsername = userManager.findByUsername(user.getUsername());
+    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "userDetails")
+    void validateUserDetailsChange()
+    {
+        User userByUsername = userManager.findByUsername(user.getUsername());
 
-		// check if the new username is not already taken by someone else
-		if (userByUsername != null && userByUsername.getId() != user.getId()) {
-			userDetails.recordError(username, messages.get("error-username-already-taken"));
-		}
-	}
+        // check if the new username is not already taken by someone else
+        if (userByUsername != null && userByUsername.getId() != user.getId())
+        {
+            userDetails.recordError(username, messages.get("error-username-already-taken"));
+        }
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "userDetails")
-	void successUserDetailsChange() {
-		try {
-			this.user = userManager.updateDetails(user);
-		} catch (AuthorizationException e) {
-			userDetails.recordError(messages.get("error-authorization-exception"));
-		} catch (UserAlreadyException e) {
-			userDetails.recordError(username, messages.get("error-username-already-taken"));
-		}
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "userDetails")
+    void successUserDetailsChange()
+    {
+        try
+        {
+            this.user = userManager.updateDetails(user);
+        }
+        catch (AuthorizationException e)
+        {
+            userDetails.recordError(messages.get("error-authorization-exception"));
+        }
+        catch (UserAlreadyException e)
+        {
+            userDetails.recordError(username, messages.get("error-username-already-taken"));
+        }
+    }
 
-	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "passwordChange")
-	void validatePasswordChange() {
-		// first, let's check if old password is ok
-		String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource.getSalt(this.user));
-		if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) {
-			passwordChange.recordError(messages.get("error-old-password-wrong"));
-		}
+    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "passwordChange")
+    void validatePasswordChange()
+    {
+        // first, let's check if old password is ok
+        String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource
+                .getSalt(this.user));
+        if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword()))
+        {
+            passwordChange.recordError(messages.get("error-old-password-wrong"));
+        }
 
-		// then check if password confirmation is ok
-		if (!newPassword.equals(newPasswordConfirmation)) {
-			passwordChange.recordError(messages.get("error-passwords-dont-match"));
-		}
-	}
+        // then check if password confirmation is ok
+        if (!newPassword.equals(newPasswordConfirmation))
+        {
+            passwordChange.recordError(messages.get("error-passwords-dont-match"));
+        }
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "passwordChange")
-	void successPasswordChange() {
-		try {
-			this.user = userManager.updatePassword(user, oldPassword, newPassword);
-			this.passwordChangeSuccess = true;
-		} catch (AuthorizationException e) {
-			userDetails.recordError(messages.get("error-authorization-exception"));
-		}
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "passwordChange")
+    void successPasswordChange()
+    {
+        try
+        {
+            this.user = userManager.updatePassword(user, oldPassword, newPassword);
+            this.passwordChangeSuccess = true;
+        }
+        catch (AuthorizationException e)
+        {
+            userDetails.recordError(messages.get("error-authorization-exception"));
+        }
+    }
 
-	public String getTitle() {
-		return this.messages.format("account-settings-title", user.getUsername());
-	}
+    public String getTitle()
+    {
+        return this.messages.format("account-settings-title", user.getUsername());
+    }
 }

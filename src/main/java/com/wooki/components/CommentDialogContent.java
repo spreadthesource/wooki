@@ -44,101 +44,102 @@ import com.wooki.domain.model.Comment;
  * Display the list of comments for a block.
  * 
  * @author ccordenier
- * 
  */
-public class CommentDialogContent {
+public class CommentDialogContent
+{
 
-	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
-	private String dialogId;
-	
-	@Property
-	@Parameter
-	private Long publicationId;
+    @Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+    private String dialogId;
 
-	@Parameter
-	private Long bookId;
+    @Property
+    @Parameter
+    private Long publicationId;
 
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.PROP)
-	private String domId;
+    @Parameter
+    private Long bookId;
 
-	@Inject
-	private ComponentResources resources;
+    @Property
+    @Parameter(defaultPrefix = BindingConstants.PROP)
+    private String domId;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private ComponentResources resources;
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private CommentManager commentManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private Block commentDetails;
+    @Inject
+    private CommentManager commentManager;
 
-	@InjectComponent
-	private Form createCommentForm;
+    @Inject
+    private Block commentDetails;
 
-	@InjectComponent
-	@Property
-	private Zone updateStateZone;
+    @InjectComponent
+    private Form createCommentForm;
 
-	@Property
-	private List<Comment> comments;
+    @InjectComponent
+    @Property
+    private Zone updateStateZone;
 
-	@Property
-	private Comment currentComment;
+    @Property
+    private List<Comment> comments;
 
-	@Property
-	private boolean published;
-	
-	@Property
-	@Validate("required")
-	@Width(80)
-	private String content;
+    @Property
+    private Comment currentComment;
 
-	@SetupRender
-	public Object searchComments() {
-		if (!resources.isBound("publicationId") || publicationId == null) {
-			return false;
-		}
-		this.comments = commentManager.listForPublicationAndDomId(
-				publicationId, domId);
-		this.published = this.chapterManager.isPublished(this.publicationId);
-		return true;
-	}
+    @Property
+    private boolean published;
 
-	@OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT, component = "updateStateForm")
-	public void prepareUpdateComment(Long commId) {
-		this.currentComment = commentManager.findById(commId);
-	}
+    @Property
+    @Validate("required")
+    @Width(80)
+    private String content;
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "updateStateForm")
-	public void updateState() {
-		commentManager.update(currentComment);
-	}
-	
-	@OnEvent(value = EventConstants.SUCCESS, component = "createCommentForm")
-	public Object addComment(Long publicationId) {
-		this.currentComment = chapterManager.addComment(publicationId, content,
-				this.domId);
-		return this.commentDetails;
-	}
+    @SetupRender
+    public Object searchComments()
+    {
+        if (!resources.isBound("publicationId") || publicationId == null) { return false; }
+        this.comments = commentManager.listForPublicationAndDomId(publicationId, domId);
+        this.published = this.chapterManager.isPublished(this.publicationId);
+        return true;
+    }
 
-	@OnEvent(value = WookiEventConstants.REMOVE)
-	public void removeComment(Long comId) {
-		this.commentManager.removeComment(comId);
-	}
+    @OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT, component = "updateStateForm")
+    public void prepareUpdateComment(Long commId)
+    {
+        this.currentComment = commentManager.findById(commId);
+    }
 
-	/**
-	 * Initialize the reminder in the comment dialog.
-	 * 
-	 */
-	@AfterRender
-	public void initReminder() {
-		support.addInit("initBlockReminder", domId);
-		support.addInit("initCloseLink", dialogId);
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "updateStateForm")
+    public void updateState()
+    {
+        commentManager.update(currentComment);
+    }
+
+    @OnEvent(value = EventConstants.SUCCESS, component = "createCommentForm")
+    public Object addComment(Long publicationId)
+    {
+        this.currentComment = chapterManager.addComment(publicationId, content, this.domId);
+        return this.commentDetails;
+    }
+
+    @OnEvent(value = WookiEventConstants.REMOVE)
+    public void removeComment(Long comId)
+    {
+        this.commentManager.removeComment(comId);
+    }
+
+    /**
+     * Initialize the reminder in the comment dialog.
+     */
+    @AfterRender
+    public void initReminder()
+    {
+        support.addInit("initBlockReminder", domId);
+        support.addInit("initCloseLink", dialogId);
+    }
 
 }

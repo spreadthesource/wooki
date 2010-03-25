@@ -9,14 +9,16 @@ import com.wooki.domain.model.WookiEntity;
  * Manage permissions on the different entities.
  * 
  * @author ccordenier
- * 
  */
-public interface AclManager {
+public interface AclManager
+{
 
-	public void addPermission(WookiEntity securedObject, Permission permission, Class<?> clazz);
+    public void addPermission(WookiEntity securedObject, Permission permission, Class<?> clazz);
 
-	public void addPermission(WookiEntity securedObject, Sid recipient, Permission permission, Class<?> clazz);
+    public void addPermission(WookiEntity securedObject, Sid recipient, Permission permission,
+            Class<?> clazz);
 
-	public void deletePermission(WookiEntity securedObject, Sid recipient, Permission permission, Class<?> clazz);
+    public void deletePermission(WookiEntity securedObject, Sid recipient, Permission permission,
+            Class<?> clazz);
 
 }

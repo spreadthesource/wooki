@@ -19,7 +19,7 @@ public class UnhandledBrowser
      */
     public Link getIndexPage()
     {
-	return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+        return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
     }
 
 }

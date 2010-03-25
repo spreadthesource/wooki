@@ -30,37 +30,47 @@ import com.wooki.services.utils.LastActivityMessages;
  * Use this class to implement utility class test.
  * 
  * @author ccordenier
- * 
  */
-public class UtilityClassTest extends Assert {
+public class UtilityClassTest extends Assert
+{
 
-	private PageTester pageTester;
+    private PageTester pageTester;
 
-	@BeforeClass
-	public void setup() {
-		pageTester = new PageTester("com.wooki.app0", "app", "src/test/app0", AppModule.class);
-	}
+    @BeforeClass
+    public void setup()
+    {
+        pageTester = new PageTester("com.wooki.app0", "app", "src/test/app0", AppModule.class);
+    }
 
-	@Test
-	public void testLastActivityMessage() {
+    @Test
+    public void testLastActivityMessage()
+    {
 
-		Messages messages = this.pageTester.getService(ServicesMessages.class).getMessages();
+        Messages messages = this.pageTester.getService(ServicesMessages.class).getMessages();
 
-		String message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis(), messages);
-		assertTrue(message.contains("few seconds"));
+        String message = LastActivityMessages.getActivityPeriod(
+                System.currentTimeMillis(),
+                messages);
+        assertTrue(message.contains("few seconds"));
 
-		message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis() - 61000, messages);
-		assertTrue(message.contains("minute(s) ago"));
+        message = LastActivityMessages.getActivityPeriod(
+                System.currentTimeMillis() - 61000,
+                messages);
+        assertTrue(message.contains("minute(s) ago"));
 
-		message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis() - (61 * 60000), messages);
-		assertTrue(message.contains("hour(s) ago"));
+        message = LastActivityMessages.getActivityPeriod(
+                System.currentTimeMillis() - (61 * 60000),
+                messages);
+        assertTrue(message.contains("hour(s) ago"));
 
-		message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis() - (61 * 60000 * 25), messages);
-		assertTrue(message.contains("day(s) ago"));
+        message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis()
+                - (61 * 60000 * 25), messages);
+        assertTrue(message.contains("day(s) ago"));
 
-		message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis() - (61 * 60000 * 25 * 5), messages);
-		assertTrue(!message.contains("ago"));
+        message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis()
+                - (61 * 60000 * 25 * 5), messages);
+        assertTrue(!message.contains("ago"));
 
-	}
+    }
 
 }

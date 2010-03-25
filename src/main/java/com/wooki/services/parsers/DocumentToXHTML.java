@@ -44,62 +44,66 @@ import org.w3c.tidy.Tidy;
 /**
  * This class cleans an HTML file to produce XHTML
  */
-public class DocumentToXHTML implements Convertor {
+public class DocumentToXHTML implements Convertor
+{
 
-	private boolean xmlOut;
-	private Logger logger = Logger.getLogger(DocumentToXHTML.class);
+    private boolean xmlOut;
 
-	public InputStream performTransformation(Resource xmlDocument) {
-		BufferedInputStream in;
-		BufferedOutputStream out;
-		ByteArrayOutputStream result;
-		Tidy tidy = new Tidy();
-		java.util.Properties props = new java.util.Properties();
+    private Logger logger = Logger.getLogger(DocumentToXHTML.class);
 
-		props
-				.setProperty("new-inline-tags",
-						"page-break,page-number,page-numbers,wooki,xsl:value-of,xsl:for-each,quote");
-		props.setProperty("new-blocklevel-tags",
-				"for,page-header,page-footer,xsl:value-of,xsl:for-each");
-		props.setProperty("new-empty-tags",
-				"page-break,page-number,page-numbers,xsl:value-of");
-		// props.setProperty("new-pre-tags", "for,header,footer");
-		props.setProperty("new-pre-tags", "wooki");
-		tidy.setConfigurationFromProps(props);
-		// tidy.setDocType("omit");
-		tidy.setXmlOut(xmlOut);
-		tidy.setXHTML(true);
-		tidy.setEmacs(true);
-		tidy.setErrfile("tidyErrors.txt");
-		tidy.setFixBackslash(true);
-		tidy.setNumEntities(true);
-		tidy.setQuoteNbsp(false);
-		tidy.setCharEncoding(Configuration.LATIN1);
-		// tidy.setInputEncoding("ISO-8859-2");
-		tidy.setFixComments(true);
-		tidy.setQuoteAmpersand(false);
-		tidy.setEncloseText(true);
-		tidy.setEncloseBlockText(true);
-		// tidy.setWord2000(true);
+    public InputStream performTransformation(Resource xmlDocument)
+    {
+        BufferedInputStream in;
+        BufferedOutputStream out;
+        ByteArrayOutputStream result;
+        Tidy tidy = new Tidy();
+        java.util.Properties props = new java.util.Properties();
 
-		try {
-			tidy.setErrout(new PrintWriter(new FileWriter("tidyErrors.txt"),
-					true));
+        props.setProperty(
+                "new-inline-tags",
+                "page-break,page-number,page-numbers,wooki,xsl:value-of,xsl:for-each,quote");
+        props.setProperty(
+                "new-blocklevel-tags",
+                "for,page-header,page-footer,xsl:value-of,xsl:for-each");
+        props.setProperty("new-empty-tags", "page-break,page-number,page-numbers,xsl:value-of");
+        // props.setProperty("new-pre-tags", "for,header,footer");
+        props.setProperty("new-pre-tags", "wooki");
+        tidy.setConfigurationFromProps(props);
+        // tidy.setDocType("omit");
+        tidy.setXmlOut(xmlOut);
+        tidy.setXHTML(true);
+        tidy.setEmacs(true);
+        tidy.setErrfile("tidyErrors.txt");
+        tidy.setFixBackslash(true);
+        tidy.setNumEntities(true);
+        tidy.setQuoteNbsp(false);
+        tidy.setCharEncoding(Configuration.LATIN1);
+        // tidy.setInputEncoding("ISO-8859-2");
+        tidy.setFixComments(true);
+        tidy.setQuoteAmpersand(false);
+        tidy.setEncloseText(true);
+        tidy.setEncloseBlockText(true);
+        // tidy.setWord2000(true);
 
-			in = new BufferedInputStream(xmlDocument.getInputStream());
-			out = new BufferedOutputStream(result = new ByteArrayOutputStream());
-			byte[] XMLHeader = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n"
-					.getBytes();
-			out.write(XMLHeader, 0, XMLHeader.length);
+        try
+        {
+            tidy.setErrout(new PrintWriter(new FileWriter("tidyErrors.txt"), true));
 
-			tidy.parse(in, out);
-			out.flush();
-			return new ByteArrayInputStream(result.toByteArray());
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-			logger.error(ioe.getLocalizedMessage());
-			return null;
-		}
-	}
+            in = new BufferedInputStream(xmlDocument.getInputStream());
+            out = new BufferedOutputStream(result = new ByteArrayOutputStream());
+            byte[] XMLHeader = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n".getBytes();
+            out.write(XMLHeader, 0, XMLHeader.length);
+
+            tidy.parse(in, out);
+            out.flush();
+            return new ByteArrayInputStream(result.toByteArray());
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+            logger.error(ioe.getLocalizedMessage());
+            return null;
+        }
+    }
 
 }

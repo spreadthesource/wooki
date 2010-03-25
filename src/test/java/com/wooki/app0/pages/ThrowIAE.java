@@ -23,13 +23,14 @@ import org.apache.tapestry5.annotations.OnEvent;
  * Simply throw {@link IllegalArgumentException}
  * 
  * @author ccordenier
- * 
  */
-public class ThrowIAE {
+public class ThrowIAE
+{
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void throwIAE() {
-		throw new IllegalArgumentException();
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public void throwIAE()
+    {
+        throw new IllegalArgumentException();
+    }
 
 }

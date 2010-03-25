@@ -35,78 +35,94 @@ import com.wooki.services.LinkSupport;
  * Display all the comment for a given chapter.
  * 
  * @author ccordenier
- * 
  */
-public class Issues extends BookBase {
+public class Issues extends BookBase
+{
 
-	public static final String ALL = "all";
+    public static final String ALL = "all";
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private LinkSupport linkSupport;
+    @Inject
+    private LinkSupport linkSupport;
 
-	@Property
-	private List<Chapter> chapters;
+    @Property
+    private List<Chapter> chapters;
 
-	@Property
-	private Chapter chapter;
+    @Property
+    private Chapter chapter;
 
-	@Property
-	private int loopIdx;
+    @Property
+    private int loopIdx;
 
-	private Long chapterId;
+    private Long chapterId;
 
-	private String request;
+    private String request;
 
-	@SetupRender
-	public void setupNav() {
-		this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< Table of content", "book/index", getBookId());
-		this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook().getTitle(), "book/index", getBookId());
-	}
+    @SetupRender
+    public void setupNav()
+    {
+        this.linkSupport.createNavLink(
+                NavLinkPosition.LEFT,
+                "< Table of content",
+                "book/index",
+                getBookId());
+        this.linkSupport.createNavLink(
+                NavLinkPosition.CENTER,
+                getBook().getTitle(),
+                "book/index",
+                getBookId());
+    }
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupChapter(Long bookId, String request) {
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupChapter(Long bookId, String request)
+    {
 
-		this.request = request;
+        this.request = request;
 
-		if (ALL.equals(request)) {
-			this.chapters = this.chapterManager.listChaptersInfo(bookId);
-		} else {
-			this.chapters = new ArrayList<Chapter>();
-			Long chapterId = Long.parseLong(request);
+        if (ALL.equals(request))
+        {
+            this.chapters = this.chapterManager.listChaptersInfo(bookId);
+        }
+        else
+        {
+            this.chapters = new ArrayList<Chapter>();
+            Long chapterId = Long.parseLong(request);
 
-			// Get book related information
-			this.chapterId = chapterId;
-			chapter = this.chapterManager.findById(chapterId);
-			if (chapter == null) {
-				return redirectToBookIndex();
-			}
+            // Get book related information
+            this.chapterId = chapterId;
+            chapter = this.chapterManager.findById(chapterId);
+            if (chapter == null) { return redirectToBookIndex(); }
 
-			this.chapters.add(chapter);
+            this.chapters.add(chapter);
 
-		}
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Return when displaying issues for first chapter.
-	 * 
-	 * @return
-	 */
-	public boolean isAbstractChapter() {
-		return this.loopIdx == 0;
-	}
+    /**
+     * Return when displaying issues for first chapter.
+     * 
+     * @return
+     */
+    public boolean isAbstractChapter()
+    {
+        return this.loopIdx == 0;
+    }
 
-	public Object[] getChapterCtx() {
-		return new Object[] { this.getBookId(), this.chapter.getId() };
-	}
+    public Object[] getChapterCtx()
+    {
+        return new Object[]
+        { this.getBookId(), this.chapter.getId() };
+    }
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public Object[] retrieveBookId() {
-		return new Object[] { this.getBookId(), this.request };
-	}
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public Object[] retrieveBookId()
+    {
+        return new Object[]
+        { this.getBookId(), this.request };
+    }
 
 }

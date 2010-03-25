@@ -24,49 +24,48 @@ import com.wooki.domain.model.Comment;
  * DAO in charge of the comment class.
  * 
  * @author ccordenier
- * 
  */
-public interface CommentDAO extends GenericDAO<Comment, Long> {
+public interface CommentDAO extends GenericDAO<Comment, Long>
+{
 
-	/**
-	 * Check if an author is owner of a book.
-	 *
-	 * @param commId
-	 * @param username
-	 * @return
-	 */
-	boolean isOwner(Long commId, String username);
-	
-	/**
-	 * Get the list of open issues for a chapter.
-	 * 
-	 * @param chapterId
-	 * @return
-	 */
-	List<Comment> listForPublication(Long chapterId);
+    /**
+     * Check if an author is owner of a book.
+     * 
+     * @param commId
+     * @param username
+     * @return
+     */
+    boolean isOwner(Long commId, String username);
 
-	/**
-	 * List the comments number by block for a given publication.
-	 * 
-	 * @return
-	 */
-	List<Object[]> listCommentsInfoForPublication(Long publicationId);
+    /**
+     * Get the list of open issues for a chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    List<Comment> listForPublication(Long chapterId);
 
-	/**
-	 * List all the comments associated to a domId in a given publication.
-	 *
-	 * @param publicationId
-	 * @param domId
-	 * @return
-	 */
-	List<Comment> listForPublicationAndDomId(Long publicationId,
-			String domId);
-	
-	/**
-	 * List all the comment for a given chapter.
-	 *
-	 * @param chapterId
-	 * @return
-	 */
-	List<Comment> listForChapter(Long chapterId);
+    /**
+     * List the comments number by block for a given publication.
+     * 
+     * @return
+     */
+    List<Object[]> listCommentsInfoForPublication(Long publicationId);
+
+    /**
+     * List all the comments associated to a domId in a given publication.
+     * 
+     * @param publicationId
+     * @param domId
+     * @return
+     */
+    List<Comment> listForPublicationAndDomId(Long publicationId, String domId);
+
+    /**
+     * List all the comment for a given chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    List<Comment> listForChapter(Long chapterId);
 }

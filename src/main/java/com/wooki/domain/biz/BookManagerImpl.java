@@ -50,267 +50,271 @@ import com.wooki.services.utils.SlugBuilder;
  */
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("bookManager")
-public class BookManagerImpl extends AbstractManager implements BookManager {
+public class BookManagerImpl extends AbstractManager implements BookManager
+{
 
-	@Autowired
-	private BookDAO bookDao;
+    @Autowired
+    private BookDAO bookDao;
 
-	@Autowired
-	private UserDAO authorDao;
+    @Autowired
+    private UserDAO authorDao;
 
-	@Autowired
-	private ActivityDAO activityDao;
+    @Autowired
+    private ActivityDAO activityDao;
 
-	@Autowired
-	private ChapterDAO chapterDao;
+    @Autowired
+    private ChapterDAO chapterDao;
 
-	@Autowired
-	private ChapterManager chapterManager;
+    @Autowired
+    private ChapterManager chapterManager;
 
-	@Autowired
-	private WookiSecurityContext securityCtx;
+    @Autowired
+    private WookiSecurityContext securityCtx;
 
-	@Transactional(readOnly = false)
-	public User addAuthor(Book book, String username) throws UserNotFoundException, UserAlreadyOwnerException {
+    @Transactional(readOnly = false)
+    public User addAuthor(Book book, String username) throws UserNotFoundException,
+            UserAlreadyOwnerException
+    {
 
-		Defense.notNull(book, "book");
-		Defense.notNull(username, "username");
+        Defense.notNull(book, "book");
+        Defense.notNull(username, "username");
 
-		// Security checks
-		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
-			throw new AuthorizationException("Action not authorized");
-		}
+        // Security checks
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
+                "Action not authorized"); }
 
-		User toAdd = authorDao.findByUsername(username);
+        User toAdd = authorDao.findByUsername(username);
 
-		if (toAdd == null) {
-			throw new UserNotFoundException(username + " does not exist.");
-		}
+        if (toAdd == null) { throw new UserNotFoundException(username + " does not exist."); }
 
-		if (bookDao.isAuthor(book.getId(), username)) {
-			throw new UserAlreadyOwnerException(username + "is already an author the book");
-		}
+        if (bookDao.isAuthor(book.getId(), username)) { throw new UserAlreadyOwnerException(
+                username + "is already an author the book"); }
 
-		book.addUser(toAdd);
-		bookDao.update(book);
-		return toAdd;
-	}
+        book.addUser(toAdd);
+        bookDao.update(book);
+        return toAdd;
+    }
 
-	@Transactional(readOnly = false)
-	public void remove(Long bookId) {
+    @Transactional(readOnly = false)
+    public void remove(Long bookId)
+    {
 
-		Defense.notNull(bookId, "bookId");
+        Defense.notNull(bookId, "bookId");
 
-		// Security check
-		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(bookId)) {
-			throw new AuthorizationException("Operation not allowed");
-		}
+        // Security check
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(bookId)) { throw new AuthorizationException(
+                "Operation not allowed"); }
 
-		Book toRemove = this.bookDao.findById(bookId);
+        Book toRemove = this.bookDao.findById(bookId);
 
-		if (toRemove != null) {
+        if (toRemove != null)
+        {
 
-			this.bookDao.delete(toRemove);
+            this.bookDao.delete(toRemove);
 
-			BookActivity ba = new BookActivity();
-			ba.setCreationDate(Calendar.getInstance().getTime());
-			ba.setType(BookEventType.DELETE);
-			ba.setUser(this.securityCtx.getAuthor());
-			ba.setBook(toRemove);
-			ba.setResourceUnavailable(true);
-			this.activityDao.create(ba);
+            BookActivity ba = new BookActivity();
+            ba.setCreationDate(Calendar.getInstance().getTime());
+            ba.setType(BookEventType.DELETE);
+            ba.setUser(this.securityCtx.getAuthor());
+            ba.setBook(toRemove);
+            ba.setResourceUnavailable(true);
+            this.activityDao.create(ba);
 
-			// Update activity states
-			List<Activity> activities = this.activityDao.listAllActivitiesOnBook(bookId);
-			if (activities != null) {
-				for (Activity a : activities) {
-					a.setResourceUnavailable(true);
-					this.activityDao.update(a);
-				}
-			}
+            // Update activity states
+            List<Activity> activities = this.activityDao.listAllActivitiesOnBook(bookId);
+            if (activities != null)
+            {
+                for (Activity a : activities)
+                {
+                    a.setResourceUnavailable(true);
+                    this.activityDao.update(a);
+                }
+            }
 
-			// Remove also chapters
-			if(toRemove.getChapters() != null) {
-				for(Chapter chapter : toRemove.getChapters()) {
-					this.chapterDao.delete(chapter);
-				}
-			}
+            // Remove also chapters
+            if (toRemove.getChapters() != null)
+            {
+                for (Chapter chapter : toRemove.getChapters())
+                {
+                    this.chapterDao.delete(chapter);
+                }
+            }
 
-		}
+        }
 
-	}
+    }
 
-	@Transactional(readOnly = false)
-	public void removeAuthor(Book book, Long authorId) {
+    @Transactional(readOnly = false)
+    public void removeAuthor(Book book, Long authorId)
+    {
 
-		Defense.notNull(book, "book");
-		Defense.notNull(authorId, "authorId");
+        Defense.notNull(book, "book");
+        Defense.notNull(authorId, "authorId");
 
-		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) {
-			throw new AuthorizationException("Action not authorized");
-		}
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
+                "Action not authorized"); }
 
-		User user = authorDao.findById(authorId);
-		user.getBooks().remove(book);
-		book.getAuthors().remove(user);
-		bookDao.update(book);
-	}
+        User user = authorDao.findById(authorId);
+        user.getBooks().remove(book);
+        book.getAuthors().remove(user);
+        bookDao.update(book);
+    }
 
-	@Transactional(readOnly = false)
-	public Book updateTitle(Book book) throws TitleAlreadyInUseException {
+    @Transactional(readOnly = false)
+    public Book updateTitle(Book book) throws TitleAlreadyInUseException
+    {
 
-		Defense.notNull(book, "book");
+        Defense.notNull(book, "book");
 
-		if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(book.getId())) {
-			throw new AuthorizationException("Action not authorized");
-		}
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
+                "Action not authorized"); }
 
-		// Create slug title
-		String slug = SlugBuilder.buildSlug(book.getTitle());
+        // Create slug title
+        String slug = SlugBuilder.buildSlug(book.getTitle());
 
-		// If book has changed of title
-		if (book.getSlugTitle() != null && !book.getSlugTitle().equalsIgnoreCase(slug)) {
-			Book result = bookDao.findBookBySlugTitle(slug);
-			if (result != null) {
-				throw new TitleAlreadyInUseException();
-			}
-		}
+        // If book has changed of title
+        if (book.getSlugTitle() != null && !book.getSlugTitle().equalsIgnoreCase(slug))
+        {
+            Book result = bookDao.findBookBySlugTitle(slug);
+            if (result != null) { throw new TitleAlreadyInUseException(); }
+        }
 
-		if (!book.getSlugTitle().equals(slug)) {
-			book.setSlugTitle(slug);
-		}
-		return bookDao.update(book);
-	}
+        if (!book.getSlugTitle().equals(slug))
+        {
+            book.setSlugTitle(slug);
+        }
+        return bookDao.update(book);
+    }
 
-	public boolean isAuthor(Book book, String username) {
+    public boolean isAuthor(Book book, String username)
+    {
 
-		Defense.notNull(book, "book");
-		Defense.notNull(username, "username");
+        Defense.notNull(book, "book");
+        Defense.notNull(username, "username");
 
-		return bookDao.isAuthor(book.getId(), username);
-	}
+        return bookDao.isAuthor(book.getId(), username);
+    }
 
-	@Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
-	public Chapter addChapter(Book book, String title) throws AuthorizationException {
+    @Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
+    public Chapter addChapter(Book book, String title) throws AuthorizationException
+    {
 
-		Defense.notNull(book, "book");
-		Defense.notNull(title, "title");
+        Defense.notNull(book, "book");
+        Defense.notNull(title, "title");
 
-		if (!securityCtx.isAuthorOfBook(book.getId())) {
-			throw new AuthorizationException("Current user is not an author of " + book.getTitle());
-		}
+        if (!securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
+                "Current user is not an author of " + book.getTitle()); }
 
-		User author = securityCtx.getAuthor();
+        User author = securityCtx.getAuthor();
 
-		// Create the new Chapter
-		Chapter chapter = new Chapter();
-		chapter.setTitle(title);
-		chapter.setSlugTitle(SlugBuilder.buildSlug(title));
-		Date creationDate = Calendar.getInstance().getTime();
-		chapter.setCreationDate(creationDate);
-		chapter.setLastModified(creationDate);
+        // Create the new Chapter
+        Chapter chapter = new Chapter();
+        chapter.setTitle(title);
+        chapter.setSlugTitle(SlugBuilder.buildSlug(title));
+        Date creationDate = Calendar.getInstance().getTime();
+        chapter.setCreationDate(creationDate);
+        chapter.setLastModified(creationDate);
 
-		// Get managed entity to update
-		book = bookDao.findById(book.getId());
-		book.addChapter(chapter);
-		chapter.setBook(book);
-		this.chapterDao.create(chapter);
+        // Get managed entity to update
+        book = bookDao.findById(book.getId());
+        book.addChapter(chapter);
+        chapter.setBook(book);
+        this.chapterDao.create(chapter);
 
-		// Add activity event
-		ChapterActivity activity = new ChapterActivity();
-		activity.setUser(author);
-		activity.setCreationDate(creationDate);
-		activity.setType(ChapterEventType.CREATE);
-		activity.setChapter(chapter);
-		activityDao.create(activity);
+        // Add activity event
+        ChapterActivity activity = new ChapterActivity();
+        activity.setUser(author);
+        activity.setCreationDate(creationDate);
+        activity.setType(ChapterEventType.CREATE);
+        activity.setChapter(chapter);
+        activityDao.create(activity);
 
-		return chapter;
-	}
+        return chapter;
+    }
 
-	@Transactional(readOnly = false)
-	public Book create(String title) {
+    @Transactional(readOnly = false)
+    public Book create(String title)
+    {
 
-		Defense.notNull(title, "title");
+        Defense.notNull(title, "title");
 
-		if (!this.securityCtx.isLoggedIn()) {
-			throw new AuthorizationException("Only logged user can create books.");
-		}
+        if (!this.securityCtx.isLoggedIn()) { throw new AuthorizationException(
+                "Only logged user can create books."); }
 
-		User author = securityCtx.getAuthor();
+        User author = securityCtx.getAuthor();
 
-		Book book = new Book();
+        Book book = new Book();
 
-		// Set basic properties
-		book.setTitle(title);
-		book.setSlugTitle(SlugBuilder.buildSlug(title));
-		Date creationDate = Calendar.getInstance().getTime();
-		book.setCreationDate(creationDate);
-		book.setLastModified(creationDate);
+        // Set basic properties
+        book.setTitle(title);
+        book.setSlugTitle(SlugBuilder.buildSlug(title));
+        Date creationDate = Calendar.getInstance().getTime();
+        book.setCreationDate(creationDate);
+        book.setLastModified(creationDate);
 
-		// Add abstract
-		Chapter bookAbstract = new Chapter();
-		bookAbstract.setCreationDate(creationDate);
-		bookAbstract.setTitle("Abstract");
-		bookAbstract.setSlugTitle("Abstract");
-		book.addChapter(bookAbstract);
-		book.setOwner(author);
-		book.addUser(author);
-		bookAbstract.setBook(book);
+        // Add abstract
+        Chapter bookAbstract = new Chapter();
+        bookAbstract.setCreationDate(creationDate);
+        bookAbstract.setTitle("Abstract");
+        bookAbstract.setSlugTitle("Abstract");
+        book.addChapter(bookAbstract);
+        book.setOwner(author);
+        book.addUser(author);
+        bookAbstract.setBook(book);
 
-		bookDao.create(book);
+        bookDao.create(book);
 
-		// Add activity event
-		BookActivity activity = new BookActivity();
-		activity.setUser(author);
-		activity.setBook(book);
-		activity.setCreationDate(creationDate);
-		activity.setType(BookEventType.CREATE);
-		activityDao.create(activity);
+        // Add activity event
+        BookActivity activity = new BookActivity();
+        activity.setUser(author);
+        activity.setBook(book);
+        activity.setCreationDate(creationDate);
+        activity.setType(BookEventType.CREATE);
+        activityDao.create(activity);
 
-		return book;
-	}
+        return book;
+    }
 
-	public Chapter getBookAbstract(Book book) {
-		if (book == null) {
-			throw new IllegalArgumentException("Book parameter cannot be null");
-		}
-		Book upToDate = bookDao.findById(book.getId());
-		if (book != null) {
-			return upToDate.getChapters().get(0);
-		}
-		return null;
-	}
+    public Chapter getBookAbstract(Book book)
+    {
+        if (book == null) { throw new IllegalArgumentException("Book parameter cannot be null"); }
+        Book upToDate = bookDao.findById(book.getId());
+        if (book != null) { return upToDate.getChapters().get(0); }
+        return null;
+    }
 
-	public Book findBookBySlugTitle(String title) {
-		return bookDao.findBookBySlugTitle(title);
-	}
+    public Book findBookBySlugTitle(String title)
+    {
+        return bookDao.findBookBySlugTitle(title);
+    }
 
-	public Book findById(Long id) {
-		return bookDao.findById(id);
-	}
+    public Book findById(Long id)
+    {
+        return bookDao.findById(id);
+    }
 
-	public List<Book> list() {
-		return bookDao.listAll();
-	}
+    public List<Book> list()
+    {
+        return bookDao.listAll();
+    }
 
-	public List<Book> listByTitle(String title) {
-		return bookDao.listByTitle(title);
-	}
+    public List<Book> listByTitle(String title)
+    {
+        return bookDao.listByTitle(title);
+    }
 
-	public List<Book> listByOwner(String userName) {
-		User author = authorDao.findByUsername(userName);
-		if (author != null) {
-			return bookDao.listByOwner(author.getId());
-		}
-		return null;
-	}
+    public List<Book> listByOwner(String userName)
+    {
+        User author = authorDao.findByUsername(userName);
+        if (author != null) { return bookDao.listByOwner(author.getId()); }
+        return null;
+    }
 
-	public List<Book> listByCollaborator(String userName) {
-		User author = authorDao.findByUsername(userName);
-		if (author != null) {
-			return bookDao.listByCollaborator(author.getId());
-		}
-		return null;
-	}
+    public List<Book> listByCollaborator(String userName)
+    {
+        User author = authorDao.findByUsername(userName);
+        if (author != null) { return bookDao.listByCollaborator(author.getId()); }
+        return null;
+    }
 
 }

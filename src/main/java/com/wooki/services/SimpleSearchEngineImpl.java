@@ -29,19 +29,18 @@ import com.wooki.services.utils.SqlUtils;
  * Basic implementation of SearchService.
  * 
  * @author ccordenier
- * 
  */
-public class SimpleSearchEngineImpl implements SearchEngine {
+public class SimpleSearchEngineImpl implements SearchEngine
+{
 
-	@Autowired
-	private BookManager bookManager;
+    @Autowired
+    private BookManager bookManager;
 
-	public List<Book> findBook(String queryString) {
-		// Check empty query string
-		if (queryString == null || "".equals(queryString.trim())) {
-			return new ArrayList<Book>();
-		}
-		return bookManager.listByTitle("%" + SqlUtils.escapeWildcards(queryString) + "%");
-	}
+    public List<Book> findBook(String queryString)
+    {
+        // Check empty query string
+        if (queryString == null || "".equals(queryString.trim())) { return new ArrayList<Book>(); }
+        return bookManager.listByTitle("%" + SqlUtils.escapeWildcards(queryString) + "%");
+    }
 
 }

@@ -28,28 +28,28 @@ import org.apache.tapestry5.services.FormSupport;
  * Submit the form on change event
  * 
  * @author ccordenier
- * 
  */
 @MixinAfter
-public class SubmitFormOnChange {
+public class SubmitFormOnChange
+{
 
-	@Inject
-	private RenderSupport renderSupport;
+    @Inject
+    private RenderSupport renderSupport;
 
-	@Inject
-	private FormSupport formSupport;
+    @Inject
+    private FormSupport formSupport;
 
-	@InjectContainer
-	private ClientElement container;
+    @InjectContainer
+    private ClientElement container;
 
-	/**
-	 * Simply bind the input element to submit the enclosing form on change
-	 * event.
-	 */
-	@AfterRender
-	public void addSubmitOnChange() {
-		renderSupport.addInit("submitFormOnChange", container.getClientId(),
-				formSupport.getClientId());
-	}
+    /**
+     * Simply bind the input element to submit the enclosing form on change event.
+     */
+    @AfterRender
+    public void addSubmitOnChange()
+    {
+        renderSupport.addInit("submitFormOnChange", container.getClientId(), formSupport
+                .getClientId());
+    }
 
 }

@@ -20,6 +20,7 @@ import java.io.InputStream;
 
 import org.springframework.core.io.Resource;
 
-public interface Convertor {
-	public InputStream performTransformation(Resource xmlDocument);
+public interface Convertor
+{
+    public InputStream performTransformation(Resource xmlDocument);
 }

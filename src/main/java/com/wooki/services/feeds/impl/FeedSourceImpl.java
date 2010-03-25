@@ -14,23 +14,24 @@ import com.wooki.services.feeds.FeedSource;
 
 /**
  * Simple adapter service.
- *
+ * 
  * @author ccordenier
- *
  */
-public class FeedSourceImpl implements FeedSource {
+public class FeedSourceImpl implements FeedSource
+{
 
-	private final Map<ActivityType, FeedProducer> sources;
+    private final Map<ActivityType, FeedProducer> sources;
 
-	public FeedSourceImpl(Map<ActivityType, FeedProducer> sources, @Inject ActivityFeedWriter<Activity> activityFeed, @Inject LinkSource lnkSource) {
-		this.sources = sources;
-	}
+    public FeedSourceImpl(Map<ActivityType, FeedProducer> sources,
+            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject LinkSource lnkSource)
+    {
+        this.sources = sources;
+    }
 
-	public Feed produceFeed(ActivityType type, Long... context) {
-		if (sources.containsKey(type)) {
-			return sources.get(type).produce(context);
-		}
-		return null;
-	}
+    public Feed produceFeed(ActivityType type, Long... context)
+    {
+        if (sources.containsKey(type)) { return sources.get(type).produce(context); }
+        return null;
+    }
 
 }

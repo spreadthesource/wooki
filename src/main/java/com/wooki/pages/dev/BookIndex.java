@@ -28,25 +28,26 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 
 import com.wooki.BookMenuItem;
 
-public class BookIndex {
-	@Inject
-	@Symbol(SymbolConstants.PRODUCTION_MODE)
-	private boolean productionMode;
-	
-	@Property
-	private List<BookMenuItem> menu;
+public class BookIndex
+{
+    @Inject
+    @Symbol(SymbolConstants.PRODUCTION_MODE)
+    private boolean productionMode;
 
-	@Property
-	private List<BookMenuItem> adminActions;
+    @Property
+    private List<BookMenuItem> menu;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	private Object redirect() {
-		adminActions = new ArrayList<BookMenuItem>();
-		menu = new ArrayList<BookMenuItem>();
-		
-		if (productionMode)
-			return com.wooki.pages.Index.class;
-		
-		return null;
-	}
+    @Property
+    private List<BookMenuItem> adminActions;
+
+    @OnEvent(value = EventConstants.ACTIVATE)
+    private Object redirect()
+    {
+        adminActions = new ArrayList<BookMenuItem>();
+        menu = new ArrayList<BookMenuItem>();
+
+        if (productionMode) return com.wooki.pages.Index.class;
+
+        return null;
+    }
 }

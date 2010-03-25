@@ -28,28 +28,35 @@ import com.wooki.WookiSymbolsConstants;
 /**
  * Tapestry module use for tapestry overrides or customization.
  */
-public class TapestryOverrideModule {
+public class TapestryOverrideModule
+{
 
-	public static void bind(ServiceBinder binder) {
-		binder.bind(RequestExceptionHandler.class, WookiRequestExceptionHandler.class).withId("WookiRequestExceptionHandler");
-	}
+    public static void bind(ServiceBinder binder)
+    {
+        binder.bind(RequestExceptionHandler.class, WookiRequestExceptionHandler.class).withId(
+                "WookiRequestExceptionHandler");
+    }
 
-	/**
-	 * Wooki Symbols default
-	 */
-	public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration) {
-		configuration.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
-	}
+    /**
+     * Wooki Symbols default
+     */
+    public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration)
+    {
+        configuration.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
+    }
 
-	/**
-	 * Alias default request handler.
-	 * 
-	 * @param exceptionHandler
-	 * @param configuration
-	 */
-	public static void contributeAlias(@InjectService("WookiRequestExceptionHandler") RequestExceptionHandler exceptionHandler,
-			Configuration<AliasContribution> configuration) {
-		configuration.add(AliasContribution.create(RequestExceptionHandler.class, exceptionHandler));
-	}
+    /**
+     * Alias default request handler.
+     * 
+     * @param exceptionHandler
+     * @param configuration
+     */
+    public static void contributeAlias(
+            @InjectService("WookiRequestExceptionHandler") RequestExceptionHandler exceptionHandler,
+            Configuration<AliasContribution> configuration)
+    {
+        configuration
+                .add(AliasContribution.create(RequestExceptionHandler.class, exceptionHandler));
+    }
 
 }

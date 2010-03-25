@@ -38,96 +38,115 @@ import org.hibernate.annotations.IndexColumn;
  * Represents a book with its relation to other elements.
  */
 @Entity
-public class Book extends WookiEntity {
+public class Book extends WookiEntity
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_book", unique = true, nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_book", unique = true, nullable = false)
+    private Long id;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns = { @JoinColumn(name = "id_user") })
-	private List<User> users;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns =
+    { @JoinColumn(name = "id_user") })
+    private List<User> users;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private User owner;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User owner;
 
-	/**
-	 * First element will always be the book abstract
-	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_book", nullable = false)
-	@IndexColumn(name = "CHAPTER_POSITION")
-	private List<Chapter> chapters;
+    /**
+     * First element will always be the book abstract
+     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_book", nullable = false)
+    @IndexColumn(name = "CHAPTER_POSITION")
+    private List<Chapter> chapters;
 
-	private String title;
+    private String title;
 
-	@Column(unique = true)
-	private String slugTitle;
+    @Column(unique = true)
+    private String slugTitle;
 
-	public void addUser(User user) {
-		if (this.users == null) {
-			this.users = new ArrayList<User>();
-		}
-		users.add(user);
-	}
+    public void addUser(User user)
+    {
+        if (this.users == null)
+        {
+            this.users = new ArrayList<User>();
+        }
+        users.add(user);
+    }
 
-	public void addChapter(Chapter chapter) {
-		if (this.chapters == null) {
-			this.chapters = new ArrayList<Chapter>();
-		}
-		chapters.add(chapter);
-	}
+    public void addChapter(Chapter chapter)
+    {
+        if (this.chapters == null)
+        {
+            this.chapters = new ArrayList<Chapter>();
+        }
+        chapters.add(chapter);
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	public List<User> getAuthors() {
-		return users;
-	}
+    public List<User> getAuthors()
+    {
+        return users;
+    }
 
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
+    public void setUsers(List<User> users)
+    {
+        this.users = users;
+    }
 
-	public List<Chapter> getChapters() {
-		if (chapters == null) {
-			this.chapters = new ArrayList<Chapter>();
-		}
-		return chapters;
-	}
+    public List<Chapter> getChapters()
+    {
+        if (chapters == null)
+        {
+            this.chapters = new ArrayList<Chapter>();
+        }
+        return chapters;
+    }
 
-	public void setChapters(List<Chapter> chapters) {
-		this.chapters = chapters;
-	}
+    public void setChapters(List<Chapter> chapters)
+    {
+        this.chapters = chapters;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle()
+    {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
-	public String getSlugTitle() {
-		return slugTitle;
-	}
+    public String getSlugTitle()
+    {
+        return slugTitle;
+    }
 
-	public void setSlugTitle(String titleSlug) {
-		this.slugTitle = titleSlug;
-	}
+    public void setSlugTitle(String titleSlug)
+    {
+        this.slugTitle = titleSlug;
+    }
 
-	public User getOwner() {
-		return owner;
-	}
+    public User getOwner()
+    {
+        return owner;
+    }
 
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
+    public void setOwner(User owner)
+    {
+        this.owner = owner;
+    }
 
 }

@@ -42,115 +42,115 @@ import org.apache.tapestry5.services.javascript.JavascriptSupport;
  * Append content instead of replacing it.
  * 
  * @author ccordenier
- * 
  */
 @MixinAfter
-public class Append {
+public class Append
+{
 
-	/** Insert Position */
-	@Parameter(value = "bottom", defaultPrefix = BindingConstants.LITERAL)
-	private String position;
+    /** Insert Position */
+    @Parameter(value = "bottom", defaultPrefix = BindingConstants.LITERAL)
+    private String position;
 
-	/** Client id of element to append result */
-	@Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
-	private String to;
+    /** Client id of element to append result */
+    @Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
+    private String to;
 
-	@BindParameter
-	private Object[] context;
+    @BindParameter
+    private Object[] context;
 
-	@Inject
-	private AssetSource assetSource;
+    @Inject
+    private AssetSource assetSource;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private JavascriptSupport javascriptSupport;
+    @Inject
+    private JavascriptSupport javascriptSupport;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	@InjectContainer
-	private Form form;
+    @InjectContainer
+    private Form form;
 
-	/**
-	 * Submit the form via Ajax and handle result to append instead of replacing
-	 * the whole content.
-	 * 
-	 */
-	@AfterRender
-	public void append() {
-		ComponentResources formResources = Component.class.cast(form)
-				.getComponentResources();
+    /**
+     * Submit the form via Ajax and handle result to append instead of replacing the whole content.
+     */
+    @AfterRender
+    public void append()
+    {
+        ComponentResources formResources = Component.class.cast(form).getComponentResources();
 
-		if (formResources.isBound("zone")) {
-			throw new IllegalStateException(
-					"'Append' mixin cannot be used if 'zone' parameter is set on form");
-		}
-		// this should not be needed anymore
-		/*
-		 * Object[] context = (Object[])
-		 * InternalComponentResources.class.cast(formResources
-		 * ).ggetParameterAccess("context").read(new Object[] {}.getClass());
-		 */
-		Link link = formResources.createFormEventLink(EventConstants.ACTION,
-				context);
+        if (formResources.isBound("zone")) { throw new IllegalStateException(
+                "'Append' mixin cannot be used if 'zone' parameter is set on form"); }
+        // this should not be needed anymore
+        /*
+         * Object[] context = (Object[]) InternalComponentResources.class.cast(formResources
+         * ).ggetParameterAccess("context").read(new Object[] {}.getClass());
+         */
+        Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
 
-		JSONObject params = new JSONObject();
-		params.put("link", link.toAbsoluteURI());
-		params.put("form", form.getClientId());
-		params.put("element", to);
-		params.put("position", position);
+        JSONObject params = new JSONObject();
+        params.put("link", link.toAbsoluteURI());
+        params.put("form", form.getClientId());
+        params.put("element", to);
+        params.put("position", position);
 
-		javascriptSupport.addInitializerCall("appendToZone", params);
-	}
+        javascriptSupport.addInitializerCall("appendToZone", params);
+    }
 
-	/**
-	 * Generate an errors message that will appear on the client side.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = EventConstants.FAILURE)
-	public Object checkErrors() {
+    /**
+     * Generate an errors message that will appear on the client side.
+     * 
+     * @return
+     */
+    @OnEvent(value = EventConstants.FAILURE)
+    public Object checkErrors()
+    {
 
-		PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
-		linker.addStylesheetLink(assetSource
-				.getContextAsset("context:/static/css/jquery.notifyBar.css",
-						request.getLocale()).toClientURL(), null);
-		linker.addScriptLink(assetSource.getContextAsset(
-				"/static/js/jquery.notifyBar.js", request.getLocale())
-				.toClientURL());
-		linker.addScriptLink(assetSource.getContextAsset(
-				"context:/static/js/notifybar.js", request.getLocale())
-				.toClientURL());
-		linker.addScriptLink(assetSource.getContextAsset(
-				"/static/js/notifybar.js", request.getLocale()).toClientURL());
+        PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
+        linker.addStylesheetLink(assetSource.getContextAsset(
+                "context:/static/css/jquery.notifyBar.css",
+                request.getLocale()).toClientURL(), null);
+        linker.addScriptLink(assetSource.getContextAsset(
+                "/static/js/jquery.notifyBar.js",
+                request.getLocale()).toClientURL());
+        linker.addScriptLink(assetSource.getContextAsset(
+                "context:/static/js/notifybar.js",
+                request.getLocale()).toClientURL());
+        linker.addScriptLink(assetSource.getContextAsset(
+                "/static/js/notifybar.js",
+                request.getLocale()).toClientURL());
 
-		JSONObject result = new JSONObject();
-		StringBuffer buff = new StringBuffer();
-		List<String> errors = form.getDefaultTracker().getErrors();
-		if (!errors.isEmpty()) {
-			buff.append("<div class=\"error-list shadowed\">");
-			buff.append("<ul class=\"error-list wrapper\">");
-			for (String error : errors) {
-				buff.append("<li>").append(error).append("</li>");
-			}
-			buff.append("</ul>");
-			buff.append("</div>");
-			result.put("errors", true);
-		} else {
-			buff.append("Unexcepted error");
-			result.put("errors", true);
-		}
+        JSONObject result = new JSONObject();
+        StringBuffer buff = new StringBuffer();
+        List<String> errors = form.getDefaultTracker().getErrors();
+        if (!errors.isEmpty())
+        {
+            buff.append("<div class=\"error-list shadowed\">");
+            buff.append("<ul class=\"error-list wrapper\">");
+            for (String error : errors)
+            {
+                buff.append("<li>").append(error).append("</li>");
+            }
+            buff.append("</ul>");
+            buff.append("</div>");
+            result.put("errors", true);
+        }
+        else
+        {
+            buff.append("Unexcepted error");
+            result.put("errors", true);
+        }
 
-		// Add error messages
-		JSONObject html = new JSONObject();
-		html.put("html", buff.toString());
-		linker.addScript(String.format(
-				"Tapestry.Initializer.initErrorMessage(%s);", html.toString()));
+        // Add error messages
+        JSONObject html = new JSONObject();
+        html.put("html", buff.toString());
+        linker.addScript(String.format("Tapestry.Initializer.initErrorMessage(%s);", html
+                .toString()));
 
-		linker.commit(result);
-		return result;
-	}
+        linker.commit(result);
+        return result;
+    }
 
 }

@@ -36,61 +36,67 @@ import com.wooki.pages.SearchResult;
 import com.wooki.services.SecurityUrlSource;
 import com.wooki.services.security.WookiSecurityContext;
 
-public class Layout extends LayoutBase {
+public class Layout extends LayoutBase
+{
 
-	@Property
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
-	private String title;
+    @Property
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
+    private String title;
 
-	@Inject
-	private WookiSecurityContext securitCtx;
+    @Inject
+    private WookiSecurityContext securitCtx;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private SecurityUrlSource source;
+    @Inject
+    private SecurityUrlSource source;
 
-	@Inject
-	private PageRenderLinkSource linkSource;
+    @Inject
+    private PageRenderLinkSource linkSource;
 
-	@InjectPage
-	private SearchResult searchResult;
+    @InjectPage
+    private SearchResult searchResult;
 
-	@Property
-	private String loginUrl;
+    @Property
+    private String loginUrl;
 
-	@Property
-	private String logoutUrl;
+    @Property
+    private String logoutUrl;
 
-	@Validate("required")
-	@Property
-	private String queryString;
+    @Validate("required")
+    @Property
+    private String queryString;
 
-	@SetupRender
-	private void setup() {
-		this.loginUrl = source.getLoginUrl();
-		this.logoutUrl = source.getLogoutUrl();
-	}
+    @SetupRender
+    private void setup()
+    {
+        this.loginUrl = source.getLoginUrl();
+        this.logoutUrl = source.getLogoutUrl();
+    }
 
-	@AfterRender
-	public void initLoginDialog() {
-		if (!securitCtx.isLoggedIn()) {
-			support.addInit("initLoginDialog");
-		}
-	}
+    @AfterRender
+    public void initLoginDialog()
+    {
+        if (!securitCtx.isLoggedIn())
+        {
+            support.addInit("initLoginDialog");
+        }
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "search")
-	private Object search() {
-		searchResult.search(queryString);
-		return searchResult;
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "search")
+    private Object search()
+    {
+        searchResult.search(queryString);
+        return searchResult;
+    }
 
-	/**
-	 * Return to page index without context.
-	 */
-	public Link getIndexPage() {
-		return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
-	}
+    /**
+     * Return to page index without context.
+     */
+    public Link getIndexPage()
+    {
+        return linkSource.createPageRenderLinkWithContext(Index.class, new Object[0]);
+    }
 
 }

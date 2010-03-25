@@ -22,9 +22,9 @@ import org.apache.tapestry5.ioc.annotations.EagerLoad;
  * This service is used in development mode only to add sample datas.
  * 
  * @author ccordenier
- * 
  */
 @EagerLoad
-public interface StartupService {
+public interface StartupService
+{
 
 }

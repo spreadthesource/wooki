@@ -16,24 +16,28 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
  * Use flying saucer to generate a PDF from a given source.
  * 
  * @author ccordenier
- *
  */
-public class FlyingSaucerPDFConvertor implements Convertor {
+public class FlyingSaucerPDFConvertor implements Convertor
+{
 
-	public InputStream performTransformation(Resource xmlDocument) {
-		try {
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = builder.parse(xmlDocument.getInputStream());
-			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocument(doc, null);
-			renderer.layout();
-			final ByteArrayOutputStream os = new ByteArrayOutputStream();
-			renderer.createPDF(os);
-			os.close();
-			return new ByteArrayInputStream(os.toByteArray());
-		} catch (Exception ex) {
-			throw new TapestryException("Error during PDF generation", ex);
-		}
-	}
+    public InputStream performTransformation(Resource xmlDocument)
+    {
+        try
+        {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.parse(xmlDocument.getInputStream());
+            ITextRenderer renderer = new ITextRenderer();
+            renderer.setDocument(doc, null);
+            renderer.layout();
+            final ByteArrayOutputStream os = new ByteArrayOutputStream();
+            renderer.createPDF(os);
+            os.close();
+            return new ByteArrayInputStream(os.toByteArray());
+        }
+        catch (Exception ex)
+        {
+            throw new TapestryException("Error during PDF generation", ex);
+        }
+    }
 
 }

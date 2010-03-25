@@ -23,12 +23,12 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         checkProfile("ccordenier");
 
         // Too many parameters
-        open("/ccordenier/1");
+        open("/ccordenier/1", "true");
         waitForPageToLoad();
         checkNotFound();
 
         // Inexistant user
-        open("/userNotExist");
+        open("/userNotExist", "true");
         waitForPageToLoad();
         checkNotFound();
 
@@ -84,15 +84,15 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         waitForPageToLoad();
         checkBookTitle("The book of Wooki");
 
-        open("/book/index/2");
+        open("/book/index/2", "true");
         waitForPageToLoad();
         checkNotFound();
 
-        open("/book/index/1/last");
+        open("/book/index/1/last", "true");
         waitForPageToLoad();
         checkAccessDenied();
 
-        open("/book/index/1/2/3");
+        open("/book/index/1/2/3", "true");
         waitForPageToLoad();
         checkNotFound();
     }
@@ -134,17 +134,17 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         checkChapterTitle("Collaborative document publishing");
 
         // Resource does not exist
-        open("/chapter/1/5");
+        open("/chapter/1/5", "true");
         waitForPageToLoad();
         checkNotFound();
 
         // Resource does not exist
-        open("/chapter/5/1");
+        open("/chapter/5/1", "true");
         waitForPageToLoad();
         checkNotFound();
 
         // Revision does not exist
-        open("/chapter/1/1/4");
+        open("/chapter/1/1/4", "true");
         waitForPageToLoad();
         checkNotFound();
 

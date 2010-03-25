@@ -143,16 +143,19 @@
 			<artifactId>spring-security-core</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-acl</artifactId>
@@ -164,44 +167,50 @@
 			<artifactId>jdom</artifactId>
 			<version>1.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>xalan</groupId>
 			<artifactId>xalan</artifactId>
 			<version>2.7.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.jvnet.hudson</groupId>
 			<artifactId>jtidy</artifactId>
 			<version>4aug2000r7-dev-hudson-1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 			<version>3.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>javax.annotation</groupId>
 			<artifactId>jsr250-api</artifactId>
 			<version>1.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.maven.doxia</groupId>
 			<artifactId>doxia-converter</artifactId>
@@ -274,7 +283,7 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<build>
 		<finalName>wooki</finalName>
 		<resources>
@@ -365,6 +374,25 @@
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
 			</plugin>
+			
+			<!-- c5-db-migration : http://code.google.com/p/c5-db-migration -->
+			<plugin>
+				<groupId>com.carbonfive.db-support</groupId>
+				<artifactId>db-migration-maven-plugin</artifactId>
+				<version>0.9.9-m3</version>
+				<configuration>
+					<url>jdbc:${url}</url>
+					<username>${dbuser}</username>
+					<password>${dbpassword}</password>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>1.8.0.10</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -389,7 +417,6 @@
 			</build>
 		</profile>
 	</profiles>
-
 
 	<reporting>
 
@@ -466,7 +493,12 @@
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+			<id>c5-public-repository</id>
+			<url>http://mvn.carbonfive.com/public</url>
+		</pluginRepository>
 	</pluginRepositories>
+
 
 	<properties>
 		<env>LOCAL</env>

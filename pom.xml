@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wooki</groupId>
 	<artifactId>wooki</artifactId>
-	<version>0.3.0</version>
+	<version>${wooki-version}</version>
 	<packaging>war</packaging>
 	<name>Wooki : Collaborative Writing</name>
 	<dependencies>
@@ -299,6 +299,28 @@
 			</resource>
 		</resources>
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>2.2</version>
+				<configuration>
+					<componentProperties>
+						<drop>true</drop>
+						<configurationfile>/src/build/hibernate.cfg.xml</configurationfile>
+						<outputfilename>wooki-schema-${wooki-version}.sql</outputfilename>
+						<scan-classes>true</scan-classes>
+					</componentProperties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>1.8.0.10</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -509,5 +531,6 @@
 		</hibernate-entitymanager-version>
 		<spring-version>3.0.0.RELEASE</spring-version>
 		<tapestry-release-version>5.2.0-SNAPSHOT</tapestry-release-version>
+		<wooki-version>0.3.0</wooki-version>
 	</properties>
 </project>

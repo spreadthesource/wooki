@@ -16,6 +16,12 @@
 			<version>${tapestry-release-version}</version>
 		</dependency>
 
+		<!-- dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-hibernate</artifactId>
+			<version>${tapestry-release-version}</version>
+		</dependency -->
+
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-upload</artifactId>
@@ -27,12 +33,11 @@
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>test</scope>
-			<!-- exclusions>
-				<exclusion>
-					<groupId>org.seleniumhq.selenium.server</groupId>
-					<artifactId>selenium-server</artifactId>
-				</exclusion>
-			</exclusions -->
+			<!--
+				exclusions> <exclusion>
+				<groupId>org.seleniumhq.selenium.server</groupId>
+				<artifactId>selenium-server</artifactId> </exclusion> </exclusions
+			-->
 		</dependency>
 
 		<dependency>

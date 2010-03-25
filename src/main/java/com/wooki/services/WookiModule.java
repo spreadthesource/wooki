@@ -117,7 +117,7 @@ public class WookiModule<T> {
 	}
 
 	public static void bind(ServiceBinder binder) {
-		binder.bind(StartupService.class, StartupServiceImpl.class).eagerLoad();
+		binder.bind(StartupService.class, StartupServiceImpl.class).preventReloading().eagerLoad();
 		binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
 		binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
 		binder.bind(UploadMediaService.class, UploadMediaServiceImpl.class);

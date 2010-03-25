@@ -14,28 +14,30 @@ import org.apache.tapestry5.json.JSONObject;
  * Add confirm dialog box.
  * 
  * @author ccordenier
- * 
  */
 @MixinAfter
-public class Confirm {
+public class Confirm
+{
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private String message;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    private String message;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	@InjectContainer
-	private AbstractLink lnk;
+    @InjectContainer
+    private AbstractLink lnk;
 
-	@AfterRender
-	public void addConfirm() {
-		JSONObject params = new JSONObject();
-		if(message != null) {
-			params.put("message", message);
-		}
-		params.put("lnkId", lnk.getClientId());
-		support.addInit("initConfirm", params);
-	}
+    @AfterRender
+    public void addConfirm()
+    {
+        JSONObject params = new JSONObject();
+        if (message != null)
+        {
+            params.put("message", message);
+        }
+        params.put("lnkId", lnk.getClientId());
+        support.addInit("initConfirm", params);
+    }
 
 }

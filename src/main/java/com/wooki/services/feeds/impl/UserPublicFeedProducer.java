@@ -20,46 +20,52 @@ import com.wooki.services.feeds.ActivityFeedWriter;
  * Produces the feed for a single book.
  * 
  * @author ccordenier
- * 
  */
-public class UserPublicFeedProducer extends AbstractFeedProducer {
+public class UserPublicFeedProducer extends AbstractFeedProducer
+{
 
-	private final UserManager userManager;
-	
-	public UserPublicFeedProducer(@Inject LinkSource linkSource, @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-			@Inject ActivityManager activityManager, @Inject UserManager userManager) {
-		super(linkSource, activityFeed, messages, activityManager);
-		this.userManager = userManager;
-	}
+    private final UserManager userManager;
 
-	/**
-	 * Read book definition and generate corresponding feed.
-	 *
-	 */
-	public Feed produce(Long... context) {
-		
-		if (context == null || !(context.length > 0)) {
-			throw new IllegalArgumentException("UserPublicFeedProducer requires the user id as a parameter");
-		}
-		
-		User user = this.userManager.findById(context[0]);
-		
-		if(user == null) {
-			throw new IllegalArgumentException("Requested user does not exist requires the user id as a parameter");
-		}
-		
-		String title = this.messages.getMessages().format("recent-user-activity", user.getUsername());
-		String id = user.getUsername() + "-public";
+    public UserPublicFeedProducer(@Inject LinkSource linkSource,
+            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
+            @Inject ActivityManager activityManager, @Inject UserManager userManager)
+    {
+        super(linkSource, activityFeed, messages, activityManager);
+        this.userManager = userManager;
+    }
 
-		List<Link> alternateLinks = new ArrayList<Link>();
+    /**
+     * Read book definition and generate corresponding feed.
+     */
+    public Feed produce(Long... context)
+    {
 
-		Link linkToSelf = new Link();
-		linkToSelf.setHref(lnkSource.createPageRenderLink("index", true, user.getUsername()).toAbsoluteURI());
-		linkToSelf.setTitle(title);
+        if (context == null || !(context.length > 0)) { throw new IllegalArgumentException(
+                "UserPublicFeedProducer requires the user id as a parameter"); }
 
-		alternateLinks.add(linkToSelf);
+        User user = this.userManager.findById(context[0]);
 
-		return super.fillFeed(id, title, alternateLinks, this.activityManager.listUserActivity(0, -1, user.getId()));
-	}
+        if (user == null) { throw new IllegalArgumentException(
+                "Requested user does not exist requires the user id as a parameter"); }
+
+        String title = this.messages.getMessages().format(
+                "recent-user-activity",
+                user.getUsername());
+        String id = user.getUsername() + "-public";
+
+        List<Link> alternateLinks = new ArrayList<Link>();
+
+        Link linkToSelf = new Link();
+        linkToSelf.setHref(lnkSource.createPageRenderLink("index", true, user.getUsername())
+                .toAbsoluteURI());
+        linkToSelf.setTitle(title);
+
+        alternateLinks.add(linkToSelf);
+
+        return super.fillFeed(id, title, alternateLinks, this.activityManager.listUserActivity(
+                0,
+                -1,
+                user.getId()));
+    }
 
 }

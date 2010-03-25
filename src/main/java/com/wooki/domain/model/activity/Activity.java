@@ -34,46 +34,52 @@ import com.wooki.domain.model.WookiEntity;
  * This class is used to follow the activity on the wooki elements.
  * 
  * @author ccordenier
- * 
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Activity extends WookiEntity {
+public abstract class Activity extends WookiEntity
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user", nullable = false)
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", nullable = false)
+    private User user;
 
-	@Column(nullable = true)
-	private boolean resourceUnavailable;
+    @Column(nullable = true)
+    private boolean resourceUnavailable;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public User getUser()
+    {
+        return user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
 
-	public boolean isResourceUnavailable() {
-		return resourceUnavailable;
-	}
+    public boolean isResourceUnavailable()
+    {
+        return resourceUnavailable;
+    }
 
-	public void setResourceUnavailable(boolean resourceUnavailable) {
-		this.resourceUnavailable = resourceUnavailable;
-	}
+    public void setResourceUnavailable(boolean resourceUnavailable)
+    {
+        this.resourceUnavailable = resourceUnavailable;
+    }
 
 }

@@ -16,7 +16,7 @@
 
 package com.wooki.domain.model.activity;
 
-
-public enum AccountEventType {
+public enum AccountEventType
+{
     JOIN;
 }

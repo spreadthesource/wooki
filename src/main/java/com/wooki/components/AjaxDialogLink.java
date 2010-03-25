@@ -28,27 +28,30 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 /**
  * Make a link to update a zone and popup a dialog box
  */
-public class AjaxDialogLink extends DialogLink {
+public class AjaxDialogLink extends DialogLink
+{
 
-	@Parameter(required = true)
-	private String zone;
+    @Parameter(required = true)
+    private String zone;
 
-	@Parameter
-	private Object[] context;
+    @Parameter
+    private Object[] context;
 
-	@Inject
-	private ComponentResources resources;
+    @Inject
+    private ComponentResources resources;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	@Override
-	@AfterRender
-	void declareDialog(MarkupWriter writer) {
-		writer.end();
+    @Override
+    @AfterRender
+    void declareDialog(MarkupWriter writer)
+    {
+        writer.end();
 
-		Link link = resources.createEventLink(EventConstants.ACTION, context);
+        Link link = resources.createEventLink(EventConstants.ACTION, context);
 
-		support.addInit("openJQueryAjaxDialogOnClick", getClientId(), zone, getDialog(), link.toAbsoluteURI());
-	}
+        support.addInit("openJQueryAjaxDialogOnClick", getClientId(), zone, getDialog(), link
+                .toAbsoluteURI());
+    }
 }

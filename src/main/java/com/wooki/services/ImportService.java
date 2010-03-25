@@ -22,26 +22,26 @@ import com.wooki.domain.model.Book;
 
 /**
  * Export book service, will provide different format, pdf...
- *
+ * 
  * @author ccordenier
- *
  */
-public interface ImportService {
+public interface ImportService
+{
 
-	/**
-	 * Export book to PDF.
-	 *
-	 * @param bookId
-	 * @return
-	 */
-	Book importDocbook(Resource docbook);
-	
-	/**
-	 * Import APT file in APT format.
-	 *
-	 * @param apt
-	 * @return
-	 */
-	Book importApt(Resource apt);
-	
+    /**
+     * Export book to PDF.
+     * 
+     * @param bookId
+     * @return
+     */
+    Book importDocbook(Resource docbook);
+
+    /**
+     * Import APT file in APT format.
+     * 
+     * @param apt
+     * @return
+     */
+    Book importApt(Resource apt);
+
 }

@@ -5,16 +5,19 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "ACCOUNT_ACTIVITY_ID")
-public class AccountActivity extends Activity {
+public class AccountActivity extends Activity
+{
 
-	private AccountEventType type;
+    private AccountEventType type;
 
-	public AccountEventType getType() {
-		return type;
-	}
+    public AccountEventType getType()
+    {
+        return type;
+    }
 
-	public void setType(AccountEventType type) {
-		this.type = type;
-	}
+    public void setType(AccountEventType type)
+    {
+        this.type = type;
+    }
 
 }

@@ -22,58 +22,62 @@ import com.wooki.domain.model.User;
 
 /**
  * Author registration and retrival manager.
- * 
  */
-public interface UserManager {
+public interface UserManager
+{
 
-	/**
-	 * Add a new author to DB
-	 * 
-	 * @param user
-	 * @return
-	 * @throws UserAlreadyException
-	 */
-	void addUser(User user) throws UserAlreadyException;
+    /**
+     * Add a new author to DB
+     * 
+     * @param user
+     * @return
+     * @throws UserAlreadyException
+     */
+    void addUser(User user) throws UserAlreadyException;
 
-	/**
-	 * Get a user by its username.
-	 * 
-	 * @param username
-	 * @return
-	 */
-	User findByUsername(String username);
+    /**
+     * Get a user by its username.
+     * 
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 
-	/**
-	 * Get a user by its id.
-	 * 
-	 * @param userId
-	 * @return
-	 */
-	User findById(Long userId);
+    /**
+     * Get a user by its id.
+     * 
+     * @param userId
+     * @return
+     */
+    User findById(Long userId);
 
-	/**
-	 * Get the list of user whos name starts with prefix.
-	 *
-	 * @param prefix
-	 * @return
-	 */
-	String[] listUserNames(String prefix);
-	
-	/**
-	 * update user details
-	 * @param user with updated details, excepting the password
-	 * @return
-	 * @throws UserAlreadyException 
-	 * @throws AuthorizationException 
-	 */
-	User updateDetails(User user) throws AuthorizationException, UserAlreadyException;
-	
-	/**
-	 * Update an user password
-	 * @param user
-	 * @return
-	 * @throws AuthorizationException
-	 */
-	User updatePassword(User user, String oldPassword, String newPassword) throws AuthorizationException;
+    /**
+     * Get the list of user whos name starts with prefix.
+     * 
+     * @param prefix
+     * @return
+     */
+    String[] listUserNames(String prefix);
+
+    /**
+     * update user details
+     * 
+     * @param user
+     *            with updated details, excepting the password
+     * @return
+     * @throws UserAlreadyException
+     * @throws AuthorizationException
+     */
+    User updateDetails(User user) throws AuthorizationException, UserAlreadyException;
+
+    /**
+     * Update an user password
+     * 
+     * @param user
+     * @return
+     * @throws AuthorizationException
+     */
+    User updatePassword(User user, String oldPassword, String newPassword)
+            throws AuthorizationException;
 
 }

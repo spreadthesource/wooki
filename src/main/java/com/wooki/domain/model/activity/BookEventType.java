@@ -16,7 +16,7 @@
 
 package com.wooki.domain.model.activity;
 
-
-public enum BookEventType {
+public enum BookEventType
+{
     CREATE, UPDATE, DELETE;
 }

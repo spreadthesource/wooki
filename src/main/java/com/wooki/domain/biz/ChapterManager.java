@@ -23,145 +23,145 @@ import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
 
 /**
- * Interface used to access to chapter related information from the wooki
- * application.
+ * Interface used to access to chapter related information from the wooki application.
  */
-public interface ChapterManager {
+public interface ChapterManager
+{
 
-	public static final String LAST = "last";
-	
-	/**
-	 * Add a comment to the list of existing one.
-	 * 
-	 * @param chapter
-	 * @param content
-	 * @param domId
-	 *            TODO
-	 */
-	Comment addComment(Long publicationId, String content, String domId);
+    public static final String LAST = "last";
 
-	/**
-	 * Load a chapter.
-	 * 
-	 * @return
-	 */
-	Chapter findById(Long chapterId);
+    /**
+     * Add a comment to the list of existing one.
+     * 
+     * @param chapter
+     * @param content
+     * @param domId
+     *            TODO
+     */
+    Comment addComment(Long publicationId, String content, String domId);
 
-	/**
-	 * Find next and previous chapter from a chapter id
-	 *
-	 * @param bookId
-	 * @param chapterId
-	 * @return
-	 */
-	Object[] findPrevious(Long bookId, Long chapterId);
-	
-	/**
-	 * Find the next published Chapter.
-	 *
-	 * @param bookId
-	 * @param chapterId
-	 * @return
-	 */
-	Object[] findNext(Long bookId, Long chapterId);
-	
-	/**
-	 * Retrieve the content for a given chapter. Content is lazy loaded for the
-	 * sake of performance. TODO:
-	 * 
-	 * @param chapter
-	 * @return
-	 */
-	String getLastContent(Long chapterId);
+    /**
+     * Load a chapter.
+     * 
+     * @return
+     */
+    Chapter findById(Long chapterId);
 
-	/**
-	 * Retrieve the content for a given chapter. Content is lazy loaded for the
-	 * sake of performance. TODO:
-	 * @param revision TODO
-	 * @param chapter
-	 * 
-	 * @return
-	 */
-	Publication getRevision(Long chapterId, String revision);
+    /**
+     * Find next and previous chapter from a chapter id
+     * 
+     * @param bookId
+     * @param chapterId
+     * @return
+     */
+    Object[] findPrevious(Long bookId, Long chapterId);
 
-	/**
-	 * Check if the revision is published.
-	 *
-	 * @param revision
-	 * @return
-	 */
-	boolean isPublished(Long revision);
+    /**
+     * Find the next published Chapter.
+     * 
+     * @param bookId
+     * @param chapterId
+     * @return
+     */
+    Object[] findNext(Long bookId, Long chapterId);
 
-	/**
-	 * Publish chapter content TODO:
-	 * 
-	 * @param chapterId
-	 */
-	void publishChapter(Long chapter);
+    /**
+     * Retrieve the content for a given chapter. Content is lazy loaded for the sake of performance.
+     * TODO:
+     * 
+     * @param chapter
+     * @return
+     */
+    String getLastContent(Long chapterId);
 
-	/**
-	 * Find the last published chapter content. TODO:
-	 * 
-	 * @param chapterId
-	 * @return
-	 */
-	String getLastPublishedContent(Long chapterId);
+    /**
+     * Retrieve the content for a given chapter. Content is lazy loaded for the sake of performance.
+     * TODO:
+     * 
+     * @param revision
+     *            TODO
+     * @param chapter
+     * @return
+     */
+    Publication getRevision(Long chapterId, String revision);
 
-	/**
-	 * Get the last publication for a given chapter. TODO:
-	 * 
-	 * @param chapterId
-	 * @return
-	 */
-	Publication getLastPublishedPublication(Long chapterId);
+    /**
+     * Check if the revision is published.
+     * 
+     * @param revision
+     * @return
+     */
+    boolean isPublished(Long revision);
 
-	/**
-	 * Simply update the entity.
-	 *
-	 * @param chapter
-	 * @return
-	 */
-	Chapter update(Chapter chapter);
-	
-	/**
-	 * When a chapter content is updated then all its related comments must be
-	 * re-organized for the sake of consistency.
-	 * 
-	 * @param chapter
-	 */
-	void updateContent(Long chapterId, String content);
+    /**
+     * Publish chapter content TODO:
+     * 
+     * @param chapterId
+     */
+    void publishChapter(Long chapter);
 
-	/**
-	 * Update and publish a chapter content. When a chapter content is updated then all
-	 * its related comments must be re-organized for the sake of consistency.
-	 * 
-	 * @param chapter
-	 */
-	void updateAndPublishContent(Long chapterId, String content);
+    /**
+     * Find the last published chapter content. TODO:
+     * 
+     * @param chapterId
+     * @return
+     */
+    String getLastPublishedContent(Long chapterId);
 
-	/**
-	 * Remove chapter from book.
-	 * 
-	 * @param book
-	 * @param chapterId
-	 */
-	void remove(Long chapterId);
+    /**
+     * Get the last publication for a given chapter. TODO:
+     * 
+     * @param chapterId
+     * @return
+     */
+    Publication getLastPublishedPublication(Long chapterId);
 
-	/**
-	 * List the chapters for a given book.
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	List<Chapter> listChapters(Long bookId);
+    /**
+     * Simply update the entity.
+     * 
+     * @param chapter
+     * @return
+     */
+    Chapter update(Chapter chapter);
 
-	/**
-	 * List the chapters for a given book, the book abstract chapter is exclude
-	 * from this list.
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	List<Chapter> listChaptersInfo(Long bookId);
+    /**
+     * When a chapter content is updated then all its related comments must be re-organized for the
+     * sake of consistency.
+     * 
+     * @param chapter
+     */
+    void updateContent(Long chapterId, String content);
+
+    /**
+     * Update and publish a chapter content. When a chapter content is updated then all its related
+     * comments must be re-organized for the sake of consistency.
+     * 
+     * @param chapter
+     */
+    void updateAndPublishContent(Long chapterId, String content);
+
+    /**
+     * Remove chapter from book.
+     * 
+     * @param book
+     * @param chapterId
+     */
+    void remove(Long chapterId);
+
+    /**
+     * List the chapters for a given book.
+     * 
+     * @param bookId
+     * @return
+     */
+    List<Chapter> listChapters(Long bookId);
+
+    /**
+     * List the chapters for a given book, the book abstract chapter is exclude from this list.
+     * 
+     * @param bookId
+     * @return
+     */
+    List<Chapter> listChaptersInfo(Long bookId);
 
 }

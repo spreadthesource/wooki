@@ -14,49 +14,54 @@ import com.wooki.GAnalyticsScriptsMessages;
 import com.wooki.WookiSymbolsConstants;
 
 /**
- * Automatically adds Google Analytics Tracking code if
- * {@link WookiSymbolsConstants}.GANALYTICS_KEY is set and "production mode" is
- * true
+ * Automatically adds Google Analytics Tracking code if {@link WookiSymbolsConstants}.GANALYTICS_KEY
+ * is set and "production mode" is true
  */
 
-public class GAnalyticsScriptsInjector implements MarkupRendererFilter {
+public class GAnalyticsScriptsInjector implements MarkupRendererFilter
+{
 
-	private final static Messages SCRIPTS = MessagesImpl.forClass(GAnalyticsScriptsMessages.class);
+    private final static Messages SCRIPTS = MessagesImpl.forClass(GAnalyticsScriptsMessages.class);
 
-	private final String key;
+    private final String key;
 
-	public GAnalyticsScriptsInjector(@Inject @Symbol(WookiSymbolsConstants.GANALYTICS_KEY) String key) {
-		this.key = key;
-	}
+    public GAnalyticsScriptsInjector(
+            @Inject @Symbol(WookiSymbolsConstants.GANALYTICS_KEY) String key)
+    {
+        this.key = key;
+    }
 
-	private void addScript(Document document) {
-		if (key != null && !key.trim().equals("")) {
-			Element root = document.getRootElement();
+    private void addScript(Document document)
+    {
+        if (key != null && !key.trim().equals(""))
+        {
+            Element root = document.getRootElement();
 
-			if (root == null)
-				return;
+            if (root == null) return;
 
-			Element body = root.find("body");
+            Element body = root.find("body");
 
-			if (body == null) {
-				body = root.element("body");
-			}
+            if (body == null)
+            {
+                body = root.element("body");
+            }
 
-			Element e = body.element("script", "type", "text/javascript");
+            Element e = body.element("script", "type", "text/javascript");
 
-			e.raw(SCRIPTS.get("scriptOne"));
+            e.raw(SCRIPTS.get("scriptOne"));
 
-			e = body.element("script", "type", "text/javascript");
+            e = body.element("script", "type", "text/javascript");
 
-			e.raw(SCRIPTS.format("scriptTwo", key));
+            e.raw(SCRIPTS.format("scriptTwo", key));
 
-		}
-	}
+        }
+    }
 
-	public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer) {
-		renderer.renderMarkup(writer);
+    public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer)
+    {
+        renderer.renderMarkup(writer);
 
-		this.addScript(writer.getDocument());
-	}
+        this.addScript(writer.getDocument());
+    }
 
 }

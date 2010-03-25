@@ -30,116 +30,127 @@ import com.wooki.domain.model.User;
  * Implement wooki security context in a web context.
  * 
  * @author ccordenier
- * 
  */
-public class WookiSecurityContextImpl implements WookiSecurityContext {
+public class WookiSecurityContextImpl implements WookiSecurityContext
+{
 
-	private CommentDAO commentDao;
+    private CommentDAO commentDao;
 
-	private BookDAO bookDAO;
+    private BookDAO bookDAO;
 
-	private UserDAO userDao;
+    private UserDAO userDao;
 
-	private ChapterDAO chapterDao;
-	
-	public void log(User user) {
-		if (user == null) {
-			throw new IllegalArgumentException("User cannot be null");
-		}
-		UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
-		SecurityContextHolder.getContext().setAuthentication(logged);
-	}
+    private ChapterDAO chapterDao;
 
-	public User getAuthor() {
-		String username = this.getUsername();
-		if (username != null) {
-			return userDao.findByUsername(username);
-		}
-		return null;
-	}
+    public void log(User user)
+    {
+        if (user == null) { throw new IllegalArgumentException("User cannot be null"); }
+        UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(user,
+                user.getPassword(), user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(logged);
+    }
 
-	public boolean isAuthorOfBook(Long bookId) {
-		String username = this.getUsername();
-		if (username != null) {
-			return bookDAO.isAuthor(bookId, username);
-		}
-		return false;
-	}
-	
-	public boolean isAuthorOfChapter(Long chapterId) {
-		String username = this.getUsername();
-		if (username != null) {
-			return chapterDao.isAuthor(chapterId, username);
-		}
-		return false;
-	}
+    public User getAuthor()
+    {
+        String username = this.getUsername();
+        if (username != null) { return userDao.findByUsername(username); }
+        return null;
+    }
 
-	public boolean isLoggedIn() {
-		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
-				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
-			return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
-		}
-		return false;
-	}
+    public boolean isAuthorOfBook(Long bookId)
+    {
+        String username = this.getUsername();
+        if (username != null) { return bookDAO.isAuthor(bookId, username); }
+        return false;
+    }
 
-	public boolean isOwnerOfBook(Long bookId) {
-		String username = this.getUsername();
-		if (username != null) {
-			return bookDAO.isOwner(bookId, username);
-		}
-		return false;
-	}
+    public boolean isAuthorOfChapter(Long chapterId)
+    {
+        String username = this.getUsername();
+        if (username != null) { return chapterDao.isAuthor(chapterId, username); }
+        return false;
+    }
 
-	public boolean isAuthorOfComment(Long commentId) {
-		String username = this.getUsername();
-		if (username != null) {
-			return commentDao.isOwner(commentId, username);
-		}
-		return false;
-	}
+    public boolean isLoggedIn()
+    {
+        if (SecurityContextHolder.getContext() != null
+                && SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) { return SecurityContextHolder
+                .getContext().getAuthentication().isAuthenticated(); }
+        return false;
+    }
 
-	public String getUsername() {
-		if (SecurityContextHolder.getContext() != null && SecurityContextHolder.getContext().getAuthentication() != null
-				&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) {
-			if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
-				return ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-			} else {
-				return null;
-			}
-		}
-		return null;
-	}
+    public boolean isOwnerOfBook(Long bookId)
+    {
+        String username = this.getUsername();
+        if (username != null) { return bookDAO.isOwner(bookId, username); }
+        return false;
+    }
 
-	public BookDAO getBookDAO() {
-		return bookDAO;
-	}
+    public boolean isAuthorOfComment(Long commentId)
+    {
+        String username = this.getUsername();
+        if (username != null) { return commentDao.isOwner(commentId, username); }
+        return false;
+    }
 
-	public void setBookDAO(BookDAO bookDAO) {
-		this.bookDAO = bookDAO;
-	}
+    public String getUsername()
+    {
+        if (SecurityContextHolder.getContext() != null
+                && SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null)
+        {
+            if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails)
+            {
+                return ((UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                        .getPrincipal()).getUsername();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        return null;
+    }
 
-	public CommentDAO getCommentDao() {
-		return commentDao;
-	}
+    public BookDAO getBookDAO()
+    {
+        return bookDAO;
+    }
 
-	public void setCommentDao(CommentDAO commentDao) {
-		this.commentDao = commentDao;
-	}
+    public void setBookDAO(BookDAO bookDAO)
+    {
+        this.bookDAO = bookDAO;
+    }
 
-	public UserDAO getUserDao() {
-		return userDao;
-	}
+    public CommentDAO getCommentDao()
+    {
+        return commentDao;
+    }
 
-	public void setUserDao(UserDAO userDao) {
-		this.userDao = userDao;
-	}
+    public void setCommentDao(CommentDAO commentDao)
+    {
+        this.commentDao = commentDao;
+    }
 
-	public ChapterDAO getChapterDao() {
-		return chapterDao;
-	}
+    public UserDAO getUserDao()
+    {
+        return userDao;
+    }
 
-	public void setChapterDao(ChapterDAO chapterDao) {
-		this.chapterDao = chapterDao;
-	}
+    public void setUserDao(UserDAO userDao)
+    {
+        this.userDao = userDao;
+    }
+
+    public ChapterDAO getChapterDao()
+    {
+        return chapterDao;
+    }
+
+    public void setChapterDao(ChapterDAO chapterDao)
+    {
+        this.chapterDao = chapterDao;
+    }
 
 }

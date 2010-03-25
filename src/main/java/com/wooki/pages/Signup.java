@@ -34,81 +34,89 @@ import com.wooki.services.security.WookiSecurityContext;
 /**
  * Signup page for new authors.
  */
-public class Signup {
+public class Signup
+{
 
-	@InjectComponent
-	private Form signupForm;
+    @InjectComponent
+    private Form signupForm;
 
-	@InjectComponent(value = "username")
-	private Field usernameF;
+    @InjectComponent(value = "username")
+    private Field usernameF;
 
-	@InjectComponent(value = "password")
-	private Field passwordF;
+    @InjectComponent(value = "password")
+    private Field passwordF;
 
-	@Inject
-	private UserManager userManager;
+    @Inject
+    private UserManager userManager;
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@InjectPage
-	private Dashboard successPage;
+    @InjectPage
+    private Dashboard successPage;
 
-	@Property
-	@Validate("required,maxLength=20")
-	private String username;
+    @Property
+    @Validate("required,maxLength=20")
+    private String username;
 
-	@Property
-	@Validate("required")
-	private String fullname;
+    @Property
+    @Validate("required")
+    private String fullname;
 
-	@Property
-	@Validate("required,minLength=8")
-	private String password;
+    @Property
+    @Validate("required,minLength=8")
+    private String password;
 
-	@Property
-	@Validate("required,email")
-	private String email;
+    @Property
+    @Validate("required,email")
+    private String email;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object checkSecurityCtx() {
-		if (securityCtx.isLoggedIn()) {
-			return Index.class;
-		}
-		return null;
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object checkSecurityCtx()
+    {
+        if (securityCtx.isLoggedIn()) { return Index.class; }
+        return null;
+    }
 
-	@OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
-	public void onValidate() {
-		if (username != null && password != null && username.trim().compareToIgnoreCase(password.trim()) == 0) {
-			signupForm.recordError(passwordF, "User password cannot be its username");
-		}
-		// Do a first check
-		if (username != null && userManager.findByUsername(username) != null) {
-			signupForm.recordError(usernameF, "User already exists");
-		}
-	}
+    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
+    public void onValidate()
+    {
+        if (username != null && password != null
+                && username.trim().compareToIgnoreCase(password.trim()) == 0)
+        {
+            signupForm.recordError(passwordF, "User password cannot be its username");
+        }
+        // Do a first check
+        if (username != null && userManager.findByUsername(username) != null)
+        {
+            signupForm.recordError(usernameF, "User already exists");
+        }
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "signupForm")
-	public Object onSignupSuccess() {
+    @OnEvent(value = EventConstants.SUCCESS, component = "signupForm")
+    public Object onSignupSuccess()
+    {
 
-		try {
-			User user = new User();
-			user.setUsername(username);
-			user.setEmail(email);
-			user.setPassword(password);
-			user.setFullname(this.fullname);
-			userManager.addUser(user);
+        try
+        {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setFullname(this.fullname);
+            userManager.addUser(user);
 
-			securityCtx.log(user);
+            securityCtx.log(user);
 
-			successPage.setFirstAccess(true);
-			return successPage;
+            successPage.setFirstAccess(true);
+            return successPage;
 
-		} catch (UserAlreadyException uaeEx) {
-			signupForm.recordError("User already exists");
-			return this;
-		}
-	}
+        }
+        catch (UserAlreadyException uaeEx)
+        {
+            signupForm.recordError("User already exists");
+            return this;
+        }
+    }
 
 }

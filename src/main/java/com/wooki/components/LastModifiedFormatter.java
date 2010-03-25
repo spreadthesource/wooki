@@ -33,28 +33,35 @@ import com.wooki.services.utils.LastActivityMessages;
  * Display a date using with a more user friendly format.
  * 
  * @author ccordenier
- * 
  */
-public class LastModifiedFormatter {
+public class LastModifiedFormatter
+{
 
-	@Inject
-	private ServicesMessages messages;
-	
-	@Parameter(required = true, allowNull = false)
-	private long time;
+    @Inject
+    private ServicesMessages messages;
 
-	@Parameter(value = "date", defaultPrefix = BindingConstants.LITERAL)
-	private String className;
-	
-	@BeginRender
-	public void displayDate(MarkupWriter writer) {
-		writer.element("abbr", "title", DateUtils.getLastModified().format(new Date(time)), "class", className);
-		writer.write(LastActivityMessages.getActivityPeriod(time, messages.getMessages()));
-	}
+    @Parameter(required = true, allowNull = false)
+    private long time;
 
-	@AfterRender
-	public void endAbbr(MarkupWriter writer) {
-		writer.end();
-	}
+    @Parameter(value = "date", defaultPrefix = BindingConstants.LITERAL)
+    private String className;
+
+    @BeginRender
+    public void displayDate(MarkupWriter writer)
+    {
+        writer.element(
+                "abbr",
+                "title",
+                DateUtils.getLastModified().format(new Date(time)),
+                "class",
+                className);
+        writer.write(LastActivityMessages.getActivityPeriod(time, messages.getMessages()));
+    }
+
+    @AfterRender
+    public void endAbbr(MarkupWriter writer)
+    {
+        writer.end();
+    }
 
 }

@@ -47,126 +47,139 @@ import com.wooki.services.UploadMediaService;
 /**
  * Integrate wymeditor as a mixin to be used with textarea.
  */
-@IncludeJavaScriptLibrary( { "context:/static/js/jquery.timer.js", "context:/static/js/wymeditor/jquery.wymeditor.js",
-		"context:/static/js/wymeditor/plugins/fullscreen/jquery.wymeditor.fullscreen.js",
-		"context:/static/js/wymeditor/plugins/upload-image-dialog/jquery.wymeditor.upload-image-dialog.js",
-		"context:/static/js/wymeditor/plugins/autosave/jquery.wymeditor.autosave.js", "context:/static/js/ajaxupload.js" })
-public class WymEditor {
+@IncludeJavaScriptLibrary(
+{
+        "context:/static/js/jquery.timer.js",
+        "context:/static/js/wymeditor/jquery.wymeditor.js",
+        "context:/static/js/wymeditor/plugins/fullscreen/jquery.wymeditor.fullscreen.js",
+        "context:/static/js/wymeditor/plugins/upload-image-dialog/jquery.wymeditor.upload-image-dialog.js",
+        "context:/static/js/wymeditor/plugins/autosave/jquery.wymeditor.autosave.js",
+        "context:/static/js/ajaxupload.js" })
+public class WymEditor
+{
 
-	@Inject
-	private UploadMediaService uploadMedia;
+    @Inject
+    private UploadMediaService uploadMedia;
 
-	@Inject
-	private MultipartDecoder decoder;
+    @Inject
+    private MultipartDecoder decoder;
 
-	@Inject
-	private Messages messages;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private FormSupport support;
+    @Inject
+    private FormSupport support;
 
-	@Inject
-	@Symbol(WookiSymbolsConstants.WOOKI_AUTOSAVE_INTERVAL)
-	private int autosaveInterval;
+    @Inject
+    @Symbol(WookiSymbolsConstants.WOOKI_AUTOSAVE_INTERVAL)
+    private int autosaveInterval;
 
-	@Inject
-	@Path("context:/static/js/wymeditor/")
-	private Asset basePath;
+    @Inject
+    @Path("context:/static/js/wymeditor/")
+    private Asset basePath;
 
-	@Inject
-	@Path("context:/static/js/wymeditor/jquery.wymeditor.js")
-	private Asset wymPath;
+    @Inject
+    @Path("context:/static/js/wymeditor/jquery.wymeditor.js")
+    private Asset wymPath;
 
-	@Inject
-	@Path("context:/static/js/jquery-1.3.2.min.js")
-	private Asset jQueryPath;
+    @Inject
+    @Path("context:/static/js/jquery-1.3.2.min.js")
+    private Asset jQueryPath;
 
-	@Inject
-	@Path("context:/static/img/ajax-loader-min.gif")
-	private Asset ajaxLoader;
+    @Inject
+    @Path("context:/static/img/ajax-loader-min.gif")
+    private Asset ajaxLoader;
 
-	@Inject
-	private ComponentResources resources;
+    @Inject
+    private ComponentResources resources;
 
-	@Parameter(defaultPrefix = BindingConstants.ASSET)
-	private String wymStyle;
+    @Parameter(defaultPrefix = BindingConstants.ASSET)
+    private String wymStyle;
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki")
-	private String wymSkin;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wooki")
+    private String wymSkin;
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wym-autosave")
-	private String autosaveStatus;
-	
-	@InjectContainer
-	private TextArea container;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "wym-autosave")
+    private String autosaveStatus;
 
-	@Inject
-	private RenderSupport renderSupport;
+    @InjectContainer
+    private TextArea container;
 
-	@AfterRender
-	public void attachWymEditor() {
+    @Inject
+    private RenderSupport renderSupport;
 
-		JSONObject data = new JSONObject();
-		data.put("elt", container.getClientId());
+    @AfterRender
+    public void attachWymEditor()
+    {
 
-		JSONObject params = new JSONObject();
-		params.put("logoHtml", "");
+        JSONObject data = new JSONObject();
+        data.put("elt", container.getClientId());
 
-		if (wymStyle != null) {
-			params.put("stylesheet", wymStyle);
-		}
+        JSONObject params = new JSONObject();
+        params.put("logoHtml", "");
 
-		params.put("skin", wymSkin);
+        if (wymStyle != null)
+        {
+            params.put("stylesheet", wymStyle);
+        }
 
-		// Set parameter for production mode compatibility
-		params.put("basePath", basePath.toClientURL() + "/");
-		params.put("wymPath", wymPath.toClientURL());
-		params.put("jQueryPath", jQueryPath.toClientURL());
-		params.put("ajaxLoader", ajaxLoader.toClientURL());
-		params.put("formId", support.getClientId());
-		params.put("autosaveInterval", autosaveInterval);
-		params.put("autosaveStatus", autosaveStatus);
+        params.put("skin", wymSkin);
 
-		Link uploadActionLink = resources.createEventLink("uploadImage");
-		params.put("uploadAction", uploadActionLink.toAbsoluteURI());
+        // Set parameter for production mode compatibility
+        params.put("basePath", basePath.toClientURL() + "/");
+        params.put("wymPath", wymPath.toClientURL());
+        params.put("jQueryPath", jQueryPath.toClientURL());
+        params.put("ajaxLoader", ajaxLoader.toClientURL());
+        params.put("formId", support.getClientId());
+        params.put("autosaveInterval", autosaveInterval);
+        params.put("autosaveStatus", autosaveStatus);
 
-		// Add activation context
-		String activationContext = uploadActionLink.getParameterValue(InternalConstants.PAGE_CONTEXT_NAME);
-		if (activationContext != null) {
-			JSONObject uploadDatas = new JSONObject();
-			uploadDatas.put(InternalConstants.PAGE_CONTEXT_NAME, activationContext);
-			params.put("uploadDatas", uploadDatas);
-		}
+        Link uploadActionLink = resources.createEventLink("uploadImage");
+        params.put("uploadAction", uploadActionLink.toAbsoluteURI());
 
-		data.put("params", params);
+        // Add activation context
+        String activationContext = uploadActionLink
+                .getParameterValue(InternalConstants.PAGE_CONTEXT_NAME);
+        if (activationContext != null)
+        {
+            JSONObject uploadDatas = new JSONObject();
+            uploadDatas.put(InternalConstants.PAGE_CONTEXT_NAME, activationContext);
+            params.put("uploadDatas", uploadDatas);
+        }
 
-		// Use wymeditor
-		renderSupport.addInit("initWymEdit", data);
+        data.put("params", params);
 
-	}
+        // Use wymeditor
+        renderSupport.addInit("initWymEdit", data);
 
-	/**
-	 * Upload image.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = "uploadImage")
-	public Object uploadFile() {
-		JSONObject result = new JSONObject();
-		JSONArray message = new JSONArray();
-		try {
-			UploadedFile attachment = decoder.getFileUpload("attachment");
-			String path = this.uploadMedia.uploadMedia(attachment);
-			result.put("error", false);
-			result.put("path", path);
-			message.put(messages.get("upload-success"));
-		} catch (IOException ioEx) {
-			ioEx.printStackTrace();
-			result.put("error", true);
-			message.put(messages.get("upload-failure"));
-		}
-		result.put("messages", message);
-		return new TextStreamResponse("text/html", result.toString());
-	}
+    }
+
+    /**
+     * Upload image.
+     * 
+     * @return
+     */
+    @OnEvent(value = "uploadImage")
+    public Object uploadFile()
+    {
+        JSONObject result = new JSONObject();
+        JSONArray message = new JSONArray();
+        try
+        {
+            UploadedFile attachment = decoder.getFileUpload("attachment");
+            String path = this.uploadMedia.uploadMedia(attachment);
+            result.put("error", false);
+            result.put("path", path);
+            message.put(messages.get("upload-success"));
+        }
+        catch (IOException ioEx)
+        {
+            ioEx.printStackTrace();
+            result.put("error", true);
+            message.put(messages.get("upload-failure"));
+        }
+        result.put("messages", message);
+        return new TextStreamResponse("text/html", result.toString());
+    }
 
 }

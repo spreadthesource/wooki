@@ -21,9 +21,10 @@ import org.apache.tapestry5.annotations.Parameter;
 
 import com.wooki.base.LayoutBase;
 
-public class BookLayout extends LayoutBase {
+public class BookLayout extends LayoutBase
+{
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
-	private String title;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
+    private String title;
 
 }

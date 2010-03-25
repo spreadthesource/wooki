@@ -30,55 +30,58 @@ import com.wooki.domain.model.User;
 import com.wooki.services.SearchEngine;
 
 /**
- * This page search and display a list of wooki elements in function of the
- * activation String.
+ * This page search and display a list of wooki elements in function of the activation String.
  * 
  * @author ccordenier
- * 
  */
-public class SearchResult {
+public class SearchResult
+{
 
-	@Inject
-	private SearchEngine searchService;
-	
-	@Property
-	// @Validate("regexp=[^%]*")
-	private String queryString;
+    @Inject
+    private SearchEngine searchService;
 
-	@Property
-	private List<Book> results;
+    @Property
+    // @Validate("regexp=[^%]*")
+    private String queryString;
 
-	@Property
-	private Book currentBook;
+    @Property
+    private List<Book> results;
 
-	@Property
-	private User currentAuthor;
+    @Property
+    private Book currentBook;
 
-	@Property
-	private int loopIdx;
-	
-	/**
-	 * Prepare search
-	 * 
-	 * @param searchField
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void search(String queryString) {
-		this.queryString = queryString;
-	}
+    @Property
+    private User currentAuthor;
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public String retrieveQuery() {
-		return this.queryString;
-	}
+    @Property
+    private int loopIdx;
 
-	@SetupRender
-	public void setupRender() {
-		this.results = searchService.findBook(queryString);
-	}
-	
-	public String getStyle() {
-		return this.loopIdx == 0 ? "first" : null;
-	}
-	
+    /**
+     * Prepare search
+     * 
+     * @param searchField
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public void search(String queryString)
+    {
+        this.queryString = queryString;
+    }
+
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public String retrieveQuery()
+    {
+        return this.queryString;
+    }
+
+    @SetupRender
+    public void setupRender()
+    {
+        this.results = searchService.findBook(queryString);
+    }
+
+    public String getStyle()
+    {
+        return this.loopIdx == 0 ? "first" : null;
+    }
+
 }

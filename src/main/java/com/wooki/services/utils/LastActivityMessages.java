@@ -27,37 +27,47 @@ import org.apache.tapestry5.ioc.Messages;
  * 
  * @author ccordenier
  */
-public class LastActivityMessages {
+public class LastActivityMessages
+{
 
-	/**
-	 * Return a string (human) representation of the period since the last
-	 * activity.
-	 * 
-	 * @param lastActivity
-	 * @return
-	 */
-	public static String getActivityPeriod(long lastActivity, Messages messages) {
+    /**
+     * Return a string (human) representation of the period since the last activity.
+     * 
+     * @param lastActivity
+     * @return
+     */
+    public static String getActivityPeriod(long lastActivity, Messages messages)
+    {
 
-		String result = "";
-		DateFormat formatter = new SimpleDateFormat(messages.get("date"));
+        String result = "";
+        DateFormat formatter = new SimpleDateFormat(messages.get("date"));
 
-		long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
 
-		long period = (now - lastActivity) / 1000;
+        long period = (now - lastActivity) / 1000;
 
-		if (period < 60) {
-			result = messages.get("few-seconds-ago");
-		} else if ((period / 60) < 60) {
-			result = String.format(messages.get("minutes-ago"), (period / 60));
-		} else if ((period / 60 / 60) < 24) {
-			result = String.format(messages.get("hours-ago"), (period / 60 / 60));
-		} else if ((period / 60 / 60 / 24) < 5) {
-			result = String.format(messages.get("days-ago"), (period / 60 / 60 / 24));
-		} else {
-			result = formatter.format(new Date(lastActivity));
-		}
+        if (period < 60)
+        {
+            result = messages.get("few-seconds-ago");
+        }
+        else if ((period / 60) < 60)
+        {
+            result = String.format(messages.get("minutes-ago"), (period / 60));
+        }
+        else if ((period / 60 / 60) < 24)
+        {
+            result = String.format(messages.get("hours-ago"), (period / 60 / 60));
+        }
+        else if ((period / 60 / 60 / 24) < 5)
+        {
+            result = String.format(messages.get("days-ago"), (period / 60 / 60 / 24));
+        }
+        else
+        {
+            result = formatter.format(new Date(lastActivity));
+        }
 
-		return result;
-	}
+        return result;
+    }
 
 }

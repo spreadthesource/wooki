@@ -41,129 +41,134 @@ import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Display an index page for wooki application. If no user logged in or
- * requested, then a default signup block will be displayed. If not, then the
- * requested user book list will be displayed.
+ * Display an index page for wooki application. If no user logged in or requested, then a default
+ * signup block will be displayed. If not, then the requested user book list will be displayed.
  * 
  * @author ccordenier
- * 
  */
-public class Index {
+public class Index
+{
 
-	@Inject
-	private BookManager bookManager;
+    @Inject
+    private BookManager bookManager;
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Inject
-	private UserManager userManager;
+    @Inject
+    private UserManager userManager;
 
-	@Inject
-	private Block homeBlock;
+    @Inject
+    private Block homeBlock;
 
-	@Inject
-	private Block presBlock;
+    @Inject
+    private Block presBlock;
 
-	@Inject
-	private Block userBlock;
+    @Inject
+    private Block userBlock;
 
-	@Inject
-	private Messages messages;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private FeedSource feedSource;
+    @Inject
+    private FeedSource feedSource;
 
-	@Property
-	private List<Book> userBooks;
+    @Property
+    private List<Book> userBooks;
 
-	@Property
-	private List<Book> userCollaborations;
+    @Property
+    private List<Book> userCollaborations;
 
-	@Property
-	private Book currentBook;
+    @Property
+    private Book currentBook;
 
-	@Property
-	private User user;
+    @Property
+    private User user;
 
-	@Property
-	private int loopIdx;
+    @Property
+    private int loopIdx;
 
-	@Property
-	private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
+    @Property
+    private DateFormat sinceFormat = new SimpleDateFormat("MMMMM dd, yyyy");
 
-	@Property
-	private Block userCtx;
+    @Property
+    private Block userCtx;
 
-	@Inject
-	private Request request;
+    @Inject
+    private Request request;
 
-	/**
-	 * Set current user if someone has logged in.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public boolean setupListBook() {
-		if (securityCtx.isLoggedIn()) {
-			this.userCtx = this.homeBlock;
-		} else {
-			this.userCtx = this.presBlock;
-		}
-		return true;
-	}
+    /**
+     * Set current user if someone has logged in.
+     * 
+     * @return
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public boolean setupListBook()
+    {
+        if (securityCtx.isLoggedIn())
+        {
+            this.userCtx = this.homeBlock;
+        }
+        else
+        {
+            this.userCtx = this.presBlock;
+        }
+        return true;
+    }
 
-	/**
-	 * If the user requested is not the user logged in, simply display his list
-	 * of book.
-	 * 
-	 * @param username
-	 * @return
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBookList(String username) {
-		this.user = this.userManager.findByUsername(username);
-		if (this.user == null) {
-			return new HttpError(404, "User not found");
-		}
-		this.userCtx = userBlock;
-		this.userBooks = this.bookManager.listByOwner(username);
-		this.userCollaborations = this.bookManager.listByCollaborator(username);
-		return true;
-	}
+    /**
+     * If the user requested is not the user logged in, simply display his list of book.
+     * 
+     * @param username
+     * @return
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupBookList(String username)
+    {
+        this.user = this.userManager.findByUsername(username);
+        if (this.user == null) { return new HttpError(404, "User not found"); }
+        this.userCtx = userBlock;
+        this.userBooks = this.bookManager.listByOwner(username);
+        this.userCollaborations = this.bookManager.listByCollaborator(username);
+        return true;
+    }
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public String getCurrentUser() {
-		if (user != null) {
-			return user.getUsername();
-		}
-		return null;
-	}
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public String getCurrentUser()
+    {
+        if (user != null) { return user.getUsername(); }
+        return null;
+    }
 
-	@OnEvent(value = "userfeed")
-	public Feed getUserFeed(Long userId) throws IOException, IllegalArgumentException, FeedException {
-		return feedSource.produceFeed(ActivityType.USER_PUBLIC, userId);
-	}
-	
-	@OnEvent(value = "feed")
-	public Feed getFeed() throws IOException, IllegalArgumentException, FeedException {
-		return feedSource.produceFeed(ActivityType.BOOK_CREATION);
-	}
+    @OnEvent(value = "userfeed")
+    public Feed getUserFeed(Long userId) throws IOException, IllegalArgumentException,
+            FeedException
+    {
+        return feedSource.produceFeed(ActivityType.USER_PUBLIC, userId);
+    }
 
-	public String getTitle() {
-		if (this.user != null) {
-			return messages.format("profile-title", this.user.getUsername());
-		}
-		return messages.get("index-message");
-	}
+    @OnEvent(value = "feed")
+    public Feed getFeed() throws IOException, IllegalArgumentException, FeedException
+    {
+        return feedSource.produceFeed(ActivityType.BOOK_CREATION);
+    }
 
-	public boolean isDisplayMessage() {
-		String userAgent = request.getHeader("User-Agent");
-		return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null) : false;
-	}
+    public String getTitle()
+    {
+        if (this.user != null) { return messages.format("profile-title", this.user.getUsername()); }
+        return messages.get("index-message");
+    }
 
-	public String getStyle() {
-		return this.loopIdx == 0 ? "first" : null;
-	}
+    public boolean isDisplayMessage()
+    {
+        String userAgent = request.getHeader("User-Agent");
+        return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null)
+                : false;
+    }
+
+    public String getStyle()
+    {
+        return this.loopIdx == 0 ? "first" : null;
+    }
 
 }

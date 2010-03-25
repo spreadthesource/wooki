@@ -33,93 +33,133 @@ import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.CommentActivity;
 
 @Repository("activityDao")
-public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements ActivityDAO {
+public class ActivityDAOImpl extends GenericDAOImpl<Activity, Long> implements ActivityDAO
+{
 
-	public List<Activity> list(int startIdx, int nbElements) {
-		Query query = entityManager.createQuery("from " + getEntityType() + " a where a.deletionDate is null order by a.creationDate desc");
-		this.setMaxResults(query,nbElements);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> list(int startIdx, int nbElements)
+    {
+        Query query = entityManager.createQuery("from " + getEntityType()
+                + " a where a.deletionDate is null order by a.creationDate desc");
+        this.setMaxResults(query, nbElements);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
 
-	public List<Activity> listAllActivitiesOnComment(Long commentId) {
-		Defense.notNull(commentId, "commentId");
-		Query query = entityManager.createQuery("from " + CommentActivity.class.getName() + " ca where ca.comment.id=:cid order by ca.creationDate desc");
-		query.setParameter("cid", commentId);
-		return query.getResultList();
-	}
-	
-	public List<Activity> listAllActivitiesOnChapter(Long chapterId) {
-		Defense.notNull(chapterId, "chapterId");
-		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from " + CommentActivity.class.getName()
-				+ " coa where coa.comment.publication.chapter.id=:cid) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.id=:cid) order by a.creationDate desc");
-		query.setParameter("cid", chapterId);
-		return query.getResultList();
-	}
-	
-	public List<Activity> listAllActivitiesOnBook(Long bookId) {
-		Defense.notNull(bookId, "bookId");
-		Query query = entityManager.createQuery("select a from " + Activity.class.getName() + " a where a.id in (select id from "
-				+ BookActivity.class.getName() + " ba where ba.book.id=:bid) or a.id in (select id from " + CommentActivity.class.getName()
-				+ " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.book.id=:bid) order by a.creationDate desc");
-		query.setParameter("bid", bookId);
-		return query.getResultList();
-	}
+    public List<Activity> listAllActivitiesOnComment(Long commentId)
+    {
+        Defense.notNull(commentId, "commentId");
+        Query query = entityManager.createQuery("from " + CommentActivity.class.getName()
+                + " ca where ca.comment.id=:cid order by ca.creationDate desc");
+        query.setParameter("cid", commentId);
+        return query.getResultList();
+    }
 
-	public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId) {
-		Defense.notNull(userId, "userId");
-		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
-				+ " b join b.users u where u.id=:uid and a.user.id!=:uid and (a.id in (select id from " + BookActivity.class.getName()
-				+ " ba where ba.book.id=b.id) or a.id in (select id from " + CommentActivity.class.getName()
-				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
-		query.setParameter("uid", userId);
-		this.setMaxResults(query,nbElts);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> listAllActivitiesOnChapter(Long chapterId)
+    {
+        Defense.notNull(chapterId, "chapterId");
+        Query query = entityManager.createQuery("select a from " + Activity.class.getName()
+                + " a where a.id in (select id from " + CommentActivity.class.getName()
+                + " coa where coa.comment.publication.chapter.id=:cid) or a.id in (select id from "
+                + ChapterActivity.class.getName()
+                + " ca where ca.chapter.id=:cid) order by a.creationDate desc");
+        query.setParameter("cid", chapterId);
+        return query.getResultList();
+    }
 
-	public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId) {
-		Defense.notNull(userId, "userId");
-		Query query = entityManager.createQuery("select a from " + getEntityType()
-				+ " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
-		query.setParameter("uid", userId);
-		this.setMaxResults(query,nbElts);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> listAllActivitiesOnBook(Long bookId)
+    {
+        Defense.notNull(bookId, "bookId");
+        Query query = entityManager
+                .createQuery("select a from "
+                        + Activity.class.getName()
+                        + " a where a.id in (select id from "
+                        + BookActivity.class.getName()
+                        + " ba where ba.book.id=:bid) or a.id in (select id from "
+                        + CommentActivity.class.getName()
+                        + " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from "
+                        + ChapterActivity.class.getName()
+                        + " ca where ca.chapter.book.id=:bid) order by a.creationDate desc");
+        query.setParameter("bid", bookId);
+        return query.getResultList();
+    }
 
-	public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId) {
-		Defense.notNull(userId, "userId");
-		Query query = entityManager.createQuery("select distinct a from " + Activity.class.getName() + " a, " + Book.class.getName()
-				+ " b join b.users u where u.id=:uid and a.user.id=:uid and (a.id in (select id from " + BookActivity.class.getName()
-				+ " ba where ba.book.id=b.id) or a.id in (select id from " + CommentActivity.class.getName()
-				+ " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from " + ChapterActivity.class.getName()
-				+ " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
-		query.setParameter("uid", userId);
-		this.setMaxResults(query,nbElements);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId)
+    {
+        Defense.notNull(userId, "userId");
+        Query query = entityManager
+                .createQuery("select distinct a from "
+                        + Activity.class.getName()
+                        + " a, "
+                        + Book.class.getName()
+                        + " b join b.users u where u.id=:uid and a.user.id!=:uid and (a.id in (select id from "
+                        + BookActivity.class.getName()
+                        + " ba where ba.book.id=b.id) or a.id in (select id from "
+                        + CommentActivity.class.getName()
+                        + " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from "
+                        + ChapterActivity.class.getName()
+                        + " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
+        query.setParameter("uid", userId);
+        this.setMaxResults(query, nbElts);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
 
-	public List<Activity> listBookCreationActivity(int startIdx, int nbElements) {
-		Query query = entityManager.createQuery("from " + BookActivity.class.getName()
-				+ " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
-		query.setParameter("type", BookEventType.CREATE);
-		this.setMaxResults(query,nbElements);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId)
+    {
+        Defense.notNull(userId, "userId");
+        Query query = entityManager
+                .createQuery("select a from "
+                        + getEntityType()
+                        + " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
+        query.setParameter("uid", userId);
+        this.setMaxResults(query, nbElts);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
 
-	public List<Activity> listAccountActivity(int startIdx, int nbElts) {
-		Query query = entityManager.createQuery("from " + AccountActivity.class.getName()
-				+ " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
-		query.setParameter("type", AccountEventType.JOIN);
-		this.setMaxResults(query,nbElts);
-		query.setFirstResult(startIdx);
-		return query.getResultList();
-	}
+    public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId)
+    {
+        Defense.notNull(userId, "userId");
+        Query query = entityManager
+                .createQuery("select distinct a from "
+                        + Activity.class.getName()
+                        + " a, "
+                        + Book.class.getName()
+                        + " b join b.users u where u.id=:uid and a.user.id=:uid and (a.id in (select id from "
+                        + BookActivity.class.getName()
+                        + " ba where ba.book.id=b.id) or a.id in (select id from "
+                        + CommentActivity.class.getName()
+                        + " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from "
+                        + ChapterActivity.class.getName()
+                        + " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
+        query.setParameter("uid", userId);
+        this.setMaxResults(query, nbElements);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
+
+    public List<Activity> listBookCreationActivity(int startIdx, int nbElements)
+    {
+        Query query = entityManager
+                .createQuery("from "
+                        + BookActivity.class.getName()
+                        + " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
+        query.setParameter("type", BookEventType.CREATE);
+        this.setMaxResults(query, nbElements);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
+
+    public List<Activity> listAccountActivity(int startIdx, int nbElts)
+    {
+        Query query = entityManager
+                .createQuery("from "
+                        + AccountActivity.class.getName()
+                        + " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
+        query.setParameter("type", AccountEventType.JOIN);
+        this.setMaxResults(query, nbElts);
+        query.setFirstResult(startIdx);
+        return query.getResultList();
+    }
 
 }

@@ -16,61 +16,60 @@ import org.apache.tapestry5.services.FormSupport;
  * This mixins implements a simple show hide effect.
  * 
  * @author ccordenier
- * 
  */
-public class ShowHideOnClick {
+public class ShowHideOnClick
+{
 
-	/**
-	 * This parameter is the element to display on click.
-	 * 
-	 */
-	@Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
-	private String toShow;
+    /**
+     * This parameter is the element to display on click.
+     */
+    @Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
+    private String toShow;
 
-	/**
-	 * This is the id of the element that will return to initial state on click.
-	 */
-	@Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
-	private String hideLnkId;
+    /**
+     * This is the id of the element that will return to initial state on click.
+     */
+    @Parameter(required = true, allowNull = false, defaultPrefix = BindingConstants.LITERAL)
+    private String hideLnkId;
 
-	/**
-	 * Effect duration.
-	 * 
-	 */
-	@Parameter(required = true, allowNull = false, value = "200")
-	private int duration;
+    /**
+     * Effect duration.
+     */
+    @Parameter(required = true, allowNull = false, value = "200")
+    private int duration;
 
-	/**
-	 * Reset the form on hide event.
-	 */
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private String resetFormClass;
-	
-	@InjectContainer
-	private AbstractLink showLnkId;
+    /**
+     * Reset the form on hide event.
+     */
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    private String resetFormClass;
 
-	@Inject
-	private RenderSupport support;
+    @InjectContainer
+    private AbstractLink showLnkId;
 
-	/**
-	 * Generate Javascript method call.
-	 * 
-	 */
-	@AfterRender
-	public void initShowHideEffect() {
+    @Inject
+    private RenderSupport support;
 
-		JSONObject data = new JSONObject();
-		data.put("showLnkId", this.showLnkId.getClientId());
-		data.put("toShow", this.toShow);
-		data.put("hideLnkId", this.hideLnkId);
-		data.put("duration", this.duration);
+    /**
+     * Generate Javascript method call.
+     */
+    @AfterRender
+    public void initShowHideEffect()
+    {
 
-		// Also reset form if the link is inside a form
-		if (this.resetFormClass != null) {
-			data.put("formClass", this.resetFormClass);
-		}
+        JSONObject data = new JSONObject();
+        data.put("showLnkId", this.showLnkId.getClientId());
+        data.put("toShow", this.toShow);
+        data.put("hideLnkId", this.hideLnkId);
+        data.put("duration", this.duration);
 
-		support.addInit("initShowHideEffect", data);
-	}
+        // Also reset form if the link is inside a form
+        if (this.resetFormClass != null)
+        {
+            data.put("formClass", this.resetFormClass);
+        }
+
+        support.addInit("initShowHideEffect", data);
+    }
 
 }

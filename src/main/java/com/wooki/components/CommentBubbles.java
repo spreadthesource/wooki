@@ -37,97 +37,101 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
 
 /**
- * This component can be us in page that display a chapter publication to create
- * comment bubbles and enable comment creation.
+ * This component can be us in page that display a chapter publication to create comment bubbles and
+ * enable comment creation.
  * 
  * @author ccordenier
- * 
  */
-public class CommentBubbles {
+public class CommentBubbles
+{
 
-	@Parameter
-	private Long publicationId;
+    @Parameter
+    private Long publicationId;
 
-	@Parameter
-	private Long bookId;
-	
-	@Inject
-	private ComponentResources resources;
+    @Parameter
+    private Long bookId;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private ComponentResources resources;
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private CommentManager commentManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@InjectComponent
-	private Zone commentList;
+    @Inject
+    private CommentManager commentManager;
 
-	@InjectComponent
-	private Dialog commentDialog;
+    @InjectComponent
+    private Zone commentList;
 
-	@Inject
-	private Block commentsBlock;
+    @InjectComponent
+    private Dialog commentDialog;
 
-	@Property
-	private List<Object[]> commentsInfos;
+    @Inject
+    private Block commentsBlock;
 
-	@Persist
-	@Property
-	private String domId;
+    @Property
+    private List<Object[]> commentsInfos;
 
-	@SetupRender
-	public Object searchComments() {
-		if (!resources.isBound("publicationId") || publicationId == null) {
-			return false;
-		}
-		this.commentsInfos = this.commentManager
-				.listCommentInfos(publicationId);
-		return true;
-	}
+    @Persist
+    @Property
+    private String domId;
 
-	@OnEvent(value = "displayComment")
-	public Object commentsDisplay(Long publicationId, String domId) {
-		this.publicationId = publicationId;
-		this.domId = domId;
-		return commentsBlock;
-	}
+    @SetupRender
+    public Object searchComments()
+    {
+        if (!resources.isBound("publicationId") || publicationId == null) { return false; }
+        this.commentsInfos = this.commentManager.listCommentInfos(publicationId);
+        return true;
+    }
 
-	@OnEvent(value = "updateBubbles")
-	public JSONObject getCommentsInfos(Long publicationId) {
-		this.commentsInfos = this.commentManager
-				.listCommentInfos(publicationId);
-		JSONObject data = new JSONObject();
-		if (this.commentsInfos != null) {
-			for (Object[] obj : this.commentsInfos) {
-				data.put((String) obj[0], ((Long) (obj[1])).toString());
-			}
-		}
-		return data;
-	}
+    @OnEvent(value = "displayComment")
+    public Object commentsDisplay(Long publicationId, String domId)
+    {
+        this.publicationId = publicationId;
+        this.domId = domId;
+        return commentsBlock;
+    }
 
-	@AfterRender
-	void addScript() {
+    @OnEvent(value = "updateBubbles")
+    public JSONObject getCommentsInfos(Long publicationId)
+    {
+        this.commentsInfos = this.commentManager.listCommentInfos(publicationId);
+        JSONObject data = new JSONObject();
+        if (this.commentsInfos != null)
+        {
+            for (Object[] obj : this.commentsInfos)
+            {
+                data.put((String) obj[0], ((Long) (obj[1])).toString());
+            }
+        }
+        return data;
+    }
 
-		JSONObject bubble = new JSONObject();
+    @AfterRender
+    void addScript()
+    {
 
-		// Add update link
-		Link lnk = resources.createEventLink("displayComment",
-				this.publicationId, "blockId");
-		bubble.put("url", lnk.toAbsoluteURI());
-		bubble.put("zoneId", commentList.getClientId());
-		bubble.put("dialogId", commentDialog.getClientId());
-		bubble.put("updateUrl", resources.createEventLink("updateBubbles", this.publicationId).toAbsoluteURI());
-		if (this.commentsInfos != null) {
-			for (Object[] obj : this.commentsInfos) {
-				bubble.put((String) obj[0], ((Long) (obj[1])).toString());
-			}
-		}
+        JSONObject bubble = new JSONObject();
 
-		support.addInit("initBubbles", bubble);
-	}
+        // Add update link
+        Link lnk = resources.createEventLink("displayComment", this.publicationId, "blockId");
+        bubble.put("url", lnk.toAbsoluteURI());
+        bubble.put("zoneId", commentList.getClientId());
+        bubble.put("dialogId", commentDialog.getClientId());
+        bubble.put("updateUrl", resources.createEventLink("updateBubbles", this.publicationId)
+                .toAbsoluteURI());
+        if (this.commentsInfos != null)
+        {
+            for (Object[] obj : this.commentsInfos)
+            {
+                bubble.put((String) obj[0], ((Long) (obj[1])).toString());
+            }
+        }
+
+        support.addInit("initBubbles", bubble);
+    }
 
 }

@@ -30,71 +30,81 @@ import javax.persistence.ManyToOne;
  * Represents a chapter of the book.
  */
 @Entity
-public class Chapter extends WookiEntity {
+public class Chapter extends WookiEntity
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "id_book", nullable = false, updatable = false, insertable = false)
-	private Book book;
+    @ManyToOne
+    @JoinColumn(name = "id_book", nullable = false, updatable = false, insertable = false)
+    private Book book;
 
-	/** User friendly title */
-	private String title;
+    /** User friendly title */
+    private String title;
 
-	/** Identifier title */
-	private String slugTitle;
+    /** Identifier title */
+    private String slugTitle;
 
-	/**
-	 * Constructor used to retrieve only required information for chapters
-	 * display.
-	 * 
-	 * @param id
-	 * @param title
-	 * @param lastModified
-	 */
-	public Chapter(long id, String title, Date lastModified) {
-		this.id = id;
-		this.title = title;
-		this.setLastModified(lastModified);
-	}
+    /**
+     * Constructor used to retrieve only required information for chapters display.
+     * 
+     * @param id
+     * @param title
+     * @param lastModified
+     */
+    public Chapter(long id, String title, Date lastModified)
+    {
+        this.id = id;
+        this.title = title;
+        this.setLastModified(lastModified);
+    }
 
-	public Chapter() {
+    public Chapter()
+    {
 
-	}
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle()
+    {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
-	public String getSlugTitle() {
-		return slugTitle;
-	}
+    public String getSlugTitle()
+    {
+        return slugTitle;
+    }
 
-	public void setSlugTitle(String titleSlug) {
-		this.slugTitle = titleSlug;
-	}
+    public void setSlugTitle(String titleSlug)
+    {
+        this.slugTitle = titleSlug;
+    }
 
-	public Book getBook() {
-		return book;
-	}
+    public Book getBook()
+    {
+        return book;
+    }
 
-	public void setBook(Book book) {
-		this.book = book;
-	}
+    public void setBook(Book book)
+    {
+        this.book = book;
+    }
 
 }

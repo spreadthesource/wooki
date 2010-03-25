@@ -28,44 +28,50 @@ import com.wooki.services.security.WookiSecurityContext;
 /**
  * Login form.
  */
-public class Signin {
+public class Signin
+{
 
-	@Inject
-	private WookiSecurityContext securityCtx;
-	
-	@Inject
-	private SecurityUrlSource source;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Property
-	private String loginUrl;
+    @Inject
+    private SecurityUrlSource source;
 
-	private boolean failed = false;
+    @Property
+    private String loginUrl;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object checkSecurityCtx() {
-		if(securityCtx.isLoggedIn()) {
-			return Index.class;
-		}
-		return null;
-	}
+    private boolean failed = false;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void checkError(String extra) {
-		if (extra.equals("failed")) {
-			failed = true;
-		}
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object checkSecurityCtx()
+    {
+        if (securityCtx.isLoggedIn()) { return Index.class; }
+        return null;
+    }
 
-	@SetupRender
-	public void setup() {
-		loginUrl = source.getLoginUrl();
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public void checkError(String extra)
+    {
+        if (extra.equals("failed"))
+        {
+            failed = true;
+        }
+    }
 
-	public boolean isFailed() {
-		return failed;
-	}
+    @SetupRender
+    public void setup()
+    {
+        loginUrl = source.getLoginUrl();
+    }
 
-	public String[] getMessages() {
-		return new String[] { "Wrong username or password" };
-	}
+    public boolean isFailed()
+    {
+        return failed;
+    }
+
+    public String[] getMessages()
+    {
+        return new String[]
+        { "Wrong username or password" };
+    }
 }

@@ -22,80 +22,95 @@ import org.springframework.core.io.InputStreamResource;
 
 import com.wooki.services.parsers.Convertor;
 
-public class ExportServiceImpl implements ExportService {
+public class ExportServiceImpl implements ExportService
+{
 
-	private ExportInputRenderer inputRenderer;
+    private ExportInputRenderer inputRenderer;
 
-	private Convertor toPdfConvertor;
-	
-	private Convertor toXHTMLConvertor;
+    private Convertor toPdfConvertor;
 
-	private Convertor toImprovedXHTML4LatexConvertor;
+    private Convertor toXHTMLConvertor;
 
-	private Convertor toLatexConvertor;
+    private Convertor toImprovedXHTML4LatexConvertor;
 
-	public InputStream exportPdf(Long bookId) {
-		if (bookId == null) {
-			throw new IllegalArgumentException("Book id cannot be null to export.");
-		}
+    private Convertor toLatexConvertor;
 
-		InputStream bookStream = this.inputRenderer.exportBook(bookId);
-		InputStream result = toPdfConvertor.performTransformation(new InputStreamResource(bookStream));
-		return result;
-	}
+    public InputStream exportPdf(Long bookId)
+    {
+        if (bookId == null) { throw new IllegalArgumentException(
+                "Book id cannot be null to export."); }
 
-	public InputStream exportLatex(Long bookId) {
+        InputStream bookStream = this.inputRenderer.exportBook(bookId);
+        InputStream result = toPdfConvertor.performTransformation(new InputStreamResource(
+                bookStream));
+        return result;
+    }
 
-		if (bookId == null) {
-			throw new IllegalArgumentException("Book id cannot be null to export.");
-		}
+    public InputStream exportLatex(Long bookId)
+    {
 
-		/** Generate Latex */
-		InputStream bookStream = this.inputRenderer.exportBook(bookId);
-		InputStream xhtml = toXHTMLConvertor.performTransformation(new InputStreamResource(bookStream));
-		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor.performTransformation(new InputStreamResource(xhtml));
-		InputStream latex = toLatexConvertor.performTransformation(new InputStreamResource(improvedXhtml));
-		return latex;
-	}
+        if (bookId == null) { throw new IllegalArgumentException(
+                "Book id cannot be null to export."); }
 
-	public ExportInputRenderer getInputRenderer() {
-		return inputRenderer;
-	}
+        /** Generate Latex */
+        InputStream bookStream = this.inputRenderer.exportBook(bookId);
+        InputStream xhtml = toXHTMLConvertor.performTransformation(new InputStreamResource(
+                bookStream));
+        InputStream improvedXhtml = toImprovedXHTML4LatexConvertor
+                .performTransformation(new InputStreamResource(xhtml));
+        InputStream latex = toLatexConvertor.performTransformation(new InputStreamResource(
+                improvedXhtml));
+        return latex;
+    }
 
-	public void setInputRenderer(ExportInputRenderer inputRenderer) {
-		this.inputRenderer = inputRenderer;
-	}
+    public ExportInputRenderer getInputRenderer()
+    {
+        return inputRenderer;
+    }
 
-	public Convertor getToPdfConvertor() {
-		return toPdfConvertor;
-	}
+    public void setInputRenderer(ExportInputRenderer inputRenderer)
+    {
+        this.inputRenderer = inputRenderer;
+    }
 
-	public void setToPdfConvertor(Convertor toPdfConvertor) {
-		this.toPdfConvertor = toPdfConvertor;
-	}
+    public Convertor getToPdfConvertor()
+    {
+        return toPdfConvertor;
+    }
 
-	public Convertor getToXHTMLConvertor() {
-		return toXHTMLConvertor;
-	}
+    public void setToPdfConvertor(Convertor toPdfConvertor)
+    {
+        this.toPdfConvertor = toPdfConvertor;
+    }
 
-	public void setToXHTMLConvertor(Convertor toXHTMLConvertor) {
-		this.toXHTMLConvertor = toXHTMLConvertor;
-	}
+    public Convertor getToXHTMLConvertor()
+    {
+        return toXHTMLConvertor;
+    }
 
-	public Convertor getToImprovedXHTML4LatexConvertor() {
-		return toImprovedXHTML4LatexConvertor;
-	}
+    public void setToXHTMLConvertor(Convertor toXHTMLConvertor)
+    {
+        this.toXHTMLConvertor = toXHTMLConvertor;
+    }
 
-	public void setToImprovedXHTML4LatexConvertor(Convertor toImprovedXHTML4LatexConvertor) {
-		this.toImprovedXHTML4LatexConvertor = toImprovedXHTML4LatexConvertor;
-	}
+    public Convertor getToImprovedXHTML4LatexConvertor()
+    {
+        return toImprovedXHTML4LatexConvertor;
+    }
 
-	public Convertor getToLatexConvertor() {
-		return toLatexConvertor;
-	}
+    public void setToImprovedXHTML4LatexConvertor(Convertor toImprovedXHTML4LatexConvertor)
+    {
+        this.toImprovedXHTML4LatexConvertor = toImprovedXHTML4LatexConvertor;
+    }
 
-	public void setToLatexConvertor(Convertor toLatexConvertor) {
-		this.toLatexConvertor = toLatexConvertor;
-	}
+    public Convertor getToLatexConvertor()
+    {
+        return toLatexConvertor;
+    }
+
+    public void setToLatexConvertor(Convertor toLatexConvertor)
+    {
+        this.toLatexConvertor = toLatexConvertor;
+    }
 
 }

@@ -53,255 +53,310 @@ import com.wooki.services.security.WookiSecurityContext;
 /**
  * This page displays a book with its table of contents.
  */
-public class Index extends BookBase {
+public class Index extends BookBase
+{
 
-	@Inject
-	private Messages messages;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private BookManager bookManager;
+    @Inject
+    private BookManager bookManager;
 
-	@Inject
-	private ChapterManager chapterManager;
+    @Inject
+    private ChapterManager chapterManager;
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Inject
-	private ExportService exportService;
+    @Inject
+    private ExportService exportService;
 
-	@Inject
-	private FeedSource feedSource;
+    @Inject
+    private FeedSource feedSource;
 
-	@Inject
-	private LinkSupport linkSupport;
+    @Inject
+    private LinkSupport linkSupport;
 
-	@InjectPage
-	private Edit editChapter;
+    @InjectPage
+    private Edit editChapter;
 
-	@Property
-	@Persist(PersistenceConstants.FLASH)
-	private boolean printError;
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private boolean printError;
 
-	@Property
-	private Long bookAbstractId;
+    @Property
+    private Long bookAbstractId;
 
-	@Property
-	private String bookAbstractTitle;
+    @Property
+    private String bookAbstractTitle;
 
-	@Property
-	private User currentUser;
+    @Property
+    private User currentUser;
 
-	@Property
-	private int loopIdx;
+    @Property
+    private int loopIdx;
 
-	@Property
-	private List<User> authors;
+    @Property
+    private List<User> authors;
 
-	@Property
-	private List<Chapter> chaptersInfo;
+    @Property
+    private List<Chapter> chaptersInfo;
 
-	private Chapter currentChapter;
+    private Chapter currentChapter;
 
-	/**
-	 * Will be set if the author tries to add a new chapter
-	 */
-	@Property
-	private String chapterName;
+    /**
+     * Will be set if the author tries to add a new chapter
+     */
+    @Property
+    private String chapterName;
 
-	private Long firstChapterId;
+    private Long firstChapterId;
 
-	private String firstChapterTitle;
+    private String firstChapterTitle;
 
-	private boolean showWorkingCopyLink;
+    private boolean showWorkingCopyLink;
 
-	private boolean bookAuthor;
+    private boolean bookAuthor;
 
-	/**
-	 * Setup all the data to display in the book index page.
-	 * 
-	 * @param bookId
-	 * @throws IOException
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBookIndex(Long bookId, String revision) {
+    /**
+     * Setup all the data to display in the book index page.
+     * 
+     * @param bookId
+     * @throws IOException
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupBookIndex(Long bookId, String revision)
+    {
 
-		this.setRevision(revision);
-		this.setViewingRevision(true);
+        this.setRevision(revision);
+        this.setViewingRevision(true);
 
-		// Only authors have access to the last revision
-		if (ChapterManager.LAST.equalsIgnoreCase(revision) && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this.getBookId()))) {
-			return new HttpError(403, "Access denied");
-		}
+        // Only authors have access to the last revision
+        if (ChapterManager.LAST.equalsIgnoreCase(revision)
+                && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this
+                        .getBookId()))) { return new HttpError(403, "Access denied"); }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Prepare book display.
-	 */
-	@SetupRender
-	public void setupBookDisplay() {
+    /**
+     * Prepare book display.
+     */
+    @SetupRender
+    public void setupBookDisplay()
+    {
 
-		this.authors = this.getBook().getAuthors();
-		this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
+        this.authors = this.getBook().getAuthors();
+        this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
 
-		// List chapter infos
-		List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-		this.bookAbstractId = chapters.get(0).getId();
-		this.bookAbstractTitle = chapters.get(0).getTitle();
+        // List chapter infos
+        List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
+        this.bookAbstractId = chapters.get(0).getId();
+        this.bookAbstractTitle = chapters.get(0).getTitle();
 
-		Object[] firstChapterData = chapterManager.findNext(getBookId(), this.bookAbstractId);
-		if (firstChapterData != null) {
-			this.firstChapterId = (Long) firstChapterData[0];
-			this.firstChapterTitle = (String) firstChapterData[1];
-		}
+        Object[] firstChapterData = chapterManager.findNext(getBookId(), this.bookAbstractId);
+        if (firstChapterData != null)
+        {
+            this.firstChapterId = (Long) firstChapterData[0];
+            this.firstChapterTitle = (String) firstChapterData[1];
+        }
 
-		if (chapters.size() > 0) {
-			this.chaptersInfo = chapters.subList(1, chapters.size());
-		}
+        if (chapters.size() > 0)
+        {
+            this.chaptersInfo = chapters.subList(1, chapters.size());
+        }
 
-		// Get abstract publication
-		Publication abstractPublication = this.isViewingRevision() ? this.chapterManager.getRevision(this.bookAbstractId, this.getRevision())
-				: this.chapterManager.getLastPublishedPublication(this.bookAbstractId);
-		this.setPublication(abstractPublication);
+        // Get abstract publication
+        Publication abstractPublication = this.isViewingRevision() ? this.chapterManager
+                .getRevision(this.bookAbstractId, this.getRevision()) : this.chapterManager
+                .getLastPublishedPublication(this.bookAbstractId);
+        this.setPublication(abstractPublication);
 
-		// Setup abstract content
-		this.setupContent();
+        // Setup abstract content
+        this.setupContent();
 
-	}
+    }
 
-	@SetupRender
-	public void setupMenus() {
-		if (securityCtx.isAuthorOfBook(getBookId())) {
-			if (isAbstractHasWorkingCopy()) {
-				linkSupport.createPageMenuItem(LinkType.MENU, "Working Copy", "book", this.getBookId(), ChapterManager.LAST);
-			}
-			linkSupport.createPageMenuItem(LinkType.ADMIN, "Edit introduction", "chapter/edit", this.getBookId(), this.bookAbstractId);
-			linkSupport.createPageMenuItem(LinkType.ADMIN, "Settings", "book/settings", this.getBookId());
-		}
-		linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this.getBookId(), "all");
-		linkSupport.createEventMenuItem(LinkType.MENU, "Download PDF", "book/index", "pdf");
-		
-		// Add RSS link
-		BookMenuItem rss = linkSupport.createEventMenuItem(LinkType.MENU, "RSS Feed", "book/index", "feed", this.getBookId());
-	}
+    @SetupRender
+    public void setupMenus()
+    {
+        if (securityCtx.isAuthorOfBook(getBookId()))
+        {
+            if (isAbstractHasWorkingCopy())
+            {
+                linkSupport.createPageMenuItem(LinkType.MENU, "Working Copy", "book", this
+                        .getBookId(), ChapterManager.LAST);
+            }
+            linkSupport.createPageMenuItem(
+                    LinkType.ADMIN,
+                    "Edit introduction",
+                    "chapter/edit",
+                    this.getBookId(),
+                    this.bookAbstractId);
+            linkSupport.createPageMenuItem(LinkType.ADMIN, "Settings", "book/settings", this
+                    .getBookId());
+        }
+        linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this
+                .getBookId(), "all");
+        linkSupport.createEventMenuItem(LinkType.MENU, "Download PDF", "book/index", "pdf");
 
-	@SetupRender
-	public void setupNav() {
-		if ((firstChapterId != null) && (firstChapterTitle != null)) {
-			linkSupport.createNavLink(NavLinkPosition.RIGHT, firstChapterTitle + " >", "chapter/index", getBookId(), firstChapterId);
-		}
-	}
+        // Add RSS link
+        BookMenuItem rss = linkSupport.createEventMenuItem(
+                LinkType.MENU,
+                "RSS Feed",
+                "book/index",
+                "feed",
+                this.getBookId());
+    }
 
-	@OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
-	public Object addNewChapter() {
-		Chapter chapter = bookManager.addChapter(this.getBook(), chapterName);
-		editChapter.setBookId(this.getBookId());
-		editChapter.setChapterId(chapter.getId());
-		return editChapter;
-	}
+    @SetupRender
+    public void setupNav()
+    {
+        if ((firstChapterId != null) && (firstChapterTitle != null))
+        {
+            linkSupport.createNavLink(
+                    NavLinkPosition.RIGHT,
+                    firstChapterTitle + " >",
+                    "chapter/index",
+                    getBookId(),
+                    firstChapterId);
+        }
+    }
 
-	/**
-	 * Simply export to PDF.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = "pdf")
-	public Object exportPdf() {
-		try {
-			InputStream bookStream = this.exportService.exportPdf(this.getBookId());
-			return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
-		} catch (Exception ex) {
-			this.printError = true;
-			ex.printStackTrace();
-			return this;
-		}
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
+    public Object addNewChapter()
+    {
+        Chapter chapter = bookManager.addChapter(this.getBook(), chapterName);
+        editChapter.setBookId(this.getBookId());
+        editChapter.setChapterId(chapter.getId());
+        return editChapter;
+    }
 
-	/**
-	 * Create the Atom feed of the book activity
-	 * 
-	 * @throws IOException
-	 * @throws FeedException
-	 * @throws IllegalArgumentException
-	 */
-	@OnEvent(value = "feed")
-	public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException {
-		return feedSource.produceFeed(ActivityType.BOOK, bookId);
-	}
+    /**
+     * Simply export to PDF.
+     * 
+     * @return
+     */
+    @OnEvent(value = "pdf")
+    public Object exportPdf()
+    {
+        try
+        {
+            InputStream bookStream = this.exportService.exportPdf(this.getBookId());
+            return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
+        }
+        catch (Exception ex)
+        {
+            this.printError = true;
+            ex.printStackTrace();
+            return this;
+        }
+    }
 
-	public String[] getPrintErrors() {
-		return new String[] { this.messages.get("print-error") };
-	}
+    /**
+     * Create the Atom feed of the book activity
+     * 
+     * @throws IOException
+     * @throws FeedException
+     * @throws IllegalArgumentException
+     */
+    @OnEvent(value = "feed")
+    public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException
+    {
+        return feedSource.produceFeed(ActivityType.BOOK, bookId);
+    }
 
-	@OnEvent(value = EventConstants.PASSIVATE)
-	public Long retrieveBookId() {
-		return this.getBookId();
-	}
+    public String[] getPrintErrors()
+    {
+        return new String[]
+        { this.messages.get("print-error") };
+    }
 
-	public boolean isPublished() {
-		long chapterId = currentChapter.getId();
+    @OnEvent(value = EventConstants.PASSIVATE)
+    public Long retrieveBookId()
+    {
+        return this.getBookId();
+    }
 
-		Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+    public boolean isPublished()
+    {
+        long chapterId = currentChapter.getId();
 
-		return (publication != null);
-	}
+        Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
 
-	public boolean isAbstractHasWorkingCopy() {
-		return hasWorkingCopy(this.bookAbstractId);
-	}
+        return (publication != null);
+    }
 
-	public boolean isShowWorkingCopyLink() {
-		long chapterId = currentChapter.getId();
-		return hasWorkingCopy(chapterId);
-	}
+    public boolean isAbstractHasWorkingCopy()
+    {
+        return hasWorkingCopy(this.bookAbstractId);
+    }
 
-	private final boolean hasWorkingCopy(long chapterId) {
-		Publication publication = this.chapterManager.getRevision(chapterId, ChapterManager.LAST);
-		if (publication != null) {
-			boolean workingCopy = !publication.isPublished();
-			return bookAuthor && workingCopy;
-		}
-		return false;
-	}
+    public boolean isShowWorkingCopyLink()
+    {
+        long chapterId = currentChapter.getId();
+        return hasWorkingCopy(chapterId);
+    }
 
-	/**
-	 * Get edit context for chapter
-	 * 
-	 * @return
-	 */
-	public Object[] getEditCtx() {
-		return new Object[] { this.getBookId(), this.bookAbstractId };
-	}
+    private final boolean hasWorkingCopy(long chapterId)
+    {
+        Publication publication = this.chapterManager.getRevision(chapterId, ChapterManager.LAST);
+        if (publication != null)
+        {
+            boolean workingCopy = !publication.isPublished();
+            return bookAuthor && workingCopy;
+        }
+        return false;
+    }
 
-	public Object[] getAbstractWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), ChapterManager.LAST };
-	}
+    /**
+     * Get edit context for chapter
+     * 
+     * @return
+     */
+    public Object[] getEditCtx()
+    {
+        return new Object[]
+        { this.getBookId(), this.bookAbstractId };
+    }
 
-	public Object[] getIssuesCtx() {
-		return new Object[] { this.getBookId(), "all" };
-	}
+    public Object[] getAbstractWorkingCopyCtx()
+    {
+        return new Object[]
+        { this.getBookId(), ChapterManager.LAST };
+    }
 
-	/**
-	 * Get id to link to chapter display
-	 * 
-	 * @return
-	 */
-	public Object[] getChapterCtx() {
-		return new Object[] { this.getBookId(), this.currentChapter.getId() };
-	}
+    public Object[] getIssuesCtx()
+    {
+        return new Object[]
+        { this.getBookId(), "all" };
+    }
 
-	public Object[] getChapterWorkingCopyCtx() {
-		return new Object[] { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
-	}
+    /**
+     * Get id to link to chapter display
+     * 
+     * @return
+     */
+    public Object[] getChapterCtx()
+    {
+        return new Object[]
+        { this.getBookId(), this.currentChapter.getId() };
+    }
 
-	public Chapter getCurrentChapter() {
-		return currentChapter;
-	}
+    public Object[] getChapterWorkingCopyCtx()
+    {
+        return new Object[]
+        { this.getBookId(), this.currentChapter.getId(), ChapterManager.LAST };
+    }
 
-	public void setCurrentChapter(Chapter currentChapter) {
-		this.currentChapter = currentChapter;
-	}
+    public Chapter getCurrentChapter()
+    {
+        return currentChapter;
+    }
+
+    public void setCurrentChapter(Chapter currentChapter)
+    {
+        this.currentChapter = currentChapter;
+    }
 
 }

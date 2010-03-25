@@ -32,28 +32,30 @@ import com.wooki.services.WookiModule;
  * Implement a custom target url resolver for spring security based on cookies.
  * 
  * @author ccordenier
- * 
  */
-public class WookiTargetUrlResolver extends SimpleUrlAuthenticationSuccessHandler {
+public class WookiTargetUrlResolver extends SimpleUrlAuthenticationSuccessHandler
+{
 
-	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException,
-			ServletException {
-		super.onAuthenticationSuccess(request, response, authentication);
-	}
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException
+    {
+        super.onAuthenticationSuccess(request, response, authentication);
+    }
 
-	@Override
-	protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response) {
-		// Check first wooki last view
-		Cookie[] cookies = request.getCookies();
-		if (cookies != null) {
-			for (Cookie cookie : cookies) {
-				if (WookiModule.VIEW_REFERER.equals(cookie.getName())) {
-					return cookie.getValue();
-				}
-			}
-		}
-		return super.determineTargetUrl(request, response);
-	}
+    @Override
+    protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response)
+    {
+        // Check first wooki last view
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null)
+        {
+            for (Cookie cookie : cookies)
+            {
+                if (WookiModule.VIEW_REFERER.equals(cookie.getName())) { return cookie.getValue(); }
+            }
+        }
+        return super.determineTargetUrl(request, response);
+    }
 
 }

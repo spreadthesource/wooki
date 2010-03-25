@@ -23,13 +23,14 @@ import org.apache.tapestry5.annotations.OnEvent;
  * Simply throws {@link NullPointerException}
  * 
  * @author ccordenier
- * 
  */
-public class ThrowNPE {
+public class ThrowNPE
+{
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public void throwNPE() {
-		throw new NullPointerException();
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public void throwNPE()
+    {
+        throw new NullPointerException();
+    }
 
 }

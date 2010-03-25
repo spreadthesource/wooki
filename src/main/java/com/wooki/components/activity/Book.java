@@ -27,21 +27,23 @@ import com.wooki.domain.model.activity.BookActivity;
  * Display activities.
  * 
  * @author ccordenier
- * 
  */
-public class Book extends AbstractActivity {
+public class Book extends AbstractActivity
+{
 
-	@Property
-	@Parameter(allowNull = false, required = true)
-	private BookActivity activity;
+    @Property
+    @Parameter(allowNull = false, required = true)
+    private BookActivity activity;
 
-	public boolean isBookAvailable() {
-		return activity.getBook().getDeletionDate() == null;
-	}
+    public boolean isBookAvailable()
+    {
+        return activity.getBook().getDeletionDate() == null;
+    }
 
-	@SetupRender
-	public boolean checkByPass() {
-		return !this.activity.isResourceUnavailable(); 
-	}
-	
+    @SetupRender
+    public boolean checkByPass()
+    {
+        return !this.activity.isResourceUnavailable();
+    }
+
 }

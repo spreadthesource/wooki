@@ -16,8 +16,8 @@
 
 package com.wooki.domain.model.activity;
 
-
-public enum CommentEventType {
+public enum CommentEventType
+{
 
     DELETE, POST;
 }

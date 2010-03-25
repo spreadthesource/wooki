@@ -20,44 +20,43 @@ import com.wooki.domain.model.Publication;
 
 /**
  * Publication will be used to follow book chapter revision.
- *
+ * 
  * @author ccordenier
- *
  */
-public interface PublicationDAO extends GenericDAO<Publication, Long>{
+public interface PublicationDAO extends GenericDAO<Publication, Long>
+{
 
-	/**
-	 * Retrieve a revision number for given chapter.
-	 *
-	 * @param chapterId
-	 * @param revision 
-	 * @return null if the revision does not exist.
-	 */
-	Publication findRevisionById(Long chapterId, Long revision);
-	
-	/**
-	 * Used to retrieve the last revision of a chapter.
-	 *
-	 * @param chapterId
-	 * @return
-	 */
-	Publication findLastRevision(Long chapterId);
-	
-	/**
-	 * Used to retrieve the last published revision of a chapter.
-	 *
-	 * @param chapterId
-	 * @return
-	 */
-	Publication findLastPublishedRevision(Long chapterId);
+    /**
+     * Retrieve a revision number for given chapter.
+     * 
+     * @param chapterId
+     * @param revision
+     * @return null if the revision does not exist.
+     */
+    Publication findRevisionById(Long chapterId, Long revision);
 
-	
-	/**
-	 * Check if the revision is published.
-	 *
-	 * @param revision
-	 * @return
-	 */
-	boolean isPublished(Long revision);
+    /**
+     * Used to retrieve the last revision of a chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    Publication findLastRevision(Long chapterId);
+
+    /**
+     * Used to retrieve the last published revision of a chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    Publication findLastPublishedRevision(Long chapterId);
+
+    /**
+     * Check if the revision is published.
+     * 
+     * @param revision
+     * @return
+     */
+    boolean isPublished(Long revision);
 
 }

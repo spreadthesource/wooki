@@ -16,11 +16,12 @@
 
 package com.wooki;
 
-public interface WookiEventConstants {
+public interface WookiEventConstants
+{
 
-	static final String REMOVE = "remove";
-	
-	static final String REMOVE_BOOK = "removeBook";
-	
-	static final String UPDATE_MORE_CONTEXT = "updateMoreContext";
+    static final String REMOVE = "remove";
+
+    static final String REMOVE_BOOK = "removeBook";
+
+    static final String UPDATE_MORE_CONTEXT = "updateMoreContext";
 }

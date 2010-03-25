@@ -16,8 +16,8 @@
 
 package com.wooki.domain.model.activity;
 
+public enum ChapterEventType
+{
 
-public enum ChapterEventType {
-
-	CREATE, UPDATE, DELETE, PUBLISHED;
+    CREATE, UPDATE, DELETE, PUBLISHED;
 }

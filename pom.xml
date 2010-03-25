@@ -33,11 +33,6 @@
 			<artifactId>tapestry-test</artifactId>
 			<version>${tapestry-release-version}</version>
 			<scope>test</scope>
-			<!--
-				exclusions> <exclusion>
-				<groupId>org.seleniumhq.selenium.server</groupId>
-				<artifactId>selenium-server</artifactId> </exclusion> </exclusions
-			-->
 		</dependency>
 
 		<dependency>
@@ -45,7 +40,6 @@
 			<artifactId>tapestry-spring</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -200,12 +194,14 @@
 			<artifactId>commons-collections</artifactId>
 			<version>3.2.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.0</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.maven.doxia</groupId>
 			<artifactId>doxia-converter</artifactId>
@@ -271,7 +267,6 @@
 			<version>2.0.8</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>rome</groupId>
 			<artifactId>rome</artifactId>
@@ -279,6 +274,7 @@
 		</dependency>
 
 	</dependencies>
+	
 	<build>
 		<finalName>wooki</finalName>
 		<resources>

@@ -40,152 +40,159 @@ import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
 /**
- * Display an index page for wooki application. If no user logged in or
- * requested, then a default signup block will be displayed. If not, then the
- * requested user book list will be displayed.
+ * Display an index page for wooki application. If no user logged in or requested, then a default
+ * signup block will be displayed. If not, then the requested user book list will be displayed.
  * 
  * @author ccordenier
- * 
  */
-public class Dashboard {
+public class Dashboard
+{
 
-	@Inject
-	private BookManager bookManager;
+    @Inject
+    private BookManager bookManager;
 
-	@Inject
-	private WookiSecurityContext securityCtx;
+    @Inject
+    private WookiSecurityContext securityCtx;
 
-	@Inject
-	private Messages messages;
-	
-	@Inject
-	private Block coAuthor;
+    @Inject
+    private Messages messages;
 
-	@Inject
-	private Block yourActivity;
+    @Inject
+    private Block coAuthor;
 
-	@InjectComponent
-	private Form createBookForm;
-	
-	@InjectPage
-	private com.wooki.pages.book.Index index;
+    @Inject
+    private Block yourActivity;
 
-	@Property
-	private List<Book> userBooks;
-	
-	@Property
-	private List<Book> userCollaborations;
+    @InjectComponent
+    private Form createBookForm;
 
-	@Property
-	private Book currentBook;
+    @InjectPage
+    private com.wooki.pages.book.Index index;
 
-	@Property
-	private User user;
+    @Property
+    private List<Book> userBooks;
 
-	@Property
-	private int loopIdx;
-	
-	@Property
-	@Persist
-	private boolean showYours;
+    @Property
+    private List<Book> userCollaborations;
 
-	@Property
-	@Validate("required")
-	private String bookTitle;
+    @Property
+    private Book currentBook;
 
-	@Persist(PersistenceConstants.FLASH)
-	private boolean firstAccess;
+    @Property
+    private User user;
 
-	/**
-	 * Set current user if someone has logged in.
-	 * 
-	 * @return
-	 */
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public boolean setupListBook() {
-		if (securityCtx.isLoggedIn()) {
-			this.user = securityCtx.getAuthor();
-			this.userBooks = bookManager.listByOwner(user.getUsername());
-			this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
-			return true;
-		}
-		return false;
-	}
+    @Property
+    private int loopIdx;
 
-	@SetupRender
-	public Object setupDashboard() {
-		if (this.user == null) {
-			return false;
-		}
-		return true;
-	}
+    @Property
+    @Persist
+    private boolean showYours;
 
-	@OnEvent(value = EventConstants.VALIDATE, component = "bookTitle")
-	public void checkUnicity(String title) {
-		if(bookManager.findBookBySlugTitle(SlugBuilder.buildSlug(title)) != null) {
-			this.createBookForm.recordError("A book with the same exact title already exists");
-		}
-	}
-	
-	@OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
-	public Object createBook() {
-		Book created = bookManager.create(bookTitle);
-		index.setBookId(created.getId());
-		return index;
-	}
+    @Property
+    @Validate("required")
+    private String bookTitle;
 
-	@OnEvent(value = "showCoAuthors")
-	public Object showCoAuthorsFeed() {
-		this.showYours = false;
-		return this.coAuthor;
-	}
+    @Persist(PersistenceConstants.FLASH)
+    private boolean firstAccess;
 
-	@OnEvent(value = "showUser")
-	public Object showUserFeed() {
-		this.showYours = true;
-		return this.yourActivity;
-	}
+    /**
+     * Set current user if someone has logged in.
+     * 
+     * @return
+     */
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public boolean setupListBook()
+    {
+        if (securityCtx.isLoggedIn())
+        {
+            this.user = securityCtx.getAuthor();
+            this.userBooks = bookManager.listByOwner(user.getUsername());
+            this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
+            return true;
+        }
+        return false;
+    }
 
-	@OnEvent(value = WookiEventConstants.REMOVE_BOOK)
-	public void removeBook(Long bookId) {
-		this.bookManager.remove(bookId);
-	}
+    @SetupRender
+    public Object setupDashboard()
+    {
+        if (this.user == null) { return false; }
+        return true;
+    }
 
-	public Object getFeed() {
-		if (this.showYours) {
-			return this.yourActivity;
-		}
-		return this.coAuthor;
-	}
+    @OnEvent(value = EventConstants.VALIDATE, component = "bookTitle")
+    public void checkUnicity(String title)
+    {
+        if (bookManager.findBookBySlugTitle(SlugBuilder.buildSlug(title)) != null)
+        {
+            this.createBookForm.recordError("A book with the same exact title already exists");
+        }
+    }
 
-	public String getCoAuthorsClass() {
-		if (this.showYours) {
-			return "inactive";
-		}
-		return "active";
-	}
+    @OnEvent(value = EventConstants.SUCCESS, component = "createBookForm")
+    public Object createBook()
+    {
+        Book created = bookManager.create(bookTitle);
+        index.setBookId(created.getId());
+        return index;
+    }
 
-	public String getUserClass() {
-		if (this.showYours) {
-			return "active";
-		}
-		return "inactive";
+    @OnEvent(value = "showCoAuthors")
+    public Object showCoAuthorsFeed()
+    {
+        this.showYours = false;
+        return this.coAuthor;
+    }
 
-	}
+    @OnEvent(value = "showUser")
+    public Object showUserFeed()
+    {
+        this.showYours = true;
+        return this.yourActivity;
+    }
 
-	public boolean isFirstAccess() {
-		return firstAccess;
-	}
+    @OnEvent(value = WookiEventConstants.REMOVE_BOOK)
+    public void removeBook(Long bookId)
+    {
+        this.bookManager.remove(bookId);
+    }
 
-	public void setFirstAccess(boolean firstAccess) {
-		this.firstAccess = firstAccess;
-	}
-	
-	public String getTitle() {
-		return this.messages.format("dashboard-title", this.user.getUsername());
-	}
+    public Object getFeed()
+    {
+        if (this.showYours) { return this.yourActivity; }
+        return this.coAuthor;
+    }
 
-	public String getStyle() {
-		return this.loopIdx == 0 ? "first" : null;
-	}
+    public String getCoAuthorsClass()
+    {
+        if (this.showYours) { return "inactive"; }
+        return "active";
+    }
+
+    public String getUserClass()
+    {
+        if (this.showYours) { return "active"; }
+        return "inactive";
+
+    }
+
+    public boolean isFirstAccess()
+    {
+        return firstAccess;
+    }
+
+    public void setFirstAccess(boolean firstAccess)
+    {
+        this.firstAccess = firstAccess;
+    }
+
+    public String getTitle()
+    {
+        return this.messages.format("dashboard-title", this.user.getUsername());
+    }
+
+    public String getStyle()
+    {
+        return this.loopIdx == 0 ? "first" : null;
+    }
 }

@@ -22,16 +22,17 @@ import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 
-public class Index {
-	@Inject
-	@Symbol(SymbolConstants.PRODUCTION_MODE)
-	private boolean productionMode;
+public class Index
+{
+    @Inject
+    @Symbol(SymbolConstants.PRODUCTION_MODE)
+    private boolean productionMode;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	private Object redirect() {
-		if (productionMode)
-			return com.wooki.pages.Index.class;
-		
-		return null;
-	}
+    @OnEvent(value = EventConstants.ACTIVATE)
+    private Object redirect()
+    {
+        if (productionMode) return com.wooki.pages.Index.class;
+
+        return null;
+    }
 }

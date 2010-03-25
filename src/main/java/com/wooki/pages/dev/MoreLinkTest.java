@@ -15,41 +15,45 @@ import com.wooki.WookiEventConstants;
  * Used to test the more link component.
  * 
  * @author ccordenier
- * 
  */
-public class MoreLinkTest {
+public class MoreLinkTest
+{
 
-	@Inject
-	private Block display;
+    @Inject
+    private Block display;
 
-	@Property
-	private List<Integer> values;
+    @Property
+    private List<Integer> values;
 
-	@Property
-	private int current;
+    @Property
+    private int current;
 
-	@OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT)
-	public MoreEventResult getResult(int page) {
-		MoreEventResult result = new MoreEventResult();
-		if (page > 3) {
-			result.setHasMore(false);
-			return result;
-		}
-		this.setupValues(page);
-		result.setHasMore(true);
-		result.setRenderable(display);
-		return result;
-	}
+    @OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT)
+    public MoreEventResult getResult(int page)
+    {
+        MoreEventResult result = new MoreEventResult();
+        if (page > 3)
+        {
+            result.setHasMore(false);
+            return result;
+        }
+        this.setupValues(page);
+        result.setHasMore(true);
+        result.setRenderable(display);
+        return result;
+    }
 
-	/**
-	 * Setup the values to display.
-	 * 
-	 * @param page
-	 */
-	private void setupValues(int page) {
-		values = new ArrayList<Integer>();
-		for (int i = 0; i < 3; i++) {
-			values.add(i + (page * 10));
-		}
-	}
+    /**
+     * Setup the values to display.
+     * 
+     * @param page
+     */
+    private void setupValues(int page)
+    {
+        values = new ArrayList<Integer>();
+        for (int i = 0; i < 3; i++)
+        {
+            values.add(i + (page * 10));
+        }
+    }
 }

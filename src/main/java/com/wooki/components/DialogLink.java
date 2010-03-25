@@ -26,39 +26,45 @@ import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-public class DialogLink implements ClientElement {
+public class DialogLink implements ClientElement
+{
 
-	@Parameter(defaultPrefix = BindingConstants.LITERAL)
-	private String clientId;
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    private String clientId;
 
-	@Parameter(required = true)
-	private String dialog;
+    @Parameter(required = true)
+    private String dialog;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	@Inject
-	private ComponentResources resources;
+    @Inject
+    private ComponentResources resources;
 
-	@BeginRender
-	void startDiv(MarkupWriter writer) {
-		writer.element("a", "id", getClientId(), "href", "#");
-	}
+    @BeginRender
+    void startDiv(MarkupWriter writer)
+    {
+        writer.element("a", "id", getClientId(), "href", "#");
+    }
 
-	@AfterRender
-	void declareDialog(MarkupWriter writer) {
-		writer.end();
-		support.addInit("openJQueryDialogOnClick", getClientId(), dialog);
-	}
+    @AfterRender
+    void declareDialog(MarkupWriter writer)
+    {
+        writer.end();
+        support.addInit("openJQueryDialogOnClick", getClientId(), dialog);
+    }
 
-	public String getClientId() {
-		if (clientId == null) {
-			clientId = support.allocateClientId(resources);
-		}
-		return this.clientId;
-	}
-	
-	protected String getDialog() {
-		return this.dialog;
-	}
+    public String getClientId()
+    {
+        if (clientId == null)
+        {
+            clientId = support.allocateClientId(resources);
+        }
+        return this.clientId;
+    }
+
+    protected String getDialog()
+    {
+        return this.dialog;
+    }
 }

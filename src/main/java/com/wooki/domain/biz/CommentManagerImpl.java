@@ -36,73 +36,83 @@ import com.wooki.services.security.WookiSecurityContext;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("commentManager")
-public class CommentManagerImpl implements CommentManager {
+public class CommentManagerImpl implements CommentManager
+{
 
-	@Autowired
-	private CommentDAO commentDao;
+    @Autowired
+    private CommentDAO commentDao;
 
-	@Autowired
-	private ActivityDAO activityDao;
+    @Autowired
+    private ActivityDAO activityDao;
 
-	@Autowired
-	private WookiSecurityContext securityCtx;
+    @Autowired
+    private WookiSecurityContext securityCtx;
 
-	public Comment findById(Long commId) {
-		return commentDao.findById(commId);
-	}
+    public Comment findById(Long commId)
+    {
+        return commentDao.findById(commId);
+    }
 
-	public List<Comment> listForChapter(Long chapterId) {
-		Defense.notNull(chapterId, "chapterId");
-		return this.commentDao.listForChapter(chapterId);
-	}
+    public List<Comment> listForChapter(Long chapterId)
+    {
+        Defense.notNull(chapterId, "chapterId");
+        return this.commentDao.listForChapter(chapterId);
+    }
 
-	public List<Comment> listOpenForPublication(Long chapterId) {
-		return commentDao.listForPublication(chapterId);
-	}
+    public List<Comment> listOpenForPublication(Long chapterId)
+    {
+        return commentDao.listForPublication(chapterId);
+    }
 
-	public List<Object[]> listCommentInfos(Long publicationId) {
-		return commentDao.listCommentsInfoForPublication(publicationId);
-	}
+    public List<Object[]> listCommentInfos(Long publicationId)
+    {
+        return commentDao.listCommentsInfoForPublication(publicationId);
+    }
 
-	public List<Comment> listForPublicationAndDomId(Long publicationId, String domId) {
-		return commentDao.listForPublicationAndDomId(publicationId, domId);
-	}
+    public List<Comment> listForPublicationAndDomId(Long publicationId, String domId)
+    {
+        return commentDao.listForPublicationAndDomId(publicationId, domId);
+    }
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public void removeComment(Long commId) {
-		if (!securityCtx.isAuthorOfComment(commId)) {
-			throw new AuthorizationException("User is not authorized to remove this comment : " + commId);
-		}
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public void removeComment(Long commId)
+    {
+        if (!securityCtx.isAuthorOfComment(commId)) { throw new AuthorizationException(
+                "User is not authorized to remove this comment : " + commId); }
 
-		Comment c = this.commentDao.findById(commId);
-		Defense.notNull(c, "comment");
-		this.commentDao.delete(c);
-		CommentActivity ca = new CommentActivity();
-		ca.setCreationDate(Calendar.getInstance().getTime());
-		ca.setUser(this.securityCtx.getAuthor());
-		ca.setType(CommentEventType.DELETE);
-		ca.setComment(c);
-		this.activityDao.create(ca);
+        Comment c = this.commentDao.findById(commId);
+        Defense.notNull(c, "comment");
+        this.commentDao.delete(c);
+        CommentActivity ca = new CommentActivity();
+        ca.setCreationDate(Calendar.getInstance().getTime());
+        ca.setUser(this.securityCtx.getAuthor());
+        ca.setType(CommentEventType.DELETE);
+        ca.setComment(c);
+        this.activityDao.create(ca);
 
-		// Flag comment activity as unavailable
-		List<Activity> activities = this.activityDao.listAllActivitiesOnComment(c.getId());
-		if (activities != null) {
-			for (Activity ac : activities) {
-				ac.setResourceUnavailable(true);
-				this.activityDao.update(ac);
-			}
-		}
+        // Flag comment activity as unavailable
+        List<Activity> activities = this.activityDao.listAllActivitiesOnComment(c.getId());
+        if (activities != null)
+        {
+            for (Activity ac : activities)
+            {
+                ac.setResourceUnavailable(true);
+                this.activityDao.update(ac);
+            }
+        }
 
-	}
+    }
 
-	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-	public Comment update(Comment comment) {
-		Defense.notNull(comment, "comment");
-		return commentDao.update(comment);
-	}
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+    public Comment update(Comment comment)
+    {
+        Defense.notNull(comment, "comment");
+        return commentDao.update(comment);
+    }
 
-	public void setCommentDao(CommentDAO commentDao) {
-		this.commentDao = commentDao;
-	}
+    public void setCommentDao(CommentDAO commentDao)
+    {
+        this.commentDao = commentDao;
+    }
 
 }

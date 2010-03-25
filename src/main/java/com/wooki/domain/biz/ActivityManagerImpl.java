@@ -29,40 +29,48 @@ import com.wooki.domain.model.activity.Activity;
 
 @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 @Component("activityManager")
-public class ActivityManagerImpl implements ActivityManager {
+public class ActivityManagerImpl implements ActivityManager
+{
 
-	@Autowired
-	private ActivityDAO activityDao;
+    @Autowired
+    private ActivityDAO activityDao;
 
-	@Autowired
-	private UserDAO userDao;
+    @Autowired
+    private UserDAO userDao;
 
-	public List<Activity> listAllBookActivities(Long bookId) {
-		return this.activityDao.listAllActivitiesOnBook(bookId);
-	}
-	
-	public List<Activity> listAll(int startIdx, int nbElts) {
-		return this.activityDao.list(startIdx, nbElts);
-	}
+    public List<Activity> listAllBookActivities(Long bookId)
+    {
+        return this.activityDao.listAllActivitiesOnBook(bookId);
+    }
 
-	public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId) {
-		return this.activityDao.listActivityOnUserBooks(startIdx, nbElts, userId);
-	}
+    public List<Activity> listAll(int startIdx, int nbElts)
+    {
+        return this.activityDao.list(startIdx, nbElts);
+    }
 
-	public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId) {
-		return this.activityDao.listUserActivity(startIdx, nbElts, userId);
-	}
+    public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId)
+    {
+        return this.activityDao.listActivityOnUserBooks(startIdx, nbElts, userId);
+    }
 
-	public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId) {
-		return this.activityDao.listActivityOnBook(startIdx, nbElements, userId);
-	}
+    public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId)
+    {
+        return this.activityDao.listUserActivity(startIdx, nbElts, userId);
+    }
 
-	public List<Activity> listBookCreationActivity(int startIdx, int nbElements) {
-		return this.activityDao.listBookCreationActivity(startIdx, nbElements);
-	}
+    public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId)
+    {
+        return this.activityDao.listActivityOnBook(startIdx, nbElements, userId);
+    }
 
-	public List<Activity> listAccountActivity(int startIdx, int nbElements) {
-		return this.activityDao.listAccountActivity(startIdx, nbElements);
-	}
+    public List<Activity> listBookCreationActivity(int startIdx, int nbElements)
+    {
+        return this.activityDao.listBookCreationActivity(startIdx, nbElements);
+    }
+
+    public List<Activity> listAccountActivity(int startIdx, int nbElements)
+    {
+        return this.activityDao.listAccountActivity(startIdx, nbElements);
+    }
 
 }

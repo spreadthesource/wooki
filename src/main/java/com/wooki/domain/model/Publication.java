@@ -32,84 +32,99 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
- * This class is used to publish chapter when an author has decided to publish
- * its work after comment validation.
+ * This class is used to publish chapter when an author has decided to publish its work after
+ * comment validation.
  */
 @Entity
-public class Publication extends WookiEntity {
+public class Publication extends WookiEntity
+{
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_chapter", nullable = false)
-	private Chapter chapter;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_chapter", nullable = false)
+    private Chapter chapter;
 
-	@Lob
-	private String content;
+    @Lob
+    private String content;
 
-	private boolean published;
+    private boolean published;
 
-	/** The list of comment associated to the current publication */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
-	private List<Comment> comments;
+    /** The list of comment associated to the current publication */
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publication", fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
-	public Publication() {
-		
-	}
-	
-	public Publication(Long id, boolean published) {
-		this.id = id;
-		this.published = published;
-	}
-	
-	public Long getId() {
-		return id;
-	}
+    public Publication()
+    {
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    }
 
-	public Chapter getChapter() {
-		return chapter;
-	}
+    public Publication(Long id, boolean published)
+    {
+        this.id = id;
+        this.published = published;
+    }
 
-	public void setChapter(Chapter chapter) {
-		this.chapter = chapter;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public Chapter getChapter()
+    {
+        return chapter;
+    }
 
-	public void addComment(Comment com) {
-		if (this.comments == null) {
-			this.comments = new ArrayList<Comment>();
-		}
-		this.comments.add(com);
-	}
+    public void setChapter(Chapter chapter)
+    {
+        this.chapter = chapter;
+    }
 
-	public List<Comment> getComments() {
-		return comments;
-	}
+    public String getContent()
+    {
+        return content;
+    }
 
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+    public void setContent(String content)
+    {
+        this.content = content;
+    }
 
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
+    public void addComment(Comment com)
+    {
+        if (this.comments == null)
+        {
+            this.comments = new ArrayList<Comment>();
+        }
+        this.comments.add(com);
+    }
 
-	public boolean isPublished() {
-		return published;
-	}
+    public List<Comment> getComments()
+    {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments)
+    {
+        this.comments = comments;
+    }
+
+    public void setPublished(boolean published)
+    {
+        this.published = published;
+    }
+
+    public boolean isPublished()
+    {
+        return published;
+    }
 
 }

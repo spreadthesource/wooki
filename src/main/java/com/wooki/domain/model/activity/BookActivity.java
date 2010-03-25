@@ -26,34 +26,38 @@ import com.wooki.domain.model.Book;
 
 /**
  * Log activities on book.
- *
+ * 
  * @author ccordenier
- *
  */
 @Entity
 @PrimaryKeyJoinColumn(name = "BOOK_ACTIVITY_ID")
-public class BookActivity extends Activity {
+public class BookActivity extends Activity
+{
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_book", nullable = false)
-	private Book book;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_book", nullable = false)
+    private Book book;
 
-	private BookEventType type;
-	
-	public void setBook(Book book) {
-		this.book = book;
-	}
+    private BookEventType type;
 
-	public Book getBook() {
-		return book;
-	}
+    public void setBook(Book book)
+    {
+        this.book = book;
+    }
 
-	public void setType(BookEventType type) {
-		this.type = type;
-	}
+    public Book getBook()
+    {
+        return book;
+    }
 
-	public BookEventType getType() {
-		return type;
-	}
-	
+    public void setType(BookEventType type)
+    {
+        this.type = type;
+    }
+
+    public BookEventType getType()
+    {
+        return type;
+    }
+
 }

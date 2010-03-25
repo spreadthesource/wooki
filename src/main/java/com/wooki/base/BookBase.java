@@ -24,172 +24,193 @@ import com.wooki.services.utils.DateUtils;
  * Abstract index page to share common code.
  * 
  * @author ccordenier
- * 
  */
-public class BookBase {
+public class BookBase
+{
 
-	@Inject
-	private BookManager bookManager;
+    @Inject
+    private BookManager bookManager;
 
-	@Inject
-	@Path("context:/static/img/rss_15x15.png")
-	private Asset rssLogo;
+    @Inject
+    @Path("context:/static/img/rss_15x15.png")
+    private Asset rssLogo;
 
-	@InjectPage
-	private com.wooki.pages.book.Index bookIndex;
+    @InjectPage
+    private com.wooki.pages.book.Index bookIndex;
 
-	@Property
-	private SimpleDateFormat format = DateUtils.getDateFormat();
+    @Property
+    private SimpleDateFormat format = DateUtils.getDateFormat();
 
-	@Property
-	private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
+    @Property
+    private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
 
-	private Publication publication;
+    private Publication publication;
 
-	private Book book;
+    private Book book;
 
-	private Long bookId;
+    private Long bookId;
 
-	private String content;
+    private String content;
 
-	private Long publicationId;
+    private Long publicationId;
 
-	private boolean viewingRevision;
+    private boolean viewingRevision;
 
-	private String revision;
+    private String revision;
 
-	private boolean resourceNotFound;
+    private boolean resourceNotFound;
 
-	@OnEvent(value = EventConstants.ACTIVATE)
-	public Object setupBookBase(Long bookId) throws IOException {
-		this.bookId = bookId;
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupBookBase(Long bookId) throws IOException
+    {
+        this.bookId = bookId;
 
-		// Check resource exists
-		this.book = this.bookManager.findById(this.bookId);
+        // Check resource exists
+        this.book = this.bookManager.findById(this.bookId);
 
-		if (this.book == null) {
-			resourceNotFound = true;
-			return new HttpError(404, "Resource Not Found");
-		}
+        if (this.book == null)
+        {
+            resourceNotFound = true;
+            return new HttpError(404, "Resource Not Found");
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@SetupRender
-	public Object checkResource() {
-		if (this.resourceNotFound) {
-			return false;
-		}
-		return null;
-	}
+    @SetupRender
+    public Object checkResource()
+    {
+        if (this.resourceNotFound) { return false; }
+        return null;
+    }
 
-	/**
-	 * Return true if this is the last row.
-	 * 
-	 * @param idx
-	 * @param maxIdx
-	 * @return
-	 */
-	public boolean isLastIteration(int idx, int maxIdx) {
-		return idx == maxIdx - 1;
-	}
+    /**
+     * Return true if this is the last row.
+     * 
+     * @param idx
+     * @param maxIdx
+     * @return
+     */
+    public boolean isLastIteration(int idx, int maxIdx)
+    {
+        return idx == maxIdx - 1;
+    }
 
-	/**
-	 * Verify if this is the antepenultiem iteration.
-	 * 
-	 * @param idx
-	 * @param maxIdx
-	 * @return
-	 */
-	public boolean isAntepenultiemIteration(int idx, int maxIdx) {
-		return idx == maxIdx - 2;
-	}
+    /**
+     * Verify if this is the antepenultiem iteration.
+     * 
+     * @param idx
+     * @param maxIdx
+     * @return
+     */
+    public boolean isAntepenultiemIteration(int idx, int maxIdx)
+    {
+        return idx == maxIdx - 2;
+    }
 
-	/**
-	 * This method must be called to initialize the display of a chapter. It can
-	 * be the abstract for the index page or the content of a chapter.
-	 * 
-	 * @param revision
-	 *            TODO
-	 * 
-	 */
-	protected void setupContent() {
+    /**
+     * This method must be called to initialize the display of a chapter. It can be the abstract for
+     * the index page or the content of a chapter.
+     * 
+     * @param revision
+     *            TODO
+     */
+    protected void setupContent()
+    {
 
-		// Get the publication
-		if (publication != null) {
-			this.content = publication.getContent();
-			this.publicationId = publication.getId();
-		}
+        // Get the publication
+        if (publication != null)
+        {
+            this.content = publication.getContent();
+            this.publicationId = publication.getId();
+        }
 
-	}
+    }
 
-	protected final Object redirectToBookIndex() {
-		bookIndex.setBookId(this.bookId);
-		return bookIndex;
-	}
+    protected final Object redirectToBookIndex()
+    {
+        bookIndex.setBookId(this.bookId);
+        return bookIndex;
+    }
 
-	public Asset getRssLogo() {
-		return rssLogo;
-	}
+    public Asset getRssLogo()
+    {
+        return rssLogo;
+    }
 
-	public Long getBookId() {
-		return bookId;
-	}
+    public Long getBookId()
+    {
+        return bookId;
+    }
 
-	public void setBookId(Long bookId) {
-		this.bookId = bookId;
-	}
+    public void setBookId(Long bookId)
+    {
+        this.bookId = bookId;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getContent()
+    {
+        return content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setContent(String content)
+    {
+        this.content = content;
+    }
 
-	public Long getPublicationId() {
-		return publicationId;
-	}
+    public Long getPublicationId()
+    {
+        return publicationId;
+    }
 
-	public void setPublicationId(Long publicationId) {
-		this.publicationId = publicationId;
-	}
+    public void setPublicationId(Long publicationId)
+    {
+        this.publicationId = publicationId;
+    }
 
-	public boolean isViewingRevision() {
-		return viewingRevision;
-	}
+    public boolean isViewingRevision()
+    {
+        return viewingRevision;
+    }
 
-	public void setViewingRevision(boolean viewRevision) {
-		this.viewingRevision = viewRevision;
-	}
+    public void setViewingRevision(boolean viewRevision)
+    {
+        this.viewingRevision = viewRevision;
+    }
 
-	public String getRevision() {
-		return revision;
-	}
+    public String getRevision()
+    {
+        return revision;
+    }
 
-	public void setRevision(String revision) {
-		this.revision = revision;
-	}
+    public void setRevision(String revision)
+    {
+        this.revision = revision;
+    }
 
-	public Book getBook() {
-		return book;
-	}
+    public Book getBook()
+    {
+        return book;
+    }
 
-	public void setBook(Book book) {
-		this.book = book;
-	}
+    public void setBook(Book book)
+    {
+        this.book = book;
+    }
 
-	public boolean isLast() {
-		return ChapterManager.LAST.equals(this.getRevision());
-	}
+    public boolean isLast()
+    {
+        return ChapterManager.LAST.equals(this.getRevision());
+    }
 
-	public Publication getPublication() {
-		return publication;
-	}
+    public Publication getPublication()
+    {
+        return publication;
+    }
 
-	public void setPublication(Publication publication) {
-		this.publication = publication;
-	}
+    public void setPublication(Publication publication)
+    {
+        this.publication = publication;
+    }
 
 }

@@ -10,56 +10,64 @@ import org.apache.tapestry5.services.PageRenderRequestParameters;
  * This matcher matched all the public Tapestry URL resources.
  * 
  * @author ccordenier
- * 
  */
-public class TapestryPublicUrlPathMatcher extends AbstractTapestryUrlPathMatcher {
+public class TapestryPublicUrlPathMatcher extends AbstractTapestryUrlPathMatcher
+{
 
-	/**
-	 * List of public pages.
-	 */
-	private List<String> publicPages = new ArrayList<String>();
+    /**
+     * List of public pages.
+     */
+    private List<String> publicPages = new ArrayList<String>();
 
-	/**
-	 * All the public pages are
-	 * 
-	 * @param publicPages
-	 */
-	public TapestryPublicUrlPathMatcher(List<String> publicPages) {
-		if (publicPages != null) {
-			for (String pageName : publicPages) {
-				this.publicPages.add(pageName.toLowerCase());
-			}
-		}
-	}
+    /**
+     * All the public pages are
+     * 
+     * @param publicPages
+     */
+    public TapestryPublicUrlPathMatcher(List<String> publicPages)
+    {
+        if (publicPages != null)
+        {
+            for (String pageName : publicPages)
+            {
+                this.publicPages.add(pageName.toLowerCase());
+            }
+        }
+    }
 
-	/**
-	 * This method tries to find a declared public in tapestry.
-	 * 
-	 */
-	public boolean matches(String url) {
+    /**
+     * This method tries to find a declared public in tapestry.
+     */
+    public boolean matches(String url)
+    {
 
-		// Secure actions request
-		ComponentEventRequestParameters actionParams = this.decodeComponentEventRequest(url);
-		if (actionParams != null) {
-			String logicalPageName = actionParams.getActivePageName();
-			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		
-		// Secure Render request
-		PageRenderRequestParameters params = this.decodePageRenderRequest(url);
-		if (params != null) {
-			String logicalPageName = params.getLogicalPageName();
-			if (this.publicPages.contains(logicalPageName.toLowerCase()) || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) {
-				return true;
-			}
-		}
+        // Secure actions request
+        ComponentEventRequestParameters actionParams = this.decodeComponentEventRequest(url);
+        if (actionParams != null)
+        {
+            String logicalPageName = actionParams.getActivePageName();
+            if (this.publicPages.contains(logicalPageName.toLowerCase())
+                    || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev")))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-		return false;
+        // Secure Render request
+        PageRenderRequestParameters params = this.decodePageRenderRequest(url);
+        if (params != null)
+        {
+            String logicalPageName = params.getLogicalPageName();
+            if (this.publicPages.contains(logicalPageName.toLowerCase())
+                    || (!this.isProductionMode() && logicalPageName.toLowerCase().startsWith("dev"))) { return true; }
+        }
 
-	}
+        return false;
+
+    }
 
 }

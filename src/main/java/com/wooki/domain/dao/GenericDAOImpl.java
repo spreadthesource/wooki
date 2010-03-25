@@ -35,61 +35,74 @@ import com.wooki.domain.model.WookiEntity;
  * @param <T>
  * @param <PK>
  */
-public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements GenericDAO<T, PK> {
+public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements
+        GenericDAO<T, PK>
+{
 
-	@PersistenceContext
-	protected EntityManager entityManager;
+    @PersistenceContext
+    protected EntityManager entityManager;
 
-	private Class<T> entityType;
+    private Class<T> entityType;
 
-	public GenericDAOImpl() {
-		this.entityType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-	}
+    public GenericDAOImpl()
+    {
+        this.entityType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+                .getActualTypeArguments()[0];
+    }
 
-	public void create(T o) {
-		this.entityManager.persist(o);
-	}
+    public void create(T o)
+    {
+        this.entityManager.persist(o);
+    }
 
-	public T update(T o) {
-		final T result = this.entityManager.merge(o);
-		return result;
-	}
+    public T update(T o)
+    {
+        final T result = this.entityManager.merge(o);
+        return result;
+    }
 
-	public void delete(T o) {
-		o.setDeletionDate(new Date());
-		this.entityManager.merge(o);
-	}
+    public void delete(T o)
+    {
+        o.setDeletionDate(new Date());
+        this.entityManager.merge(o);
+    }
 
-	public T findById(PK id) {
-		if (id == null)
-			throw new IllegalArgumentException("Id for " + entityType.getCanonicalName() + " cannot be null.");
-		Query query = entityManager.createQuery("from " + this.getEntityType() + " e where e.deletionDate is null and e.id=:id");
-		query.setParameter("id", id);
-		List<T> results = (List<T>) query.getResultList();
-		if (results != null && results.size() == 1) {
-			return results.get(0);
-		}
-		return null;
-	}
+    public T findById(PK id)
+    {
+        if (id == null)
+            throw new IllegalArgumentException("Id for " + entityType.getCanonicalName()
+                    + " cannot be null.");
+        Query query = entityManager.createQuery("from " + this.getEntityType()
+                + " e where e.deletionDate is null and e.id=:id");
+        query.setParameter("id", id);
+        List<T> results = (List<T>) query.getResultList();
+        if (results != null && results.size() == 1) { return results.get(0); }
+        return null;
+    }
 
-	public List<T> listAll() {
-		Query query = this.entityManager.createQuery("from " + this.getEntityType());
-		List<T> resultList = (List<T>) query.getResultList();
-		return resultList;
-	}
+    public List<T> listAll()
+    {
+        Query query = this.entityManager.createQuery("from " + this.getEntityType());
+        List<T> resultList = (List<T>) query.getResultList();
+        return resultList;
+    }
 
-	public String getEntityType() {
-		return entityType.getName();
-	}
+    public String getEntityType()
+    {
+        return entityType.getName();
+    }
 
-	protected Session getSession() {
-		return (Session) entityManager.getDelegate();
-	}
+    protected Session getSession()
+    {
+        return (Session) entityManager.getDelegate();
+    }
 
-	protected void setMaxResults(Query query, int max) {
-		if (max > 0) {
-			query.setMaxResults(max);
-		}
-	}
+    protected void setMaxResults(Query query, int max)
+    {
+        if (max > 0)
+        {
+            query.setMaxResults(max);
+        }
+    }
 
 }

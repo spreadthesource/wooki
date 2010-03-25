@@ -24,69 +24,93 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wooki.domain.model.WookiEntity;
 
 @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-public class AclManagerImpl implements AclManager {
+public class AclManagerImpl implements AclManager
+{
 
-	private static Logger logger = LoggerFactory.getLogger(AclManager.class);
+    private static Logger logger = LoggerFactory.getLogger(AclManager.class);
 
-	@Autowired
-	@Qualifier("aclServices")
-	private MutableAclService mutableAclService;
+    @Autowired
+    @Qualifier("aclServices")
+    private MutableAclService mutableAclService;
 
-	public void addPermission(WookiEntity secureObject, Permission permission, Class<?> clazz) {
-		addPermission(secureObject, new PrincipalSid(getUsername()), permission, clazz);
-	}
+    public void addPermission(WookiEntity secureObject, Permission permission, Class<?> clazz)
+    {
+        addPermission(secureObject, new PrincipalSid(getUsername()), permission, clazz);
+    }
 
-	public void addPermission(WookiEntity securedObject, Sid recipient, Permission permission, Class<?> clazz) {
+    public void addPermission(WookiEntity securedObject, Sid recipient, Permission permission,
+            Class<?> clazz)
+    {
 
-		MutableAcl acl;
-		ObjectIdentity oid = new ObjectIdentityImpl(clazz.getCanonicalName(), securedObject.getId());
+        MutableAcl acl;
+        ObjectIdentity oid = new ObjectIdentityImpl(clazz.getCanonicalName(), securedObject.getId());
 
-		try {
-			acl = (MutableAcl) mutableAclService.readAclById(oid);
-		} catch (NotFoundException nfe) {
-			acl = mutableAclService.createAcl(oid);
-		}
+        try
+        {
+            acl = (MutableAcl) mutableAclService.readAclById(oid);
+        }
+        catch (NotFoundException nfe)
+        {
+            acl = mutableAclService.createAcl(oid);
+        }
 
-		acl.insertAce(acl.getEntries() != null ? acl.getEntries().size() : 0, permission, recipient, true);
-		mutableAclService.updateAcl(acl);
+        acl.insertAce(
+                acl.getEntries() != null ? acl.getEntries().size() : 0,
+                permission,
+                recipient,
+                true);
+        mutableAclService.updateAcl(acl);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Added permission " + permission + " for Sid " + recipient + " securedObject " + securedObject);
-		}
-	}
+        if (logger.isDebugEnabled())
+        {
+            logger.debug("Added permission " + permission + " for Sid " + recipient
+                    + " securedObject " + securedObject);
+        }
+    }
 
-	public void deletePermission(WookiEntity securedObject, Sid recipient, Permission permission, Class<?> clazz) {
-		ObjectIdentity oid = new ObjectIdentityImpl(clazz.getCanonicalName(), securedObject.getId());
-		MutableAcl acl = (MutableAcl) mutableAclService.readAclById(oid);
+    public void deletePermission(WookiEntity securedObject, Sid recipient, Permission permission,
+            Class<?> clazz)
+    {
+        ObjectIdentity oid = new ObjectIdentityImpl(clazz.getCanonicalName(), securedObject.getId());
+        MutableAcl acl = (MutableAcl) mutableAclService.readAclById(oid);
 
-		// Remove all permissions associated with this particular recipient
-		// (string equality used to keep things simple)
-		List<AccessControlEntry> entries = acl.getEntries();
+        // Remove all permissions associated with this particular recipient
+        // (string equality used to keep things simple)
+        List<AccessControlEntry> entries = acl.getEntries();
 
-		if (entries != null) {
-			for (int i = 0; i < entries.size(); i++) {
-				AccessControlEntry entry = entries.get(0);
-				if (entry.getSid().equals(recipient) && entry.getPermission().equals(permission)) {
-					acl.deleteAce(i);
-				}
-			}
-		}
+        if (entries != null)
+        {
+            for (int i = 0; i < entries.size(); i++)
+            {
+                AccessControlEntry entry = entries.get(0);
+                if (entry.getSid().equals(recipient) && entry.getPermission().equals(permission))
+                {
+                    acl.deleteAce(i);
+                }
+            }
+        }
 
-		mutableAclService.updateAcl(acl);
+        mutableAclService.updateAcl(acl);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Deleted securedObject " + securedObject + " ACL permissions for recipient " + recipient);
-		}
-	}
+        if (logger.isDebugEnabled())
+        {
+            logger.debug("Deleted securedObject " + securedObject
+                    + " ACL permissions for recipient " + recipient);
+        }
+    }
 
-	protected String getUsername() {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    protected String getUsername()
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-		if (auth.getPrincipal() instanceof UserDetails) {
-			return ((UserDetails) auth.getPrincipal()).getUsername();
-		} else {
-			return auth.getPrincipal().toString();
-		}
-	}
+        if (auth.getPrincipal() instanceof UserDetails)
+        {
+            return ((UserDetails) auth.getPrincipal()).getUsername();
+        }
+        else
+        {
+            return auth.getPrincipal().toString();
+        }
+    }
 
 }

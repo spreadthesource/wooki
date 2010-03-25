@@ -23,41 +23,46 @@ import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-@IncludeJavaScriptLibrary( { "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
+@IncludeJavaScriptLibrary(
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
 @IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
-public class FlashMessage {
+public class FlashMessage
+{
 
-	@Parameter
-	private String message;
+    @Parameter
+    private String message;
 
-	@Inject
-	private RenderSupport support;
+    @Inject
+    private RenderSupport support;
 
-	private String flashMessageId;
+    private String flashMessageId;
 
-	void beginRender(MarkupWriter writer) {
+    void beginRender(MarkupWriter writer)
+    {
 
-		flashMessageId = support.allocateClientId("flash-msg");
+        flashMessageId = support.allocateClientId("flash-msg");
 
-		writer.element("div", "style", "display:none;", "id", flashMessageId);
+        writer.element("div", "style", "display:none;", "id", flashMessageId);
 
-		writer.element("div", "class", "flash-list shadowed");
-		writer.element("ul", "class", "wrapper");
+        writer.element("div", "class", "flash-list shadowed");
+        writer.element("ul", "class", "wrapper");
 
-		writer.element("li");
-		writer.write(message);
-		writer.end(); // li
-		writer.end(); // ul
-		writer.end(); // div
-		writer.end(); // div
+        writer.element("li");
+        writer.write(message);
+        writer.end(); // li
+        writer.end(); // ul
+        writer.end(); // div
+        writer.end(); // div
 
-	}
+    }
 
-	// Add javascript
-	void afterRender() {
-		if (flashMessageId != null) {
-			support.addInit("initFlashMsgBox", this.flashMessageId);
-		}
-	}
+    // Add javascript
+    void afterRender()
+    {
+        if (flashMessageId != null)
+        {
+            support.addInit("initFlashMsgBox", this.flashMessageId);
+        }
+    }
 
 }

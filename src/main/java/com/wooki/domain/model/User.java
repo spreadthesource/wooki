@@ -39,114 +39,135 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Wooki basic user. Can post comment, write book etc.
  */
 @Entity
-public class User extends WookiEntity implements UserDetails {
+public class User extends WookiEntity implements UserDetails
+{
 
-	private static final long serialVersionUID = 4060967693790504175L;
+    private static final long serialVersionUID = 4060967693790504175L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false, name = "id_user")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name = "id_user")
+    private Long id;
 
-	@Column(nullable = false, unique = true)
-	private String username;
+    @Column(nullable = false, unique = true)
+    private String username;
 
-	@Column(nullable = false)
-	private String fullname;
+    @Column(nullable = false)
+    private String fullname;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
-	private List<Book> books;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
+    private List<Book> books;
 
-	@Column(nullable = false)
-	private String email;
+    @Column(nullable = false)
+    private String email;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(name = "UserAuthority")
     private List<Authority> authorities = new LinkedList<Authority>();
 
-	private String password;
+    private String password;
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId()
+    {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail()
+    {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getUsername()
+    {
+        return username;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+    public void setFullname(String fullname)
+    {
+        this.fullname = fullname;
+    }
 
-	public String getFullname() {
-		return fullname;
-	}
+    public String getFullname()
+    {
+        return fullname;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword()
+    {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
 
-	public List<Book> getBooks() {
-		return books;
-	}
+    public List<Book> getBooks()
+    {
+        return books;
+    }
 
-	public void setBooks(List<Book> books) {
-		this.books = books;
-	}
+    public void setBooks(List<Book> books)
+    {
+        this.books = books;
+    }
 
-	public List<GrantedAuthority> getAuthorities() {
-		if (this.authorities != null) {
-			ArrayList<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
-			for (Authority auth : this.authorities) {
-				result.add(new GrantedAuthorityImpl(auth.getAuthority()));
-			}
-			return result;
-		}
-		return null;
-	}
+    public List<GrantedAuthority> getAuthorities()
+    {
+        if (this.authorities != null)
+        {
+            ArrayList<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
+            for (Authority auth : this.authorities)
+            {
+                result.add(new GrantedAuthorityImpl(auth.getAuthority()));
+            }
+            return result;
+        }
+        return null;
+    }
 
-	public void setGrantedAuthorities(List<Authority> grantedAuthorities) {
-		this.authorities = grantedAuthorities;
-	}
+    public void setGrantedAuthorities(List<Authority> grantedAuthorities)
+    {
+        this.authorities = grantedAuthorities;
+    }
 
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public boolean isAccountNonExpired()
+    {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public boolean isAccountNonLocked()
+    {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public boolean isCredentialsNonExpired()
+    {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
+    public boolean isEnabled()
+    {
+        // TODO Auto-generated method stub
+        return true;
+    }
 
 }

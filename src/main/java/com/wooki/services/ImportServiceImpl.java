@@ -41,109 +41,141 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Book;
 import com.wooki.services.parsers.Convertor;
 
-public class ImportServiceImpl implements ImportService {
+public class ImportServiceImpl implements ImportService
+{
 
-	private BookManager bookManager;
+    private BookManager bookManager;
 
-	private ChapterManager chapterManager;
+    private ChapterManager chapterManager;
 
-	private Convertor toHTMLConvertor;
-	private Convertor fromAptToDocbook;
+    private Convertor toHTMLConvertor;
 
-	private Logger logger = Logger.getLogger(ImportServiceImpl.class);
+    private Convertor fromAptToDocbook;
 
-	public Book importDocbook(Resource docbook) {
-		/** Generate HTML */
-		InputStream xhtml = toHTMLConvertor.performTransformation(docbook);
-		return importDocbook(xhtml);
-	}
+    private Logger logger = Logger.getLogger(ImportServiceImpl.class);
 
-	public Book importApt(Resource apt) {
-		try {
-			String from = "apt";
-			File out = File.createTempFile("fromAptToXHTML", ".html");
-			String to = "html";
+    public Book importDocbook(Resource docbook)
+    {
+        /** Generate HTML */
+        InputStream xhtml = toHTMLConvertor.performTransformation(docbook);
+        return importDocbook(xhtml);
+    }
 
-			Converter converter = new DefaultConverter();
+    public Book importApt(Resource apt)
+    {
+        try
+        {
+            String from = "apt";
+            File out = File.createTempFile("fromAptToXHTML", ".html");
+            String to = "html";
 
-			InputFileWrapper input = InputFileWrapper.valueOf(
-					apt.getFilename(), from, "ISO-8859-1", converter
-							.getInputFormats());
-			OutputFileWrapper output = OutputFileWrapper.valueOf(out
-					.getAbsolutePath(), to, "UTF-8", converter
-					.getOutputFormats());
+            Converter converter = new DefaultConverter();
 
-			converter.convert(input, output);
-			return importDocbook(fromAptToDocbook.performTransformation(new FileSystemResource(out)));
-		} catch (UnsupportedFormatException e) {
-			e.printStackTrace();
-		} catch (ConverterException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return null;
-	}
+            InputFileWrapper input = InputFileWrapper.valueOf(
+                    apt.getFilename(),
+                    from,
+                    "ISO-8859-1",
+                    converter.getInputFormats());
+            OutputFileWrapper output = OutputFileWrapper.valueOf(
+                    out.getAbsolutePath(),
+                    to,
+                    "UTF-8",
+                    converter.getOutputFormats());
 
-	public Book importDocbook(InputStream generatedXhtml) {
-		HTMLParser handler = new HTMLParser();
-		SAXParserFactory factory = SAXParserFactory.newInstance();
+            converter.convert(input, output);
+            return importDocbook(fromAptToDocbook
+                    .performTransformation(new FileSystemResource(out)));
+        }
+        catch (UnsupportedFormatException e)
+        {
+            e.printStackTrace();
+        }
+        catch (ConverterException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        return null;
+    }
 
-		// création d'un parseur SAX
-		SAXParser parser;
+    public Book importDocbook(InputStream generatedXhtml)
+    {
+        HTMLParser handler = new HTMLParser();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
 
-		try {
-			parser = factory.newSAXParser();
-			parser.parse(new InputSource(generatedXhtml), handler);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
-			return null;
-		} catch (SAXException e) {
-			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
-			return null;
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
-			return null;
-		}
+        // création d'un parseur SAX
+        SAXParser parser;
 
-		Book book = handler.getBook();
-		Book toReturn = getBookManager().create(book.getTitle());
-		return toReturn;
-	}
+        try
+        {
+            parser = factory.newSAXParser();
+            parser.parse(new InputSource(generatedXhtml), handler);
+        }
+        catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
+            return null;
+        }
+        catch (SAXException e)
+        {
+            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
+            return null;
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            logger.error(e.getLocalizedMessage());
+            return null;
+        }
 
-	public BookManager getBookManager() {
-		return bookManager;
-	}
+        Book book = handler.getBook();
+        Book toReturn = getBookManager().create(book.getTitle());
+        return toReturn;
+    }
 
-	public void setBookManager(BookManager bookManager) {
-		this.bookManager = bookManager;
-	}
+    public BookManager getBookManager()
+    {
+        return bookManager;
+    }
 
-	public ChapterManager getChapterManager() {
-		return chapterManager;
-	}
+    public void setBookManager(BookManager bookManager)
+    {
+        this.bookManager = bookManager;
+    }
 
-	public void setChapterManager(ChapterManager chapterManager) {
-		this.chapterManager = chapterManager;
-	}
+    public ChapterManager getChapterManager()
+    {
+        return chapterManager;
+    }
 
-	public Convertor getToHTMLConvertor() {
-		return toHTMLConvertor;
-	}
+    public void setChapterManager(ChapterManager chapterManager)
+    {
+        this.chapterManager = chapterManager;
+    }
 
-	public void setToHTMLConvertor(Convertor toHTMLConvertor) {
-		this.toHTMLConvertor = toHTMLConvertor;
-	}
+    public Convertor getToHTMLConvertor()
+    {
+        return toHTMLConvertor;
+    }
 
-	public Convertor getFromAptToDocbook() {
-		return fromAptToDocbook;
-	}
+    public void setToHTMLConvertor(Convertor toHTMLConvertor)
+    {
+        this.toHTMLConvertor = toHTMLConvertor;
+    }
 
-	public void setFromAptToDocbook(Convertor fromAptToDocbook) {
-		this.fromAptToDocbook = fromAptToDocbook;
-	}
+    public Convertor getFromAptToDocbook()
+    {
+        return fromAptToDocbook;
+    }
+
+    public void setFromAptToDocbook(Convertor fromAptToDocbook)
+    {
+        this.fromAptToDocbook = fromAptToDocbook;
+    }
 }

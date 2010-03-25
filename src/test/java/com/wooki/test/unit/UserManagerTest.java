@@ -31,65 +31,69 @@ import com.wooki.domain.model.User;
  * Verify authoring management.
  * 
  * @author ccordenier
- * 
  */
-@ContextConfiguration(locations = { "/applicationContext.xml" })
-public class UserManagerTest extends AbstractTestNGSpringContextTests {
+@ContextConfiguration(locations =
+{ "/applicationContext.xml" })
+public class UserManagerTest extends AbstractTestNGSpringContextTests
+{
 
-	@Autowired
-	private UserManager userManager;
+    @Autowired
+    private UserManager userManager;
 
-	@BeforeClass
-	public void initDb() throws UserAlreadyException {
+    @BeforeClass
+    public void initDb() throws UserAlreadyException
+    {
 
-		// Add author to the book
-		User john = new User();
-		john.setEmail("john.doe@gmail.com");
-		john.setUsername("johndoe");
-		john.setFullname("John Doe");
-		john.setPassword("password");
-		userManager.addUser(john);
+        // Add author to the book
+        User john = new User();
+        john.setEmail("john.doe@gmail.com");
+        john.setUsername("johndoe");
+        john.setFullname("John Doe");
+        john.setPassword("password");
+        userManager.addUser(john);
 
-	}
+    }
 
-	/**
-	 * Verify that we cannot create a user that already exists.
-	 * 
-	 */
-	@Test
-	public void checkUserExists() {
-		User user = userManager.findByUsername("JohNDOE");
-		Assert.assertNotNull(user, "John doe exist.");
-	}
+    /**
+     * Verify that we cannot create a user that already exists.
+     */
+    @Test
+    public void checkUserExists()
+    {
+        User user = userManager.findByUsername("JohNDOE");
+        Assert.assertNotNull(user, "John doe exist.");
+    }
 
-	/**
-	 * Verifies that an exception is thrown when adding an author that already
-	 * exists.
-	 * 
-	 */
-	@Test
-	public void verifyAuthorAlreadyExists() {
-		User john = new User();
-		john.setEmail("john.doe@hotmail.com");
-		john.setUsername("johndoe");
-		john.setFullname("John Doe");
-		john.setPassword("passpass");
-		try {
-			userManager.addUser(john);
-			Assert.fail("User john already exists, call add must raise an exception.");
-		} catch (UserAlreadyException uaEx) {
-			uaEx.printStackTrace();
-		}
-	}
+    /**
+     * Verifies that an exception is thrown when adding an author that already exists.
+     */
+    @Test
+    public void verifyAuthorAlreadyExists()
+    {
+        User john = new User();
+        john.setEmail("john.doe@hotmail.com");
+        john.setUsername("johndoe");
+        john.setFullname("John Doe");
+        john.setPassword("passpass");
+        try
+        {
+            userManager.addUser(john);
+            Assert.fail("User john already exists, call add must raise an exception.");
+        }
+        catch (UserAlreadyException uaEx)
+        {
+            uaEx.printStackTrace();
+        }
+    }
 
-	/**
-	 * Verify that findByUsername is case insensitive.
-	 * 
-	 */
-	@Test
-	public void checkFindByUserName() {
-		User user = userManager.findByUsername("JoHnDoe");
-		Assert.assertNotNull(user);
-	}
+    /**
+     * Verify that findByUsername is case insensitive.
+     */
+    @Test
+    public void checkFindByUserName()
+    {
+        User user = userManager.findByUsername("JoHnDoe");
+        Assert.assertNotNull(user);
+    }
 
 }

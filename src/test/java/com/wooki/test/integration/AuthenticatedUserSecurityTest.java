@@ -4,6 +4,8 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
+import com.thoughtworks.selenium.SeleniumException;
+
 /**
  * This test class is design to check that URL are secured by Wooki security configuration in the
  * case an authenticated user access to unauthorized resources.
@@ -39,7 +41,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     public void testIndex()
     {
 
-        open("/userNotExist");
+        open("/userNotExist", "true");
         waitForPageToLoad();
         checkNotFound();
 
@@ -55,7 +57,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         waitForPageToLoad();
         checkProfile("ccordenier");
 
-        open("/1/2");
+        open("/1/2", "true");
         waitForPageToLoad();
         checkNotFound();
 
@@ -73,12 +75,12 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         checkDashboard("author");
 
         // Try to delete a book that exist but that john does not own
-        open("/dashboard:removebook/1");
+        open("/dashboard:removebook/1", "true");
         waitForPageToLoad();
         checkAccessDenied();
 
         // Not allowad context
-        open("/dashboard/1");
+        open("/dashboard/1", "true");
         waitForPageToLoad();
         checkNotFound();
     }
@@ -95,9 +97,16 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         checkAccountSettings("author");
 
         // Bad URL
-        open("/accountSettings/1");
-        waitForPageToLoad();
-        checkNotFound();
+        try
+        {
+            open("/accountSettings/1");
+            waitForPageToLoad();
+        }
+        catch (SeleniumException se)
+        {
+            assertTrue(se.getMessage().contains("404"));
+        }
+
     }
 
     /**
@@ -107,7 +116,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     { "signup" })
     public void testComment()
     {
-        open("/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1");
+        open("/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1", "true");
         checkAccessDenied();
     }
 
@@ -129,7 +138,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
                 "Admin button should not be present for this book");
 
         // User is not owner so he has not access to the last copy
-        open("/book/1/last");
+        open("/book/1/last", "true");
         waitForPageToLoad();
         checkAccessDenied();
     }

@@ -40,6 +40,20 @@
 			<artifactId>tapestry-spring</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
+		
+		<!-- Spread the source -->
+		<dependency>
+			<groupId>com.spreadthesource</groupId>
+			<artifactId>tapestry5-googleanalytics</artifactId>
+			<version>1.4-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.spreadthesource</groupId>
+			<artifactId>tapestry5-rome</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -276,10 +290,11 @@
 			<version>2.0.8</version>
 		</dependency>
 
+
 		<dependency>
-			<groupId>rome</groupId>
-			<artifactId>rome</artifactId>
-			<version>1.0</version>
+			<groupId>com.carbonfive.db-support</groupId>
+			<artifactId>db-migration-maven-plugin</artifactId>
+			<version>0.9.9-m3</version>
 		</dependency>
 
 	</dependencies>
@@ -396,7 +411,7 @@
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
 			</plugin>
-			
+
 			<!-- c5-db-migration : http://code.google.com/p/c5-db-migration -->
 			<plugin>
 				<groupId>com.carbonfive.db-support</groupId>
@@ -471,10 +486,28 @@
 
 		<repository>
 			<id>apache-snapshots</id>
-			<url>https://repository.apache.org/content/groups/snapshots-group/</url>
+			<url>https://repository.apache.org/content/groups/snapshots-group</url>
 			<releases>
 				<enabled>false</enabled>
 				<checksumPolicy>ignore</checksumPolicy>
+			</releases>
+		</repository>
+		
+		<repository>
+			<id>devlab722-repo</id>
+			<url>http://nexus.devlab722.net/nexus/content/repositories/releases
+			</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
+		<repository>
+			<id>devlab722-snapshot-repo</id>
+			<url>http://nexus.devlab722.net/nexus/content/repositories/snapshots
+			</url>
+			<releases>
+				<enabled>false</enabled>
 			</releases>
 		</repository>
 
@@ -518,6 +551,18 @@
 		<pluginRepository>
 			<id>c5-public-repository</id>
 			<url>http://mvn.carbonfive.com/public</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<id>mc-release</id>
+			<name>Local Maven repository of releases</name>
+			<url>http://mc-repo.googlecode.com/svn/maven2/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</pluginRepository>
 	</pluginRepositories>
 

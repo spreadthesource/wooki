@@ -68,7 +68,6 @@ import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.sun.syndication.feed.atom.Feed;
 import com.wooki.ActivityType;
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
@@ -187,7 +186,6 @@ public class WookiModule<T>
             MappedConfiguration<Class, ComponentEventResultProcessor> configuration)
     {
         configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
-        configuration.addInstance(Feed.class, FeedResultProcessor.class);
     }
 
     /**
@@ -281,15 +279,6 @@ public class WookiModule<T>
             final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
             final RequestPageCache pageCache)
     {
-
-        if (productionMode)
-        {
-            configuration.addInstance(
-                    "GAnalyticsScript",
-                    GAnalyticsScriptsInjector.class,
-                    "after:RenderSupport");
-        }
-
         // Add general links support
         configuration.add("MenuSupport", new MarkupRendererFilter()
         {

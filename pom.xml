@@ -297,6 +297,7 @@
 				<directory>${basedir}/src/main/resources</directory>
 				<includes>
 					<include>**/*.properties</include>
+					<include>**/hibernate.cfg.xml</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>

@@ -18,6 +18,8 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
@@ -36,8 +38,9 @@ public interface ChapterManager
      * @param chapter
      * @param content
      * @param domId
-     *            TODO
      */
+    
+    @CommitAfter
     Comment addComment(Long publicationId, String content, String domId);
 
     /**
@@ -76,10 +79,8 @@ public interface ChapterManager
 
     /**
      * Retrieve the content for a given chapter. Content is lazy loaded for the sake of performance.
-     * TODO:
      * 
      * @param revision
-     *            TODO
      * @param chapter
      * @return
      */
@@ -94,14 +95,14 @@ public interface ChapterManager
     boolean isPublished(Long revision);
 
     /**
-     * Publish chapter content TODO:
+     * Publish chapter content
      * 
      * @param chapterId
      */
     void publishChapter(Long chapter);
 
     /**
-     * Find the last published chapter content. TODO:
+     * Find the last published chapter content.
      * 
      * @param chapterId
      * @return

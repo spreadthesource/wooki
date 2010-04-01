@@ -40,20 +40,10 @@
 		</property>
 	</bean>
 
-	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl">
-		<property name="bookDAO" ref="bookDao" />
-		<property name="commentDao" ref="commentDao" />
-		<property name="userDao" ref="userDao" />
-		<property name="chapterDao" ref="chapterDao" />
+	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextMock">
+		
 	</bean>
 
-	<bean id="userManager" class="com.wooki.domain.biz.UserManagerImpl">
-		<property name="activityDao" ref="activityDao" />
-		<property name="authorDao" ref="userDao" />
-		<property name="securityCtx" ref="wookiSecurityContext" />
-		<property name="saltSource" ref="wookiSaltSource" />
-		<property name="passwordEncoder" ref="wookiPasswordEncoder" />
-	</bean>
 
 	<!-- Match tapestry public page -->
 	<bean id="tapestryPublicPageMatcher"
@@ -86,7 +76,7 @@
 		<property name="requiresLowerCaseUrl" value="true" />
 	</bean>
 
-	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+	<!-- bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
 		<property name="matcher" ref="delegatingUrlMatcher" />
 		<property name="stripQueryStringFromUrls" value="false" />
 		<property name="filterChainMap">
@@ -119,14 +109,12 @@
 					</list>
 				</entry>
 
-				<!-- Public tapestry pages -->
 				<entry key="tapestry-public-page">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
 					</list>
 				</entry>
 
-				<!-- All other resources must be a public Tapestry pages -->
 				<entry key="/.*">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
@@ -137,7 +125,7 @@
 				</entry>
 			</map>
 		</property>
-	</bean>
+	</bean-->
 
 	<bean id="wookiPasswordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
@@ -148,7 +136,7 @@
 	</bean>
 
 	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
-		<constructor-arg ref="userManager" />
+		<!-- constructor-arg ref="userManager" / -->
 		<constructor-arg ref="roleHierarchy" />
 	</bean>
 

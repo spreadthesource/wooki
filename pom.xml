@@ -16,11 +16,11 @@
 			<version>${tapestry-release-version}</version>
 		</dependency>
 
-		<!--
-			dependency> <groupId>org.apache.tapestry</groupId>
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
 			<artifactId>tapestry-hibernate</artifactId>
-			<version>${tapestry-release-version}</version> </dependency
-		-->
+			<version>${tapestry-release-version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>
@@ -40,20 +40,20 @@
 			<artifactId>tapestry-spring</artifactId>
 			<version>${tapestry-release-version}</version>
 		</dependency>
-		
+
 		<!-- Spread the source -->
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-googleanalytics</artifactId>
 			<version>1.4-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-rome</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -83,12 +83,6 @@
 			<version>1.8.0.10</version>
 		</dependency>
 
-		<!-- Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate-entitymanager-version}</version>
-		</dependency>
 
 		<!-- Spring -->
 		<!-- Spring Framework -->
@@ -118,19 +112,13 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
+			<artifactId>spring-orm</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
 
@@ -413,7 +401,7 @@
 			</plugin>
 
 			<!-- c5-db-migration : http://code.google.com/p/c5-db-migration -->
-			<plugin>
+			<!-- plugin>
 				<groupId>com.carbonfive.db-support</groupId>
 				<artifactId>db-migration-maven-plugin</artifactId>
 				<version>0.9.9-m3</version>
@@ -429,7 +417,7 @@
 						<version>1.8.0.10</version>
 					</dependency>
 				</dependencies>
-			</plugin>
+			</plugin -->
 		</plugins>
 	</build>
 
@@ -492,7 +480,7 @@
 				<checksumPolicy>ignore</checksumPolicy>
 			</releases>
 		</repository>
-		
+
 		<repository>
 			<id>devlab722-repo</id>
 			<url>http://nexus.devlab722.net/nexus/content/repositories/releases

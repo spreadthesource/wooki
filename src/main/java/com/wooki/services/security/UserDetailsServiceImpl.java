@@ -38,9 +38,9 @@ public class UserDetailsServiceImpl implements UserDetailsService
 
     private final RoleHierarchy roleHierarchy;
 
-    public UserDetailsServiceImpl(UserManager userManager, RoleHierarchy roleHierarchy)
+    public UserDetailsServiceImpl( RoleHierarchy roleHierarchy)
     {
-        this.userManager = userManager;
+        this.userManager = null;
         this.roleHierarchy = roleHierarchy;
     }
 

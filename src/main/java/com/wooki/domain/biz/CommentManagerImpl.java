@@ -19,10 +19,7 @@ package com.wooki.domain.biz;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
@@ -34,19 +31,22 @@ import com.wooki.domain.model.activity.CommentActivity;
 import com.wooki.domain.model.activity.CommentEventType;
 import com.wooki.services.security.WookiSecurityContext;
 
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Component("commentManager")
 public class CommentManagerImpl implements CommentManager
 {
+    private final CommentDAO commentDao;
 
-    @Autowired
-    private CommentDAO commentDao;
+    private final ActivityDAO activityDao;
 
-    @Autowired
-    private ActivityDAO activityDao;
-
-    @Autowired
     private WookiSecurityContext securityCtx;
+
+    public CommentManagerImpl(CommentDAO commentDao, ActivityDAO activityDAO,
+            ApplicationContext context)
+    {
+        this.commentDao = commentDao;
+        this.activityDao = activityDAO;
+        
+        this.securityCtx = context.getBean(WookiSecurityContext.class);
+    }
 
     public Comment findById(Long commId)
     {
@@ -74,7 +74,6 @@ public class CommentManagerImpl implements CommentManager
         return commentDao.listForPublicationAndDomId(publicationId, domId);
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public void removeComment(Long commId)
     {
         if (!securityCtx.isAuthorOfComment(commId)) { throw new AuthorizationException(
@@ -103,16 +102,10 @@ public class CommentManagerImpl implements CommentManager
 
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public Comment update(Comment comment)
     {
         Defense.notNull(comment, "comment");
         return commentDao.update(comment);
-    }
-
-    public void setCommentDao(CommentDAO commentDao)
-    {
-        this.commentDao = commentDao;
     }
 
 }

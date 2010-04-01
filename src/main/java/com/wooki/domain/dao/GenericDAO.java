@@ -19,20 +19,18 @@ package com.wooki.domain.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+import org.hibernate.Criteria;
+
 /**
  * Generic DAO will be the base for all concrete DAO implementation. It will provide generic data
  * access method.
  * 
- * @author ccordenier
  * @param <T>
  * @param <PK>
  */
 public interface GenericDAO<T, PK extends Serializable>
 {
-
-    /** Persist the newInstance object into database */
-    void create(T newInstance);
-
     /**
      * Retrieve an object that was previously persisted to the database using the indicated id as
      * primary key
@@ -40,15 +38,42 @@ public interface GenericDAO<T, PK extends Serializable>
     T findById(PK id);
 
     /**
+     *  Persist the newInstance object into database 
+     */
+
+    T create(T newInstance);
+
+    /**
      * Save changes made to a persistent object.
      * 
-     * @return TODO
+     * @return Updated object
      */
     T update(T transientObject);
 
-    /** Remove an object from persistent storage in the database */
+    /**
+     * Remove an object from persistent storage in the database
+     */
     void delete(T persistentObject);
 
-    /** List all the persistent entities of type T */
-    List<T> listAll();
+    /**
+     * Create a new <tt>Criteria</tt> instance, for the current entity class, or a superclass of an
+     * entity class.
+     * 
+     * @return Criteria
+     */
+    public Criteria createCriteria();
+
+    /**
+     * Create a new <tt>Criteria</tt> instance, for the current entity class, or a superclass of an
+     * entity class, with the given alias.
+     * 
+     * @param String alias
+     * @return Criteria
+     */
+    public Criteria createCriteria(String alias);
+    
+    /**
+     * List all the persistent entities of type T
+     */
+    List<T> list();
 }

@@ -24,6 +24,7 @@ import org.springframework.context.ApplicationContext;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
@@ -36,19 +37,15 @@ public class StartupServiceImpl implements StartupService
 {
 
     public StartupServiceImpl(ApplicationContext applicationContext,
-            @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode)
+            @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
+            BookManager bookManager, ChapterManager chapterManager, UserManager userManager, UserDAO userDao)
             throws UserAlreadyException, AuthorizationException
     {
-
         // enabled headless mode
         System.setProperty("java.awt.headless", "true");
 
         WookiSecurityContext securityCtx = (WookiSecurityContext) applicationContext
                 .getBean("wookiSecurityContext");
-        BookManager bookManager = (BookManager) applicationContext.getBean("bookManager");
-        ChapterManager chapterManager = (ChapterManager) applicationContext
-                .getBean("chapterManager");
-        UserManager userManager = (UserManager) applicationContext.getBean("userManager");
 
         // Bypass creation if already done
         if (userManager.findByUsername("ccordenier") != null) { return; }
@@ -73,6 +70,8 @@ public class StartupServiceImpl implements StartupService
         robink.setPassword("password");
         robink.setFullname("Robin K.");
         userManager.addUser(robink);
+
+        
 
         securityCtx.log(robink);
 

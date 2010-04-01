@@ -22,8 +22,6 @@ import com.wooki.domain.model.activity.Activity;
 
 /**
  * Use to handle activities on wikies element to follow history.
- * 
- * @author ccordenier
  */
 public interface ActivityManager
 {
@@ -40,7 +38,6 @@ public interface ActivityManager
      * List the book creation activity.
      * 
      * @param startIdx
-     *            TODO
      * @return
      */
     List<Activity> listBookCreationActivity(int startIdx, int nbElements);
@@ -49,7 +46,6 @@ public interface ActivityManager
      * List the activity of a user on its own books.
      * 
      * @param startIdx
-     *            TODO
      * @param userId
      * @param nbElementsn
      * @return
@@ -60,7 +56,6 @@ public interface ActivityManager
      * List the account activity on wooki.
      * 
      * @param startIdx
-     *            TODO
      * @param nbElements
      * @param userId
      * @return

@@ -18,25 +18,17 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wooki.domain.dao.ActivityDAO;
-import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.model.activity.Activity;
 
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Component("activityManager")
 public class ActivityManagerImpl implements ActivityManager
 {
+    private final ActivityDAO activityDao;
 
-    @Autowired
-    private ActivityDAO activityDao;
-
-    @Autowired
-    private UserDAO userDao;
+    public ActivityManagerImpl(ActivityDAO activityDAO)
+    {
+        this.activityDao = activityDAO;
+    }
 
     public List<Activity> listAllBookActivities(Long bookId)
     {

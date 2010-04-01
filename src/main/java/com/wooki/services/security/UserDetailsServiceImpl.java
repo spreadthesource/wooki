@@ -17,8 +17,6 @@
 package com.wooki.services.security;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
-import org.springframework.security.access.hierarchicalroles.UserDetailsWrapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,19 +34,16 @@ public class UserDetailsServiceImpl implements UserDetailsService
 
     private final UserManager userManager;
 
-    private final RoleHierarchy roleHierarchy;
-
-    public UserDetailsServiceImpl(UserManager userManager, RoleHierarchy roleHierarchy)
+    public UserDetailsServiceImpl(UserManager userManager)
     {
         this.userManager = userManager;
-        this.roleHierarchy = roleHierarchy;
     }
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,
             DataAccessException
     {
         User user = userManager.findByUsername(username);
-        return new UserDetailsWrapper(user, roleHierarchy);
+        return user;
     }
 
 }

@@ -61,8 +61,7 @@
 				<ref local="readPermission" />
 			</list>
 		</constructor-arg>
-		<property name="processDomainObjectClass"
-			value="com.wooki.domain.model.WookiEntity" />
+		<property name="processDomainObjectClass" value="com.wooki.domain.model.WookiEntity" />
 	</bean>
 
 	<!--
@@ -78,8 +77,7 @@
 				<ref local="writePermission" />
 			</list>
 		</constructor-arg>
-		<property name="processDomainObjectClass"
-			value="com.wooki.domain.model.WookiEntity" />
+		<property name="processDomainObjectClass" value="com.wooki.domain.model.WookiEntity" />
 	</bean>
 
 	<!--
@@ -95,8 +93,7 @@
 				<ref local="deletePermission" />
 			</list>
 		</constructor-arg>
-		<property name="processDomainObjectClass"
-			value="com.wooki.domain.model.WookiEntity" />
+		<property name="processDomainObjectClass" value="com.wooki.domain.model.WookiEntity" />
 	</bean>
 
 	<!--
@@ -111,8 +108,7 @@
 				<ref local="administrationPermission" />
 			</list>
 		</constructor-arg>
-		<property name="processDomainObjectClass"
-			value="com.wooki.domain.model.WookiEntity" />
+		<property name="processDomainObjectClass" value="com.wooki.domain.model.WookiEntity" />
 	</bean>
 
 	<bean id="aclService"
@@ -132,6 +128,67 @@
 		</constructor-arg>
 	</bean>
 
+	<bean id="aclManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<qualifier value="aclManager" />
+		<property name="proxyInterfaces" value="com.wooki.domain.biz.AclManager" />
+		<property name="interceptorNames">
+			<list>
+				<idref local="transactionInterceptor" />
+				<idref local="aclSecurityUtilTarget" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="aclSecurityUtilTarget" class="com.wooki.domain.biz.AclManagerImpl">
+		<property name="mutableAclService" ref="aclService" />
+	</bean>
+
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="jdbcTransactionManager" />
+		<property name="transactionAttributeSource">
+			<value>
+				com.wooki.domain.biz.AclManagerImpl.deletePermission=PROPAGATION_REQUIRED
+				com.wooki.domain.biz.AclManagerImpl.addPermission=PROPAGATION_REQUIRED
+			</value>
+		</property>
+	</bean>
+
+	<bean id="jdbcTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+	<bean id="businessAccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<property name="allowIfAllAbstainDecisions" value="true" />
+		<property name="decisionVoters">
+			<list>
+				<ref local="roleVoter" />
+				<ref local="aclObjectReadVoter" />
+				<ref local="aclObjectWriteVoter" />
+				<ref local="aclObjectDeleteVoter" />
+				<ref local="aclObjectAdminVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="roleVoter"
+		class="org.springframework.security.access.vote.RoleHierarchyVoter">
+		<constructor-arg>
+			<ref bean="roleHierarchy" />
+		</constructor-arg>
+		<property name="rolePrefix">
+			<value>ROLE_</value>
+		</property>
+	</bean>
+
+	<bean id="aclPermissionEvaluator"
+		class="org.springframework.security.acls.AclPermissionEvaluator">
+		<constructor-arg>
+			<ref bean="aclService" />
+		</constructor-arg>
+	</bean>
+
 	<bean id="aclCache"
 		class="org.springframework.security.acls.domain.EhCacheBasedAclCache">
 		<constructor-arg>
@@ -148,13 +205,16 @@
 		class="org.springframework.security.acls.domain.AclAuthorizationStrategyImpl">
 		<constructor-arg>
 			<list>
-				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+				<bean
+					class="org.springframework.security.core.authority.GrantedAuthorityImpl">
 					<constructor-arg value="ROLE_ADMIN" />
 				</bean>
-				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+				<bean
+					class="org.springframework.security.core.authority.GrantedAuthorityImpl">
 					<constructor-arg value="ROLE_ADMIN" />
 				</bean>
-				<bean class="org.springframework.security.core.authority.GrantedAuthorityImpl">
+				<bean
+					class="org.springframework.security.core.authority.GrantedAuthorityImpl">
 					<constructor-arg value="ROLE_ADMIN" />
 				</bean>
 			</list>

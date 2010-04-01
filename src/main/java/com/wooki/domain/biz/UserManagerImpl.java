@@ -20,8 +20,11 @@ import java.util.Arrays;
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.springframework.security.acls.AclPermissionEvaluator;
+import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +54,10 @@ public class UserManagerImpl implements UserManager
 
     private PasswordEncoder passwordEncoder;
 
+    private SecurityManager securityManager;
+
+    private AclPermissionEvaluator aclPermissionEvaluator;
+
     @Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
     public void addUser(User author) throws UserAlreadyException
     {
@@ -73,6 +80,12 @@ public class UserManagerImpl implements UserManager
         aa.setType(AccountEventType.JOIN);
         aa.setUser(author);
         this.activityDao.create(aa);
+
+        // Set security context
+        securityCtx.log(author);
+
+        // Set permission
+        this.securityManager.setOwnerPermission(author);
 
     }
 
@@ -119,18 +132,26 @@ public class UserManagerImpl implements UserManager
         Defense.notNull(oldPassword, "oldPassword");
         Defense.notNull(newPassword, "newPassword");
 
-        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()) { throw new AuthorizationException(
-                "Action not authorized"); }
+        // Check access
+        if (this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
+                .getAuthentication(), user, BasePermission.ADMINISTRATION))
+        {
 
-        String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource
-                .getSalt(user));
-        if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) { throw new AuthorizationException(); }
+            String encodedPassword = this.passwordEncoder.encodePassword(
+                    oldPassword,
+                    this.saltSource.getSalt(user));
+            if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) { throw new AuthorizationException(); }
 
-        user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
-                .getSalt(user)));
-        this.securityCtx.log(authorDao.update(user));
+            user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
+                    .getSalt(user)));
+            this.securityCtx.log(authorDao.update(user));
+            return user;
+        }
+        else
+        {
+            throw new AuthorizationException("You do not have enough rights to do this action");
+        }
 
-        return user;
     }
 
     public UserDAO getAuthorDao()
@@ -181,6 +202,26 @@ public class UserManagerImpl implements UserManager
     public void setPasswordEncoder(PasswordEncoder passwordEncoder)
     {
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public SecurityManager getSecurityManager()
+    {
+        return securityManager;
+    }
+
+    public void setSecurityManager(SecurityManager securityManager)
+    {
+        this.securityManager = securityManager;
+    }
+
+    public AclPermissionEvaluator getAclPermissionEvaluator()
+    {
+        return aclPermissionEvaluator;
+    }
+
+    public void setAclPermissionEvaluator(AclPermissionEvaluator aclPermissionEvaluator)
+    {
+        this.aclPermissionEvaluator = aclPermissionEvaluator;
     }
 
 }

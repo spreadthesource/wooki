@@ -139,8 +139,8 @@ jQuery.extend(Tapestry.Initializer, {
 	 * replacing current content.
 	 * 
 	 */
-	appendToZone : function(url, element, to, position) {
-		new Tapestry.Append(url, element, to, position);
+	appendToZone : function(params) {
+		new Tapestry.Append(params.url, params.element, params.to, params.position);
 	},
 	
 	/**

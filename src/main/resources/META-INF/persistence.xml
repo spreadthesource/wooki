@@ -22,7 +22,6 @@
 	<persistence-unit name="wookiPersitence" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.use_sql_comments" value="true"/>
 			<property name="hibernate.query.substitutions" value="true 1, false 0" />
 		</properties>

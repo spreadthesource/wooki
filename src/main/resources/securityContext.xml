@@ -53,6 +53,8 @@
 		<property name="securityCtx" ref="wookiSecurityContext" />
 		<property name="saltSource" ref="wookiSaltSource" />
 		<property name="passwordEncoder" ref="wookiPasswordEncoder" />
+		<property name="securityManager" ref="securityManager" />
+		<property name="aclPermissionEvaluator" ref="aclPermissionEvaluator" />
 	</bean>
 
 	<!-- Match tapestry public page -->
@@ -149,7 +151,6 @@
 
 	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
 		<constructor-arg ref="userManager" />
-		<constructor-arg ref="roleHierarchy" />
 	</bean>
 
 	<bean id="wookiAuthenticationManager"
@@ -254,12 +255,6 @@
 		<constructor-arg>
 			<ref bean="wookiSecurityContext" />
 		</constructor-arg>
-	</bean>
-
-	<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
-		<property name="rolePrefix">
-			<value>ROLE_</value>
-		</property>
 	</bean>
 
 	<!-- Exception handler -->

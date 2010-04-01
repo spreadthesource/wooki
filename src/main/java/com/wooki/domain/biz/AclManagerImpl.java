@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.acls.domain.ObjectIdentityImpl;
 import org.springframework.security.acls.domain.PrincipalSid;
 import org.springframework.security.acls.model.AccessControlEntry;
@@ -18,19 +16,14 @@ import org.springframework.security.acls.model.Sid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.wooki.domain.model.WookiEntity;
 
-@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
 public class AclManagerImpl implements AclManager
 {
 
     private static Logger logger = LoggerFactory.getLogger(AclManager.class);
 
-    @Autowired
-    @Qualifier("aclServices")
     private MutableAclService mutableAclService;
 
     public void addPermission(WookiEntity secureObject, Permission permission, Class<?> clazz)
@@ -111,6 +104,16 @@ public class AclManagerImpl implements AclManager
         {
             return auth.getPrincipal().toString();
         }
+    }
+
+    public MutableAclService getMutableAclService()
+    {
+        return mutableAclService;
+    }
+
+    public void setMutableAclService(MutableAclService mutableAclService)
+    {
+        this.mutableAclService = mutableAclService;
     }
 
 }

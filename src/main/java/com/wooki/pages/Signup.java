@@ -18,6 +18,7 @@ package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Field;
+import org.apache.tapestry5.annotations.Id;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -25,8 +26,10 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.ioc.annotations.InjectService;
 
 import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.biz.SecurityManager;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
 import com.wooki.services.security.WookiSecurityContext;
@@ -52,6 +55,9 @@ public class Signup
     @Inject
     private WookiSecurityContext securityCtx;
 
+    @InjectService("securityManager")
+    private SecurityManager securityManager;
+    
     @InjectPage
     private Dashboard successPage;
 
@@ -106,9 +112,12 @@ public class Signup
             user.setFullname(this.fullname);
             userManager.addUser(user);
 
-            securityCtx.log(user);
+            // securityCtx.log(user);
 
             successPage.setFirstAccess(true);
+
+            // this.securityManager.setOwnerPermission(user);
+            
             return successPage;
 
         }

@@ -71,6 +71,9 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     @Autowired
     private WookiSecurityContext securityCtx;
 
+    @Autowired
+    private SecurityManager securityManager;
+    
     @Transactional(readOnly = false)
     public User addAuthor(Book book, String username) throws UserNotFoundException,
             UserAlreadyOwnerException
@@ -271,6 +274,9 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         activity.setCreationDate(creationDate);
         activity.setType(BookEventType.CREATE);
         activityDao.create(activity);
+        
+        // Set permissions
+        this.securityManager.setOwnerPermission(book);
 
         return book;
     }

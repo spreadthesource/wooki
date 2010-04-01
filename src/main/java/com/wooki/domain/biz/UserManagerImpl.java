@@ -105,8 +105,8 @@ public class UserManagerImpl implements UserManager
     {
         Defense.notNull(user, "user");
 
-        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()
-                && user.getPassword() != this.securityCtx.getAuthor().getPassword()) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getUser().getId() != user.getId()
+                && user.getPassword() != this.securityCtx.getUser().getPassword()) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         User userByUsername = findByUsername(user.getUsername());
@@ -126,12 +126,12 @@ public class UserManagerImpl implements UserManager
         Defense.notNull(oldPassword, "oldPassword");
         Defense.notNull(newPassword, "newPassword");
 
-        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getUser().getId() != user.getId()) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource
                 .getSalt(user));
-        if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) { throw new AuthorizationException(); }
+        if (!encodedPassword.equals(this.securityCtx.getUser().getPassword())) { throw new AuthorizationException(); }
 
         user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
                 .getSalt(user)));

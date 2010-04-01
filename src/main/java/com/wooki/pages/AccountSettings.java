@@ -95,7 +95,7 @@ public class AccountSettings
     {
         if (securityCtx.isLoggedIn())
         {
-            this.user = securityCtx.getAuthor();
+            this.user = securityCtx.getUser();
             return true;
         }
         return Signin.class;
@@ -143,7 +143,7 @@ public class AccountSettings
         // first, let's check if old password is ok
         String encodedPassword = this.passwordEncoder.encodePassword(oldPassword, this.saltSource
                 .getSalt(this.user));
-        if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword()))
+        if (!encodedPassword.equals(this.securityCtx.getUser().getPassword()))
         {
             passwordChange.recordError(messages.get("error-old-password-wrong"));
         }

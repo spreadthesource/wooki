@@ -7,7 +7,7 @@ public class WookiSecurityContextMock implements WookiSecurityContext
     
     private User user;
     
-    public User getAuthor()
+    public User getUser()
     {
         return user;
     }

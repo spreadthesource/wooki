@@ -110,7 +110,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
             BookActivity ba = new BookActivity();
             ba.setCreationDate(Calendar.getInstance().getTime());
             ba.setType(BookEventType.DELETE);
-            ba.setUser(this.securityCtx.getAuthor());
+            ba.setUser(this.securityCtx.getUser());
             ba.setBook(toRemove);
             ba.setResourceUnavailable(true);
             this.activityDao.create(ba);
@@ -197,7 +197,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
                 "Current user is not an author of " + book.getTitle()); }
 
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         // Create the new Chapter
         Chapter chapter = new Chapter();
@@ -232,7 +232,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!this.securityCtx.isLoggedIn()) { throw new AuthorizationException(
                 "Only logged user can create books."); }
 
-        User author = userDao.findById(new Long(1));
+        User author = securityCtx.getUser();
 
         Book book = new Book();
 

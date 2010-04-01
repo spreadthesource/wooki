@@ -74,6 +74,7 @@ public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements Book
     public boolean isAuthor(Long bookId, String username)
     {
         Defense.notNull(bookId, "bookId");
+
         Query query = this.session
                 .createQuery("select count(b) from Book b join b.users as u where u.username=:un and b.id=:id");
         Long result = (Long) query.setParameter("un", username).setParameter("id", bookId)

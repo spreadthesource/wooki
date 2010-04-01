@@ -50,7 +50,7 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
         SecurityContextHolder.getContext().setAuthentication(logged);
     }
 
-    public User getAuthor()
+    public User getUser()
     {
         String username = this.getUsername();
         if (username != null) { return userDao.findByUsername(username); }

@@ -80,7 +80,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         if (!securityCtx.isLoggedIn()) { throw new AuthorizationException(
                 "Only logged user are allowed to add a comments."); }
 
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         if (publicationId == null || content == null) { throw new IllegalArgumentException(
                 "Chapter and comment cannot be null for addition."); }
@@ -176,7 +176,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         }
 
         // Check that the logged user is an author of the book
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         // Flag last publication as not published
         Publication lastPublished = publicationDao.findLastPublishedRevision(chapterId);
@@ -265,7 +265,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             ChapterActivity activity = new ChapterActivity();
             activity.setCreationDate(Calendar.getInstance().getTime());
             activity.setChapter(toDelete);
-            activity.setUser(this.securityCtx.getAuthor());
+            activity.setUser(this.securityCtx.getUser());
             activity.setType(ChapterEventType.DELETE);
             this.activityDao.create(activity);
 

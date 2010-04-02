@@ -40,10 +40,7 @@
 		</property>
 	</bean>
 
-	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextMock">
-		
-	</bean>
-
+	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl" />
 
 	<!-- Match tapestry public page -->
 	<bean id="tapestryPublicPageMatcher"
@@ -76,7 +73,7 @@
 		<property name="requiresLowerCaseUrl" value="true" />
 	</bean>
 
-	<!-- bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
+	<bean id="springSecurityFilterChain" class="org.springframework.security.web.FilterChainProxy">
 		<property name="matcher" ref="delegatingUrlMatcher" />
 		<property name="stripQueryStringFromUrls" value="false" />
 		<property name="filterChainMap">
@@ -125,7 +122,7 @@
 				</entry>
 			</map>
 		</property>
-	</bean-->
+	</bean>
 
 	<bean id="wookiPasswordEncoder"
 		class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />
@@ -135,11 +132,8 @@
 		<property name="systemWideSalt" value="${wooki.salt}" />
 	</bean>
 
-	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
-		<!-- constructor-arg ref="userManager" / -->
-		<constructor-arg ref="roleHierarchy" />
-	</bean>
-
+	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl" />
+	
 	<bean id="wookiAuthenticationManager"
 		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<property name="userDetailsService" ref="wookiUserDetailsService" />
@@ -242,12 +236,6 @@
 		<constructor-arg>
 			<ref bean="wookiSecurityContext" />
 		</constructor-arg>
-	</bean>
-
-	<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter">
-		<property name="rolePrefix">
-			<value>ROLE_</value>
-		</property>
 	</bean>
 
 	<!-- Exception handler -->

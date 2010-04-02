@@ -1,0 +1,13 @@
+<html>
+
+	<head>
+		<title>Wooki Installer Page</title>
+	</head>
+
+	<body>
+	
+		<a href="/wooki/restart">Restart</a>
+	
+	</body>
+
+</html>

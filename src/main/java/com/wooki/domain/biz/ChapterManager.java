@@ -123,6 +123,7 @@ public interface ChapterManager
      * @param chapter
      * @return
      */
+    @CommitAfter
     Chapter update(Chapter chapter);
 
     /**
@@ -131,6 +132,7 @@ public interface ChapterManager
      * 
      * @param chapter
      */
+    @CommitAfter
     void updateContent(Long chapterId, String content);
 
     /**
@@ -139,6 +141,7 @@ public interface ChapterManager
      * 
      * @param chapter
      */
+    @CommitAfter
     void updateAndPublishContent(Long chapterId, String content);
 
     /**
@@ -147,6 +150,7 @@ public interface ChapterManager
      * @param book
      * @param chapterId
      */
+    @CommitAfter
     void remove(Long chapterId);
 
     /**

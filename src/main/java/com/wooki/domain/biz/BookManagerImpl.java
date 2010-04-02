@@ -55,6 +55,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     private final ChapterDAO chapterDao;
 
+    private SecurityManager securityManager;
+    
     private WookiSecurityContext securityCtx;
 
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
@@ -66,6 +68,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         this.chapterDao = chapterDAO;
         
         this.securityCtx = context.getBean(WookiSecurityContext.class);
+        this.securityManager = context.getBean(SecurityManager.class);
     }
 
     public User addAuthor(Book book, String username) throws UserNotFoundException,
@@ -262,6 +265,9 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         activity.setCreationDate(creationDate);
         activity.setType(BookEventType.CREATE);
         activityDao.create(activity);
+        
+        // Set permissions
+        this.securityManager.setOwnerPermission(book);
 
         return book;
     }

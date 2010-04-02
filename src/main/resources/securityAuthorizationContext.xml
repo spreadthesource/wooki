@@ -23,6 +23,28 @@
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
+	<bean id="project-properties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>
+					classpath*:config/database.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
 	<!-- Define permissions -->
 	<bean id="administrationPermission"
 		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
@@ -118,8 +140,8 @@
 		<constructor-arg ref="aclCache" />
 	</bean>
 
-	<bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<bean id="securityManager" class="com.wooki.domain.biz.SecurityManagerImpl">
+		<property name="aclManager" ref="aclManager" />
 	</bean>
 
 	<bean id="lookupStrategy"
@@ -129,6 +151,45 @@
 		<constructor-arg ref="aclAuthorizationStrategy" />
 		<constructor-arg>
 			<bean class="org.springframework.security.acls.domain.ConsoleAuditLogger" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="aclManager" class="com.wooki.domain.biz.AclManagerImpl">
+		<property name="mutableAclService" ref="aclService" />
+	</bean>
+
+	<bean id="jdbcTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+	<bean id="businessAccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
+		<property name="allowIfAllAbstainDecisions" value="true" />
+		<property name="decisionVoters">
+			<list>
+				<ref local="roleVoter" />
+				<ref local="aclObjectReadVoter" />
+				<ref local="aclObjectWriteVoter" />
+				<ref local="aclObjectDeleteVoter" />
+				<ref local="aclObjectAdminVoter" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="roleVoter"
+		class="org.springframework.security.access.vote.RoleHierarchyVoter">
+		<constructor-arg>
+			<ref bean="roleHierarchy" />
+		</constructor-arg>
+		<property name="rolePrefix">
+			<value>ROLE_</value>
+		</property>
+	</bean>
+
+	<bean id="aclPermissionEvaluator"
+		class="org.springframework.security.acls.AclPermissionEvaluator">
+		<constructor-arg>
+			<ref bean="aclService" />
 		</constructor-arg>
 	</bean>
 

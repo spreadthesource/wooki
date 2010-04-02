@@ -91,9 +91,9 @@ public class Append
         Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
 
         JSONObject params = new JSONObject();
-        params.put("link", link.toAbsoluteURI());
-        params.put("form", form.getClientId());
-        params.put("element", to);
+        params.put("url", link.toAbsoluteURI());
+        params.put("element", form.getClientId());
+        params.put("to", to);
         params.put("position", position);
 
         javascriptSupport.addInitializerCall("appendToZone", params);

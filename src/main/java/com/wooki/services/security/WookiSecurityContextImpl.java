@@ -16,6 +16,8 @@
 
 package com.wooki.services.security;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,13 +35,16 @@ import com.wooki.domain.model.User;
  */
 public class WookiSecurityContextImpl implements WookiSecurityContext
 {
-
+    @Inject @Autowired
     private CommentDAO commentDao;
 
+    @Inject @Autowired
     private BookDAO bookDAO;
 
+    @Inject @Autowired
     private UserDAO userDao;
 
+    @Inject @Autowired
     private ChapterDAO chapterDao;
 
     public void log(User user)
@@ -111,46 +116,6 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
             }
         }
         return null;
-    }
-
-    public BookDAO getBookDAO()
-    {
-        return bookDAO;
-    }
-
-    public void setBookDAO(BookDAO bookDAO)
-    {
-        this.bookDAO = bookDAO;
-    }
-
-    public CommentDAO getCommentDao()
-    {
-        return commentDao;
-    }
-
-    public void setCommentDao(CommentDAO commentDao)
-    {
-        this.commentDao = commentDao;
-    }
-
-    public UserDAO getUserDao()
-    {
-        return userDao;
-    }
-
-    public void setUserDao(UserDAO userDao)
-    {
-        this.userDao = userDao;
-    }
-
-    public ChapterDAO getChapterDao()
-    {
-        return chapterDao;
-    }
-
-    public void setChapterDao(ChapterDAO chapterDao)
-    {
-        this.chapterDao = chapterDao;
     }
 
 }

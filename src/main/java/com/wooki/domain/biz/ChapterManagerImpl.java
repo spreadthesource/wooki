@@ -69,7 +69,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         this.commentDao = commentDAO;
         this.publicationDao = publicationDAO;
         this.domManager = domManager;
-        
+
         this.securityCtx = context.getBean(WookiSecurityContext.class);
     }
 

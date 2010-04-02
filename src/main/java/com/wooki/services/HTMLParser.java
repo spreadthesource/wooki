@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.xml.sax.Attributes;
 import org.xml.sax.EntityResolver;
@@ -28,12 +29,15 @@ public class HTMLParser extends DefaultHandler
 
     private EntityResolver entityResolver;
 
+    @Inject
     @Autowired
     private UserManager userManager;
 
+    @Inject
     @Autowired
     private ChapterManager chapterManager;
 
+    @Inject
     @Autowired
     private BookManager bookManager;
 

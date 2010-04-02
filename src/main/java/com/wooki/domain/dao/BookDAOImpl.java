@@ -25,7 +25,6 @@ import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
 
-@Repository("bookDao")
 public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements BookDAO
 {
 

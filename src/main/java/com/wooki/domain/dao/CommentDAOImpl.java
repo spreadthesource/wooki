@@ -26,7 +26,6 @@ import org.springframework.stereotype.Repository;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 
-@Repository("commentDao")
 public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implements CommentDAO
 {
 

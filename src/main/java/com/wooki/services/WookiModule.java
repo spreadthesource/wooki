@@ -114,6 +114,8 @@ import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
 import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
+import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.security.WookiSecurityContextImpl;
 
 @SubModule(
 { TapestryOverrideModule.class, FeedModule.class })
@@ -165,7 +167,6 @@ public class WookiModule<T>
         binder.bind(UserDAO.class, UserDAOImpl.class);
 
         // domain biz
-        binder.bind(AclManager.class, AclManagerImpl.class);
         binder.bind(ActivityManager.class, ActivityManagerImpl.class);
         binder.bind(BookManager.class, BookManagerImpl.class);
         binder.bind(ChapterManager.class, ChapterManagerImpl.class);

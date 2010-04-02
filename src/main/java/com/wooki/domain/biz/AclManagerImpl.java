@@ -21,7 +21,6 @@ import com.wooki.domain.model.WookiEntity;
 
 public class AclManagerImpl implements AclManager
 {
-
     private static Logger logger = LoggerFactory.getLogger(AclManager.class);
 
     private MutableAclService mutableAclService;
@@ -104,6 +103,16 @@ public class AclManagerImpl implements AclManager
         {
             return auth.getPrincipal().toString();
         }
+    }
+
+    public MutableAclService getMutableAclService()
+    {
+        return mutableAclService;
+    }
+
+    public void setMutableAclService(MutableAclService mutableAclService)
+    {
+        this.mutableAclService = mutableAclService;
     }
 
 }

@@ -19,6 +19,7 @@ package com.wooki.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wooki.domain.biz.BookManager;
@@ -33,7 +34,7 @@ import com.wooki.services.utils.SqlUtils;
 public class SimpleSearchEngineImpl implements SearchEngine
 {
 
-    @Autowired
+    @Inject @Autowired
     private BookManager bookManager;
 
     public List<Book> findBook(String queryString)

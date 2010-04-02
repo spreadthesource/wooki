@@ -27,7 +27,6 @@ import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 
-@Repository("chapterDao")
 public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implements ChapterDAO
 {
 

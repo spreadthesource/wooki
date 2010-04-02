@@ -32,7 +32,6 @@ import com.wooki.domain.model.activity.BookEventType;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.CommentActivity;
 
-@Repository("activityDao")
 public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> implements ActivityDAO
 {
 

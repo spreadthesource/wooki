@@ -18,26 +18,30 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 
-@Repository("chapterDao")
-public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements ChapterDAO
+public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implements ChapterDAO
 {
+
+    public ChapterDAOImpl(Session session)
+    {
+        super(session);
+    }
 
     public boolean isAuthor(Long chapterId, String username)
     {
         Defense.notNull(chapterId, "chapterId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("select count(b) from Book b, Chapter c join b.users as u where c.id=:id and b.id=c.book.id and u.username=:un");
         Long result = (Long) query.setParameter("un", username).setParameter("id", chapterId)
-                .getSingleResult();
+                .uniqueResult();
         return result == 1;
     }
 
@@ -45,7 +49,7 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
     {
         Defense.notNull(bookId, "bookId");
         Defense.notNull(chapterId, "chapterId");
-        Query query = entityManager
+        Query query = session
                 .createQuery(String
                         .format("select item.id, item.title from "
                                 + Book.class.getName()
@@ -56,14 +60,14 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
         query.setParameter("bid", bookId);
         query.setParameter("cid", chapterId);
 
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Object[]> findPrevious(Long bookId, Long chapterId)
     {
         Defense.notNull(bookId, "bookId");
         Defense.notNull(chapterId, "chapterId");
-        Query query = entityManager
+        Query query = session
                 .createQuery(String
                         .format("select item.id, item.title from "
                                 + Book.class.getName()
@@ -74,40 +78,40 @@ public class ChapterDAOImpl extends GenericDAOImpl<Chapter, Long> implements Cha
         query.setParameter("bid", bookId);
         query.setParameter("cid", chapterId);
 
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Chapter> listChapterInfo(Long bookId)
     {
         Defense.notNull(bookId, "bookId");
-        Query query = entityManager
+        Query query = session
                 .createQuery(String
                         .format(
                                 "select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book and c.deletionDate is null",
                                 getEntityType(),
                                 getEntityType()));
         query.setParameter("book", bookId);
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Chapter> listChapters(Long idBook)
     {
         Defense.notNull(idBook, "bookId");
-        Query query = this.entityManager.createQuery("from " + getEntityType()
+        Query query = this.session.createQuery("from " + getEntityType()
                 + " c where c.book.id=:book and c.deletionDate is null");
-        List<Chapter> result = (List<Chapter>) query.setParameter("book", idBook).getResultList();
+        List<Chapter> result = (List<Chapter>) query.setParameter("book", idBook).list();
         return result;
     }
 
     public List<Chapter> listLastModified(Long id, int nbElts)
     {
         Defense.notNull(id, "bookId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("from "
                         + this.getEntityType()
                         + " c where c.book.id=:booId and c.deletionDate is null order by c.lastModified desc");
         query.setParameter("bookId", id);
-        return query.getResultList();
+        return query.list();
     }
 
 }

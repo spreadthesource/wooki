@@ -47,7 +47,7 @@ public interface WookiSecurityContext
      * 
      * @return
      */
-    User getAuthor();
+    User getUser();
 
     /**
      * Check if the logged in user is author of a book.

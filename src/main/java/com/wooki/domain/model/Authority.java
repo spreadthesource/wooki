@@ -7,6 +7,7 @@
 package com.wooki.domain.model;
 
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ public class Authority implements Serializable
 {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToMany
@@ -31,16 +32,6 @@ public class Authority implements Serializable
     public Authority(String authority)
     {
         this.authority = authority;
-    }
-
-    public long getId()
-    {
-        return id;
-    }
-
-    public void setId(long id)
-    {
-        this.id = id;
     }
 
     public List<User> getUsers()
@@ -61,6 +52,11 @@ public class Authority implements Serializable
     public void setAuthority(String authority)
     {
         this.authority = authority;
+    }
+
+    public Long getId()
+    {
+        return this.id;
     }
 
 }

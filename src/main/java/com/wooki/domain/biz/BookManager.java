@@ -18,6 +18,8 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.TitleAlreadyInUseException;
 import com.wooki.domain.exception.UserAlreadyOwnerException;
@@ -28,8 +30,6 @@ import com.wooki.domain.model.User;
 
 /**
  * Manager interface to manipulate DAO Interaction.
- * 
- * @author ccordenier
  */
 public interface BookManager
 {
@@ -41,6 +41,7 @@ public interface BookManager
      *            The title of the book
      * @return
      */
+    @CommitAfter
     Book create(String title);
 
     /**
@@ -48,6 +49,7 @@ public interface BookManager
      * 
      * @param bookId
      */
+    @CommitAfter
     void remove(Long bookId);
 
     /**
@@ -56,6 +58,7 @@ public interface BookManager
      * @param book
      * @return
      */
+    @CommitAfter
     Book updateTitle(Book book) throws TitleAlreadyInUseException;
 
     /**
@@ -69,12 +72,14 @@ public interface BookManager
      *            TODO
      * @return TODO
      */
+    @CommitAfter
     User addAuthor(Book book, String username) throws UserNotFoundException,
             UserAlreadyOwnerException;
 
     /**
      * Remove an author from a book.
      */
+    @CommitAfter
     void removeAuthor(Book book, Long authorId);
 
     /**
@@ -96,6 +101,7 @@ public interface BookManager
      * @param username
      *            TODO
      */
+    @CommitAfter
     Chapter addChapter(Book book, String title) throws AuthorizationException;
 
     /**

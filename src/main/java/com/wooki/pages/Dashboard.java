@@ -105,7 +105,7 @@ public class Dashboard
     {
         if (securityCtx.isLoggedIn())
         {
-            this.user = securityCtx.getAuthor();
+            this.user = securityCtx.getUser();
             this.userBooks = bookManager.listByOwner(user.getUsername());
             this.userCollaborations = this.bookManager.listByCollaborator(user.getUsername());
             return true;

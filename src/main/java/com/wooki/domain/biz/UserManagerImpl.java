@@ -19,14 +19,19 @@ package com.wooki.domain.biz;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.ResourceHolderSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
@@ -40,27 +45,60 @@ import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.services.security.WookiSecurityContext;
 
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
 public class UserManagerImpl implements UserManager
 {
 
-    private UserDAO authorDao;
+    private final UserDAO userDao;
 
-    private ActivityDAO activityDao;
+    private final ActivityDAO activityDao;
 
-    private WookiSecurityContext securityCtx;
+    private final WookiSecurityContext securityCtx;
 
-    private SaltSource saltSource;
+    private final SecurityManager securityManager;
 
-    private PasswordEncoder passwordEncoder;
+    private final SaltSource saltSource;
 
-    private SecurityManager securityManager;
+    private final PasswordEncoder passwordEncoder;
 
-    private AclPermissionEvaluator aclPermissionEvaluator;
+    private final AclPermissionEvaluator aclPermissionEvaluator;
 
-    @Transactional(readOnly = false, rollbackFor = UserAlreadyException.class)
+    private final HibernateSessionManager sessionManager;
+
+    public UserManagerImpl(UserDAO userDAO, ActivityDAO activityDAO,
+            ApplicationContext applicationContext, HibernateSessionManager sessionManager)
+    {
+        this.userDao = userDAO;
+        this.activityDao = activityDAO;
+        this.sessionManager = sessionManager;
+
+        this.securityCtx = applicationContext.getBean(WookiSecurityContext.class);
+        this.saltSource = applicationContext.getBean(SaltSource.class);
+        this.passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
+        this.aclPermissionEvaluator = applicationContext.getBean(AclPermissionEvaluator.class);
+        this.securityManager = applicationContext.getBean(SecurityManager.class);
+    }
+
+    private static class ConnectionSynchronization extends
+            ResourceHolderSynchronization<SessionHolder, SessionFactory>
+    {
+
+        public ConnectionSynchronization(SessionHolder connectionHolder,
+                SessionFactory connectionFactory)
+        {
+            super(connectionHolder, connectionFactory);
+        }
+
+       
+    }
+
     public void addUser(User author) throws UserAlreadyException
     {
+        
+        Session session = this.sessionManager.getSession();
+        System.out.println(session.getTransaction().isActive());
+        TransactionSynchronizationManager.initSynchronization();
+        TransactionSynchronizationManager.registerSynchronization(new ConnectionSynchronization(new SessionHolder(session), session.getSessionFactory()));
+        // SessionFactoryUtils.doGetSession(this.sessionManager.getSession().getSessionFactory(), false);
 
         if (findByUsername(author.getUsername()) != null) { throw new UserAlreadyException(); }
 
@@ -69,11 +107,12 @@ public class UserManagerImpl implements UserManager
         author.setCreationDate(new Date());
         author.setPassword(this.passwordEncoder.encodePassword(pass, this.saltSource
                 .getSalt(author)));
-        authorDao.create(author);
 
         // Add default Author Role
         author.setGrantedAuthorities(Arrays.asList(new Authority[]
         { new Authority(WookiGrantedAuthority.ROLE_AUTHOR.getAuthority()) }));
+
+        userDao.create(author);
 
         AccountActivity aa = new AccountActivity();
         aa.setCreationDate(Calendar.getInstance().getTime());
@@ -91,27 +130,26 @@ public class UserManagerImpl implements UserManager
 
     public User findByUsername(String username)
     {
-        return authorDao.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 
     public User findById(Long userId)
     {
         Defense.notNull(userId, "userId");
-        return authorDao.findById(userId);
+        return userDao.findById(userId);
     }
 
     public String[] listUserNames(String prefix)
     {
-        return authorDao.listUserNames(prefix);
+        return userDao.listUserNames(prefix);
     }
 
-    @Transactional(readOnly = false)
     public User updateDetails(User user) throws AuthorizationException, UserAlreadyException
     {
         Defense.notNull(user, "user");
 
-        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getAuthor().getId() != user.getId()
-                && user.getPassword() != this.securityCtx.getAuthor().getPassword()) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getUser().getId() != user.getId()
+                && user.getPassword() != this.securityCtx.getUser().getPassword()) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         User userByUsername = findByUsername(user.getUsername());
@@ -119,12 +157,11 @@ public class UserManagerImpl implements UserManager
         // check if the new username is not already taken by someone else
         if (userByUsername != null && userByUsername.getId() != user.getId()) { throw new UserAlreadyException(); }
 
-        this.securityCtx.log(authorDao.update(user));
+        this.securityCtx.log(userDao.update(user));
 
         return user;
     }
 
-    @Transactional(readOnly = false)
     public User updatePassword(User user, String oldPassword, String newPassword)
             throws AuthorizationException
     {
@@ -136,92 +173,19 @@ public class UserManagerImpl implements UserManager
         if (this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
                 .getAuthentication(), user, BasePermission.ADMINISTRATION))
         {
-
             String encodedPassword = this.passwordEncoder.encodePassword(
                     oldPassword,
                     this.saltSource.getSalt(user));
-            if (!encodedPassword.equals(this.securityCtx.getAuthor().getPassword())) { throw new AuthorizationException(); }
+            if (!encodedPassword.equals(this.securityCtx.getUser().getPassword())) { throw new AuthorizationException(); }
 
             user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
                     .getSalt(user)));
-            this.securityCtx.log(authorDao.update(user));
+            this.securityCtx.log(userDao.update(user));
             return user;
         }
         else
         {
             throw new AuthorizationException("You do not have enough rights to do this action");
         }
-
     }
-
-    public UserDAO getAuthorDao()
-    {
-        return authorDao;
-    }
-
-    public void setAuthorDao(UserDAO authorDao)
-    {
-        this.authorDao = authorDao;
-    }
-
-    public ActivityDAO getActivityDao()
-    {
-        return activityDao;
-    }
-
-    public void setActivityDao(ActivityDAO activityDao)
-    {
-        this.activityDao = activityDao;
-    }
-
-    public WookiSecurityContext getSecurityCtx()
-    {
-        return securityCtx;
-    }
-
-    public void setSecurityCtx(WookiSecurityContext securityCtx)
-    {
-        this.securityCtx = securityCtx;
-    }
-
-    public SaltSource getSaltSource()
-    {
-        return saltSource;
-    }
-
-    public void setSaltSource(SaltSource saltSource)
-    {
-        this.saltSource = saltSource;
-    }
-
-    public PasswordEncoder getPasswordEncoder()
-    {
-        return passwordEncoder;
-    }
-
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder)
-    {
-        this.passwordEncoder = passwordEncoder;
-    }
-
-    public SecurityManager getSecurityManager()
-    {
-        return securityManager;
-    }
-
-    public void setSecurityManager(SecurityManager securityManager)
-    {
-        this.securityManager = securityManager;
-    }
-
-    public AclPermissionEvaluator getAclPermissionEvaluator()
-    {
-        return aclPermissionEvaluator;
-    }
-
-    public void setAclPermissionEvaluator(AclPermissionEvaluator aclPermissionEvaluator)
-    {
-        this.aclPermissionEvaluator = aclPermissionEvaluator;
-    }
-
 }

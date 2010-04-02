@@ -16,6 +16,8 @@
 
 package com.wooki.domain.biz;
 
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.User;
@@ -33,6 +35,7 @@ public interface UserManager
      * @return
      * @throws UserAlreadyException
      */
+    @CommitAfter
     void addUser(User user) throws UserAlreadyException;
 
     /**
@@ -68,6 +71,7 @@ public interface UserManager
      * @throws UserAlreadyException
      * @throws AuthorizationException
      */
+    @CommitAfter
     User updateDetails(User user) throws AuthorizationException, UserAlreadyException;
 
     /**
@@ -77,6 +81,7 @@ public interface UserManager
      * @return
      * @throws AuthorizationException
      */
+    @CommitAfter
     User updatePassword(User user, String oldPassword, String newPassword)
             throws AuthorizationException;
 

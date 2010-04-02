@@ -21,7 +21,6 @@ import com.wooki.domain.model.WookiEntity;
 
 public class AclManagerImpl implements AclManager
 {
-
     private static Logger logger = LoggerFactory.getLogger(AclManager.class);
 
     private MutableAclService mutableAclService;

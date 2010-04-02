@@ -23,6 +23,28 @@
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
+	<bean id="project-properties"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders">
+			<value>true</value>
+		</property>
+		<property name="locations">
+			<list>
+				<value>
+					classpath*:config/database.properties
+				</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${hibernate.connection.driver_class}" />
+		<property name="url" value="${hibernate.connection.url}" />
+		<property name="username" value="${hibernate.connection.username}" />
+		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
 	<!-- Define permissions -->
 	<bean id="administrationPermission"
 		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
@@ -118,6 +140,10 @@
 		<constructor-arg ref="aclCache" />
 	</bean>
 
+	<bean id="securityManager" class="com.wooki.domain.biz.SecurityManagerImpl">
+		<property name="aclManager" ref="aclManager" />
+	</bean>
+
 	<bean id="lookupStrategy"
 		class="org.springframework.security.acls.jdbc.BasicLookupStrategy">
 		<constructor-arg ref="dataSource" />
@@ -128,30 +154,8 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="aclManager" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<qualifier value="aclManager" />
-		<property name="proxyInterfaces" value="com.wooki.domain.biz.AclManager" />
-		<property name="interceptorNames">
-			<list>
-				<idref local="transactionInterceptor" />
-				<idref local="aclSecurityUtilTarget" />
-			</list>
-		</property>
-	</bean>
-
-	<bean id="aclSecurityUtilTarget" class="com.wooki.domain.biz.AclManagerImpl">
+	<bean id="aclManager" class="com.wooki.domain.biz.AclManagerImpl">
 		<property name="mutableAclService" ref="aclService" />
-	</bean>
-
-	<bean id="transactionInterceptor"
-		class="org.springframework.transaction.interceptor.TransactionInterceptor">
-		<property name="transactionManager" ref="jdbcTransactionManager" />
-		<property name="transactionAttributeSource">
-			<value>
-				com.wooki.domain.biz.AclManagerImpl.deletePermission=PROPAGATION_REQUIRED
-				com.wooki.domain.biz.AclManagerImpl.addPermission=PROPAGATION_REQUIRED
-			</value>
-		</property>
 	</bean>
 
 	<bean id="jdbcTransactionManager"

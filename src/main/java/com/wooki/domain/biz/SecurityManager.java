@@ -5,8 +5,6 @@ import com.wooki.domain.model.WookiEntity;
 
 /**
  * Handle security concerns of wooki application. This service is in charge of affecting
- * 
- * @author ccordenier
  */
 public interface SecurityManager
 {

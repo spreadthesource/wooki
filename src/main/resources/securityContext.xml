@@ -40,22 +40,7 @@
 		</property>
 	</bean>
 
-	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl">
-		<property name="bookDAO" ref="bookDao" />
-		<property name="commentDao" ref="commentDao" />
-		<property name="userDao" ref="userDao" />
-		<property name="chapterDao" ref="chapterDao" />
-	</bean>
-
-	<bean id="userManager" class="com.wooki.domain.biz.UserManagerImpl">
-		<property name="activityDao" ref="activityDao" />
-		<property name="authorDao" ref="userDao" />
-		<property name="securityCtx" ref="wookiSecurityContext" />
-		<property name="saltSource" ref="wookiSaltSource" />
-		<property name="passwordEncoder" ref="wookiPasswordEncoder" />
-		<property name="securityManager" ref="securityManager" />
-		<property name="aclPermissionEvaluator" ref="aclPermissionEvaluator" />
-	</bean>
+	<bean id="wookiSecurityContext" class="com.wooki.services.security.WookiSecurityContextImpl" />
 
 	<!-- Match tapestry public page -->
 	<bean id="tapestryPublicPageMatcher"
@@ -121,14 +106,12 @@
 					</list>
 				</entry>
 
-				<!-- Public tapestry pages -->
 				<entry key="tapestry-public-page">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
 					</list>
 				</entry>
 
-				<!-- All other resources must be a public Tapestry pages -->
 				<entry key="/.*">
 					<list>
 						<ref bean="httpSessionContextIntegrationFilter" />
@@ -149,10 +132,8 @@
 		<property name="systemWideSalt" value="${wooki.salt}" />
 	</bean>
 
-	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl">
-		<constructor-arg ref="userManager" />
-	</bean>
-
+	<bean id="wookiUserDetailsService" class="com.wooki.services.security.UserDetailsServiceImpl" />
+	
 	<bean id="wookiAuthenticationManager"
 		class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
 		<property name="userDetailsService" ref="wookiUserDetailsService" />

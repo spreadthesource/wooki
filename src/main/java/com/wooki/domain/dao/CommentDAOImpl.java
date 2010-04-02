@@ -18,58 +18,62 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.CommentState;
 
-@Repository("commentDao")
-public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements CommentDAO
+public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implements CommentDAO
 {
+
+    public CommentDAOImpl(Session session)
+    {
+        super(session);
+    }
 
     public boolean isOwner(Long commId, String username)
     {
         Defense.notNull(commId, "commId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("select count(c) from "
                         + this.getEntityType()
                         + " c join c.user as u where c.id=:id and u.username=:un and c.deletionDate is null");
         Long result = (Long) query.setParameter("un", username).setParameter("id", commId)
-                .getSingleResult();
+                .uniqueResult();
         return result > 0;
     }
 
     public List<Comment> listForPublication(Long publicationId)
     {
         Defense.notNull(publicationId, "publicationId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("from "
                         + getEntityType()
                         + " c where c.publication.id=:pubId and c.state!=:st and c.deletionDate is null order by c.creationDate desc");
         query.setParameter("pubId", publicationId);
         query.setParameter("st", CommentState.REJECTED);
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Comment> listForChapter(Long chapterId)
     {
         Defense.notNull(chapterId, "chapterId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("from "
                         + getEntityType()
                         + " c where c.publication.chapter.id=:chapterId and c.state!=:st and c.deletionDate is null order by c.creationDate desc");
         query.setParameter("chapterId", chapterId);
         query.setParameter("st", CommentState.REJECTED);
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Comment> listForPublicationAndDomId(Long publicationId, String domId)
     {
         Defense.notNull(publicationId, "publicationId");
-        Query query = this.entityManager
+        Query query = this.session
                 .createQuery("from "
                         + getEntityType()
                         + " c where c.publication.id=:pubId and c.state!=:st and c.domId=:cid and c.deletionDate is null order by c.creationDate desc");
@@ -77,7 +81,7 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
         query.setParameter("st", CommentState.REJECTED);
         query.setParameter("cid", domId);
 
-        return query.getResultList();
+        return query.list();
     }
 
     public List<Object[]> listCommentsInfoForPublication(Long publicationId)
@@ -87,10 +91,10 @@ public class CommentDAOImpl extends GenericDAOImpl<Comment, Long> implements Com
                 .format(
                         "select c.domId, count(c.domId) from %s c where c.publication.id=:id and c.state!=:st and c.deletionDate is null group by c.domId",
                         Comment.class.getName());
-        Query query = this.entityManager.createQuery(queryStr);
+        Query query = this.session.createQuery(queryStr);
         query.setParameter("id", publicationId);
         query.setParameter("st", CommentState.REJECTED);
-        return query.getResultList();
+        return query.list();
     }
 
 }

@@ -22,10 +22,7 @@ import java.util.List;
 import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
@@ -47,32 +44,35 @@ import com.wooki.domain.model.activity.CommentEventType;
 import com.wooki.services.parsers.DOMManager;
 import com.wooki.services.security.WookiSecurityContext;
 
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Component("chapterManager")
 public class ChapterManagerImpl extends AbstractManager implements ChapterManager
 {
+    private final ChapterDAO chapterDao;
 
-    @Autowired
-    private ChapterDAO chapterDao;
+    private final ActivityDAO activityDao;
 
-    @Autowired
-    private ActivityDAO activityDao;
+    private final CommentDAO commentDao;
 
-    @Autowired
-    private CommentDAO commentDao;
+    private final PublicationDAO publicationDao;
 
-    @Autowired
-    private PublicationDAO publicationDao;
+    private final DOMManager domManager;
 
-    @Autowired
-    private DOMManager domManager;
-
-    @Autowired
     private WookiSecurityContext securityCtx;
 
     private Logger logger = LoggerFactory.getLogger(ChapterManagerImpl.class);
 
-    @Transactional(readOnly = false)
+    public ChapterManagerImpl(ChapterDAO chapterDAO, ActivityDAO activityDAO,
+            CommentDAO commentDAO, PublicationDAO publicationDAO, DOMManager domManager,
+            ApplicationContext context)
+    {
+        this.chapterDao = chapterDAO;
+        this.activityDao = activityDAO;
+        this.commentDao = commentDAO;
+        this.publicationDao = publicationDAO;
+        this.domManager = domManager;
+
+        this.securityCtx = context.getBean(WookiSecurityContext.class);
+    }
+
     public Comment addComment(Long publicationId, String content, String domId)
     {
 
@@ -80,7 +80,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         if (!securityCtx.isLoggedIn()) { throw new AuthorizationException(
                 "Only logged user are allowed to add a comments."); }
 
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         if (publicationId == null || content == null) { throw new IllegalArgumentException(
                 "Chapter and comment cannot be null for addition."); }
@@ -152,7 +152,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         return null;
     }
 
-    @Transactional(readOnly = false)
     public void publishChapter(Long chapterId)
     {
 
@@ -177,7 +176,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         }
 
         // Check that the logged user is an author of the book
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         // Flag last publication as not published
         Publication lastPublished = publicationDao.findLastPublishedRevision(chapterId);
@@ -203,14 +202,12 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     }
 
-    @Transactional(readOnly = false)
     public Chapter update(Chapter chapter)
     {
         Defense.notNull(chapter, "chapter");
         return this.chapterDao.update(chapter);
     }
 
-    @Transactional(readOnly = false)
     public void updateContent(Long chapterId, String content)
     {
 
@@ -244,14 +241,12 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     }
 
-    @Transactional(readOnly = false)
     public void updateAndPublishContent(Long chapterId, String content)
     {
         updateContent(chapterId, content);
         publishChapter(chapterId);
     }
 
-    @Transactional(readOnly = false)
     public void remove(Long chapterId)
     {
 
@@ -270,7 +265,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             ChapterActivity activity = new ChapterActivity();
             activity.setCreationDate(Calendar.getInstance().getTime());
             activity.setChapter(toDelete);
-            activity.setUser(this.securityCtx.getAuthor());
+            activity.setUser(this.securityCtx.getUser());
             activity.setType(ChapterEventType.DELETE);
             this.activityDao.create(activity);
 

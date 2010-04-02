@@ -21,11 +21,11 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
+import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.WookiEntity;
 
@@ -35,66 +35,57 @@ import com.wooki.domain.model.WookiEntity;
  * @param <T>
  * @param <PK>
  */
-public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements
+public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> implements
         GenericDAO<T, PK>
 {
 
-    @PersistenceContext
-    protected EntityManager entityManager;
+    protected Session session;
 
     private Class<T> entityType;
 
-    public GenericDAOImpl()
+    @SuppressWarnings("unchecked")
+    public GenericDAOImpl(Session session)
     {
+        this.session = session;
+
         this.entityType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
     }
 
-    public void create(T o)
+    public T create(T o)
     {
-        this.entityManager.persist(o);
+        this.session.persist(o);
+
+        return o;
     }
 
+    @SuppressWarnings("unchecked")
     public T update(T o)
     {
-        final T result = this.entityManager.merge(o);
+        final T result = (T) this.session.merge(o);
         return result;
     }
 
     public void delete(T o)
     {
         o.setDeletionDate(new Date());
-        this.entityManager.merge(o);
+        this.session.merge(o);
     }
 
+    @SuppressWarnings("unchecked")
     public T findById(PK id)
     {
-        if (id == null)
-            throw new IllegalArgumentException("Id for " + entityType.getCanonicalName()
-                    + " cannot be null.");
-        Query query = entityManager.createQuery("from " + this.getEntityType()
-                + " e where e.deletionDate is null and e.id=:id");
-        query.setParameter("id", id);
-        List<T> results = (List<T>) query.getResultList();
-        if (results != null && results.size() == 1) { return results.get(0); }
-        return null;
-    }
+        Defense.notNull(id, "id");
 
-    public List<T> listAll()
-    {
-        Query query = this.entityManager.createQuery("from " + this.getEntityType());
-        List<T> resultList = (List<T>) query.getResultList();
-        return resultList;
+        Criteria crit = session.createCriteria(getEntityType());
+        crit.add(Restrictions.idEq(id));
+
+        return (T) crit.uniqueResult();
     }
 
     public String getEntityType()
     {
         return entityType.getName();
-    }
-
-    protected Session getSession()
-    {
-        return (Session) entityManager.getDelegate();
     }
 
     protected void setMaxResults(Query query, int max)
@@ -103,6 +94,23 @@ public class GenericDAOImpl<T extends WookiEntity, PK extends Serializable> impl
         {
             query.setMaxResults(max);
         }
+    }
+
+    public Criteria createCriteria()
+    {
+        return session.createCriteria(getEntityType());
+    }
+
+    public Criteria createCriteria(String alias)
+    {
+        return session.createCriteria(getEntityType(), alias);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> list()
+    {
+        Criteria crit = session.createCriteria(getEntityType());
+        return (List<T>) crit.list();
     }
 
 }

@@ -18,12 +18,12 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+
 import com.wooki.domain.model.Comment;
 
 /**
  * Use to manage comments in the wooki application.
- * 
- * @author ccordenier
  */
 public interface CommentManager
 {
@@ -34,6 +34,7 @@ public interface CommentManager
      * @param comment
      * @return
      */
+    @CommitAfter
     Comment update(Comment comment);
 
     /**
@@ -41,6 +42,7 @@ public interface CommentManager
      * 
      * @param commId
      */
+    @CommitAfter
     void removeComment(Long commId);
 
     /**

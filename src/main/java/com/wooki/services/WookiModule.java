@@ -23,6 +23,8 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
+import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.internal.services.RequestPageCache;
@@ -68,10 +70,33 @@ import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import com.sun.syndication.feed.atom.Feed;
 import com.wooki.ActivityType;
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
+import com.wooki.domain.biz.AclManager;
+import com.wooki.domain.biz.AclManagerImpl;
+import com.wooki.domain.biz.ActivityManager;
+import com.wooki.domain.biz.ActivityManagerImpl;
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.BookManagerImpl;
+import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.biz.ChapterManagerImpl;
+import com.wooki.domain.biz.CommentManager;
+import com.wooki.domain.biz.CommentManagerImpl;
+import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.biz.UserManagerImpl;
+import com.wooki.domain.dao.ActivityDAO;
+import com.wooki.domain.dao.ActivityDAOImpl;
+import com.wooki.domain.dao.BookDAO;
+import com.wooki.domain.dao.BookDAOImpl;
+import com.wooki.domain.dao.ChapterDAO;
+import com.wooki.domain.dao.ChapterDAOImpl;
+import com.wooki.domain.dao.CommentDAO;
+import com.wooki.domain.dao.CommentDAOImpl;
+import com.wooki.domain.dao.PublicationDAO;
+import com.wooki.domain.dao.PublicationDAOImpl;
+import com.wooki.domain.dao.UserDAO;
+import com.wooki.domain.dao.UserDAOImpl;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.ChapterActivity;
@@ -83,10 +108,14 @@ import com.wooki.services.feeds.impl.BookActivityFeed;
 import com.wooki.services.feeds.impl.ChapterActivityFeed;
 import com.wooki.services.feeds.impl.CommentActivityFeed;
 import com.wooki.services.internal.TapestryOverrideModule;
+import com.wooki.services.parsers.DOMManager;
+import com.wooki.services.parsers.DOMManagerImpl;
 import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
 import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
+import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.security.WookiSecurityContextImpl;
 
 @SubModule(
 { TapestryOverrideModule.class, FeedModule.class })
@@ -126,191 +155,29 @@ public class WookiModule<T>
         binder.bind(UserDetailsService.class, UserDetailsServiceImpl.class);
         binder.bind(SecurityUrlSource.class, SecurityUrlSourceImpl.class);
         binder.bind(UploadMediaService.class, UploadMediaServiceImpl.class);
+        binder.bind(DOMManager.class, DOMManagerImpl.class);
         binder.bind(WookiViewRefererFilter.class);
+
+        // domain dao
+        binder.bind(ActivityDAO.class, ActivityDAOImpl.class);
+        binder.bind(BookDAO.class, BookDAOImpl.class);
+        binder.bind(ChapterDAO.class, ChapterDAOImpl.class);
+        binder.bind(CommentDAO.class, CommentDAOImpl.class);
+        binder.bind(PublicationDAO.class, PublicationDAOImpl.class);
+        binder.bind(UserDAO.class, UserDAOImpl.class);
+
+        // domain biz
+        binder.bind(ActivityManager.class, ActivityManagerImpl.class);
+        binder.bind(BookManager.class, BookManagerImpl.class);
+        binder.bind(ChapterManager.class, ChapterManagerImpl.class);
+        binder.bind(CommentManager.class, CommentManagerImpl.class);
+        binder.bind(UserManager.class, UserManagerImpl.class);
+
     }
 
     public LinkSupport buildLinkSupport()
     {
         return environmentalBuilder.build(LinkSupport.class);
-    }
-
-    public ActivationContextManager buildActivationContextManager(
-            @Autobuild ActivationContextManagerImpl service)
-    {
-        // This covers invalidations due to changes to classes
-        classesInvalidationEventHub.addInvalidationListener(service);
-
-        return service;
-    }
-
-    /**
-     * Wooki Symbols default
-     */
-    public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration)
-    {
-        configuration.add(
-                WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE,
-                "error/unhandledbrowser");
-        configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
-    }
-
-    public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration)
-    {
-        configuration.addInstance("UploadedAsset", UploadedAssetDispatcher.class, "before:Asset");
-    }
-
-    public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers)
-    {
-        providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider(
-                "config/tapestry.properties"));
-        providers.add("springSecurity", new ClasspathResourceSymbolProvider(
-                "config/security.properties"));
-    }
-
-    /**
-     * Store the last view page in session.
-     */
-    public static void contributePageRenderRequestHandler(
-            OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter)
-    {
-        filters.add("ViewRefererFilter", vrFilter);
-    }
-
-    /**
-     * Allow to return error code instance.
-     * 
-     * @param componentInstanceProcessor
-     * @param configuration
-     */
-    public void contributeComponentEventResultProcessor(
-            @Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
-            MappedConfiguration<Class, ComponentEventResultProcessor> configuration)
-    {
-        configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
-        configuration.addInstance(Feed.class, FeedResultProcessor.class);
-    }
-
-    /**
-     * Add a filter to secure activation context in request.
-     * 
-     * @param filters
-     * @param manager
-     * @param response
-     */
-    public static void contributeComponentRequestHandler(
-            OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
-            Response response, MultipartDecoder decoder)
-    {
-        filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(
-                manager, response, decoder));
-    }
-
-    /**
-     * Add request that shouldn't generate a referer.
-     * 
-     * @param excludePattern
-     */
-    public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern)
-    {
-        excludePattern.add("signin");
-        excludePattern.add("signup");
-        excludePattern.add(".*edit.*");
-        excludePattern.add("dev.*");
-        excludePattern.add("error.*");
-    }
-
-    /**
-     * Add coercion tuple for parameter types...
-     * 
-     * @param configuration
-     */
-    public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration)
-    {
-        addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion
-                .create(ActivityType.class));
-        addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion
-                .create(AppendPosition.class));
-    }
-
-    private static <S, T> void addTuple(Configuration<CoercionTuple> configuration,
-            Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion)
-    {
-        CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
-        configuration.add(tuple);
-    }
-
-    /**
-     * Add jQuery in no conflict mode to default JavaScript Stack
-     * 
-     * @param receiver
-     * @throws NoSuchMethodException
-     * @throws SecurityException
-     */
-    @SuppressWarnings("unchecked")
-    @Match("ClientInfrastructure")
-    public static void adviseClientInfrastructure(MethodAdviceReceiver receiver,
-            final AssetSource source) throws SecurityException, NoSuchMethodException
-    {
-
-        MethodAdvice advice = new MethodAdvice()
-        {
-            public void advise(Invocation invocation)
-            {
-                invocation.proceed();
-                List<Asset> jsStack = (List<Asset>) invocation.getResult();
-                jsStack.add(source.getClasspathAsset("context:static/js/jquery-1.3.2.min.js"));
-                jsStack.add(source.getClasspathAsset("context:static/js/jquery.noconflict.js"));
-                jsStack.add(source.getClasspathAsset("context:static/js/wooki.js"));
-            }
-        };
-
-        receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
-    };
-
-    /**
-     * Contribute GAnalytics plugin to append google analytics javascript to generated pages.
-     * 
-     * @param configuration
-     * @param scriptInjector
-     * @param productionMode
-     * @param environment
-     * @param clientInfrastructure
-     */
-    public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-            @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode,
-            final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
-            final RequestPageCache pageCache)
-    {
-
-        if (productionMode)
-        {
-            configuration.addInstance(
-                    "GAnalyticsScript",
-                    GAnalyticsScriptsInjector.class,
-                    "after:RenderSupport");
-        }
-
-        // Add general links support
-        configuration.add("MenuSupport", new MarkupRendererFilter()
-        {
-            public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer)
-            {
-                RenderSupport renderSupport = environment.peek(RenderSupport.class);
-                LinkSupport linkSupport = new LinkSupportImpl(linkSource, pageLinkSource,
-                        pageCache, renderSupport);
-                environment.push(LinkSupport.class, linkSupport);
-                try
-                {
-                    renderer.renderMarkup(writer);
-                    linkSupport.commit(writer);
-                }
-                finally
-                {
-                    environment.pop(LinkSupport.class);
-                }
-            }
-        }, "after:RenderSupport");
-
     }
 
     /**
@@ -326,6 +193,15 @@ public class WookiModule<T>
                 locale, linkSource, fileParse);
         listenerHub.addUpdateListener(messages);
         return messages;
+    }
+
+    public ActivationContextManager buildActivationContextManager(
+            @Autobuild ActivationContextManagerImpl service)
+    {
+        // This covers invalidations due to changes to classes
+        classesInvalidationEventHub.addInvalidationListener(service);
+
+        return service;
     }
 
     /**
@@ -356,6 +232,179 @@ public class WookiModule<T>
         configuration.add(BookActivity.class, bookActivityFeed);
         configuration.add(ChapterActivity.class, chapterActivityFeed);
         configuration.add(CommentActivity.class, commentActivityFeed);
+    }
+
+    /**
+     * Allow to return error code instance.
+     * 
+     * @param componentInstanceProcessor
+     * @param configuration
+     */
+    public void contributeComponentEventResultProcessor(
+            @Traditional @ComponentInstanceProcessor ComponentEventResultProcessor componentInstanceProcessor,
+            MappedConfiguration<Class, ComponentEventResultProcessor> configuration)
+    {
+        configuration.addInstance(HttpError.class, HttpErrorResultProcessor.class);
+    }
+
+    /**
+     * Add a filter to secure activation context in request.
+     * 
+     * @param filters
+     * @param manager
+     * @param response
+     */
+    public static void contributeComponentRequestHandler(
+            OrderedConfiguration<ComponentRequestFilter> filters, ActivationContextManager manager,
+            Response response, MultipartDecoder decoder)
+    {
+        filters.add("secureActivationContextFilter", new SecureActivationContextRequestFilter(
+                manager, response, decoder));
+    }
+
+    /**
+     * Wooki Symbols default
+     */
+    public static void contributeFactoryDefaults(MappedConfiguration<String, String> configuration)
+    {
+        configuration.add(
+                WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE,
+                "error/unhandledbrowser");
+        configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
+    }
+
+    public static void contributeHibernateEntityPackageManager(Configuration<String> configuration,
+            @Inject @Symbol(InternalConstants.TAPESTRY_APP_PACKAGE_PARAM) String rootPackage)
+    {
+        configuration.add(rootPackage + ".domain.model");
+    }
+
+    public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration)
+    {
+        configuration.addInstance("UploadedAsset", UploadedAssetDispatcher.class, "before:Asset");
+    }
+
+    /**
+     * Contribute GAnalytics plugin to append google analytics javascript to generated pages.
+     * 
+     * @param configuration
+     * @param scriptInjector
+     * @param productionMode
+     * @param environment
+     * @param clientInfrastructure
+     */
+    public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
+            @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode,
+            final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
+            final RequestPageCache pageCache)
+    {
+        // Add general links support
+        configuration.add("MenuSupport", new MarkupRendererFilter()
+        {
+            public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer)
+            {
+                RenderSupport renderSupport = environment.peek(RenderSupport.class);
+                LinkSupport linkSupport = new LinkSupportImpl(linkSource, pageLinkSource,
+                        pageCache, renderSupport);
+                environment.push(LinkSupport.class, linkSupport);
+                try
+                {
+                    renderer.renderMarkup(writer);
+                    linkSupport.commit(writer);
+                }
+                finally
+                {
+                    environment.pop(LinkSupport.class);
+                }
+            }
+        }, "after:RenderSupport");
+
+    }
+
+    public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers)
+    {
+        providers.add("tapestryConfiguration", new ClasspathResourceSymbolProvider(
+                "config/tapestry.properties"));
+        providers.add("springSecurity", new ClasspathResourceSymbolProvider(
+                "config/security.properties"));
+    }
+
+    /**
+     * Store the last view page in session.
+     */
+    public static void contributePageRenderRequestHandler(
+            OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter)
+    {
+        filters.add("ViewRefererFilter", vrFilter);
+    }
+
+    /**
+     * Add coercion tuple for parameter types...
+     * 
+     * @param configuration
+     */
+    public static void contributeTypeCoercer(Configuration<CoercionTuple> configuration)
+    {
+        addTuple(configuration, String.class, ActivityType.class, StringToEnumCoercion
+                .create(ActivityType.class));
+        addTuple(configuration, String.class, AppendPosition.class, StringToEnumCoercion
+                .create(AppendPosition.class));
+    }
+
+    /**
+     * Add request that shouldn't generate a referer.
+     * 
+     * @param excludePattern
+     */
+    public static void contributeWookiViewRefererFilter(Configuration<String> excludePattern)
+    {
+        excludePattern.add("signin");
+        excludePattern.add("signup");
+        excludePattern.add(".*edit.*");
+        excludePattern.add("dev.*");
+        excludePattern.add("error.*");
+    }
+
+    /**
+     * Add jQuery in no conflict mode to default JavaScript Stack
+     * 
+     * @param receiver
+     * @throws NoSuchMethodException
+     * @throws SecurityException
+     */
+    @SuppressWarnings("unchecked")
+    @Match("ClientInfrastructure")
+    public static void adviseClientInfrastructure(MethodAdviceReceiver receiver,
+            final AssetSource source) throws SecurityException, NoSuchMethodException
+    {
+
+        MethodAdvice advice = new MethodAdvice()
+        {
+            public void advise(Invocation invocation)
+            {
+                invocation.proceed();
+                List<Asset> jsStack = (List<Asset>) invocation.getResult();
+                jsStack.add(source.getClasspathAsset("context:static/js/jquery-1.3.2.min.js"));
+                jsStack.add(source.getClasspathAsset("context:static/js/jquery.noconflict.js"));
+                jsStack.add(source.getClasspathAsset("context:static/js/wooki.js"));
+            }
+        };
+
+        receiver.adviseMethod(receiver.getInterface().getMethod("getJavascriptStack"), advice);
+    }
+
+    @Match("*Manager")
+    public static void adviseTransactions(HibernateTransactionAdvisor advisor,
+            MethodAdviceReceiver receiver)
+    {
+        advisor.addTransactionCommitAdvice(receiver);
+    }
+
+    private static <S, T> void addTuple(Configuration<CoercionTuple> configuration,
+            Class<S> sourceType, Class<T> targetType, Coercion<S, T> coercion)
+    {
+        CoercionTuple<S, T> tuple = new CoercionTuple<S, T>(sourceType, targetType, coercion);
+        configuration.add(tuple);
     }
 
 }

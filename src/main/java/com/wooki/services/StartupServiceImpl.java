@@ -26,29 +26,33 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.exception.AuthorizationException;
 import com.wooki.domain.exception.UserAlreadyException;
+import com.wooki.domain.model.Book;
+import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.User;
+import com.wooki.services.security.WookiSecurityContext;
 
 public class StartupServiceImpl implements StartupService
 {
 
     public StartupServiceImpl(ApplicationContext applicationContext,
-            @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode, @Inject DataSource ds)
+            @Inject @Symbol(SymbolConstants.PRODUCTION_MODE) boolean productionMode,
+            BookManager bookManager, ChapterManager chapterManager, UserManager userManager, UserDAO userDao, DataSource datasource)
             throws UserAlreadyException, AuthorizationException
     {
+        // enabled headless mode
+        System.setProperty("java.awt.headless", "true");
 
-        // Create Acl schema
         ClassPathResource script = new ClassPathResource("createAclSchema.sql");
-        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-
-        script = new ClassPathResource("wookiSchema.sql");
-        tpl = new SimpleJdbcTemplate(ds);
+        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(datasource);
         SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
         
-        script = new ClassPathResource("wookiData.sql");
-        tpl = new SimpleJdbcTemplate(ds);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
     }
 }

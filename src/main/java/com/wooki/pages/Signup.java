@@ -55,9 +55,6 @@ public class Signup
     @Inject
     private WookiSecurityContext securityCtx;
 
-    @InjectService("securityManager")
-    private SecurityManager securityManager;
-    
     @InjectPage
     private Dashboard successPage;
 

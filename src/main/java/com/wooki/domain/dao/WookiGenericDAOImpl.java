@@ -16,30 +16,25 @@
 
 package com.wooki.domain.dao;
 
-import com.wooki.domain.model.User;
+import java.io.Serializable;
+
+import org.hibernate.Session;
+
+import com.wooki.domain.model.WookiEntity;
 
 /**
- * Implements handling of Wooki Authors.
+ * Wooki Generic DAO. Provides convenience method for selecting only non deleted objects...
  * 
- * @author ccordenier
+ * @param <T>
+ * @param <PK>
  */
-public interface UserDAO extends WookiGenericDAO<User, Long>
+public abstract class WookiGenericDAOImpl<T extends WookiEntity, PK extends Serializable> extends
+        GenericDAOImpl<T, PK> implements WookiGenericDAO<T, PK>
 {
 
-    /**
-     * Find an author by its username, case is insensitive.
-     * 
-     * @param username
-     * @return
-     */
-    User findByUsername(String username);
-
-    /**
-     * List usernames
-     * 
-     * @param prefix
-     * @return
-     */
-    String[] listUserNames(String prefix);
+    public WookiGenericDAOImpl(Session session)
+    {
+        super(session);
+    }
 
 }

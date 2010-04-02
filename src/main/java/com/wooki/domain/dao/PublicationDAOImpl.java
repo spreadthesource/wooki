@@ -18,29 +18,34 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Publication;
 
-@Repository("publicationDao")
-public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implements PublicationDAO
+public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> implements
+        PublicationDAO
 {
+
+    public PublicationDAOImpl(Session session)
+    {
+        super(session);
+    }
 
     public Publication findRevisionById(Long chapterId, Long revision)
     {
         Defense.notNull(chapterId, "chapterId");
         Defense.notNull(revision, "revision");
-        Query query = entityManager
+        Query query = session
                 .createQuery("from "
                         + getEntityType()
                         + " p where p.id=:pid and p.chapter.id=:cid and p.deletionDate is null order by p.creationDate desc");
         query.setParameter("cid", chapterId);
         query.setParameter("pid", revision);
         query.setMaxResults(1);
-        List<Publication> published = query.getResultList();
+        List<Publication> published = query.list();
         if (published != null && published.size() > 0)
         {
             return published.get(0);
@@ -54,13 +59,13 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
     public Publication findLastRevision(Long chapterId)
     {
         Defense.notNull(chapterId, "chapterId");
-        Query query = entityManager
+        Query query = session
                 .createQuery("from "
                         + getEntityType()
                         + " p where p.chapter.id=:id and p.deletionDate is null order by p.creationDate desc");
         query.setParameter("id", chapterId);
         query.setMaxResults(10);
-        List<Publication> published = query.getResultList();
+        List<Publication> published = query.list();
         if (published != null && published.size() > 0)
         {
             return published.get(0);
@@ -74,13 +79,13 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
     public Publication findLastPublishedRevision(Long chapterId)
     {
         Defense.notNull(chapterId, "chapterId");
-        Query query = entityManager
+        Query query = session
                 .createQuery("from "
                         + getEntityType()
                         + " p where p.chapter.id=:id and p.deletionDate is null and p.published = 1 order by p.creationDate desc");
         query.setParameter("id", chapterId);
         query.setMaxResults(10);
-        List<Publication> published = query.getResultList();
+        List<Publication> published = query.list();
         if (published != null && published.size() > 0)
         {
             return published.get(0);
@@ -93,10 +98,10 @@ public class PublicationDAOImpl extends GenericDAOImpl<Publication, Long> implem
 
     public boolean isPublished(Long revision)
     {
-        Query query = entityManager.createQuery("select p.published from " + getEntityType()
+        Query query = session.createQuery("select p.published from " + getEntityType()
                 + " p where p.id=:id and p.deletionDate is null");
         query.setParameter("id", revision);
-        List<Boolean> published = query.getResultList();
+        List<Boolean> published = query.list();
         if (published != null && published.size() > 0)
         {
             return published.get(0);

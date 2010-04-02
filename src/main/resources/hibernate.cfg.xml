@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="wookidb">
+		<property name="hibernate.connection.driver_class">${driver}</property>
+		<property name="hibernate.connection.username">${dbuser}</property>
+		<property name="hibernate.connection.password">${dbpassword}</property>
+		<property name="hibernate.dialect">${sql_dialect}</property>
+		<property name="hibernate.connection.url">jdbc:hsqldb:mem:wookidb</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.show_sql">${show_sql}</property>
+        
+		<mapping package="com.wooki.domain.model" />
+		<mapping package="com.wooki.domain.activity" />
+	</session-factory>
+</hibernate-configuration>

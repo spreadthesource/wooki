@@ -16,6 +16,8 @@
 
 package com.wooki.services.security;
 
+import org.apache.tapestry5.ioc.annotations.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,13 +33,8 @@ import com.wooki.domain.model.User;
  */
 public class UserDetailsServiceImpl implements UserDetailsService
 {
-
-    private final UserManager userManager;
-
-    public UserDetailsServiceImpl(UserManager userManager)
-    {
-        this.userManager = userManager;
-    }
+    @Inject @Autowired
+    private UserManager userManager;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,
             DataAccessException

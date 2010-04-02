@@ -20,10 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
@@ -48,33 +45,32 @@ import com.wooki.services.utils.SlugBuilder;
 /**
  * Global wooki application business manager.
  */
-@Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-@Component("bookManager")
 public class BookManagerImpl extends AbstractManager implements BookManager
 {
+    private final BookDAO bookDao;
 
-    @Autowired
-    private BookDAO bookDao;
+    private final UserDAO userDao;
 
-    @Autowired
-    private UserDAO authorDao;
+    private final ActivityDAO activityDao;
 
-    @Autowired
-    private ActivityDAO activityDao;
+    private final ChapterDAO chapterDao;
 
-    @Autowired
-    private ChapterDAO chapterDao;
-
-    @Autowired
-    private ChapterManager chapterManager;
-
-    @Autowired
-    private WookiSecurityContext securityCtx;
-
-    @Autowired
     private SecurityManager securityManager;
     
-    @Transactional(readOnly = false)
+    private WookiSecurityContext securityCtx;
+
+    public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
+            ChapterDAO chapterDAO, ApplicationContext context)
+    {
+        this.bookDao = bookDAO;
+        this.userDao = userDAO;
+        this.activityDao = activityDAO;
+        this.chapterDao = chapterDAO;
+        
+        this.securityCtx = context.getBean(WookiSecurityContext.class);
+        this.securityManager = context.getBean(SecurityManager.class);
+    }
+
     public User addAuthor(Book book, String username) throws UserNotFoundException,
             UserAlreadyOwnerException
     {
@@ -86,7 +82,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
                 "Action not authorized"); }
 
-        User toAdd = authorDao.findByUsername(username);
+        User toAdd = userDao.findByUsername(username);
 
         if (toAdd == null) { throw new UserNotFoundException(username + " does not exist."); }
 
@@ -98,7 +94,6 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         return toAdd;
     }
 
-    @Transactional(readOnly = false)
     public void remove(Long bookId)
     {
 
@@ -118,7 +113,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
             BookActivity ba = new BookActivity();
             ba.setCreationDate(Calendar.getInstance().getTime());
             ba.setType(BookEventType.DELETE);
-            ba.setUser(this.securityCtx.getAuthor());
+            ba.setUser(this.securityCtx.getUser());
             ba.setBook(toRemove);
             ba.setResourceUnavailable(true);
             this.activityDao.create(ba);
@@ -147,7 +142,6 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     }
 
-    @Transactional(readOnly = false)
     public void removeAuthor(Book book, Long authorId)
     {
 
@@ -157,13 +151,12 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
                 "Action not authorized"); }
 
-        User user = authorDao.findById(authorId);
+        User user = userDao.findById(authorId);
         user.getBooks().remove(book);
         book.getAuthors().remove(user);
         bookDao.update(book);
     }
 
-    @Transactional(readOnly = false)
     public Book updateTitle(Book book) throws TitleAlreadyInUseException
     {
 
@@ -198,7 +191,6 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         return bookDao.isAuthor(book.getId(), username);
     }
 
-    @Transactional(readOnly = false, rollbackFor = AuthorizationException.class)
     public Chapter addChapter(Book book, String title) throws AuthorizationException
     {
 
@@ -208,7 +200,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
                 "Current user is not an author of " + book.getTitle()); }
 
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         // Create the new Chapter
         Chapter chapter = new Chapter();
@@ -235,7 +227,6 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         return chapter;
     }
 
-    @Transactional(readOnly = false)
     public Book create(String title)
     {
 
@@ -244,7 +235,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!this.securityCtx.isLoggedIn()) { throw new AuthorizationException(
                 "Only logged user can create books."); }
 
-        User author = securityCtx.getAuthor();
+        User author = securityCtx.getUser();
 
         Book book = new Book();
 
@@ -301,7 +292,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     public List<Book> list()
     {
-        return bookDao.listAll();
+        return bookDao.list();
     }
 
     public List<Book> listByTitle(String title)
@@ -311,14 +302,14 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     public List<Book> listByOwner(String userName)
     {
-        User author = authorDao.findByUsername(userName);
+        User author = userDao.findByUsername(userName);
         if (author != null) { return bookDao.listByOwner(author.getId()); }
         return null;
     }
 
     public List<Book> listByCollaborator(String userName)
     {
-        User author = authorDao.findByUsername(userName);
+        User author = userDao.findByUsername(userName);
         if (author != null) { return bookDao.listByCollaborator(author.getId()); }
         return null;
     }

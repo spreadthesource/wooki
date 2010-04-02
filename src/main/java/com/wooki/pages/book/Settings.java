@@ -215,7 +215,7 @@ public class Settings extends BookBase
 
         this.authors = this.getBook().getAuthors();
         this.rowIndex = 0;
-        this.loggedAuthor = securityCtx.getAuthor();
+        this.loggedAuthor = securityCtx.getUser();
 
         return null;
     }

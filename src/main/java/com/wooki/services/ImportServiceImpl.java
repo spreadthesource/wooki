@@ -17,8 +17,11 @@
 package com.wooki.services;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -31,8 +34,10 @@ import org.apache.maven.doxia.DefaultConverter;
 import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -43,12 +48,25 @@ import com.wooki.services.parsers.Convertor;
 
 public class ImportServiceImpl implements ImportService {
 
+	@Autowired
+	private HTMLParser handler;
+
+	@Autowired
 	private BookManager bookManager;
 
 	private ChapterManager chapterManager;
 
 	private Convertor toHTMLConvertor;
+
 	private Convertor fromAptToDocbook;
+
+	public Convertor getFromAptToDocbook() {
+		return fromAptToDocbook;
+	}
+
+	public void setFromAptToDocbook(Convertor fromAptToDocbook) {
+		this.fromAptToDocbook = fromAptToDocbook;
+	}
 
 	private Logger logger = Logger.getLogger(ImportServiceImpl.class);
 
@@ -58,36 +76,57 @@ public class ImportServiceImpl implements ImportService {
 		return importDocbook(xhtml);
 	}
 
-	public Book importApt(Resource apt) {
+	public Book importBook(Resource book) {
+		Book toReturn = new Book();
+		Converter converter = new DefaultConverter();
+		File tempFile = null;
 		try {
-			String from = "apt";
-			File out = File.createTempFile("fromAptToXHTML", ".html");
-			String to = "html";
-
-			Converter converter = new DefaultConverter();
-
-			InputFileWrapper input = InputFileWrapper.valueOf(
-					apt.getFilename(), from, "ISO-8859-1", converter
-							.getInputFormats());
-			OutputFileWrapper output = OutputFileWrapper.valueOf(out
-					.getAbsolutePath(), to, "UTF-8", converter
+			InputFileWrapper input = InputFileWrapper.valueOf(book.getFile()
+					.getAbsolutePath(), null, "ISO-8859-1", converter
+					.getInputFormats());
+			tempFile = File.createTempFile("DoxiaWooki", ".xhtml");
+			OutputFileWrapper output = OutputFileWrapper.valueOf(tempFile
+					.getAbsolutePath(), "xhtml", "UTF-8", converter
 					.getOutputFormats());
-
 			converter.convert(input, output);
-			return importDocbook(fromAptToDocbook.performTransformation(new FileSystemResource(out)));
 		} catch (UnsupportedFormatException e) {
-			e.printStackTrace();
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription()
+					+ " because of an unsupported format");
+			logger.error(e.getLocalizedMessage());
 		} catch (ConverterException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription()
+					+ " because of a Doxia Converter exception");
+			logger.error(e.getLocalizedMessage());
+		} catch (IllegalArgumentException e) {
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription()
+					+ " because of an IllegalArgument exception");
+			logger.error(e.getLocalizedMessage());
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription() + " because of the encoding");
+			logger.error(e.getLocalizedMessage());
+		} catch (FileNotFoundException e) {
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription()
+					+ " because of a FileNotFound exception");
+		} catch (IOException e) {
+			logger.error("Didn't manage to import the book contained in "
+					+ book.getDescription() + " because of an IO exception");
+			logger.error(e.getLocalizedMessage());
+			return null;
 		}
-		return null;
+
+		InputStream correctedXHTML = fromAptToDocbook
+				.performTransformation(new FileSystemResource(tempFile));
+		return importDocbook(correctedXHTML);
 	}
 
 	public Book importDocbook(InputStream generatedXhtml) {
-		HTMLParser handler = new HTMLParser();
+
+		handler.setEntityResolver((EntityResolver) toHTMLConvertor);
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 
 		// création d'un parseur SAX
@@ -111,8 +150,7 @@ public class ImportServiceImpl implements ImportService {
 		}
 
 		Book book = handler.getBook();
-		Book toReturn = getBookManager().create(book.getTitle());
-		return toReturn;
+		return book;
 	}
 
 	public BookManager getBookManager() {
@@ -139,11 +177,7 @@ public class ImportServiceImpl implements ImportService {
 		this.toHTMLConvertor = toHTMLConvertor;
 	}
 
-	public Convertor getFromAptToDocbook() {
-		return fromAptToDocbook;
-	}
-
-	public void setFromAptToDocbook(Convertor fromAptToDocbook) {
-		this.fromAptToDocbook = fromAptToDocbook;
+	public Book importApt(Resource apt) {
+		return importBook(apt);
 	}
 }

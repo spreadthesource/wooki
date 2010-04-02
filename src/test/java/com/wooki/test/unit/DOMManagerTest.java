@@ -101,6 +101,19 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	@Qualifier("htmlParser")
 	private HTMLParser htmlParser;
 
+	@Autowired
+	@Qualifier("importService")
+	private com.wooki.services.ImportServiceImpl importService;
+
+	public com.wooki.services.ImportServiceImpl getImportService() {
+		return importService;
+	}
+
+	public void setImportService(
+			com.wooki.services.ImportServiceImpl importService) {
+		this.importService = importService;
+	}
+
 	public Convertor getFromDocbookConvertor() {
 		return fromDocbookConvertor;
 	}
@@ -145,7 +158,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 						"<bookmark name=\"Chapter 1\" href=\"#1\"><bookmark name=\"Chapter 1-1\" href=\"#2\" /><bookmark name=\"Chapter 1-2\" href=\"#3\"><bookmark name=\"Chapter 1-1-1\" href=\"#4\" /></bookmark><bookmark name=\"Chapter 1-3\" href=\"#5\" /></bookmark><bookmark name=\"Chapter 2\" href=\"#6\" />",
 						"Bookmark generation is wrong");
 
-		bookmarks = this.generator.generatePdfBookmarks("<div><h2 id='1'>Chapter 1</h2><h4 id='2'>Chapter 1-1-1</h4><h2 id='3'>Chapter 2</h2></div>", 2, 4);
+		bookmarks = this.generator
+				.generatePdfBookmarks(
+						"<div><h2 id='1'>Chapter 1</h2><h4 id='2'>Chapter 1-1-1</h4><h2 id='3'>Chapter 2</h2></div>",
+						2, 4);
 		Assert
 				.assertEquals(
 						bookmarks,
@@ -162,7 +178,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		Resource resource = new ByteArrayResource(result.getBytes());
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
 		logger.debug("Document to xhtml ok");
-		InputStream apt = toAPTConvertor.performTransformation(new InputStreamResource(xhtml));
+		InputStream apt = toAPTConvertor
+				.performTransformation(new InputStreamResource(xhtml));
 		logger.debug("xhtml to apt ok");
 		File aptFile;
 		try {
@@ -188,7 +205,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	public void testDocbookConversion() {
 		String result = "<book>	  <bookinfo>	    <title>An Example Book</title>	    	    <author>	      <firstname>Your first name</firstname>	      <surname>Your surname</surname>	      <affiliation>	        <address><email>foo@example.com</email></address>	      </affiliation>	    </author>		    <copyright>	      <year>2000</year>	      <holder>Copyright string here</holder>	    </copyright>		    <abstract>	      <para>If your book has an abstract then it should go here.</para>	    </abstract>	  </bookinfo>		  <preface>	    <title>Preface</title>		    <para>Your book may have a preface, in which case it should be placed	      here.</para>	  </preface>	      	  <chapter>	    <title>My First Chapter</title>		    <para>This is the first chapter in my book.</para>		    <sect1>	      <title>My First Section</title>		      <para>This is the first section in my book.</para>	    </sect1>	  </chapter>	</book>";
 		Resource resource = new ByteArrayResource(result.getBytes());
-		InputStream xhtml = fromDocbookConvertor.performTransformation(resource);
+		InputStream xhtml = fromDocbookConvertor
+				.performTransformation(resource);
 		File htmlFile = null;
 		try {
 			htmlFile = File.createTempFile("wooki", ".html");
@@ -215,7 +233,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 		SAXParser parser;
 		try {
 			parser = factory.newSAXParser();
-			parser.parse(new InputSource(new FileInputStream(htmlFile)), htmlParser);
+			parser.parse(new InputSource(new FileInputStream(htmlFile)),
+					htmlParser);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 			logger.error(e.getLocalizedMessage());
@@ -233,7 +252,7 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 	}
 
 	@Test
-	public void testAptConversion() {
+	public void testAptImport() {
 		String result = "   ------\n            Title\n            ------\n            Author\n            ------\n             Date\n\n  Paragraph 1, line 1.\n  Paragraph 1, line 2.\n\n  Paragraph 2, line 1.\n  Paragraph 2, line 2.\n\nSection title\n\n* Sub-section title\n\n** Sub-sub-section title\n\n*** Sub-sub-sub-section title\n\n**** Sub-sub-sub-sub-section title\n\n      * List item 1.\n\n      * List item 2.\n\n        Paragraph contained in list item 2.\n\n            * Sub-list item 1.\n\n            * Sub-list item 2.\n\n      * List item 3.\n        Force end of list:\n\n      []\n\n+------------------------------------------+\nVerbatim text not contained in list item 3\n+------------------------------------------+\n\n      [[1]] Numbered item 1.\n\n                [[A]] Numbered item A.\n\n                [[B]] Numbered item B.\n\n      [[2]] Numbered item 2.\n\n  List numbering schemes: [[1]], [[a]], [[A]], [[i]], [[I]].\n\n      [Defined term 1] of definition list.\n\n      [Defined term 2] of definition list.\n\n+-------------------------------+\nVerbatim text\n                        in a box\n+-------------------------------+\n\n  --- instead of +-- suppresses the box around verbatim text.\n\n[Figure name] Figure caption\n\n*----------*--------------+----------------:\n| Centered | Left-aligned | Right-aligned  |\n| cell 1,1 | cell 1,2     | cell 1,3       |\n*----------*--------------+----------------:\n| cell 2,1 | cell 2,2     | cell 2,3       |\n*----------*--------------+----------------:\nTable caption\n\n  No grid, no caption:\n\n*-----*------*\n cell | cell\n*-----*------*\n cell | cell\n*-----*------*\n\n  Horizontal line:\n\n=======================================================================\n\n^L\n  New page.\n\n  <Italic> font. <<Bold>> font. <<<Monospaced>>> font.\n\n  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.\n  Link to {{{anchor}showing alternate text}}.\n  Link to {{{http://www.pixware.fr}Pixware home page}}.\n\n  Force line\\\n  break.\n\n  Non\\ breaking\\ space.\n\n  Escaped special characters: \\~, \\=, \\-, \\+, \\*, \\[, \\], \\<, \\>, \\{, \\}, \\\\.\n\n  Copyright symbol: \\251, \\xA9, \\u00a9.\n\n~~Commented out.";
 		File aptFile = null;
 		String from = "apt";
@@ -241,59 +260,31 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		try {
 			out = File.createTempFile("fromAptToXHTML", ".html");
-			InputStream apt = new ByteArrayInputStream(result.getBytes());
-			try {
-				aptFile = File.createTempFile("wooki", ".apt");
-				FileOutputStream fos = new FileOutputStream(aptFile);
-				logger.debug("APT File is " + aptFile.getAbsolutePath());
-				byte[] content = null;
-				int available = 0;
-				while ((available = apt.available()) > 0) {
-					content = new byte[available];
-					apt.read(content);
-					fos.write(content);
-				}
-				fos.flush();
-				fos.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			String to = "xhtml";
-			Converter converter = new DefaultConverter();
-			InputFileWrapper input = InputFileWrapper.valueOf(aptFile.getAbsolutePath(), from, "ISO-8859-1", converter.getInputFormats());
-
-			OutputFileWrapper output = OutputFileWrapper.valueOf(out.getAbsolutePath(), to, "UTF-8", converter.getOutputFormats());
-
-			converter.convert(input, output);
-		} catch (UnsupportedFormatException e) {
-			e.printStackTrace();
-		} catch (ConverterException e) {
-			e.printStackTrace();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		InputStream newHTML = fromAptToDocbook.performTransformation(new FileSystemResource(out));
-		SAXParserFactory factory = SAXParserFactory.newInstance();
-
-		// création d'un parseur SAX
-		SAXParser parser;
+		InputStream apt = new ByteArrayInputStream(result.getBytes());
 		try {
-			parser = factory.newSAXParser();
-			parser.parse(new InputSource(newHTML), htmlParser);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
-		} catch (SAXException e) {
-			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
+			aptFile = File.createTempFile("wooki", ".apt");
+			FileOutputStream fos = new FileOutputStream(aptFile);
+			logger.debug("APT File is " + aptFile.getAbsolutePath());
+			byte[] content = null;
+			int available = 0;
+			while ((available = apt.available()) > 0) {
+				content = new byte[available];
+				apt.read(content);
+				fos.write(content);
+			}
+			fos.flush();
+			fos.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			logger.error(e.getLocalizedMessage());
 		}
+		String to = "xhtml";
+		Book book = importService.importApt(new FileSystemResource(aptFile));
 
-		Book book = htmlParser.getBook();
 		logger.debug("The book title is " + book.getTitle());
 	}
 
@@ -307,8 +298,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		/** Generate Latex */
 		InputStream xhtml = toXHTMLConvertor.performTransformation(resource);
-		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor.performTransformation(new InputStreamResource(xhtml));
-		InputStream latex = toLatexConvertor.performTransformation(new InputStreamResource(improvedXhtml));
+		InputStream improvedXhtml = toImprovedXHTML4LatexConvertor
+				.performTransformation(new InputStreamResource(xhtml));
+		InputStream latex = toLatexConvertor
+				.performTransformation(new InputStreamResource(improvedXhtml));
 		logger.debug("xhtml to apt ok");
 		File latexFile;
 		try {
@@ -332,7 +325,10 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 	@Test
 	public void testAddIds() {
-		String result = generator.adaptContent("<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>", null);
+		String result = generator
+				.adaptContent(
+						"<h2>SubTitle</h2><p>Lorem ipsum</p><h3>SubTitle2</h3><p>Lorem ipsum</p>",
+						null);
 		Assert
 				.assertTrue(result
 						.contains("<h2 id=\"b0\" class=\"commentable\">SubTitle</h2><p id=\"b1\" class=\"commentable\">Lorem ipsum</p><h3 id=\"b2\" class=\"commentable\">SubTitle2</h3><p id=\"b3\" class=\"commentable\">Lorem ipsum</p>"));
@@ -357,7 +353,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "2", "Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "2",
+				"Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -375,7 +372,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "0", "Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "0",
+				"Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -393,7 +391,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), null, "Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), null,
+				"Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -411,7 +410,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "0", "Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "0",
+				"Comment must be assigned to previous 'h' element id");
 	}
 
 	@Test
@@ -429,7 +429,8 @@ public class DOMManagerTest extends AbstractTestNGSpringContextTests {
 
 		generator.reAssignComment(comments, currentContent, newContent);
 
-		Assert.assertEquals(comment.getDomId(), "1", "Comment must be assigned to previous 'h' element id");
+		Assert.assertEquals(comment.getDomId(), "1",
+				"Comment must be assigned to previous 'h' element id");
 	}
 
 }

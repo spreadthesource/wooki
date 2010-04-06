@@ -283,6 +283,11 @@
 			<artifactId>db-migration-maven-plugin</artifactId>
 			<version>0.9.9-m3</version>
 		</dependency>
+		<dependency>
+			<groupId>com.spreadthesource</groupId>
+			<artifactId>tapestry5-installer</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 

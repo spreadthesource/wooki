@@ -39,13 +39,13 @@
 
 	<filter>
 		<filter-name>wooki</filter-name>
-		<filter-class>com.spreadthesource.tapestry5.installer.TapestrySpringDelayedFilter
+		<filter-class>com.spreadthesource.tapestry.installer.TapestrySpringDelayedFilter
 		</filter-class>
 	</filter>
 	
 	<filter>
 		<filter-name>terminator</filter-name>
-		<filter-class>com.spreadthesource.tapestry5.installer.TapestryTerminatorFilter
+		<filter-class>com.spreadthesource.tapestry.installer.TapestryTerminatorFilter
 		</filter-class>
 	</filter>
 

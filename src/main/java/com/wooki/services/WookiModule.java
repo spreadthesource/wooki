@@ -270,7 +270,8 @@ public class WookiModule<T>
         configuration.add(
                 WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE,
                 "error/unhandledbrowser");
-        configuration.add(WookiSymbolsConstants.GANALYTICS_KEY, "");
+        
+        configuration.add(WookiSymbolsConstants.MIGRATIONS_PATH, "WEB-INF/migrations/");
     }
 
     public static void contributeHibernateEntityPackageManager(Configuration<String> configuration,

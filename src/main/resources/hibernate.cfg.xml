@@ -8,11 +8,9 @@
 		<property name="hibernate.connection.username">${dbuser}</property>
 		<property name="hibernate.connection.password">${dbpassword}</property>
 		<property name="hibernate.dialect">${sql_dialect}</property>
-		<property name="hibernate.connection.url">jdbc:hsqldb:mem:wookidb</property>
-		<property name="hibernate.hbm2ddl.auto">update</property>
+		<property name="hibernate.connection.url">${url}</property>
+		<!--  property name="hibernate.hbm2ddl.auto">update</property-->
         <property name="hibernate.show_sql">${show_sql}</property>
-        
-		<mapping package="com.wooki.domain.model" />
-		<mapping package="com.wooki.domain.activity" />
+
 	</session-factory>
 </hibernate-configuration>

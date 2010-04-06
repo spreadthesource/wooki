@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wooki</groupId>
 	<artifactId>wooki</artifactId>
-	<version>${wooki-version}</version>
+	<version>0.3.0</version>
 	<packaging>war</packaging>
 	<name>Wooki : Collaborative Writing</name>
 	<dependencies>
@@ -316,7 +316,7 @@
 					<componentProperties>
 						<drop>true</drop>
 						<configurationfile>/src/build/hibernate.cfg.xml</configurationfile>
-						<outputfilename>wooki-schema-${wooki-version}.sql</outputfilename>
+						<outputfilename>wooki-schema-${project.version}.sql</outputfilename>
 						<scan-classes>true</scan-classes>
 					</componentProperties>
 				</configuration>
@@ -569,6 +569,6 @@
 		</hibernate-entitymanager-version>
 		<spring-version>3.0.0.RELEASE</spring-version>
 		<tapestry-release-version>5.2.0-SNAPSHOT</tapestry-release-version>
-		<wooki-version>0.3.0</wooki-version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 </project>

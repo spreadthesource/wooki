@@ -1,5 +1,7 @@
 package com.wooki.components;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
@@ -11,7 +13,13 @@ import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentSource;
+import org.apache.tapestry5.services.RequestGlobals;
 
+/**
+ * Add a link in your HTML header section to refer to the Feed corresponding to the current page.
+ * 
+ * @author ccordenier
+ */
 public class FeedLink extends AbstractLink
 {
 
@@ -30,6 +38,9 @@ public class FeedLink extends AbstractLink
     @Parameter
     private Object[] titleFormat;
 
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "http")
+    private String protocol;
+
     /**
      * If provided, this is the activation context for the target page (the information will be
      * encoded into the URL). If not provided, then the target page will provide its own activation
@@ -47,6 +58,9 @@ public class FeedLink extends AbstractLink
     @Inject
     private ComponentSource source;
 
+    @Inject
+    private RequestGlobals request;
+
     String defaultEvent()
     {
         return resources.getId();
@@ -62,6 +76,9 @@ public class FeedLink extends AbstractLink
                 titleKey,
                 titleFormat) : this.messages.get(titleKey);
 
+        // Use to build a full URL
+        HttpServletRequest httpRequest = request.getHTTPServletRequest();
+
         // Add link to the header
         Element head = writer.getDocument().find("html/head");
         head.element(
@@ -73,6 +90,7 @@ public class FeedLink extends AbstractLink
                 "rel",
                 "alternate",
                 "href",
-                link.toAbsoluteURI());
+                protocol + "://" + httpRequest.getServerName() + ":" + httpRequest.getServerPort()
+                        + link.toAbsoluteURI());
     }
 }

@@ -76,11 +76,13 @@ public class CommentManagerImpl implements CommentManager
 
     public void removeComment(Long commId)
     {
-        if (!securityCtx.isAuthorOfComment(commId)) { throw new AuthorizationException(
-                "User is not authorized to remove this comment : " + commId); }
 
         Comment c = this.commentDao.findById(commId);
         Defense.notNull(c, "comment");
+
+        if (!securityCtx.isOwner(c)) { throw new AuthorizationException(
+                "User is not authorized to remove this comment : " + commId); }
+        
         this.commentDao.delete(c);
         CommentActivity ca = new CommentActivity();
         ca.setCreationDate(Calendar.getInstance().getTime());

@@ -17,9 +17,13 @@
 package com.wooki.services.security.spring;
 
 import org.apache.tapestry5.EventContext;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
 import org.apache.tapestry5.services.PageRenderRequestParameters;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import com.wooki.domain.biz.BookManager;
+import com.wooki.domain.model.Book;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -30,7 +34,11 @@ import com.wooki.services.security.WookiSecurityContext;
 public class BookAuthorAccessController implements TapestryResourceAccessController
 {
 
-    private WookiSecurityContext ctx;
+    private final WookiSecurityContext ctx;
+
+    @Inject
+    @Autowired
+    private BookManager bookManager;
 
     public BookAuthorAccessController(WookiSecurityContext ctx)
     {
@@ -47,15 +55,18 @@ public class BookAuthorAccessController implements TapestryResourceAccessControl
         if (activationContext.getCount() > 0)
         {
             Long bookId = null;
+            Book book = null;
             try
             {
                 bookId = activationContext.get(Long.class, 0);
+                book = this.bookManager.findById(bookId);
+                if (book == null) { return false; }
             }
             catch (RuntimeException re)
             {
                 return false;
             }
-            return ctx.isAuthorOfBook(bookId);
+            return ctx.canWrite(book);
         }
         return false;
     }
@@ -69,15 +80,18 @@ public class BookAuthorAccessController implements TapestryResourceAccessControl
         if (activationContext.getCount() > 0)
         {
             Long bookId = null;
+            Book book = null;
             try
             {
                 bookId = activationContext.get(Long.class, 0);
+                book = this.bookManager.findById(bookId);
+                if (book == null) { return false; }
             }
             catch (RuntimeException re)
             {
                 return false;
             }
-            return ctx.isAuthorOfBook(bookId);
+            return ctx.canWrite(book);
         }
         return false;
     }

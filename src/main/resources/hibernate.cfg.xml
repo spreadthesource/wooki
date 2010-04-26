@@ -9,8 +9,7 @@
 		<property name="hibernate.connection.password">${dbpassword}</property>
 		<property name="hibernate.dialect">${sql_dialect}</property>
 		<property name="hibernate.connection.url">${url}</property>
-		<!--  property name="hibernate.hbm2ddl.auto">update</property-->
+		<property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">${show_sql}</property>
-
 	</session-factory>
 </hibernate-configuration>

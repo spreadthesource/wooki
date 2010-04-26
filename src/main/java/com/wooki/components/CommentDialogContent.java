@@ -39,6 +39,7 @@ import com.wooki.WookiEventConstants;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.WookiEntity;
 
 /**
  * Display the list of comments for a block.
@@ -56,7 +57,7 @@ public class CommentDialogContent
     private Long publicationId;
 
     @Parameter
-    private Long bookId;
+    private WookiEntity book;
 
     @Property
     @Parameter(defaultPrefix = BindingConstants.PROP)

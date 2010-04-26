@@ -81,7 +81,7 @@ public class Signup
         return null;
     }
 
-    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "signupForm")
+    @OnEvent(value = EventConstants.VALIDATE, component = "signupForm")
     public void onValidate()
     {
         if (username != null && password != null

@@ -19,6 +19,6 @@
     </t:ifNotNull>
     <!-- Attach bubble to content -->
     <t:unless t:test="last">
-        <t:commentBubbles t:publicationId="publicationId" t:bookId="bookId" />
+        <t:commentBubbles t:publicationId="publicationId" t:book="book" />
     </t:unless>
 </html>

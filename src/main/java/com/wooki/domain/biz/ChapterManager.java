@@ -99,6 +99,7 @@ public interface ChapterManager
      * 
      * @param chapterId
      */
+    @CommitAfter
     void publishChapter(Long chapter);
 
     /**

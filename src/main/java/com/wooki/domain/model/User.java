@@ -147,25 +147,21 @@ public class User extends WookiEntity implements UserDetails
 
     public boolean isAccountNonExpired()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 
     public boolean isAccountNonLocked()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 
     public boolean isCredentialsNonExpired()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 
     public boolean isEnabled()
     {
-        // TODO Auto-generated method stub
         return true;
     }
 

@@ -35,6 +35,7 @@ import org.apache.tapestry5.json.JSONObject;
 
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
+import com.wooki.domain.model.WookiEntity;
 
 /**
  * This component can be us in page that display a chapter publication to create comment bubbles and
@@ -49,7 +50,7 @@ public class CommentBubbles
     private Long publicationId;
 
     @Parameter
-    private Long bookId;
+    private WookiEntity book;
 
     @Inject
     private ComponentResources resources;

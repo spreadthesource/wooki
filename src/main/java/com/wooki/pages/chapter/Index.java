@@ -79,8 +79,8 @@ public class Index extends BookBase
         this.setupChapter(bookId, chapterId);
 
         if (ChapterManager.LAST.equalsIgnoreCase(revision)
-                && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this
-                        .getBookId()))) { return new HttpError(403, "Access denied"); }
+                && !(this.securityCtx.isLoggedIn() && this.securityCtx.canWrite(this.getBook()))) { return new HttpError(
+                403, "Access denied"); }
 
         this.setPublication(this.chapterManager.getRevision(chapterId, revision));
         if (this.getPublication() == null) { return new HttpError(404, "Revision not found"); }
@@ -140,7 +140,7 @@ public class Index extends BookBase
     @SetupRender
     public void setupMenus()
     {
-        if (securityCtx.isAuthorOfBook(getBookId()))
+        if (securityCtx.canWrite(getBook()))
         {
             if (isShowAdmin())
             {

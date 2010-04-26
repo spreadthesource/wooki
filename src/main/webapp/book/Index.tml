@@ -24,10 +24,16 @@
         <p id="revision">
             Published <t:output value="prop:book?.creationDate" t:format="prop:format" />
         </p>
-    </div><t:outputRaw value="content" />
+    </div>
+    
+    <t:outputRaw value="content" />
+    
     <t:unless t:test="last">
-        <t:commentBubbles t:publicationId="publicationId" t:bookId="book?.id" />
-    </t:unless><h2>Table of contents</h2>
+        <t:commentBubbles t:publicationId="publicationId" t:book="book" />
+    </t:unless>
+    
+    <h2>Table of contents</h2>
+    
     <ol id="table-of-contents">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
@@ -37,11 +43,11 @@
                             ${currentChapter.title}
                         </t:pagelink>
                         <t:if t:test="showWorkingCopyLink">
-                            <t:security.ifAuthorOfBook t:bookId="bookId">
+                            <t:security.ifCanWrite t:object="book">
                                 <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
                                     <em>(Working copy) </em>
                                 </t:pagelink>
-                            </t:security.ifAuthorOfBook>
+                            </t:security.ifCanWrite>
                         </t:if>
                     </h3>
                     <p class="last-update">
@@ -49,7 +55,7 @@
                     </p>
                 </li>
                 <p:else>
-                	<t:security.ifAuthorOfBook t:bookId="bookId">
+					<t:security.ifCanWrite t:object="book">
                 		<t:if t:test="showWorkingCopyLink">
 			                <li>
 			                    <h3>
@@ -63,11 +69,11 @@
 			                    </p>
 			                </li>
                         </t:if>
-                    </t:security.ifAuthorOfBook>
+					</t:security.ifCanWrite>
                 </p:else>
             </t:if>
         </t:loop>
-        <t:security.ifAuthorOfBook t:bookId="bookId">
+		<t:security.ifCanWrite t:object="book">
             <!-- Add chapter section based on simple show hide mechanism -->
             <li>
                 <h3 class="add-chapter-link">
@@ -90,6 +96,6 @@
                     </t:form>
                 </div>
             </li>
-        </t:security.ifAuthorOfBook>
+		</t:security.ifCanWrite>
     </ol>
 </html>

@@ -108,7 +108,7 @@ public class AccountSettings
         return true;
     }
 
-    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "userDetails")
+    @OnEvent(value = EventConstants.VALIDATE, component = "userDetails")
     void validateUserDetailsChange()
     {
         User userByUsername = userManager.findByUsername(user.getUsername());
@@ -137,7 +137,7 @@ public class AccountSettings
         }
     }
 
-    @OnEvent(value = EventConstants.VALIDATE_FORM, component = "passwordChange")
+    @OnEvent(value = EventConstants.VALIDATE, component = "passwordChange")
     void validatePasswordChange()
     {
         // first, let's check if old password is ok

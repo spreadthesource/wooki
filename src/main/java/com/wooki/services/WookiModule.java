@@ -73,8 +73,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import com.wooki.ActivityType;
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
-import com.wooki.domain.biz.AclManager;
-import com.wooki.domain.biz.AclManagerImpl;
 import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.ActivityManagerImpl;
 import com.wooki.domain.biz.BookManager;
@@ -87,6 +85,8 @@ import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.biz.UserManagerImpl;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.ActivityDAOImpl;
+import com.wooki.domain.dao.AuthorityDAO;
+import com.wooki.domain.dao.AuthorityDAOImpl;
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.BookDAOImpl;
 import com.wooki.domain.dao.ChapterDAO;
@@ -114,8 +114,6 @@ import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
 import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
-import com.wooki.services.security.WookiSecurityContext;
-import com.wooki.services.security.WookiSecurityContextImpl;
 
 @SubModule(
 { TapestryOverrideModule.class, FeedModule.class })
@@ -165,7 +163,8 @@ public class WookiModule<T>
         binder.bind(CommentDAO.class, CommentDAOImpl.class);
         binder.bind(PublicationDAO.class, PublicationDAOImpl.class);
         binder.bind(UserDAO.class, UserDAOImpl.class);
-
+        binder.bind(AuthorityDAO.class, AuthorityDAOImpl.class);
+        
         // domain biz
         binder.bind(ActivityManager.class, ActivityManagerImpl.class);
         binder.bind(BookManager.class, BookManagerImpl.class);

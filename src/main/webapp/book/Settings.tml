@@ -28,7 +28,7 @@
     <div class="right-col">
         <div id="authors-settings" class="feed x360 ">
             <h3>Author List</h3>
-            <t:security.ifOwnerOfBook t:bookId="bookId">
+            <t:security.ifOwner t:object="book">
                 <form t:type="form" t:id="addAuthorForm" t:mixins="append" t:to="authors-list" t:position="top" class="small-form">
                     <t:errors/>
                     <table>
@@ -44,14 +44,14 @@
                         <input t:type="submit" class="btn-active" t:value="Add author" />
                     </div>
                 </form>
-            </t:security.ifOwnerOfBook>
+            </t:security.ifOwner>
             <t:block id="authorRow">
                 <li id="ent-${currentAuthor.id}" class="${style}">
                     <t:if test="!loggedAuthor">
                         <span><a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a> (${currentAuthor.fullname})</span>
-                        <t:security.ifOwnerOfBook t:bookId="bookId">
+                        <t:security.ifOwner t:object="book">
                             <a href="#" t:type="clickAndRemove" t:entityId="currentAuthor.id">Remove</a>
-                        </t:security.ifOwnerOfBook>
+                        </t:security.ifOwner>
                         <p:else>
                             <a t:type="pagelink" t:page="Index" t:context="currentAuthor.username">${currentAuthor.username}</a>
                             (${currentAuthor.fullname})

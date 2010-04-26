@@ -38,7 +38,7 @@ public interface GenericDAO<T, PK extends Serializable>
     T findById(PK id);
 
     /**
-     *  Persist the newInstance object into database 
+     * Persist the newInstance object into database
      */
 
     T create(T newInstance);
@@ -64,14 +64,24 @@ public interface GenericDAO<T, PK extends Serializable>
     public Criteria createCriteria();
 
     /**
+     * Create a simple criteria based on a column name and a value.
+     * 
+     * @param col
+     * @param value
+     * @return
+     */
+    public Criteria createColumnCriteria(String col, Object value);
+
+    /**
      * Create a new <tt>Criteria</tt> instance, for the current entity class, or a superclass of an
      * entity class, with the given alias.
      * 
-     * @param String alias
+     * @param String
+     *            alias
      * @return Criteria
      */
     public Criteria createCriteria(String alias);
-    
+
     /**
      * List all the persistent entities of type T
      */

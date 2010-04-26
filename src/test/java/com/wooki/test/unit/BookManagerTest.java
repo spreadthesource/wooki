@@ -206,7 +206,7 @@ public class BookManagerTest extends AbstractTransactionalTestNGSpringContextTes
         Assert.assertNotNull(books, "John has written books");
         Assert.assertEquals(books.size(), 3, "John has three book");
         securityCtx.log(this.userManager.findByUsername("john"));
-        securityCtx.isOwnerOfBook(books.get(0).getId());
+        securityCtx.isOwner(books.get(0));
     }
 
     /**

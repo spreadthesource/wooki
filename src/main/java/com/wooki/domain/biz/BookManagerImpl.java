@@ -56,9 +56,9 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     private final ChapterDAO chapterDao;
 
     private SecurityManager securityManager;
-    
-    private WookiSecurityContext securityCtx;
 
+    private WookiSecurityContext securityCtx;
+    
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
             ChapterDAO chapterDAO, ApplicationContext context)
     {
@@ -66,7 +66,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         this.userDao = userDAO;
         this.activityDao = activityDAO;
         this.chapterDao = chapterDAO;
-        
+
         this.securityCtx = context.getBean(WookiSecurityContext.class);
         this.securityManager = context.getBean(SecurityManager.class);
     }
@@ -79,7 +79,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         Defense.notNull(username, "username");
 
         // Security checks
-        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwner(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         User toAdd = userDao.findByUsername(username);
@@ -91,22 +91,22 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
         book.addUser(toAdd);
         bookDao.update(book);
+        this.securityManager.setCollaboratorPermission(book, toAdd);
+        
         return toAdd;
     }
 
     public void remove(Long bookId)
     {
-
         Defense.notNull(bookId, "bookId");
-
-        // Security check
-        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(bookId)) { throw new AuthorizationException(
-                "Operation not allowed"); }
 
         Book toRemove = this.bookDao.findById(bookId);
 
         if (toRemove != null)
         {
+            // Security check
+            if (!this.securityCtx.isLoggedIn() || !this.securityCtx.canDelete(toRemove)) { throw new AuthorizationException(
+                    "Operation not allowed"); }
 
             this.bookDao.delete(toRemove);
 
@@ -148,7 +148,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         Defense.notNull(book, "book");
         Defense.notNull(authorId, "authorId");
 
-        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwnerOfBook(book.getId())) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwner(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         User user = userDao.findById(authorId);
@@ -162,7 +162,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
         Defense.notNull(book, "book");
 
-        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.canWrite(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         // Create slug title
@@ -197,7 +197,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         Defense.notNull(book, "book");
         Defense.notNull(title, "title");
 
-        if (!securityCtx.isAuthorOfBook(book.getId())) { throw new AuthorizationException(
+        if (!securityCtx.canWrite(book)) { throw new AuthorizationException(
                 "Current user is not an author of " + book.getTitle()); }
 
         User author = securityCtx.getUser();
@@ -265,7 +265,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         activity.setCreationDate(creationDate);
         activity.setType(BookEventType.CREATE);
         activityDao.create(activity);
-        
+
         // Set permissions
         this.securityManager.setOwnerPermission(book);
 

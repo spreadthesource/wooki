@@ -5,6 +5,11 @@
 
 	<display-name>Wooki Tapestry 5 Application</display-name>
 
+	<context-param>
+		<param-name>tapestry.production-mode</param-name>
+		<param-value>false</param-value>
+	</context-param>
+
 	<!-- Tapestry configuration -->
 	<context-param>
 		<param-name>tapestry.app-package</param-name>

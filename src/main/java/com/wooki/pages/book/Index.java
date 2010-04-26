@@ -133,8 +133,8 @@ public class Index extends BookBase
 
         // Only authors have access to the last revision
         if (ChapterManager.LAST.equalsIgnoreCase(revision)
-                && !(this.securityCtx.isLoggedIn() && this.securityCtx.isAuthorOfBook(this
-                        .getBookId()))) { return new HttpError(403, "Access denied"); }
+                && !(this.securityCtx.isLoggedIn() && this.securityCtx.canWrite(this.getBook()))) { return new HttpError(
+                403, "Access denied"); }
 
         return true;
     }
@@ -147,7 +147,7 @@ public class Index extends BookBase
     {
 
         this.authors = this.getBook().getAuthors();
-        this.bookAuthor = this.securityCtx.isAuthorOfBook(this.getBookId());
+        this.bookAuthor = this.securityCtx.canWrite(this.getBook());
 
         // List chapter infos
         List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
@@ -180,7 +180,7 @@ public class Index extends BookBase
     @SetupRender
     public void setupMenus()
     {
-        if (securityCtx.isAuthorOfBook(getBookId()))
+        if (securityCtx.canWrite(getBook()))
         {
             if (isAbstractHasWorkingCopy())
             {

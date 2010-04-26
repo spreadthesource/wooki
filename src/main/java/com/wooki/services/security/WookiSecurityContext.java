@@ -17,6 +17,7 @@
 package com.wooki.services.security;
 
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.WookiEntity;
 
 /**
  * Contains authorization and security behavior of wooki.
@@ -50,31 +51,27 @@ public interface WookiSecurityContext
     User getUser();
 
     /**
-     * Check if the logged in user is author of a book.
+     * Check if the current logged user has administration permission on a given entity.
      * 
-     * @param bookId
+     * @param id
      * @return
      */
-    boolean isAuthorOfBook(Long bookId);
+    boolean isOwner(WookiEntity object);
 
     /**
-     * Check if the logged in user is author of a book.
-     * 
-     * @param bookId
+     * A user will be allowed to write to the entity if he has WRITE or ADMINISTRATION permission.
+     *
+     * @param id
      * @return
      */
-    boolean isAuthorOfChapter(Long chapterId);
-
+    boolean canWrite(WookiEntity object);
+    
     /**
-     * Check if the logged user is owner of the book.
-     * 
+     * A user will be allowed to delete to the entity if he has DELETE or ADMINISTRATION permission.
+     *
+     * @param id
      * @return
      */
-    boolean isOwnerOfBook(Long bookId);
-
-    /**
-     * Check if the user is author of a comment
-     */
-    boolean isAuthorOfComment(Long commentId);
+    boolean canDelete(WookiEntity object);
 
 }

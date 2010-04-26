@@ -82,7 +82,6 @@
 			<version>1.8.0.10</version>
 		</dependency>
 
-
 		<!-- Spring -->
 		<!-- Spring Framework -->
 		<dependency>
@@ -288,6 +287,11 @@
 			<artifactId>tapestry5-installer</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.spreadthesource</groupId>
+			<artifactId>tapestry5-spring-tx</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 
 	</dependencies>
 
@@ -472,18 +476,9 @@
 			<id>apache</id>
 			<url>https://repository.apache.org/content/groups/public/</url>
 			<snapshots>
-				<enabled>false</enabled>
+				<enabled>true</enabled>
 				<checksumPolicy>ignore</checksumPolicy>
 			</snapshots>
-		</repository>
-
-		<repository>
-			<id>apache-snapshots</id>
-			<url>https://repository.apache.org/content/groups/snapshots-group</url>
-			<releases>
-				<enabled>false</enabled>
-				<checksumPolicy>ignore</checksumPolicy>
-			</releases>
 		</repository>
 
 		<repository>

@@ -25,6 +25,7 @@ import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.WookiEntity;
@@ -104,6 +105,12 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
     public Criteria createCriteria(String alias)
     {
         return session.createCriteria(getEntityType(), alias);
+    }
+    
+    public Criteria createColumnCriteria(String col, Object value) {
+        Criteria crit = this.session.createCriteria(getEntityType());
+        crit.add(Restrictions.eq(col, value));
+        return crit;
     }
 
     @SuppressWarnings("unchecked")

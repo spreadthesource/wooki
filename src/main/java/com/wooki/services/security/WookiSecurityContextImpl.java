@@ -18,15 +18,17 @@ package com.wooki.services.security;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.acls.AclPermissionEvaluator;
+import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.acls.model.Permission;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.wooki.domain.dao.BookDAO;
-import com.wooki.domain.dao.ChapterDAO;
-import com.wooki.domain.dao.CommentDAO;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.WookiEntity;
 
 /**
  * Implement wooki security context in a web context.
@@ -35,17 +37,12 @@ import com.wooki.domain.model.User;
  */
 public class WookiSecurityContextImpl implements WookiSecurityContext
 {
-    @Inject @Autowired
-    private CommentDAO commentDao;
-
-    @Inject @Autowired
-    private BookDAO bookDAO;
-
-    @Inject @Autowired
+    @Inject
+    @Autowired
     private UserDAO userDao;
 
-    @Inject @Autowired
-    private ChapterDAO chapterDao;
+    @Autowired
+    private AclPermissionEvaluator aclPermissionEvaluator;
 
     public void log(User user)
     {
@@ -62,40 +59,12 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
         return null;
     }
 
-    public boolean isAuthorOfBook(Long bookId)
-    {
-        String username = this.getUsername();
-        if (username != null) { return bookDAO.isAuthor(bookId, username); }
-        return false;
-    }
-
-    public boolean isAuthorOfChapter(Long chapterId)
-    {
-        String username = this.getUsername();
-        if (username != null) { return chapterDao.isAuthor(chapterId, username); }
-        return false;
-    }
-
     public boolean isLoggedIn()
     {
         if (SecurityContextHolder.getContext() != null
                 && SecurityContextHolder.getContext().getAuthentication() != null
                 && SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null) { return SecurityContextHolder
                 .getContext().getAuthentication().isAuthenticated(); }
-        return false;
-    }
-
-    public boolean isOwnerOfBook(Long bookId)
-    {
-        String username = this.getUsername();
-        if (username != null) { return bookDAO.isOwner(bookId, username); }
-        return false;
-    }
-
-    public boolean isAuthorOfComment(Long commentId)
-    {
-        String username = this.getUsername();
-        if (username != null) { return commentDao.isOwner(commentId, username); }
         return false;
     }
 
@@ -118,4 +87,36 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
         return null;
     }
 
+    public boolean canWrite(WookiEntity object)
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) { return false; }
+
+        return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
+        { BasePermission.WRITE, BasePermission.ADMINISTRATION });
+    }
+
+    public boolean canDelete(WookiEntity object)
+    {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) { return false; }
+        
+        return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
+        { BasePermission.DELETE, BasePermission.ADMINISTRATION });
+    }
+
+    public boolean isOwner(WookiEntity object)
+    {
+        
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) { return false; }
+        
+        return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
+        { BasePermission.ADMINISTRATION });
+    }
+    
 }

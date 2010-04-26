@@ -157,11 +157,15 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
         Defense.notNull(chapterId, "chapterId");
 
-        // Check security
-        if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) { throw new AuthorizationException(
-                "Publish action not authorized"); }
-
         Publication published = publicationDao.findLastRevision(chapterId);
+        Chapter chapter = this.chapterDao.findById(chapterId);
+
+        if (chapter == null || published == null) { throw new IllegalArgumentException(
+                "Cannot find chapter with id " + chapterId); }
+
+        // Check security
+        if (!securityCtx.isLoggedIn() || !this.securityCtx.canWrite(chapter.getBook())) { throw new AuthorizationException(
+                "Publish action not authorized"); }
 
         // Adapt content
         String content = null;
@@ -190,6 +194,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         published.setLastModified(Calendar.getInstance().getTime());
         published.setContent(content);
         published.setPublished(true);
+        published.setChapter(chapter);
 
         publicationDao.update(published);
 
@@ -214,10 +219,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         Defense.notNull(chapterId, "chapterId");
         Defense.notNull(content, "content");
 
-        // Security check
-        if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) { throw new AuthorizationException(
-                "Publish action not authorized"); }
-
         Publication publication = publicationDao.findLastRevision(chapterId);
 
         // we check the published flag. If set, then this Publication must
@@ -226,8 +227,12 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         if (publication == null || (publication != null && publication.isPublished()))
         {
             publication = new Publication();
-
             Chapter chapter = chapterDao.findById(chapterId);
+
+            // Security check
+            if (!securityCtx.isLoggedIn()
+                    || !this.securityCtx.canWrite(chapter.getBook())) { throw new AuthorizationException(
+                    "Publish action not authorized"); }
             publication.setChapter(chapter);
 
             publication.setCreationDate(Calendar.getInstance().getTime());
@@ -249,16 +254,14 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public void remove(Long chapterId)
     {
-
         Defense.notNull(chapterId, "chapterId");
-
-        // Check security
-        if (!securityCtx.isLoggedIn() || !this.securityCtx.isAuthorOfChapter(chapterId)) { throw new AuthorizationException(
-                "Publish action not authorized"); }
 
         Chapter toDelete = chapterDao.findById(chapterId);
         if (toDelete != null)
         {
+            // The logged user must be allow to write to the book to delete a chapter in it
+            if (!securityCtx.isLoggedIn() || !this.securityCtx.canWrite(toDelete.getBook())) { throw new AuthorizationException(
+                    "Delete action not authorized"); }
 
             chapterDao.delete(toDelete);
 

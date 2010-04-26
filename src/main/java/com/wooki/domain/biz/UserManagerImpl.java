@@ -19,19 +19,13 @@ package com.wooki.domain.biz;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.tapestry5.hibernate.HibernateSessionManager;
 import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.transaction.support.ResourceHolderSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.ibm.icu.util.Calendar;
 import com.wooki.domain.dao.ActivityDAO;
@@ -62,14 +56,11 @@ public class UserManagerImpl implements UserManager
 
     private final AclPermissionEvaluator aclPermissionEvaluator;
 
-    private final HibernateSessionManager sessionManager;
-
     public UserManagerImpl(UserDAO userDAO, ActivityDAO activityDAO,
-            ApplicationContext applicationContext, HibernateSessionManager sessionManager)
+            ApplicationContext applicationContext)
     {
         this.userDao = userDAO;
         this.activityDao = activityDAO;
-        this.sessionManager = sessionManager;
 
         this.securityCtx = applicationContext.getBean(WookiSecurityContext.class);
         this.saltSource = applicationContext.getBean(SaltSource.class);
@@ -78,27 +69,8 @@ public class UserManagerImpl implements UserManager
         this.securityManager = applicationContext.getBean(SecurityManager.class);
     }
 
-    private static class ConnectionSynchronization extends
-            ResourceHolderSynchronization<SessionHolder, SessionFactory>
-    {
-
-        public ConnectionSynchronization(SessionHolder connectionHolder,
-                SessionFactory connectionFactory)
-        {
-            super(connectionHolder, connectionFactory);
-        }
-
-       
-    }
-
     public void addUser(User author) throws UserAlreadyException
     {
-        
-        Session session = this.sessionManager.getSession();
-        System.out.println(session.getTransaction().isActive());
-        TransactionSynchronizationManager.initSynchronization();
-        TransactionSynchronizationManager.registerSynchronization(new ConnectionSynchronization(new SessionHolder(session), session.getSessionFactory()));
-        // SessionFactoryUtils.doGetSession(this.sessionManager.getSession().getSessionFactory(), false);
 
         if (findByUsername(author.getUsername()) != null) { throw new UserAlreadyException(); }
 
@@ -110,7 +82,8 @@ public class UserManagerImpl implements UserManager
 
         // Add default Author Role
         author.setGrantedAuthorities(Arrays.asList(new Authority[]
-        { new Authority(WookiGrantedAuthority.ROLE_AUTHOR.getAuthority()) }));
+        { this.securityManager.getOrCreateAuthority(WookiGrantedAuthority.ROLE_AUTHOR
+                .getAuthority()) }));
 
         userDao.create(author);
 
@@ -148,7 +121,10 @@ public class UserManagerImpl implements UserManager
     {
         Defense.notNull(user, "user");
 
-        if (!this.securityCtx.isLoggedIn() || this.securityCtx.getUser().getId() != user.getId()
+        if (!this.securityCtx.isLoggedIn()
+                || !this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
+                        .getAuthentication(), user, BasePermission.ADMINISTRATION)
+                || this.securityCtx.getUser().getId() != user.getId()
                 && user.getPassword() != this.securityCtx.getUser().getPassword()) { throw new AuthorizationException(
                 "Action not authorized"); }
 

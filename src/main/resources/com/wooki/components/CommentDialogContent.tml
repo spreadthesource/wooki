@@ -6,12 +6,12 @@
 				<li class="first-child">
 					By <b><a href="#" t:type="pagelink" t:page="Index" t:context="currentComment.user.username">${currentComment.user.username}</a></b><t:lastModifiedFormatter t:time="currentComment.creationDate.time" />
 				</li>
-				<t:security.ifAuthorOfComment t:commentId="currentComment.id">
+				<t:security.ifOwner t:object="currentComment">
 					<li>
 						<a class="delete-comment-link" t:type="clickAndRemove" t:entityId="currentComment.id" title="Delete comment">Delete</a>
 					</li>
-				</t:security.ifAuthorOfComment>
-				<t:security.ifAuthorOfBook t:bookId="inherit:bookId">
+				</t:security.ifOwner>
+				<t:security.ifCanWrite t:object="inherit:book">
 					<li>
 						<t:zone t:id="updateStateZone">
 							<span class="t-zone-update">
@@ -26,7 +26,7 @@
 							<span class="comment-state">${currentComment.state}</span>
 						</li>
 					</p:else>
-				</t:security.ifAuthorOfBook>
+				</t:security.ifCanWrite>
 			</ul>
           	<div class="radied">
 				<p>

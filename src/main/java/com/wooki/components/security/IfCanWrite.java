@@ -20,18 +20,19 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractConditional;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.model.WookiEntity;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Verify if the current logged user is owner of the requested book.
+ * Verify if the current logged user is author of the requested book.
  * 
  * @author ccordenier
  */
-public class IfOwnerOfBook extends AbstractConditional
+public class IfCanWrite extends AbstractConditional
 {
 
     @Parameter(required = true, allowNull = false)
-    private Long bookId;
+    private WookiEntity object;
 
     @Inject
     private WookiSecurityContext securityContext;
@@ -41,7 +42,7 @@ public class IfOwnerOfBook extends AbstractConditional
      */
     protected boolean test()
     {
-        return securityContext.isOwnerOfBook(bookId);
+        return securityContext.canWrite(object);
     }
 
 }

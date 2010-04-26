@@ -24,7 +24,7 @@
           http://www.springframework.org/schema/security/spring-security-3.0.xsd">
 
 	<bean id="project-properties"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="com.spreadthesource.tapestry.installer.config.TapestryPropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders">
 			<value>true</value>
 		</property>
@@ -43,6 +43,18 @@
 		<property name="url" value="${hibernate.connection.url}" />
 		<property name="username" value="${hibernate.connection.username}" />
 		<property name="password" value="${hibernate.connection.password}" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="com.spreadthesource.tapestry.spring.hibernate.TapestryLocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
+		<property name="packageNames">
+			<list>
+				<value>com.wooki.domain.model</value>
+			</list>
+		</property>
 	</bean>
 
 	<!-- Define permissions -->
@@ -154,13 +166,36 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="aclManager" class="com.wooki.domain.biz.AclManagerImpl">
+	<bean id="aclManager" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<qualifier value="aclManager" />
+		<property name="proxyInterfaces" value="com.wooki.domain.biz.AclManager" />
+		<property name="interceptorNames">
+			<list>
+				<idref local="transactionInterceptor" />
+				<idref local="aclSecurityUtilTarget" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="aclSecurityUtilTarget" class="com.wooki.domain.biz.AclManagerImpl">
 		<property name="mutableAclService" ref="aclService" />
 	</bean>
 
-	<bean id="jdbcTransactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<constructor-arg ref="dataSource" />
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributes">
+			<value>
+				deletePermission=PROPAGATION_REQUIRED
+				addPermission=PROPAGATION_REQUIRED
+			</value>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<bean id="businessAccessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">

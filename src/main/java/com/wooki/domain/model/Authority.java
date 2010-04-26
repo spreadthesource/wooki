@@ -6,15 +6,20 @@
 
 package com.wooki.domain.model;
 
-import javax.persistence.*;
-
 import java.io.Serializable;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
-public class Authority implements Serializable
+public class Authority extends WookiEntity implements Serializable
 {
+    private static final long serialVersionUID = -4698804116621759012L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

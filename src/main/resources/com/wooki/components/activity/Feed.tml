@@ -19,25 +19,11 @@
     
     <t:block id="activities">
     	<t:loop source="activities" value="current" index="loopIdx" empty="block:empty">
-	    	<t:delegate to="activityBlock" />
+    		<t:if t:test="resourceAvailable">
+    			<t:delegate to="activityBlock" />
+	    	</t:if>
 		</t:loop>
     </t:block>
-
-	<t:block id="accountActivity">
-		<t:activity.account t:activity="current" t:style="prop:currentStyle" />
-	</t:block>
-
-	<t:block id="bookActivity">
-		<t:activity.book t:activity="current" t:style="prop:currentStyle" />
-	</t:block>
-
-	<t:block id="chapterActivity">
-		<t:activity.chapter t:activity="current" t:style="prop:currentStyle" />
-	</t:block>
-	
-	<t:block id="commentActivity">
-		<t:activity.comment t:activity="current" t:style="prop:currentStyle" />
-	</t:block>
 
 	<t:block t:id="empty">
 		<li class="first">No activities by now</li>

@@ -195,7 +195,7 @@ public class HTMLParser extends DefaultHandler
                                 user.setPassword(currentFirstName);
                                 try
                                 {
-                                    userManager.addUser(user);
+                                    userManager.registerUser(user);
                                     securityCtx.log(user);
                                 }
                                 catch (UserAlreadyException e)

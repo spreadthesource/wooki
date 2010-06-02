@@ -99,7 +99,7 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler
         response.setHeader("X-Tapestry-ErrorMessage", InternalUtils.toMessage(exception));
 
         // Access denied when the operation is not authorized
-        if (exception.getCause() instanceof AuthorizationException)
+        if (containsException(exception, AuthorizationException.class))
         {
             response.sendError(403, "Access denied");
         }
@@ -127,4 +127,29 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler
         renderer.renderPageResponse(page);
     }
 
+    /**
+     * Check if the exception stack contains the provided exception type.
+     * 
+     * @param ex
+     * @return
+     */
+    private <T extends Throwable> boolean containsException(Throwable ex, Class<T> exType)
+    {
+
+        boolean result = false;
+
+        do
+        {
+            if (ex.getClass().equals(exType))
+            {
+                result = true;
+                break;
+            }
+            ex = ex.getCause();
+        }
+        while (ex != null);
+
+        return result;
+
+    }
 }

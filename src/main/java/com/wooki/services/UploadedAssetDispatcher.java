@@ -9,6 +9,12 @@ import org.apache.tapestry5.services.Response;
 
 import com.wooki.WookiRequestConstants;
 
+/**
+ * This dispatcher identifies the files that has been updated by the user. Doing this we can protect
+ * assets from their real name.
+ * 
+ * @author ccordenier
+ */
 public class UploadedAssetDispatcher implements Dispatcher
 {
 

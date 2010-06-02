@@ -29,6 +29,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.WookiEntity;
+import com.wooki.services.db.query.QueryFilter;
 
 /**
  * This generic implementation of DAO will be the base for all wooki's DAO.
@@ -106,11 +107,19 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
     {
         return session.createCriteria(getEntityType(), alias);
     }
-    
-    public Criteria createColumnCriteria(String col, Object value) {
+
+    public Criteria createColumnCriteria(String col, Object value)
+    {
         Criteria crit = this.session.createCriteria(getEntityType());
         crit.add(Restrictions.eq(col, value));
         return crit;
+    }
+
+    public List<T> listEntitiesAfter(Date date)
+    {
+        Criteria crit = this.session.createCriteria(getEntityType());
+        crit.add(Restrictions.isNull("deletionDate"));
+        return crit.list();
     }
 
     @SuppressWarnings("unchecked")
@@ -118,6 +127,23 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
     {
         Criteria crit = session.createCriteria(getEntityType());
         return (List<T>) crit.list();
+    }
+
+    /**
+     * This method can be called to apply a list of filter on the current query.
+     * 
+     * @param crit
+     * @param filters
+     */
+    protected void applyFilters(Criteria crit, QueryFilter... filters)
+    {
+        if (filters != null)
+        {
+            for (QueryFilter f : filters)
+            {
+                f.filter(crit);
+            }
+        }
     }
 
 }

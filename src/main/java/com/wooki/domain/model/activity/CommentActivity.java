@@ -26,7 +26,7 @@ import com.wooki.domain.model.Comment;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "COMMENT_ACTIVITY_ID")
-public class CommentActivity extends Activity
+public class CommentActivity extends AbtractChapterActivity
 {
 
     @ManyToOne(fetch = FetchType.LAZY)

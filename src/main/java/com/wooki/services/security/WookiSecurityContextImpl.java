@@ -52,6 +52,11 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
         SecurityContextHolder.getContext().setAuthentication(logged);
     }
 
+    public void logout()
+    {
+        SecurityContextHolder.getContext().setAuthentication(null);
+    }
+
     public User getUser()
     {
         String username = this.getUsername();

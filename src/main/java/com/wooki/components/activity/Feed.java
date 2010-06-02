@@ -26,16 +26,16 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Environment;
 
-import com.wooki.ActivityType;
 import com.wooki.MoreEventResult;
 import com.wooki.WookiEventConstants;
-import com.wooki.domain.biz.ActivityManager;
-import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.Activity;
-import com.wooki.domain.model.activity.BookActivity;
-import com.wooki.domain.model.activity.ChapterActivity;
-import com.wooki.domain.model.activity.CommentActivity;
+import com.wooki.services.EnumServiceLocator;
+import com.wooki.services.activity.ActivityBlockSource;
+import com.wooki.services.activity.ActivityDisplayContext;
+import com.wooki.services.activity.ActivitySource;
+import com.wooki.services.activity.ActivitySourceType;
 
 /**
  * Display activities.
@@ -62,32 +62,26 @@ public class Feed<T extends Activity>
     private String clientId;
 
     @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "BOOK_CREATION")
-    private ActivityType type;
+    private ActivitySourceType type;
 
     @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "10")
     private int nbElts;
 
     @Parameter
-    private Long userId;
+    private List<Long> context;
 
     @Inject
     @Id("activities")
     private Block activitiesBlock;
 
     @Inject
-    private ActivityManager activityManager;
+    private ActivityBlockSource activitySource;
 
     @Inject
-    private Block bookActivity;
+    private Environment environment;
 
     @Inject
-    private Block chapterActivity;
-
-    @Inject
-    private Block commentActivity;
-
-    @Inject
-    private Block accountActivity;
+    private EnumServiceLocator locator;
 
     @Property
     private List<Activity> activities;
@@ -103,32 +97,51 @@ public class Feed<T extends Activity>
 
     private int page;
 
+    private ActivitySource source;
+
+    /**
+     * Wrapper around current activity entry.
+     * 
+     * @author ccordenier
+     */
+    private class FeedActivityDisplayContext implements ActivityDisplayContext
+    {
+
+        public Activity getActivity()
+        {
+            return current;
+        }
+
+        public String getStyle()
+        {
+            return getCurrentStyle();
+        }
+
+        public boolean isResourceUnavailable()
+        {
+            return current.isResourceUnavailable();
+        }
+
+    }
+
     @SetupRender
     public void setupActivitiesList()
     {
+        this.source = this.locator.getService(this.type);
         int startIdx = nbElts * page;
-        if (ActivityType.BOOK_CREATION.equals(type))
-        {
-            this.activities = this.activityManager.listBookCreationActivity(startIdx, nbElts);
-        }
-        else if (ActivityType.USER.equals(type))
-        {
-            this.activities = this.activityManager.listActivityOnBook(startIdx, nbElts, userId);
-        }
-        else if (ActivityType.CO_AUTHOR.equals(type))
-        {
-            this.activities = this.activityManager
-                    .listActivityOnUserBooks(startIdx, nbElts, userId);
-        }
-        else if (ActivityType.USER_PUBLIC.equals(type))
-        {
-            this.activities = this.activityManager.listUserActivity(startIdx, nbElts, userId);
-        }
-        else if (ActivityType.ACCOUNT.equals(type))
-        {
-            this.activities = this.activityManager.listAccountActivity(startIdx, nbElts);
-        }
+        Long [] parameters = context == null ? null : context.toArray(new Long[context.size()]);
+        this.activities = this.source.listActivitiesRange(startIdx, this.nbElts, parameters);
         this.hasMore = this.activities.size() == nbElts;
+    }
+
+    protected void beginRender()
+    {
+        this.environment.push(ActivityDisplayContext.class, new FeedActivityDisplayContext());
+    }
+
+    protected void cleanupRender()
+    {
+        this.environment.pop(ActivityDisplayContext.class);
     }
 
     @OnEvent(value = WookiEventConstants.UPDATE_MORE_CONTEXT, component = "moreFeeds")
@@ -150,20 +163,7 @@ public class Feed<T extends Activity>
      */
     public Block getActivityBlock()
     {
-        if (current instanceof ChapterActivity)
-        {
-            return this.chapterActivity;
-        }
-        else if (current instanceof AccountActivity)
-        {
-            return this.accountActivity;
-        }
-        else if (current instanceof BookActivity)
-        {
-            return this.bookActivity;
-        }
-        else if (current instanceof CommentActivity) { return commentActivity; }
-        return null;
+        return this.activitySource.getActivityBlock(current);
     }
 
     public int getMoreContext()

@@ -38,6 +38,11 @@ public class SecurityManagerImpl implements SecurityManager
         this.aclManager.addPermission(entity, BasePermission.ADMINISTRATION, entity.getClass());
     }
 
+    public void setOwnerPermission(WookiEntity entity, User user)
+    {
+        this.aclManager.addPermission(entity, new PrincipalSid(user.getUsername()), BasePermission.ADMINISTRATION, Book.class);
+    }
+
     public Authority getOrCreateAuthority(String authority)
     {
         Criteria result = this.authorityDao.createColumnCriteria("authority", authority);

@@ -98,6 +98,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
         // Log activity
         CommentActivity activity = new CommentActivity();
+        activity.setBook(toUpdate.getChapter().getBook());
+        activity.setChapter(toUpdate.getChapter());
         activity.setCreationDate(Calendar.getInstance().getTime());
         activity.setComment(comment);
         activity.setType(CommentEventType.POST);
@@ -199,6 +201,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         publicationDao.update(published);
 
         ChapterActivity ca = new ChapterActivity();
+        ca.setBook(chapter.getBook());
         ca.setChapter(published.getChapter());
         ca.setType(ChapterEventType.PUBLISHED);
         ca.setCreationDate(Calendar.getInstance().getTime());
@@ -266,6 +269,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             chapterDao.delete(toDelete);
 
             ChapterActivity activity = new ChapterActivity();
+            activity.setBook(toDelete.getBook());
             activity.setCreationDate(Calendar.getInstance().getTime());
             activity.setChapter(toDelete);
             activity.setUser(this.securityCtx.getUser());

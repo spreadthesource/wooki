@@ -1,7 +1,7 @@
 package com.wooki.services.feeds;
 
 import com.sun.syndication.feed.atom.Feed;
-import com.wooki.ActivityType;
+import com.wooki.services.activity.ActivitySourceType;
 
 /**
  * Defines a object that can generate a Feed with its description.
@@ -18,6 +18,6 @@ public interface FeedSource
      * @param ids
      * @return
      */
-    Feed produceFeed(ActivityType type, Long... context);
+    Feed produceFeed(ActivitySourceType type, Long... context);
 
 }

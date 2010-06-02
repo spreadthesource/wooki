@@ -32,7 +32,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
-import com.wooki.ActivityType;
 import com.wooki.BookMenuItem;
 import com.wooki.LinkType;
 import com.wooki.NavLinkPosition;
@@ -46,6 +45,7 @@ import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
 import com.wooki.services.LinkSupport;
+import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
@@ -263,7 +263,7 @@ public class Index extends BookBase
     @OnEvent(value = "feed")
     public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException
     {
-        return feedSource.produceFeed(ActivityType.BOOK, bookId);
+        return feedSource.produceFeed(ActivitySourceType.BOOK, bookId);
     }
 
     public String[] getPrintErrors()

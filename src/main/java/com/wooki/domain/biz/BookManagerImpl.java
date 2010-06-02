@@ -218,6 +218,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
         // Add activity event
         ChapterActivity activity = new ChapterActivity();
+        activity.setBook(book);
         activity.setUser(author);
         activity.setCreationDate(creationDate);
         activity.setType(ChapterEventType.CREATE);

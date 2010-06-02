@@ -3,14 +3,11 @@ package com.wooki.mixins;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
-import org.apache.tapestry5.annotations.Environmental;
 import org.apache.tapestry5.annotations.InjectContainer;
-import org.apache.tapestry5.annotations.MixinAfter;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.FormSupport;
 
 /**
  * This mixins implements a simple show hide effect.

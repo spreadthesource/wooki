@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-package com.wooki.services;
+package com.wooki.services.security.spring;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;

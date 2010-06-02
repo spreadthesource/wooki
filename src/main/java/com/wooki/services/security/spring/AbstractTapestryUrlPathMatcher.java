@@ -56,12 +56,13 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
     public void setServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
+        this.init();
     }
 
     /**
      * Init Tapestry registries and services.
      */
-    private void init()
+    protected void init()
     {
         if (initDone) { return; }
         this.tapestryRegistry = (Registry) this.servletContext
@@ -82,7 +83,6 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
      */
     protected ComponentEventRequestParameters decodeComponentEventRequest(String path)
     {
-        this.init();
         RequestImpl tapRequest = new RequestImpl(this.createRequestForTapestry(path),
                 applicationCharset, spoa);
         globals.storeRequestResponse(tapRequest, null);
@@ -97,7 +97,6 @@ public abstract class AbstractTapestryUrlPathMatcher implements WookiPathMatcher
      */
     protected PageRenderRequestParameters decodePageRenderRequest(String path)
     {
-        this.init();
         RequestImpl tapRequest = new RequestImpl(this.createRequestForTapestry(path),
                 applicationCharset, spoa);
         globals.storeRequestResponse(tapRequest, null);

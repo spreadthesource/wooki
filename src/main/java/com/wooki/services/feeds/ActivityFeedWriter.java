@@ -9,6 +9,8 @@ import com.wooki.domain.model.activity.Activity;
 public interface ActivityFeedWriter<T extends Activity>
 {
     /**
+     * Get the title to display in the feed entry for this type of activity.
+     * 
      * @param activity
      *            the activity to output
      */

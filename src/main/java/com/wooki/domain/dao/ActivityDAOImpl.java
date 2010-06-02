@@ -19,17 +19,19 @@ package com.wooki.domain.dao;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
-import com.wooki.domain.model.Book;
+import com.wooki.domain.model.activity.AbstractBookActivity;
+import com.wooki.domain.model.activity.AbtractChapterActivity;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.BookEventType;
-import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.CommentActivity;
+import com.wooki.services.db.query.QueryFilter;
 
 public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> implements ActivityDAO
 {
@@ -39,130 +41,99 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
         super(session);
     }
 
-    public List<Activity> list(int startIdx, int nbElements)
+    public List<Activity> list(QueryFilter... filters)
     {
-        Query query = session.createQuery("from " + getEntityType()
-                + " a where a.deletionDate is null order by a.creationDate desc");
-        this.setMaxResults(query, nbElements);
-        query.setFirstResult(startIdx);
-        return query.list();
+        Criteria crit = session.createCriteria(Activity.class);
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listAllActivitiesOnComment(Long commentId)
+    public List<Activity> listAllActivitiesOnComment(Long commentId, QueryFilter... filters)
     {
         Defense.notNull(commentId, "commentId");
-        Query query = session.createQuery("from " + CommentActivity.class.getName()
-                + " ca where ca.comment.id=:cid order by ca.creationDate desc");
-        query.setParameter("cid", commentId);
-        return query.list();
+        Criteria crit = session.createCriteria(CommentActivity.class);
+        crit.add(Restrictions.eq("comment.id", commentId));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listAllActivitiesOnChapter(Long chapterId)
+    public List<Activity> listAllActivitiesOnChapter(Long chapterId, QueryFilter... filters)
     {
         Defense.notNull(chapterId, "chapterId");
-        Query query = session.createQuery("select a from " + Activity.class.getName()
-                + " a where a.id in (select id from " + CommentActivity.class.getName()
-                + " coa where coa.comment.publication.chapter.id=:cid) or a.id in (select id from "
-                + ChapterActivity.class.getName()
-                + " ca where ca.chapter.id=:cid) order by a.creationDate desc");
-        query.setParameter("cid", chapterId);
-        return query.list();
+        Criteria crit = session.createCriteria(AbtractChapterActivity.class);
+        crit.add(Restrictions.eq("chapter.id", chapterId));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listAllActivitiesOnBook(Long bookId)
+    public List<Activity> listAllActivitiesOnBook(Long bookId, QueryFilter... filters)
     {
         Defense.notNull(bookId, "bookId");
-        Query query = session
-                .createQuery("select a from "
-                        + Activity.class.getName()
-                        + " a where a.id in (select id from "
-                        + BookActivity.class.getName()
-                        + " ba where ba.book.id=:bid) or a.id in (select id from "
-                        + CommentActivity.class.getName()
-                        + " coa where coa.comment.publication.chapter.book.id=:bid) or a.id in (select id from "
-                        + ChapterActivity.class.getName()
-                        + " ca where ca.chapter.book.id=:bid) order by a.creationDate desc");
-        query.setParameter("bid", bookId);
-        return query.list();
+        Criteria crit = session.createCriteria(AbstractBookActivity.class);
+        crit.add(Restrictions.eq("book.id", bookId));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId)
+    public List<Activity> listCoauthorBookActivity(Long userId, QueryFilter... filters)
     {
         Defense.notNull(userId, "userId");
-        Query query = session
-                .createQuery("select distinct a from "
-                        + Activity.class.getName()
-                        + " a, "
-                        + Book.class.getName()
-                        + " b join b.users u where u.id=:uid and a.user.id!=:uid and (a.id in (select id from "
-                        + BookActivity.class.getName()
-                        + " ba where ba.book.id=b.id) or a.id in (select id from "
-                        + CommentActivity.class.getName()
-                        + " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from "
-                        + ChapterActivity.class.getName()
-                        + " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
-        query.setParameter("uid", userId);
-        this.setMaxResults(query, nbElts);
-        query.setFirstResult(startIdx);
-        return query.list();
+
+        Criteria crit = session.createCriteria(AbstractBookActivity.class).add(
+                Restrictions.ne("user.id", userId)).createCriteria("book")
+                .createAlias("users", "u").add(Restrictions.eq("u.id", userId));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listUserActivity(int startIdx, int nbElts, Long userId)
+    public List<Activity> listUserActivity(Long userId, QueryFilter... filters)
     {
         Defense.notNull(userId, "userId");
-        Query query = session
-                .createQuery("select a from "
-                        + getEntityType()
-                        + " a where a.deletionDate is null and a.user.id=:uid order by a.creationDate desc");
-        query.setParameter("uid", userId);
-        this.setMaxResults(query, nbElts);
-        query.setFirstResult(startIdx);
-        return query.list();
-    }
 
-    public List<Activity> listActivityOnBook(int startIdx, int nbElements, Long userId)
+        Criteria crit = session.createCriteria(AbstractBookActivity.class, "a");
+        crit.add(Restrictions.eq("a.user.id", userId));
+        applyFilters(crit, filters);
+
+        return crit.list();
+    }
+    
+    public List<Activity> listUserPublicActivity(Long userId, QueryFilter... filters)
     {
         Defense.notNull(userId, "userId");
-        Query query = session
-                .createQuery("select distinct a from "
-                        + Activity.class.getName()
-                        + " a, "
-                        + Book.class.getName()
-                        + " b join b.users u where u.id=:uid and a.user.id=:uid and (a.id in (select id from "
-                        + BookActivity.class.getName()
-                        + " ba where ba.book.id=b.id) or a.id in (select id from "
-                        + CommentActivity.class.getName()
-                        + " coa where coa.comment.publication.chapter.book.id=b.id) or a.id in (select id from "
-                        + ChapterActivity.class.getName()
-                        + " ca where ca.chapter.book.id=b.id)) order by a.creationDate desc");
-        query.setParameter("uid", userId);
-        this.setMaxResults(query, nbElements);
-        query.setFirstResult(startIdx);
-        return query.list();
+
+        Criteria crit = session.createCriteria(AbstractBookActivity.class, "a");
+        crit.add(Restrictions.eq("a.user.id", userId));
+        crit.add(Restrictions.eq("a.resourceUnavailable", false));
+        applyFilters(crit, filters);
+
+        return crit.list();
     }
 
-    public List<Activity> listBookCreationActivity(int startIdx, int nbElements)
+    public List<Activity> listActivityOnBook(Long userId, QueryFilter... filters)
     {
-        Query query = session
-                .createQuery("from "
-                        + BookActivity.class.getName()
-                        + " a where a.deletionDate is null and a.type=:type and a.book.deletionDate is null order by a.creationDate desc");
-        query.setParameter("type", BookEventType.CREATE);
-        this.setMaxResults(query, nbElements);
-        query.setFirstResult(startIdx);
-        return query.list();
+        Defense.notNull(userId, "userId");
+
+        Criteria crit = session.createCriteria(AbstractBookActivity.class).add(
+                Restrictions.eq("user.id", userId)).createCriteria("book")
+                .createAlias("users", "u").add(Restrictions.eq("u.id", userId));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
-    public List<Activity> listAccountActivity(int startIdx, int nbElts)
+    public List<Activity> listBookCreationActivity(QueryFilter... filters)
     {
-        Query query = session
-                .createQuery("from "
-                        + AccountActivity.class.getName()
-                        + " a where a.deletionDate is null and a.type=:type and a.user.deletionDate is null order by a.creationDate desc");
-        query.setParameter("type", AccountEventType.JOIN);
-        this.setMaxResults(query, nbElts);
-        query.setFirstResult(startIdx);
-        return query.list();
+        Criteria crit = session.createCriteria(BookActivity.class);
+        crit.add(Restrictions.eq("type", BookEventType.CREATE));
+        applyFilters(crit, filters);
+        return crit.list();
+    }
+
+    public List<Activity> listAccountActivity(QueryFilter... filters)
+    {
+        Criteria crit = session.createCriteria(AccountActivity.class);
+        crit.add(Restrictions.eq("type", AccountEventType.JOIN));
+        applyFilters(crit, filters);
+        return crit.list();
     }
 
 }

@@ -77,11 +77,11 @@
 
 
 	<t:block id="coAuthor">
-		<t:activity.feed t:type="co_author" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
+		<t:activity.feed t:type="co_author" t:context="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
 	</t:block>
 
 	<t:block id="yourActivity">
-		<t:activity.feed t:type="user" t:userId="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
+		<t:activity.feed t:type="user" t:context="user.id" t:client="my-action-feeds" t:titleBlock="titleBlock" />
 	</t:block>
 
 	<t:block id="noBooks">

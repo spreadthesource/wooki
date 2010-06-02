@@ -211,21 +211,4 @@ public class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
         click("//div[@id='form-submit']/input[@type='submit'][1]");
     }
 
-    @AfterClass(alwaysRun = true)
-    @Override
-    public void cleanup()
-    {
-        ScriptTool tool = new ScriptTool();
-        // Reset database
-        tool.execute(new String[]
-        { "-url", "jdbc:hsqldb:mem:demo_wooki", "-script",
-                this.getClass().getResource("/reset.sql").getFile(), "-log", "false" });
-        // Import test datas
-        tool.execute(new String[]
-        { "-url", "jdbc:hsqldb:mem:demo_wooki", "-script",
-                this.getClass().getResource("/data.sql").getFile(), "-log", "false" });
-
-        super.cleanup();
-    }
-
 }

@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
-import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
+import com.wooki.services.activity.ActivitySource;
 import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
@@ -22,11 +21,10 @@ import com.wooki.services.feeds.ActivityFeedWriter;
 public class FrontFeedProducer extends AbstractFeedProducer
 {
 
-    public FrontFeedProducer(@Inject LinkSource linkSource,
-            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-            @Inject ActivityManager activityManager)
+    public FrontFeedProducer(ServicesMessages messages, LinkSource lnkSource,
+            ActivityFeedWriter<Activity> activityFeed, ActivitySource source)
     {
-        super(linkSource, activityFeed, messages, activityManager);
+        super(messages, lnkSource, activityFeed, source);
     }
 
     /**
@@ -46,8 +44,7 @@ public class FrontFeedProducer extends AbstractFeedProducer
 
         alternateLinks.add(linkToSelf);
 
-        return super.fillFeed(id, title, alternateLinks, this.activityManager
-                .listBookCreationActivity(0, -1));
+        return super.fillFeed(id, title, alternateLinks, source.listActivitiesForFeed(context));
     }
 
 }

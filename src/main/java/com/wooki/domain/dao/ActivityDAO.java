@@ -18,7 +18,13 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
+import org.apache.tapestry5.ioc.internal.util.Defense;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+
+import com.wooki.domain.model.activity.AbstractBookActivity;
 import com.wooki.domain.model.activity.Activity;
+import com.wooki.services.db.query.QueryFilter;
 
 /**
  * Manipulate activity elements
@@ -28,91 +34,25 @@ import com.wooki.domain.model.activity.Activity;
 public interface ActivityDAO extends GenericDAO<Activity, Long>
 {
 
-    /**
-     * List comment on activities.
-     * 
-     * @param commentId
-     * @return
-     */
-    List<Activity> listAllActivitiesOnComment(Long commentId);
+    public List<Activity> list(QueryFilter... filters);
 
-    /**
-     * Get all the activities on a given chapter.
-     * 
-     * @param chapterId
-     * @return
-     */
-    List<Activity> listAllActivitiesOnChapter(Long chapterId);
+    public List<Activity> listAllActivitiesOnComment(Long commentId, QueryFilter... filters);
 
-    /**
-     * Get all the activities on a given chapter.
-     * 
-     * @param chapterId
-     * @return
-     */
-    List<Activity> listAllActivitiesOnBook(Long bookId);
+    public List<Activity> listAllActivitiesOnChapter(Long chapterId, QueryFilter... filters);
 
-    /**
-     * List the last nbElelements activities.
-     * 
-     * @param startIdx
-     *            TODO
-     * @param nbElements
-     * @return
-     */
-    List<Activity> list(int startIdx, int nbElements);
+    public List<Activity> listAllActivitiesOnBook(Long bookId, QueryFilter... filters);
 
-    /**
-     * List the book creation activity.
-     * 
-     * @param startIdx
-     *            TODO
-     * @return
-     */
-    List<Activity> listBookCreationActivity(int startIdx, int nbElements);
+    public List<Activity> listCoauthorBookActivity(Long userId, QueryFilter... filters);
 
-    /**
-     * List the activity of a user on its own books.
-     * 
-     * @param startIdx
-     *            TODO
-     * @param nbElementsn
-     * @param userId
-     * @return
-     */
-    List<Activity> listActivityOnBook(int startIdx, int nbElementsn, Long userId);
+    public List<Activity> listUserActivity(Long userId, QueryFilter... filters);
 
-    /**
-     * List the user public activity.
-     * 
-     * @param startIdx
-     *            TODO
-     * @param nbElts
-     * @param userId
-     * @return
-     */
-    List<Activity> listUserActivity(int startIdx, int nbElts, Long userId);
+    public List<Activity> listActivityOnBook(Long bookId, QueryFilter... filters);
 
-    /**
-     * List the activity of others users on the current user book.
-     * 
-     * @param startIdx
-     *            TODO
-     * @param nbElts
-     * @param userId
-     * @return
-     */
-    List<Activity> listActivityOnUserBooks(int startIdx, int nbElts, Long userId);
+    public List<Activity> listBookCreationActivity(QueryFilter... filters);
 
-    /**
-     * List account activity on wooki.
-     * 
-     * @param startIdx
-     *            TODO
-     * @param nbElts
-     * @param userId
-     * @return
-     */
-    List<Activity> listAccountActivity(int startIdx, int nbElts);
+    public List<Activity> listAccountActivity(QueryFilter... filters);
 
+    public List<Activity> listUserPublicActivity(Long userId, QueryFilter... filters);
+
+    
 }

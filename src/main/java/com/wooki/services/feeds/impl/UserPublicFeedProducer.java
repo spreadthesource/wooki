@@ -8,11 +8,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
-import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
+import com.wooki.services.activity.ActivitySource;
 import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
@@ -28,9 +28,9 @@ public class UserPublicFeedProducer extends AbstractFeedProducer
 
     public UserPublicFeedProducer(@Inject LinkSource linkSource,
             @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-            @Inject ActivityManager activityManager, @Inject UserManager userManager)
+            @Inject ActivitySource source, @Inject UserManager userManager)
     {
-        super(linkSource, activityFeed, messages, activityManager);
+        super(messages, linkSource, activityFeed, source);
         this.userManager = userManager;
     }
 
@@ -62,10 +62,8 @@ public class UserPublicFeedProducer extends AbstractFeedProducer
 
         alternateLinks.add(linkToSelf);
 
-        return super.fillFeed(id, title, alternateLinks, this.activityManager.listUserActivity(
-                0,
-                -1,
-                user.getId()));
+        return super.fillFeed(id, title, alternateLinks, this.source.listActivitiesForFeed(user
+                .getId()));
     }
 
 }

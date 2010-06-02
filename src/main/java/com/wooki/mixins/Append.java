@@ -36,7 +36,9 @@ import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.InitializationPriority;
 import org.apache.tapestry5.services.javascript.JavascriptSupport;
+import org.apache.tapestry5.services.javascript.StylesheetLink;
 
 /**
  * Append content instead of replacing it.
@@ -109,9 +111,9 @@ public class Append
     {
 
         PartialMarkupDocumentLinker linker = new PartialMarkupDocumentLinker();
-        linker.addStylesheetLink(assetSource.getContextAsset(
+        linker.addStylesheetLink(new StylesheetLink(assetSource.getContextAsset(
                 "context:/static/css/jquery.notifyBar.css",
-                request.getLocale()).toClientURL(), null);
+                request.getLocale()).toClientURL()));
         linker.addScriptLink(assetSource.getContextAsset(
                 "/static/js/jquery.notifyBar.js",
                 request.getLocale()).toClientURL());
@@ -146,7 +148,7 @@ public class Append
         // Add error messages
         JSONObject html = new JSONObject();
         html.put("html", buff.toString());
-        linker.addScript(String.format("Tapestry.Initializer.initErrorMessage(%s);", html
+        linker.addScript(InitializationPriority.LATE, String.format("Tapestry.Initializer.initErrorMessage(%s);", html
                 .toString()));
 
         linker.commit(result);

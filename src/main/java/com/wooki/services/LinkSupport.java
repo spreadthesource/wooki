@@ -1,6 +1,5 @@
 package com.wooki.services;
 
-import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.MarkupWriter;
 
 import com.wooki.BookMenuItem;

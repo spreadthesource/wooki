@@ -31,12 +31,12 @@ import org.apache.tapestry5.services.Request;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
-import com.wooki.ActivityType;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
 import com.wooki.services.HttpError;
+import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
@@ -144,13 +144,13 @@ public class Index
     public Feed getUserFeed(Long userId) throws IOException, IllegalArgumentException,
             FeedException
     {
-        return feedSource.produceFeed(ActivityType.USER_PUBLIC, userId);
+        return feedSource.produceFeed(ActivitySourceType.USER_PUBLIC, userId);
     }
 
     @OnEvent(value = "feed")
     public Feed getFeed() throws IOException, IllegalArgumentException, FeedException
     {
-        return feedSource.produceFeed(ActivityType.BOOK_CREATION);
+        return feedSource.produceFeed(ActivitySourceType.BOOK_CREATION);
     }
 
     public String getTitle()

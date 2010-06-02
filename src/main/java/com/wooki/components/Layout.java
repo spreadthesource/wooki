@@ -33,8 +33,8 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import com.wooki.base.LayoutBase;
 import com.wooki.pages.Index;
 import com.wooki.pages.SearchResult;
-import com.wooki.services.SecurityUrlSource;
 import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.security.spring.SecurityUrlSource;
 
 public class Layout extends LayoutBase
 {

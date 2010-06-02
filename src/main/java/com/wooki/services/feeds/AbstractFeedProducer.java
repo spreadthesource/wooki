@@ -5,17 +5,16 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.sun.syndication.feed.atom.Person;
-import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
+import com.wooki.services.activity.ActivitySource;
 
 /**
  * Define a base utility for feed producing.
@@ -25,22 +24,22 @@ import com.wooki.services.ServicesMessages;
 public abstract class AbstractFeedProducer implements FeedProducer
 {
 
-    protected final ActivityManager activityManager;
-
     protected final ServicesMessages messages;
 
     protected final LinkSource lnkSource;
 
     protected final ActivityFeedWriter<Activity> activityFeed;
 
-    public AbstractFeedProducer(@Inject LinkSource linkSource,
-            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-            @Inject ActivityManager activityManager)
+    protected final ActivitySource source;
+
+    public AbstractFeedProducer(ServicesMessages messages, LinkSource lnkSource,
+            ActivityFeedWriter<Activity> activityFeed, ActivitySource source)
     {
-        this.lnkSource = linkSource;
-        this.activityFeed = activityFeed;
+        super();
         this.messages = messages;
-        this.activityManager = activityManager;
+        this.lnkSource = lnkSource;
+        this.activityFeed = activityFeed;
+        this.source = source;
     }
 
     protected Feed fillFeed(String id, String title, List<Link> altLinks, List<Activity> activities)

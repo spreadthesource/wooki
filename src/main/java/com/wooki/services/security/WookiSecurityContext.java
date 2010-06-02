@@ -30,6 +30,12 @@ public interface WookiSecurityContext
     void log(User user);
 
     /**
+     * Simply clear the security context.
+     *
+     */
+    void logout();
+    
+    /**
      * Check if a user is logged in.
      * 
      * @return

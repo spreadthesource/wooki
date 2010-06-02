@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
-import com.wooki.domain.biz.ActivityManager;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
+import com.wooki.services.activity.ActivitySource;
 import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
@@ -26,11 +25,11 @@ public class SingleBookFeedProducer extends AbstractFeedProducer
 
     private final BookManager bookManager;
 
-    public SingleBookFeedProducer(@Inject LinkSource linkSource,
-            @Inject ActivityFeedWriter<Activity> activityFeed, @Inject ServicesMessages messages,
-            @Inject ActivityManager activityManager, @Inject BookManager bookManager)
+    public SingleBookFeedProducer(ServicesMessages messages, LinkSource lnkSource,
+            ActivityFeedWriter<Activity> activityFeed, ActivitySource source,
+            BookManager bookManager)
     {
-        super(linkSource, activityFeed, messages, activityManager);
+        super(messages, lnkSource, activityFeed, source);
         this.bookManager = bookManager;
     }
 
@@ -58,8 +57,7 @@ public class SingleBookFeedProducer extends AbstractFeedProducer
 
         alternateLinks.add(linkToSelf);
 
-        return super.fillFeed(id, title, alternateLinks, this.activityManager
-                .listAllBookActivities(bookId));
+        return super.fillFeed(id, title, alternateLinks, this.source.listActivitiesForFeed(bookId));
     }
 
 }

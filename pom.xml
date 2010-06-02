@@ -113,7 +113,7 @@
 			<artifactId>spring-core</artifactId>
 			<version>${spring-version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -313,6 +313,28 @@
 		<plugins>
 
 			<plugin>
+				<groupId>org.apache.db.torque</groupId>
+				<artifactId>torque-maven-plugin</artifactId>
+				<configuration>
+					<targetDatabase>hsqldb</targetDatabase>
+					<targetPackage>org.apache.torque.test</targetPackage>
+					<driver>org.hsqldb.jdbcDriver</driver>
+					<url>jdbc:hsqldb:/tmp/wookidb/wooki</url>
+					<user>sa</user>
+					<password></password>
+				</configuration>
+
+				<dependencies>
+					<dependency>
+						<groupId>hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>1.8.0.10</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>hibernate3-maven-plugin</artifactId>
 				<version>2.2</version>
@@ -410,23 +432,15 @@
 			</plugin>
 
 			<!-- c5-db-migration : http://code.google.com/p/c5-db-migration -->
-			<!-- plugin>
-				<groupId>com.carbonfive.db-support</groupId>
+			<!--
+				plugin> <groupId>com.carbonfive.db-support</groupId>
 				<artifactId>db-migration-maven-plugin</artifactId>
-				<version>0.9.9-m3</version>
-				<configuration>
-					<url>jdbc:${url}</url>
-					<username>${dbuser}</username>
-					<password>${dbpassword}</password>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>hsqldb</groupId>
-						<artifactId>hsqldb</artifactId>
-						<version>1.8.0.10</version>
-					</dependency>
-				</dependencies>
-			</plugin -->
+				<version>0.9.9-m3</version> <configuration> <url>jdbc:${url}</url>
+				<username>${dbuser}</username> <password>${dbpassword}</password>
+				</configuration> <dependencies> <dependency>
+				<groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId>
+				<version>1.8.0.10</version> </dependency> </dependencies> </plugin
+			-->
 		</plugins>
 	</build>
 
@@ -520,7 +534,7 @@
 
 		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2/</url>
+			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 
 		<repository>

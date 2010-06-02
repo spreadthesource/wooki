@@ -14,16 +14,27 @@
 // limitations under the License.
 //
 
-package com.wooki;
+package com.wooki.services.security.spring;
 
 /**
- * Describe the type of activity to display by the activity component.
+ * Wrapper around spring security bean to obtain the URL with the context.
  * 
  * @author ccordenier
  */
-public enum ActivityType
+public interface SecurityUrlSource
 {
 
-    USER, CO_AUTHOR, USER_PUBLIC, BOOK_CREATION, ACCOUNT, BOOK;
+    /**
+     * Obtain the login URL.
+     * 
+     * @return
+     */
+    String getLoginUrl();
 
+    /**
+     * Return the logout URL.
+     * 
+     * @return
+     */
+    String getLogoutUrl();
 }

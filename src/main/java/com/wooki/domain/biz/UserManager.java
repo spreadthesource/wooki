@@ -36,7 +36,7 @@ public interface UserManager
      * @throws UserAlreadyException
      */
     @CommitAfter
-    void addUser(User user) throws UserAlreadyException;
+    void registerUser(User user) throws UserAlreadyException;
 
     /**
      * Get a user by its username.

@@ -85,6 +85,7 @@ public class CommentManagerImpl implements CommentManager
         
         this.commentDao.delete(c);
         CommentActivity ca = new CommentActivity();
+        ca.setBook(c.getPublication().getChapter().getBook());
         ca.setCreationDate(Calendar.getInstance().getTime());
         ca.setUser(this.securityCtx.getUser());
         ca.setType(CommentEventType.DELETE);

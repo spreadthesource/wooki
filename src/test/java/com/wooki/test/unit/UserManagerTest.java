@@ -50,7 +50,7 @@ public class UserManagerTest extends AbstractTestNGSpringContextTests
         john.setUsername("johndoe");
         john.setFullname("John Doe");
         john.setPassword("password");
-        userManager.addUser(john);
+        userManager.registerUser(john);
 
     }
 
@@ -77,7 +77,7 @@ public class UserManagerTest extends AbstractTestNGSpringContextTests
         john.setPassword("passpass");
         try
         {
-            userManager.addUser(john);
+            userManager.registerUser(john);
             Assert.fail("User john already exists, call add must raise an exception.");
         }
         catch (UserAlreadyException uaEx)

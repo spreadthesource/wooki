@@ -22,8 +22,8 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.services.SecurityUrlSource;
 import com.wooki.services.security.WookiSecurityContext;
+import com.wooki.services.security.spring.SecurityUrlSource;
 
 /**
  * Login form.

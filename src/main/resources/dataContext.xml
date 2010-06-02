@@ -27,7 +27,7 @@
 	<context:component-scan base-package="com.wooki" />
 
 	<bean id="project-properties"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		class="com.spreadthesource.tapestry.installer.config.TapestryPropertyPlaceholderConfigurer">
 		<property name="ignoreUnresolvablePlaceholders">
 			<value>true</value>
 		</property>
@@ -36,16 +36,9 @@
 				<value>
 					classpath*:config/database.properties
 				</value>
-				<value>
-					classpath*:config/tapestry.properties
-				</value>
 			</list>
 		</property>
 	</bean>
-
-	<!-- Exception translation bean post processor -->
-	<!-- bean
-		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
 	<bean id="dataSource"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -55,30 +48,16 @@
 		<property name="password" value="${hibernate.connection.password}" />
 	</bean>
 
-	<bean id="entityManagerFactory"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="wookiPersitence" />
+	<bean id="sessionFactory"
+		class="com.spreadthesource.tapestry.spring.hibernate.TapestryLocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="jpaDialect">
-			<bean class="${jpa.dialect}" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
+		<property name="packageNames">
+			<list>
+				<value>com.wooki.domain.model</value>
+			</list>
 		</property>
-		<property name="jpaVendorAdapter">
-			<bean class="org.springframework.orm.jpa.vendor.${jpa.vendor.adapter}">
-				<property name="showSql" value="${hibernate.show_sql}" />
-				<property name="databasePlatform" value="${hibernate.dialect}" />
-				<property name="generateDdl" value="false" />
-			</bean>
-		</property>
-	</bean>
-
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-
-	<tx:annotation-driven transaction-manager="transactionManager" /-->
-
-	<bean id="domManager" class="com.wooki.services.parsers.DOMManagerImpl">
-		<property name="characterEncoding" value="${tapestry.charset}" />
 	</bean>
 
 </beans>

@@ -69,7 +69,7 @@ public class UserManagerImpl implements UserManager
         this.securityManager = applicationContext.getBean(SecurityManager.class);
     }
 
-    public void addUser(User author) throws UserAlreadyException
+    public void registerUser(User author) throws UserAlreadyException
     {
 
         if (findByUsername(author.getUsername()) != null) { throw new UserAlreadyException(); }
@@ -93,10 +93,8 @@ public class UserManagerImpl implements UserManager
         aa.setUser(author);
         this.activityDao.create(aa);
 
-        // Set security context
-        securityCtx.log(author);
-
         // Set permission
+        this.securityCtx.log(author);
         this.securityManager.setOwnerPermission(author);
 
     }

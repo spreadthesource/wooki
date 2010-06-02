@@ -1,0 +1,45 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+	<t:block t:id="accountActivityBlock">
+		<li class="${style}">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="accountActivity?.user?.username">${accountActivity?.user?.username}</a> has <span> ${getActivityLabel(accountActivity.type)} </span> Wooki <t:lastModifiedFormatter t:time="accountActivity.creationDate?.time" />
+		</li>
+	</t:block>
+	
+	<t:block t:id="bookActivityBlock">
+		<li class="${style}">
+			<a href="#" t:type="pagelink" t:page="book/index" t:context="bookActivity?.book?.id">${bookActivity?.book?.title}</a> by <a href="#" t:type="pagelink" t:page="Index" t:context="bookActivity?.user?.username">${bookActivity?.user?.username}</a><span>  ${getActivityLabel(bookActivity.type)} </span><t:lastModifiedFormatter t:time="bookActivity.creationDate?.time" />
+		</li>
+	</t:block>
+
+	<t:block t:id="chapterActivityBlock">
+		<li class="${style}">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="chapterActivity?.user?.username">${chapterActivity?.user?.username}</a> <em> has  ${getActivityLabel(chapterActivity.type)} a chapter </em><t:lastModifiedFormatter t:time="chapterActivity.creationDate?.time" />
+			<blockquote>
+				<t:if t:test="chapterActivity.getType().toString().equals('PUBLISHED')">
+					<a href="#" t:type="pagelink" t:page="chapter/Index" t:context="[chapterActivity?.chapter?.book?.id,chapterActivity?.chapter?.id]">${chapterActivity?.chapter?.title}</a>
+					<p:else>
+						'${chapterActivity?.chapter?.title}'
+					</p:else>
+				</t:if>
+				<em> in book </em><a href="#" t:type="pagelink" t:page="book/Index" t:context="chapterActivity?.chapter?.book?.id">${chapterActivity?.chapter?.book?.title}</a>
+			</blockquote>
+		</li>
+	</t:block>
+	
+	<t:block t:id="commentActivityBlock">
+		<li class="${style}">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="commentActivity?.user?.username">${commentActivity?.user?.username}</a> <em> has  ${getActivityLabel(commentActivity.type)} a comment </em> <t:lastModifiedFormatter t:time="commentActivity.creationDate?.time" />
+			on <a href="#" t:type="pagelink" t:page="chapter/Index" t:context="[commentActivity.comment?.publication?.chapter?.book?.id,commentActivity.comment?.publication?.chapter?.id]">${commentActivity.comment?.publication?.chapter?.title}</a> in <a href="#" t:type="pagelink" t:page="book/Index" t:context="commentActivity.comment?.publication?.chapter?.book?.id">${commentActivity.comment?.publication?.chapter?.book?.title}</a>
+			<blockquote>
+				${commentActivity?.comment?.content}
+			</blockquote>
+		</li>
+	</t:block>
+
+	<!-- Empty block when the targeted resource is not available -->
+	<t:block t:id="empty">
+		<p>This type of activity does not correspond to any block, see your configuration</p>
+	</t:block>
+
+</t:container>

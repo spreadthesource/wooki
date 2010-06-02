@@ -15,6 +15,14 @@ public interface SecurityManager
      * @param entity
      */
     void setOwnerPermission(WookiEntity entity);
+    
+    /**
+     * Set owner permission on an entity using to a given user. 
+     *
+     * @param entity
+     * @param user
+     */
+    void setOwnerPermission(WookiEntity entity, User user);
 
     /**
      * Set author collaboration rights that mean a collaborator can r/w

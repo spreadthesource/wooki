@@ -41,7 +41,7 @@ public class ExceptionReportTest
         Document document = pageTester.renderPage("ThrowIAE");
         Assert.assertNotNull(
                 document.getElementById("specificReport"),
-                "Wiki Exception should not handled IllegalArgumentException");
+                "Wiki Exception should handle IllegalArgumentException");
 
     }
 

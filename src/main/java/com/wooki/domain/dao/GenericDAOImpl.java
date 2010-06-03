@@ -25,7 +25,6 @@ import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.WookiEntity;
@@ -115,17 +114,12 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
         return crit;
     }
 
-    public List<T> listEntitiesAfter(Date date)
-    {
-        Criteria crit = this.session.createCriteria(getEntityType());
-        crit.add(Restrictions.isNull("deletionDate"));
-        return crit.list();
-    }
-
     @SuppressWarnings("unchecked")
-    public List<T> list()
+    public List<T> list(QueryFilter... filters)
     {
         Criteria crit = session.createCriteria(getEntityType());
+        crit.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        applyFilters(crit, filters);
         return (List<T>) crit.list();
     }
 

@@ -39,6 +39,7 @@ import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.BookEventType;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.ChapterEventType;
+import com.wooki.services.db.query.QueryFilterService;
 import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 
@@ -55,17 +56,20 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     private final ChapterDAO chapterDao;
 
-    private SecurityManager securityManager;
+    private final QueryFilterService filterService;
+    
+    private final SecurityManager securityManager;
 
-    private WookiSecurityContext securityCtx;
+    private final WookiSecurityContext securityCtx;
     
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
-            ChapterDAO chapterDAO, ApplicationContext context)
+            ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService)
     {
         this.bookDao = bookDAO;
         this.userDao = userDAO;
         this.activityDao = activityDAO;
         this.chapterDao = chapterDAO;
+        this.filterService = filterService;
 
         this.securityCtx = context.getBean(WookiSecurityContext.class);
         this.securityManager = context.getBean(SecurityManager.class);
@@ -293,7 +297,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
     public List<Book> list()
     {
-        return bookDao.list();
+        return bookDao.list(filterService.present());
     }
 
     public List<Book> listByTitle(String title)

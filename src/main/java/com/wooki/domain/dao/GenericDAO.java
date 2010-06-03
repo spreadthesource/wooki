@@ -22,6 +22,8 @@ import java.util.List;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.hibernate.Criteria;
 
+import com.wooki.services.db.query.QueryFilter;
+
 /**
  * Generic DAO will be the base for all concrete DAO implementation. It will provide generic data
  * access method.
@@ -85,5 +87,5 @@ public interface GenericDAO<T, PK extends Serializable>
     /**
      * List all the persistent entities of type T
      */
-    List<T> list();
+    List<T> list(QueryFilter... filters);
 }

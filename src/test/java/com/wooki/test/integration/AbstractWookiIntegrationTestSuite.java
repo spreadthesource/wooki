@@ -1,13 +1,11 @@
 package com.wooki.test.integration;
 
 import org.apache.tapestry5.test.SeleniumTestCase;
-import org.hsqldb.util.ScriptTool;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 @Test(sequential = true)
-public class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
+public abstract class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
 {
 
     /**

@@ -106,13 +106,16 @@ public class WookiRequestExceptionHandler implements RequestExceptionHandler
 
         // Check if there is an existing a page that correspond to the root
         // exception
-        if (exception.getCause() != null
-                && this.exceptionMap.containsKey(exception.getCause().getClass()))
+        for (Class ex : this.exceptionMap.keySet())
         {
-            String page = this.exceptionMap.get(exception.getCause().getClass());
-            if (classResolver.isPageName(page))
+            if (containsException(exception, ex))
             {
-                exceptionPage = page;
+                String page = this.exceptionMap.get(ex);
+                if (classResolver.isPageName(page))
+                {
+                    exceptionPage = page;
+                    break;
+                }
             }
         }
 

@@ -43,7 +43,7 @@ public class SecurityManagerImpl implements SecurityManager
         this.aclManager.addPermission(entity, new PrincipalSid(user.getUsername()), BasePermission.ADMINISTRATION, Book.class);
     }
 
-    public Authority getOrCreateAuthority(String authority)
+    public synchronized Authority getOrCreateAuthority(String authority)
     {
         Criteria result = this.authorityDao.createColumnCriteria("authority", authority);
         Authority auth = (Authority) result.uniqueResult();

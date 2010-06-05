@@ -3,9 +3,14 @@ package com.wooki.test.unit;
 import org.apache.tapestry5.ioc.Registry;
 import org.apache.tapestry5.test.PageTester;
 import org.springframework.context.ApplicationContext;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.spreadthesource.tapestry.installer.services.InstallerModule;
+import com.wooki.app0.services.UnitTestModule;
 import com.wooki.services.WookiModule;
+import com.wooki.test.WookiPageTester;
 
 /**
  * This class is in charge of initializing Tapestry for the wooki application. So, concrete test
@@ -13,7 +18,8 @@ import com.wooki.services.WookiModule;
  * 
  * @author ccordenier
  */
-public class AbstractWookiUnitTestSuite
+@Test(sequential = true)
+public abstract class AbstractWookiUnitTestSuite
 {
 
     /**
@@ -31,13 +37,23 @@ public class AbstractWookiUnitTestSuite
      */
     protected ApplicationContext context;
 
-    public AbstractWookiUnitTestSuite()
+    @BeforeClass
+    public void setup()
     {
         pageTester = new WookiPageTester("com.wooki", "wooki", "src/main/webapp",
                 WookiModule.class, com.wooki.installer.services.InstallerModule.class,
-                InstallerModule.class);
+                InstallerModule.class, UnitTestModule.class);
         registry = pageTester.getRegistry();
         context = registry.getService(ApplicationContext.class);
+    }
+
+    @AfterClass
+    public void cleanup()
+    {
+        if (registry != null)
+        {
+            registry.shutdown();
+        }
     }
 
 }

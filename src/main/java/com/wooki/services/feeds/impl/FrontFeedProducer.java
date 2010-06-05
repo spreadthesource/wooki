@@ -8,8 +8,9 @@ import org.apache.tapestry5.internal.services.LinkSource;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
 import com.wooki.domain.model.activity.Activity;
+import com.wooki.services.EnumServiceLocator;
 import com.wooki.services.ServicesMessages;
-import com.wooki.services.activity.ActivitySource;
+import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
@@ -22,9 +23,10 @@ public class FrontFeedProducer extends AbstractFeedProducer
 {
 
     public FrontFeedProducer(ServicesMessages messages, LinkSource lnkSource,
-            ActivityFeedWriter<Activity> activityFeed, ActivitySource source)
+            ActivityFeedWriter<Activity> activityFeed, EnumServiceLocator locator)
     {
-        super(messages, lnkSource, activityFeed, source);
+        super(messages, lnkSource, activityFeed, locator
+                .getService(ActivitySourceType.BOOK_CREATION));
     }
 
     /**

@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -37,20 +38,28 @@ import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.wooki.domain.biz.UserManager;
+import com.wooki.domain.exception.UserAlreadyException;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.User;
 import com.wooki.services.HTMLParser;
 import com.wooki.services.parsers.Convertor;
 import com.wooki.services.parsers.DOMManager;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * Test case for DOM manipulation.
@@ -80,57 +89,17 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
 
     private HTMLParser htmlParser;
 
-    public Convertor getFromDocbookConvertor()
-    {
-        return fromDocbookConvertor;
-    }
-
-    public void setFromDocbookConvertor(Convertor fromDocbookConvertor)
-    {
-        this.fromDocbookConvertor = fromDocbookConvertor;
-    }
-
-    public Convertor getToFOConvertor()
-    {
-        return toFOConvertor;
-    }
-
-    public void setToFOConvertor(Convertor toFOConvertor)
-    {
-        this.toFOConvertor = toFOConvertor;
-    }
-
-    public Convertor getToXHTMLConvertor()
-    {
-        return toXHTMLConvertor;
-    }
-
-    public void setToXHTMLConvertor(Convertor toXHTMLConvertor)
-    {
-        this.toXHTMLConvertor = toXHTMLConvertor;
-    }
-
-    public Convertor getToAPTConvertor()
-    {
-        return toAPTConvertor;
-    }
-
-    public void setToAPTConvertor(Convertor toAPTConvertor)
-    {
-        this.toAPTConvertor = toAPTConvertor;
-    }
-
     @BeforeClass
-    void setup()
+    public void setupServices() throws UserAlreadyException
     {
         generator = registry.getService(DOMManager.class);
-        
+
         toFOConvertor = (Convertor) context.getBean("xhtmlToFOConvertor");
 
         toAPTConvertor = (Convertor) context.getBean("xhtmlToAPTConvertor");
 
         toXHTMLConvertor = (Convertor) context.getBean("documentToXHTMLConvertor");
-        
+
         toImprovedXHTML4LatexConvertor = (Convertor) context
                 .getBean("documentToImprovedXHTML4LatexConvertor");
 
@@ -141,6 +110,31 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         fromAptToDocbook = (Convertor) context.getBean("APTHTMLToDocbookHTMLConvertor");
 
         htmlParser = (HTMLParser) context.getBean("htmlParser");
+
+        DataSource ds = context.getBean(DriverManagerDataSource.class);
+
+        UserManager userManager = registry.getService(UserManager.class);
+        
+        WookiSecurityContext securityCtx = context.getBean(WookiSecurityContext.class);
+        
+        // Reset datas and create required schemas
+        ClassPathResource script = new ClassPathResource("reset.sql");
+        // SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
+        // SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+
+        script = new ClassPathResource("createAclSchema.sql");
+        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
+        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+
+        // Add author to the book
+        User conversion = new User();
+        conversion.setEmail("conv.ersion@gmail.com");
+        conversion.setUsername("conversion");
+        conversion.setFullname("convers");
+        conversion.setPassword("password");
+        userManager.registerUser(conversion);
+
+        securityCtx.log(conversion);
     }
 
     @Test

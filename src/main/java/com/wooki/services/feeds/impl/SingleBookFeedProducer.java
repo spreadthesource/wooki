@@ -10,8 +10,9 @@ import com.sun.syndication.feed.atom.Link;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.activity.Activity;
+import com.wooki.services.EnumServiceLocator;
 import com.wooki.services.ServicesMessages;
-import com.wooki.services.activity.ActivitySource;
+import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
@@ -26,10 +27,10 @@ public class SingleBookFeedProducer extends AbstractFeedProducer
     private final BookManager bookManager;
 
     public SingleBookFeedProducer(ServicesMessages messages, LinkSource lnkSource,
-            ActivityFeedWriter<Activity> activityFeed, ActivitySource source,
-            BookManager bookManager)
+            ActivityFeedWriter<Activity> activityFeed, BookManager bookManager,
+            EnumServiceLocator locator)
     {
-        super(messages, lnkSource, activityFeed, source);
+        super(messages, lnkSource, activityFeed, locator.getService(ActivitySourceType.BOOK));
         this.bookManager = bookManager;
     }
 

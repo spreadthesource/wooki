@@ -70,7 +70,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     // private ActivitySource activityManager;
 
     @BeforeClass
-    public void setup() throws UserAlreadyException, AuthorizationException
+    public void setupServices() throws UserAlreadyException, AuthorizationException
     {
         bookManager = registry.getService(BookManager.class);
         chapterManager = registry.getService(ChapterManager.class);
@@ -82,19 +82,13 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         securityCtx = context.getBean(WookiSecurityContext.class);
         ds = context.getBean(DriverManagerDataSource.class);
 
-        initDb();
-    }
-
-    public void initDb() throws UserAlreadyException, AuthorizationException
-    {
-
         // Reset datas and create required schemas
         ClassPathResource script = new ClassPathResource("reset.sql");
-        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+        // SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
+        // SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
         script = new ClassPathResource("createAclSchema.sql");
-        tpl = new SimpleJdbcTemplate(ds);
+        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
         SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
         // Add author to the book
@@ -120,7 +114,6 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         chapterManager.updateContent(
                 chapterTwo.getId(),
                 "<p>First you have to set environment variables...</p>");
-
     }
 
     @AfterClass

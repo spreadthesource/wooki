@@ -32,13 +32,13 @@ public class BookActivitySource implements ActivitySource
     public List<Activity> listActivities(Long... context)
     {
         checkContext(context);
-        return this.activityDao.listActivityOnBook(context[0], filterService.present());
+        return this.activityDao.listAllActivitiesOnBook(context[0], filterService.present());
     }
 
     public List<Activity> listActivitiesForFeed(Long... context)
     {
         checkContext(context);
-        return this.activityDao.listActivityOnBook(
+        return this.activityDao.listAllActivitiesOnBook(
                 context[0],
                 filterService.present(),
                 filterService.createAfter(DateUtils.oneMonthAgo()));
@@ -47,7 +47,7 @@ public class BookActivitySource implements ActivitySource
     public List<Activity> listActivitiesRange(int startIdx, int range, Long... context)
     {
         checkContext(context);
-        return this.activityDao.listActivityOnBook(
+        return this.activityDao.listAllActivitiesOnBook(
                 context[0],
                 filterService.present(),
                 filterService.range(startIdx, range));

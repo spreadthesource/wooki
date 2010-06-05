@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.hibernate.HibernateSymbols;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -52,6 +53,7 @@ public class AppModule
         conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         conf.add(SymbolConstants.PRODUCTION_MODE, "false");
         conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
+        conf.add(HibernateSymbols.EARLY_START_UP, "false");
     }
 
     public static void bind(ServiceBinder binder)
@@ -87,4 +89,5 @@ public class AppModule
         };
         config.add("EnsureNonNullHttpRequestAndResponse", filter, "before:*");
     }
+
 }

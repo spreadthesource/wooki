@@ -18,11 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
-import com.wooki.domain.model.activity.AbstractBookActivity;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.db.query.QueryFilter;
 

@@ -24,4 +24,24 @@ public class UserAlreadyException extends BusinessException
 	 */
     private static final long serialVersionUID = 1424814279486457742L;
 
+    public UserAlreadyException()
+    {
+        super();
+    }
+
+    public UserAlreadyException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
+
+    public UserAlreadyException(String message)
+    {
+        super(message);
+    }
+
+    public UserAlreadyException(Throwable cause)
+    {
+        super(cause);
+    }
+
 }

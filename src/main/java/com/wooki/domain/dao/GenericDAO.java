@@ -19,7 +19,6 @@ package com.wooki.domain.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.hibernate.Criteria;
 
 import com.wooki.services.db.query.QueryFilter;

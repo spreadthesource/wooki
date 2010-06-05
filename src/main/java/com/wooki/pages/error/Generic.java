@@ -1,7 +1,6 @@
 package com.wooki.pages.error;
 
 import org.apache.tapestry5.Link;
-
 import org.apache.tapestry5.annotations.IncludeStylesheet;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ExceptionReporter;

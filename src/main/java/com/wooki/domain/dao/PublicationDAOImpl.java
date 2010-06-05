@@ -21,7 +21,6 @@ import java.util.List;
 import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
 
 import com.wooki.domain.model.Publication;
 

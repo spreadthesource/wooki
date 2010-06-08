@@ -17,6 +17,7 @@
 package com.wooki.components;
 
 import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 
 import com.wooki.base.LayoutBase;
@@ -27,4 +28,7 @@ public class BookLayout extends LayoutBase
     @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "message:index-message")
     private String title;
 
+    @Component(publishParameters = "adminLinks,publicLinks")
+    private Menu menu;
+    
 }

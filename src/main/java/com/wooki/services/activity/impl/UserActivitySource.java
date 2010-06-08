@@ -7,7 +7,7 @@ import org.apache.tapestry5.ioc.internal.util.Defense;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.activity.ActivitySource;
-import com.wooki.services.db.query.QueryFilterService;
+import com.wooki.services.db.QueryFilterService;
 import com.wooki.services.utils.DateUtils;
 
 /**

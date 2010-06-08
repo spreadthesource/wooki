@@ -19,7 +19,7 @@ package com.wooki.domain.dao;
 import java.util.List;
 
 import com.wooki.domain.model.activity.Activity;
-import com.wooki.services.db.query.QueryFilter;
+import com.wooki.services.db.QueryFilter;
 
 /**
  * Manipulate activity elements

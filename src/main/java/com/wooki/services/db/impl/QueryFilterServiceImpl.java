@@ -1,6 +1,9 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db.impl;
 
 import java.util.Date;
+
+import com.wooki.services.db.QueryFilter;
+import com.wooki.services.db.QueryFilterService;
 
 
 /**

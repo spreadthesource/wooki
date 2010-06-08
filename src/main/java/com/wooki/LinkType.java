@@ -7,5 +7,5 @@ package com.wooki;
  */
 public enum LinkType
 {
-    ADMIN, MENU;
+    ADMIN, PUBLIC;
 }

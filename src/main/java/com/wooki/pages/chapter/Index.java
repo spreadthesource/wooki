@@ -158,10 +158,10 @@ public class Index extends BookBase
                 delete.setConfirm(true);
             }
         }
-        linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this
+        linkSupport.createPageMenuItem(LinkType.PUBLIC, "All feedback", "chapter/issues", this
                 .getBookId(), Issues.ALL);
         linkSupport.createPageMenuItem(
-                LinkType.MENU,
+                LinkType.PUBLIC,
                 "Feedback on this chapter only",
                 "chapter/issues",
                 false,
@@ -170,7 +170,7 @@ public class Index extends BookBase
 
         // Add RSS link
         BookMenuItem rss = linkSupport.createEventMenuItem(
-                LinkType.MENU,
+                LinkType.PUBLIC,
                 "RSS Feed",
                 "book/index",
                 "feed",

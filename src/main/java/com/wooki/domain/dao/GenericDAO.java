@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 
-import com.wooki.services.db.query.QueryFilter;
+import com.wooki.services.db.QueryFilter;
 
 /**
  * Generic DAO will be the base for all concrete DAO implementation. It will provide generic data

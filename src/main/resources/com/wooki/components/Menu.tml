@@ -1,0 +1,10 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<t:container
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<t:menuBlock t:links="availablePublicLinks" t:blockClasses="book-menu shadowed" t:blockId="bookMenu" />
+
+	<t:menuBlock t:links="availableAdminLinks"  t:blockClasses="book-admin book-menu shadowed" t:blockId="adminMenu" />
+
+</t:container>

@@ -39,7 +39,7 @@ import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.BookEventType;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.ChapterEventType;
-import com.wooki.services.db.query.QueryFilterService;
+import com.wooki.services.db.QueryFilterService;
 import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.utils.SlugBuilder;
 

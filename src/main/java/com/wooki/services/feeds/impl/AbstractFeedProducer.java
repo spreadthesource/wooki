@@ -1,4 +1,4 @@
-package com.wooki.services.feeds;
+package com.wooki.services.feeds.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +15,8 @@ import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
 import com.wooki.services.activity.ActivitySource;
+import com.wooki.services.feeds.ActivityFeedWriter;
+import com.wooki.services.feeds.FeedProducer;
 
 /**
  * Define a base utility for feed producing.

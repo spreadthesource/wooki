@@ -16,8 +16,7 @@ import com.wooki.domain.dao.PublicationDAO;
 import com.wooki.domain.dao.PublicationDAOImpl;
 import com.wooki.domain.dao.UserDAO;
 import com.wooki.domain.dao.UserDAOImpl;
-import com.wooki.services.db.query.QueryFilterService;
-import com.wooki.services.db.query.QueryFilterServiceImpl;
+import com.wooki.services.db.impl.QueryFilterServiceImpl;
 
 /**
  * Defines data layer related services and utilities.

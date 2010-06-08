@@ -1,4 +1,4 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db;
 
 /**
  * This interface defines a generic filter API used by the business layer to add query specifics

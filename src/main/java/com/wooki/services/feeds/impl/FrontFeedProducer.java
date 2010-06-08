@@ -11,7 +11,6 @@ import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.EnumServiceLocator;
 import com.wooki.services.ServicesMessages;
 import com.wooki.services.activity.ActivitySourceType;
-import com.wooki.services.feeds.AbstractFeedProducer;
 import com.wooki.services.feeds.ActivityFeedWriter;
 
 /**

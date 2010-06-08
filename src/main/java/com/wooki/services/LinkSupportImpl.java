@@ -16,6 +16,7 @@ import org.apache.tapestry5.services.PageRenderLinkSource;
 import com.wooki.BookMenuItem;
 import com.wooki.LinkType;
 import com.wooki.NavLinkPosition;
+import com.wooki.services.security.WookiSecurityContext;
 
 /**
  * This environmental service is responsible for generating menu elements in the layout. It will use
@@ -42,7 +43,8 @@ public class LinkSupportImpl implements LinkSupport
     private Map<NavLinkPosition, BookMenuItem> navLinks = CollectionFactory.newMap();
 
     public LinkSupportImpl(LinkSource linkSource, PageRenderLinkSource pageLinkSource,
-            RequestPageCache pageCache, RenderSupport renderSupport)
+            RequestPageCache pageCache, RenderSupport renderSupport,
+            WookiSecurityContext securityCtx)
     {
         this.linkSource = linkSource;
         this.pageLinkSource = pageLinkSource;

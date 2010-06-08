@@ -18,6 +18,7 @@ package com.wooki.pages.book;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -32,9 +33,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
-import com.wooki.BookMenuItem;
-import com.wooki.LinkType;
 import com.wooki.NavLinkPosition;
+import com.wooki.actions.Link;
+import com.wooki.actions.impl.EditLink;
+import com.wooki.actions.impl.Export;
+import com.wooki.actions.impl.ViewLink;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
@@ -110,6 +113,12 @@ public class Index extends BookBase
     @Property
     private String chapterName;
 
+    @Property
+    private List<Link> publicLinks;
+
+    @Property
+    private List<Link> adminLinks;
+
     private Long firstChapterId;
 
     private String firstChapterTitle;
@@ -180,33 +189,23 @@ public class Index extends BookBase
     @SetupRender
     public void setupMenus()
     {
-        if (securityCtx.canWrite(getBook()))
-        {
-            if (isAbstractHasWorkingCopy())
-            {
-                linkSupport.createPageMenuItem(LinkType.MENU, "Working Copy", "book", this
-                        .getBookId(), ChapterManager.LAST);
-            }
-            linkSupport.createPageMenuItem(
-                    LinkType.ADMIN,
-                    "Edit introduction",
-                    "chapter/edit",
-                    this.getBookId(),
-                    this.bookAbstractId);
-            linkSupport.createPageMenuItem(LinkType.ADMIN, "Settings", "book/settings", this
-                    .getBookId());
-        }
-        linkSupport.createPageMenuItem(LinkType.MENU, "All feedback", "chapter/issues", this
-                .getBookId(), "all");
-        linkSupport.createEventMenuItem(LinkType.MENU, "Download PDF", "book/index", "pdf");
+        publicLinks = new ArrayList<Link>();
+        adminLinks = new ArrayList<Link>();
 
-        // Add RSS link
-        BookMenuItem rss = linkSupport.createEventMenuItem(
-                LinkType.MENU,
-                "RSS Feed",
-                "book/index",
-                "feed",
-                this.getBookId());
+        if (isAbstractHasWorkingCopy())
+        {
+            publicLinks.add(new ViewLink(this.getBook(), "book", "working-copy", true, this
+                    .getBookId(), ChapterManager.LAST));
+        }
+
+        publicLinks.add(new ViewLink("chapter/issues", "all-feedback", this.getBookId(), "all"));
+        publicLinks.add(new Export("print-pdf", "pdf", this.getBookId()));
+        publicLinks.add(new Export("rss-feed", "feed", this.getBookId()));
+
+        adminLinks.add(new EditLink(getBook(), "chapter/edit", "edit-intro", getBookId(),
+                bookAbstractId));
+        adminLinks.add(new EditLink(getBook(), "book/settings", "settings", getBookId()));
+
     }
 
     @SetupRender

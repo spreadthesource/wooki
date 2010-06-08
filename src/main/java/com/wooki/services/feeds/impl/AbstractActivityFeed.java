@@ -1,4 +1,4 @@
-package com.wooki.services.feeds;
+package com.wooki.services.feeds.impl;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -8,6 +8,7 @@ import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
 
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
+import com.wooki.services.feeds.ActivityFeedWriter;
 
 @UsesMappedConfiguration(key = Class.class, value = AbstractActivityFeed.class)
 public abstract class AbstractActivityFeed<T extends Activity> implements ActivityFeedWriter<T>

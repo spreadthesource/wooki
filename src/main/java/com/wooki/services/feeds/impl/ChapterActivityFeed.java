@@ -7,7 +7,6 @@ import com.sun.syndication.feed.atom.Link;
 import com.wooki.domain.model.activity.ChapterActivity;
 import com.wooki.domain.model.activity.ChapterEventType;
 import com.wooki.services.ServicesMessages;
-import com.wooki.services.feeds.AbstractActivityFeed;
 
 public class ChapterActivityFeed extends AbstractActivityFeed<ChapterActivity>
 {

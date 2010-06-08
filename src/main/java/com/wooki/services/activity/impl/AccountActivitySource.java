@@ -5,7 +5,7 @@ import java.util.List;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.activity.ActivitySource;
-import com.wooki.services.db.query.QueryFilterService;
+import com.wooki.services.db.QueryFilterService;
 import com.wooki.services.utils.DateUtils;
 
 /**

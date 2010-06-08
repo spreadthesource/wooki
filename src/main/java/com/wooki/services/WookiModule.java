@@ -87,6 +87,7 @@ import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
 import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
+import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.security.spring.SecurityUrlSource;
 import com.wooki.services.security.spring.SecurityUrlSourceImpl;
 
@@ -137,9 +138,9 @@ public class WookiModule<T>
         binder.bind(CommentManager.class, CommentManagerImpl.class);
         binder.bind(UserManager.class, UserManagerImpl.class);
 
-        // Bind the service 
+        // Bind the service
         binder.bind(EnumServiceLocator.class, EnumServiceLocatorImpl.class);
-        
+
     }
 
     public LinkSupport buildLinkSupport()
@@ -234,7 +235,7 @@ public class WookiModule<T>
     public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
             @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode,
             final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
-            final RequestPageCache pageCache)
+            final RequestPageCache pageCache, final WookiSecurityContext securityCtx)
     {
         // Add general links support
         configuration.add("MenuSupport", new MarkupRendererFilter()
@@ -243,7 +244,7 @@ public class WookiModule<T>
             {
                 RenderSupport renderSupport = environment.peek(RenderSupport.class);
                 LinkSupport linkSupport = new LinkSupportImpl(linkSource, pageLinkSource,
-                        pageCache, renderSupport);
+                        pageCache, renderSupport, securityCtx);
                 environment.push(LinkSupport.class, linkSupport);
                 try
                 {

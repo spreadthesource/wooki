@@ -8,7 +8,6 @@ import com.wooki.domain.model.activity.CommentActivity;
 import com.wooki.domain.model.activity.CommentEventType;
 import com.wooki.pages.chapter.Issues;
 import com.wooki.services.ServicesMessages;
-import com.wooki.services.feeds.AbstractActivityFeed;
 
 public class CommentActivityFeed extends AbstractActivityFeed<CommentActivity>
 {

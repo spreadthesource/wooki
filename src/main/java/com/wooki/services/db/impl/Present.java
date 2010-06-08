@@ -1,7 +1,9 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db.impl;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+
+import com.wooki.services.db.QueryFilter;
 
 
 /**

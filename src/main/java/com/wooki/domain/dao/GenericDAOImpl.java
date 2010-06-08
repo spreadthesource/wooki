@@ -28,7 +28,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.WookiEntity;
-import com.wooki.services.db.query.QueryFilter;
+import com.wooki.services.db.QueryFilter;
 
 /**
  * This generic implementation of DAO will be the base for all wooki's DAO.

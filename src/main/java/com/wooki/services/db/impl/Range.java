@@ -1,6 +1,8 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db.impl;
 
 import org.hibernate.Criteria;
+
+import com.wooki.services.db.QueryFilter;
 
 
 public class Range implements QueryFilter<Criteria>

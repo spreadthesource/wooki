@@ -1,6 +1,7 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db;
 
 import java.util.Date;
+
 
 
 /**

@@ -1,10 +1,12 @@
-package com.wooki.services.db.query;
+package com.wooki.services.db.impl;
 
 import java.util.Date;
 
 import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+
+import com.wooki.services.db.QueryFilter;
 
 
 public class CreateSince implements QueryFilter<Criteria>

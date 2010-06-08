@@ -31,7 +31,7 @@ import com.wooki.domain.model.activity.Activity;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.BookEventType;
 import com.wooki.domain.model.activity.CommentActivity;
-import com.wooki.services.db.query.QueryFilter;
+import com.wooki.services.db.QueryFilter;
 
 public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> implements ActivityDAO
 {

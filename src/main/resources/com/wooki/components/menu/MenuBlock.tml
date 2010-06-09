@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<t:container
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<ul id="${blockId}" class="${blockClasses}">
+		<t:loop t:source="links" t:value="current" t:empty="block:empty" t:index="index">
+			<t:menu.menuitem t:link="current" t:rowClass="rowClass" />
+		</t:loop>
+	</ul>
+
+	<t:block id="empty">
+		<li>&nbsp;</li>
+	</t:block>
+
+</t:container>

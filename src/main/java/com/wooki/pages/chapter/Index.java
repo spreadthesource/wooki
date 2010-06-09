@@ -16,6 +16,7 @@
 
 package com.wooki.pages.chapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -27,6 +28,11 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.BookMenuItem;
 import com.wooki.LinkType;
 import com.wooki.NavLinkPosition;
+import com.wooki.actions.Link;
+import com.wooki.actions.impl.DeleteLink;
+import com.wooki.actions.impl.EditLink;
+import com.wooki.actions.impl.ExportLink;
+import com.wooki.actions.impl.ViewLink;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
@@ -65,6 +71,12 @@ public class Index extends BookBase
 
     @Property
     private String nextTitle;
+
+    @Property
+    private List<Link> publicLinks;
+
+    @Property
+    private List<Link> adminLinks;
 
     private Long chapterId;
 
@@ -137,44 +149,27 @@ public class Index extends BookBase
 
     }
 
+    /**
+     * Setup all the menu items.
+     *
+     */
     @SetupRender
     public void setupMenus()
     {
-        if (securityCtx.canWrite(getBook()))
-        {
-            if (isShowAdmin())
-            {
-                linkSupport.createPageMenuItem(
-                        LinkType.ADMIN,
-                        "Edit content",
-                        "chapter/edit",
-                        getBookId(),
-                        chapterId);
-                BookMenuItem delete = linkSupport.createEventMenuItem(
-                        LinkType.ADMIN,
-                        "Delete",
-                        "chapter/index",
-                        "delete");
-                delete.setConfirm(true);
-            }
-        }
-        linkSupport.createPageMenuItem(LinkType.PUBLIC, "All feedback", "chapter/issues", this
-                .getBookId(), Issues.ALL);
-        linkSupport.createPageMenuItem(
-                LinkType.PUBLIC,
-                "Feedback on this chapter only",
-                "chapter/issues",
-                false,
-                getBookId(),
-                chapterId);
+        adminLinks = new ArrayList<Link>();
+        publicLinks = new ArrayList<Link>();
 
-        // Add RSS link
-        BookMenuItem rss = linkSupport.createEventMenuItem(
-                LinkType.PUBLIC,
-                "RSS Feed",
-                "book/index",
-                "feed",
-                this.getBookId());
+        if (isShowAdmin())
+        {
+            adminLinks.add(new EditLink(getBook(), "chapter/edit", "edit-content", getBookId(),
+                    chapterId));
+            adminLinks.add(new DeleteLink(getBook(), "delete-chapter"));
+        }
+
+        publicLinks.add(new ViewLink("chapter/issues", "all-feedback", getBookId(), Issues.ALL));
+        publicLinks.add(new ViewLink("chapter/issues", "chapter-feedback", false, getBookId(),
+                chapterId));
+        publicLinks.add(new ExportLink("rss-feed", "rss", getBookId()));
     }
 
     @SetupRender

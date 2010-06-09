@@ -21,6 +21,7 @@ import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.Parameter;
 
 import com.wooki.base.LayoutBase;
+import com.wooki.components.menu.Menu;
 
 public class BookLayout extends LayoutBase
 {

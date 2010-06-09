@@ -13,6 +13,12 @@ public class EditLink extends AbstractPageLink
         this.resource = resource;
     }
 
+    public EditLink(WookiEntity resource, String page, String labelMessageKey, String confirmMessageKey, Object... context)
+    {
+        super(page, labelMessageKey, confirmMessageKey, context);
+        this.resource = resource;
+    }
+    
     public boolean isAuthorized(WookiSecurityContext securityContext)
     {
         return securityContext.canWrite(resource);

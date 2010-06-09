@@ -33,7 +33,8 @@ import com.wooki.domain.model.User;
  */
 public class UserDetailsServiceImpl implements UserDetailsService
 {
-    @Inject @Autowired
+    @Inject
+    @Autowired
     private UserManager userManager;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException,

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html t:type="layout" t:title="inherit:title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
    
-   	<t:menu t:id="menu" />
+   	<t:menu.menu t:id="menu" />
    
  	<ul id="book-menu-placeholder" class="book-menu"><li>&nbsp;</li>
     </ul>

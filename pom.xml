@@ -314,17 +314,6 @@
 		<plugins>
 
 			<plugin>
-				<groupId>org.apache.db.torque</groupId>
-				<artifactId>torque-maven-plugin</artifactId>
-				<configuration>
-					<targetDatabase>hsqldb</targetDatabase>
-					<targetPackage>org.apache.torque.test</targetPackage>
-					<driver>org.hsqldb.jdbcDriver</driver>
-					<url>jdbc:hsqldb:/tmp/wookidb/wooki</url>
-					<user>sa</user>
-					<password></password>
-				</configuration>
-
 				<dependencies>
 					<dependency>
 						<groupId>hsqldb</groupId>
@@ -432,16 +421,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- c5-db-migration : http://code.google.com/p/c5-db-migration -->
-			<!--
-				plugin> <groupId>com.carbonfive.db-support</groupId>
-				<artifactId>db-migration-maven-plugin</artifactId>
-				<version>0.9.9-m3</version> <configuration> <url>jdbc:${url}</url>
-				<username>${dbuser}</username> <password>${dbpassword}</password>
-				</configuration> <dependencies> <dependency>
-				<groupId>hsqldb</groupId> <artifactId>hsqldb</artifactId>
-				<version>1.8.0.10</version> </dependency> </dependencies> </plugin
-			-->
+		
 		</plugins>
 	</build>
 
@@ -551,11 +531,6 @@
 	</repositories>
 
 	<pluginRepositories>
-		<pluginRepository>
-			<id>c5-public-repository</id>
-			<url>http://mvn.carbonfive.com/public</url>
-		</pluginRepository>
-
 		<pluginRepository>
 			<id>mc-release</id>
 			<name>Local Maven repository of releases</name>

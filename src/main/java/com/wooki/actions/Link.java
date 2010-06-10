@@ -3,7 +3,6 @@ package com.wooki.actions;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * 
  * @author ccordenier
  */
 public interface Link
@@ -29,5 +28,12 @@ public interface Link
      * @return
      */
     String getLabelMessageKey();
+
+    /**
+     * Return the key of the message that will popup when the user click on the link.
+     * 
+     * @return
+     */
+    String getConfirmMessageKey();
 
 }

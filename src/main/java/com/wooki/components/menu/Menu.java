@@ -1,4 +1,4 @@
-package com.wooki.components;
+package com.wooki.components.menu;
 
 import java.util.ArrayList;
 import java.util.List;

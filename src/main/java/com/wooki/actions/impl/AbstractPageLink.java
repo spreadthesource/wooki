@@ -18,6 +18,12 @@ public abstract class AbstractPageLink extends AbstractLink implements PageLink
         super(labelKey, context);
         this.page = page;
     }
+    
+    public AbstractPageLink(String page, String labelKey, String confirmMessageKey, Object[] context)
+    {
+        super(labelKey, confirmMessageKey, context);
+        this.page = page;
+    }
 
     public String getPage()
     {

@@ -7,10 +7,10 @@ import com.wooki.services.security.WookiSecurityContext;
  * 
  * @author ccordenier
  */
-public class Export extends AbstractEventLink
+public class ExportLink extends AbstractEventLink
 {
 
-    public Export(String labelMessageKey, String printType, Object... context)
+    public ExportLink(String labelMessageKey, String printType, Object... context)
     {
         super(printType, labelMessageKey, context);
     }

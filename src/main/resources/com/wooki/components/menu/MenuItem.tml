@@ -1,0 +1,14 @@
+<t:container
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<li class="${rowClass}">
+		<t:if test="action">
+			<a class="bookmenuitem" t:id="elink" t:type="eventLink" t:context="currentEventLink.context" t:event="prop:currentEventLink.event">${label}</a>
+			<p:else>
+				<a class="bookmenuitem" t:id="plink" t:type="pageLink" t:page="prop:currentPageLink.page" t:context="currentPageLink.context">${label}</a>
+			</p:else>
+		</t:if>
+	</li>
+
+</t:container>

@@ -7,9 +7,9 @@ public class DeleteLink extends AbstractEventLink
 {
     private WookiEntity resource;
 
-    public DeleteLink(WookiEntity resource, String page, String labelMessageKey, Object[] context)
+    public DeleteLink(WookiEntity resource, String labelMessageKey, Object... context)
     {
-        super("delete", labelMessageKey, context);
+        super("delete", labelMessageKey, "confirm-delete", context);
         this.resource = resource;
     }
 

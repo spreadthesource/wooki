@@ -24,6 +24,13 @@ public abstract class AbstractEventLink extends AbstractLink implements EventLin
         this.event = event;
     }
 
+    public AbstractEventLink(String event, String labelKey, String confirmMessageKey,
+            Object[] context)
+    {
+        super(labelKey, confirmMessageKey, context);
+        this.event = event;
+    }
+
     public String getEvent()
     {
         return event;

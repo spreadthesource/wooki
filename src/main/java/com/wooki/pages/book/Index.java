@@ -36,7 +36,7 @@ import com.sun.syndication.io.FeedException;
 import com.wooki.NavLinkPosition;
 import com.wooki.actions.Link;
 import com.wooki.actions.impl.EditLink;
-import com.wooki.actions.impl.Export;
+import com.wooki.actions.impl.ExportLink;
 import com.wooki.actions.impl.ViewLink;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
@@ -199,8 +199,8 @@ public class Index extends BookBase
         }
 
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", this.getBookId(), "all"));
-        publicLinks.add(new Export("print-pdf", "pdf", this.getBookId()));
-        publicLinks.add(new Export("rss-feed", "feed", this.getBookId()));
+        publicLinks.add(new ExportLink("print-pdf", "pdf", this.getBookId()));
+        publicLinks.add(new ExportLink("rss-feed", "feed", this.getBookId()));
 
         adminLinks.add(new EditLink(getBook(), "chapter/edit", "edit-intro", getBookId(),
                 bookAbstractId));

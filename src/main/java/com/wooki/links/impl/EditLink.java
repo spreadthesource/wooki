@@ -1,8 +1,14 @@
-package com.wooki.actions.impl;
+package com.wooki.links.impl;
 
 import com.wooki.domain.model.WookiEntity;
 import com.wooki.services.security.WookiSecurityContext;
 
+/**
+ * This link can be used to display a delete action link on a WoookiEntity resource.
+ * 
+ * @author ccordenier
+ *
+ */
 public class EditLink extends AbstractPageLink
 {
     private WookiEntity resource;

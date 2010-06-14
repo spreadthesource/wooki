@@ -41,13 +41,13 @@ import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.ibm.icu.util.Calendar;
-import com.wooki.BookMenuItem;
-import com.wooki.NavLinkPosition;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Chapter;
-import com.wooki.services.LinkSupport;
+import com.wooki.links.PageLink;
+import com.wooki.links.impl.NavLink;
+import com.wooki.links.impl.ViewLink;
 
 /**
  * This page is used to update/publish a chapter of a given book.
@@ -71,9 +71,6 @@ public class Edit extends BookBase
 
     @Inject
     private Request request;
-
-    @Inject
-    private LinkSupport linkSupport;
 
     @InjectComponent
     private Form editChapterForm;
@@ -108,6 +105,15 @@ public class Edit extends BookBase
 
     @Property
     private boolean abstractChapter;
+
+    @Property
+    private PageLink left;
+
+    @Property
+    private PageLink right;
+
+    @Property
+    private PageLink center;
 
     private DateFormat format = new SimpleDateFormat("hh:mm");
 
@@ -159,34 +165,22 @@ public class Edit extends BookBase
     {
         if ((previous != null) && (previousTitle != null))
         {
-            BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.LEFT, "< "
-                    + previousTitle, "chapter/index", getBookId(), previous);
-            item.setConfirm(true);
-            item.setConfirmMsg("Cancel edition?");
+            left = new NavLink("chapter/index", "nav-left", "cancel-edition", previousTitle,
+                    getBookId(), previous);
         }
         else
         {
-            BookMenuItem item = this.linkSupport.createNavLink(
-                    NavLinkPosition.LEFT,
-                    "< Table of content",
-                    "book/index",
-                    getBookId());
-            item.setConfirm(true);
-            item.setConfirmMsg("Cancel edition?");
+            left = new ViewLink("book/index", "toc", getBookId());
         }
 
         if ((next != null) && (nextTitle != null))
         {
-            BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.RIGHT, nextTitle
-                    + " >", "chapter/index", getBookId(), next);
-            item.setConfirm(true);
-            item.setConfirmMsg("Cancel edition?");
+            right = new NavLink("chapter/index", "nav-right", "cancel-edition", nextTitle,
+                    getBookId(), next);
         }
+        center = new NavLink("book/index", "book-root", "cancel-edition", getBook().getTitle(),
+                getBookId());
 
-        BookMenuItem item = this.linkSupport.createNavLink(NavLinkPosition.CENTER, getBook()
-                .getTitle(), "book/index", getBookId());
-        item.setConfirm(true);
-        item.setConfirmMsg("Cancel edition?");
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")

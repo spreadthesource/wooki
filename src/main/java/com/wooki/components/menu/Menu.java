@@ -8,7 +8,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.actions.Link;
+import com.wooki.links.Link;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**

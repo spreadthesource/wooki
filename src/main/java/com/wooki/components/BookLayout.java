@@ -22,6 +22,7 @@ import org.apache.tapestry5.annotations.Parameter;
 
 import com.wooki.base.LayoutBase;
 import com.wooki.components.menu.Menu;
+import com.wooki.components.menu.NavBar;
 
 public class BookLayout extends LayoutBase
 {
@@ -31,5 +32,8 @@ public class BookLayout extends LayoutBase
 
     @Component(publishParameters = "adminLinks,publicLinks")
     private Menu menu;
-    
+
+    @Component(publishParameters = "left,right,center")
+    private NavBar navbar;
+
 }

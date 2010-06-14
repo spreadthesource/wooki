@@ -1,17 +1,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html t:type="layout" t:title="inherit:title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
    
-   	<t:menu.menu t:id="menu" />
+   <body>
    
- 	<ul id="book-menu-placeholder" class="book-menu"><li>&nbsp;</li>
-    </ul>
-
-    <div class="clearer" />
-
-    <div id="book-wrapper" class="shadowed radied" >
-        <div id="book" class="radied">
-            <t:body/>
-        </div>
-    </div>
+	   	<t:menu.menu t:id="menu" />
+	   
+	 	<ul id="book-menu-placeholder" class="book-menu"><li>&nbsp;</li>
+	    </ul>
+	
+	    <div class="clearer" />
+	
+	    <div id="book-wrapper" class="shadowed radied" >
+	        <div id="book" class="radied">
+		    	<t:menu.navbar t:id="navbar" />
+	            <t:body/>
+	        </div>
+	    </div>
+    
+    </body>
 
 </html>

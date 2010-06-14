@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id" t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
+<html t:type="booklayout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id" t:menu="menu" t:adminActions="adminActions" t:left="left" t:center="center">
 
 	<t:feedlink t:page="book/index" t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
 

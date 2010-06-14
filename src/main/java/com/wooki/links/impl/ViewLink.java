@@ -1,8 +1,14 @@
-package com.wooki.actions.impl;
+package com.wooki.links.impl;
 
 import com.wooki.domain.model.WookiEntity;
 import com.wooki.services.security.WookiSecurityContext;
 
+/**
+ * Generak view link.
+ *
+ * @author ccordenier
+ *
+ */
 public class ViewLink extends AbstractPageLink
 {
 

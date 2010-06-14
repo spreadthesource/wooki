@@ -143,11 +143,6 @@ public class WookiModule<T>
 
     }
 
-    public LinkSupport buildLinkSupport()
-    {
-        return environmentalBuilder.build(LinkSupport.class);
-    }
-
     /**
      * Build messages catalog service for services.
      */
@@ -221,43 +216,6 @@ public class WookiModule<T>
     public static void contributeMasterDispatcher(OrderedConfiguration<Dispatcher> configuration)
     {
         configuration.addInstance("UploadedAsset", UploadedAssetDispatcher.class, "before:Asset");
-    }
-
-    /**
-     * Contribute GAnalytics plugin to append google analytics javascript to generated pages.
-     * 
-     * @param configuration
-     * @param scriptInjector
-     * @param productionMode
-     * @param environment
-     * @param clientInfrastructure
-     */
-    public void contributeMarkupRenderer(OrderedConfiguration<MarkupRendererFilter> configuration,
-            @Symbol(SymbolConstants.PRODUCTION_MODE) final boolean productionMode,
-            final PageRenderLinkSource pageLinkSource, final LinkSource linkSource,
-            final RequestPageCache pageCache, final WookiSecurityContext securityCtx)
-    {
-        // Add general links support
-        configuration.add("MenuSupport", new MarkupRendererFilter()
-        {
-            public void renderMarkup(MarkupWriter writer, MarkupRenderer renderer)
-            {
-                RenderSupport renderSupport = environment.peek(RenderSupport.class);
-                LinkSupport linkSupport = new LinkSupportImpl(linkSource, pageLinkSource,
-                        pageCache, renderSupport, securityCtx);
-                environment.push(LinkSupport.class, linkSupport);
-                try
-                {
-                    renderer.renderMarkup(writer);
-                    linkSupport.commit(writer);
-                }
-                finally
-                {
-                    environment.pop(LinkSupport.class);
-                }
-            }
-        }, "after:RenderSupport");
-
     }
 
     public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers)

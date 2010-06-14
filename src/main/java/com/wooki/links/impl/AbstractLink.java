@@ -1,6 +1,8 @@
-package com.wooki.actions.impl;
+package com.wooki.links.impl;
 
-import com.wooki.actions.Link;
+import org.apache.tapestry5.ioc.MessageFormatter;
+
+import com.wooki.links.Link;
 
 /**
  * Adapter class for link.
@@ -15,7 +17,7 @@ public abstract class AbstractLink implements Link
     private Object[] context;
 
     private String confirmMessage;
-    
+
     public AbstractLink(String labelMessageKey, Object... context)
     {
         super();
@@ -30,7 +32,7 @@ public abstract class AbstractLink implements Link
         this.confirmMessage = confirmMessageKey;
         this.context = context;
     }
-    
+
     public Object[] getContext()
     {
         return context;
@@ -44,6 +46,11 @@ public abstract class AbstractLink implements Link
     public String getConfirmMessageKey()
     {
         return confirmMessage;
+    }
+
+    public String format(MessageFormatter formatter)
+    {
+        return formatter.format();
     }
 
 }

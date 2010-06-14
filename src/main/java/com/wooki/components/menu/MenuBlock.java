@@ -6,15 +6,15 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 
-import com.wooki.actions.Link;
+import com.wooki.links.Link;
 
 public class MenuBlock
 {
-    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, name = "class")
     @Property
     private String blockClasses;
 
-    @Parameter(defaultPrefix = BindingConstants.LITERAL)
+    @Parameter(defaultPrefix = BindingConstants.LITERAL, name = "id")
     @Property
     private String blockId;
 

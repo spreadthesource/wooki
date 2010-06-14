@@ -1,0 +1,15 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<t:container
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+
+	<li id="${clientId}" class="chapter-nav-item">
+		<t:ifNotNull test="link">
+			<a t:id="plink" t:type="pageLink" t:page="prop:link.page" t:context="link.context">
+				<t:outputraw value="label" />
+			</a>
+			<p:else>&nbsp;</p:else>
+		</t:ifNotNull>
+	</li>
+
+</t:container>

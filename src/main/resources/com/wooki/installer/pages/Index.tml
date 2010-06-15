@@ -1,4 +1,4 @@
-<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:type="layout">
 
 	<head>
 		<title>Wooki Installer Page</title>
@@ -6,8 +6,76 @@
 
 	<body>
 	
+		<t:form class="full-form" t:id="installerForm">
+			
+			<t:errors />
+			
+    		<table>
+    			
+    			<tr>
+    				<th colspan="3"><h3>Upload</h3></th>
+    			</tr>
+    			<tr>
+    				<th><label t:type="label" t:for="uploadDir"/></th>
+    				<td><input type="text" t:type="textfield" t:id="uploadDir" /></td>
+    				<td></td>
+    			</tr>
+				<tr>
+    				<th><label t:type="label" t:for="uploadMaxFileSize"/></th>
+    				<td><input type="text" t:type="textfield" t:id="uploadMaxFileSize"  /></td>
+    				<td>Value in Mo</td>
+    			</tr>
+				
+				<tr>
+    				<th colspan="3"><h3>Database</h3></th>
+    			</tr>
+				<tr>
+    				<th><label t:type="label" t:for="dbType" t:zone="dbFields" /></th>
+    				<td><t:select t:model="dbSelectionModel" t:encoder="dbSelectionEncoder" t:id="dbType" t:value="dbType" t:zone="dbFields" /></td>
+    				<td></td>
+    			</tr>
+			</table>
+				
+			<t:zone t:id="dbFields">
+				<t:delegate t:to="dbDetails" />
+			</t:zone>
+					
+			<div class="form-submit">
+				<input type="submit" class="btn-active" value="Save settings" />
+			</div>
+			
+		</t:form>
 		<a t:type="actionlink">Restart</a>
-	
 	</body>
+	
+	<t:block t:id="dbDetails">
+		<table>
+		<tr>
+			<th><label t:type="label" t:for="dbUsername"/></th>
+			<td><input type="text" t:type="textfield" t:id="dbUsername" /></td>
+			<td></td>
+		</tr>
+		<tr>
+			<th><label t:type="label" t:for="dbPassword"/></th>
+			<td><input type="text" t:type="textfield" t:id="dbPassword" /></td>
+			<td></td>
+		</tr>
+			<tr>
+				<th><label t:type="label" t:for="dbUrl"/></th>
+				<td><input type="text" t:type="textfield" t:id="dbUrl" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th><label t:type="label" t:for="dbDriver"/></th>
+				<td><input type="text" t:type="textfield" t:id="dbDriver" /></td>
+				<td></td>
+			</tr>
+			<tr>
+				<th><label t:type="label" t:for="dbDialect"/></th>
+				<td><input type="text" t:type="textfield" t:id="dbDialect" /></td>
+				<td></td>
+			</tr>
+		</table>
+	</t:block>
 
 </html>

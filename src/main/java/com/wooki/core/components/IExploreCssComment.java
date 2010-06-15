@@ -1,4 +1,4 @@
-package com.wooki.components;
+package com.wooki.core.components;
 
 import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.MarkupWriter;

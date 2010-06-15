@@ -68,6 +68,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
+import com.wooki.core.services.CoreModule;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.BookManagerImpl;
 import com.wooki.domain.biz.ChapterManager;
@@ -92,7 +93,7 @@ import com.wooki.services.security.spring.SecurityUrlSource;
 import com.wooki.services.security.spring.SecurityUrlSourceImpl;
 
 @SubModule(
-{ TapestryOverrideModule.class, DataModule.class, ActivityModule.class, FeedModule.class })
+{ TapestryOverrideModule.class, DataModule.class, ActivityModule.class, FeedModule.class, CoreModule.class })
 public class WookiModule<T>
 {
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
+	xmlns:p="tapestry:parameter">
+<head>
+<meta charset="utf-8" />
+<title>Wooki - Installer</title>
+<link href="${asset:context:static/css/style.css}" rel="stylesheet" type="text/css" />
+<script type="text/javascript">	var shim='${asset:context:static/img/x.gif}';</script>
+<t:wooki.iexploreCssComment t:script="asset:context:static/css/ie6style.css" />
+<t:wooki.iexploreScriptComment t:script="asset:context:static/js/supersleight-min.js" />
+</head>
+<body>
+<div class="wrapper" id="page-wrapper">
+	
+<div id="header">
+
+	<h1 id="wooki">
+		<a href="#" t:type="pagelink" t:page="index" t:context="null">
+			<img id="wooki-logo" src="${asset:context:static/img/wooki.png}" alt="wooki - collaborative writing" />
+		</a>
+	</h1>
+		
+	
+	<ul class="nav right-col shadowed" id="nav">
+		<li><a href="http://wookicentral.com/faq">FAQ</a></li>
+	</ul>
+	
+</div>
+
+<div id="content">
+	 
+    <div class="section">
+		<h2>Wooki installer</h2>
+		
+		<t:body />
+    </div>
+</div>
+
+
+<div id="footer"><a href="http://www.wookicentral.com">wookicentral.com</a></div>
+</div>
+
+</body>
+</html>

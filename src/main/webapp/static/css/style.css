@@ -255,9 +255,10 @@ span.autosave { margin-left: 10px; }
 .full-form, .small-form { padding:10px 0px;}
 .full-form table th, .full-form table td { padding: 5px 5px;}
 .full-form table th { width: 180px; text-align:right; font-weight:normal; color: #6E6D65; }
+.full-form table th h3 { text-align:left;}
 .full-form table label {  display:block; color: #2F2F32; font-size:18px;}
 .full-form input { font-size:18px;  }
-.full-form table td input { width:200px; }
+.full-form table td input { width:250px; }
 .full-form .form-submit {text-align:center; padding:10px 0px}
 
 .small-form label { display:block; color: #2F2F32;}

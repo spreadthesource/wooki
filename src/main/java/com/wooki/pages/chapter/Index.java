@@ -16,6 +16,7 @@
 
 package com.wooki.pages.chapter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,19 +26,21 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.BookMenuItem;
-import com.wooki.LinkType;
-import com.wooki.NavLinkPosition;
-import com.wooki.actions.Link;
-import com.wooki.actions.impl.DeleteLink;
-import com.wooki.actions.impl.EditLink;
-import com.wooki.actions.impl.ExportLink;
-import com.wooki.actions.impl.ViewLink;
+import com.sun.syndication.feed.atom.Feed;
+import com.sun.syndication.io.FeedException;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
+import com.wooki.links.Link;
+import com.wooki.links.PageLink;
+import com.wooki.links.impl.DeleteLink;
+import com.wooki.links.impl.EditLink;
+import com.wooki.links.impl.ExportLink;
+import com.wooki.links.impl.NavLink;
+import com.wooki.links.impl.ViewLink;
 import com.wooki.services.HttpError;
-import com.wooki.services.LinkSupport;
+import com.wooki.services.activity.ActivitySourceType;
+import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -55,7 +58,7 @@ public class Index extends BookBase
     private WookiSecurityContext securityCtx;
 
     @Inject
-    private LinkSupport linkSupport;
+    private FeedSource feedSource;
 
     @Property
     private Chapter chapter;
@@ -77,6 +80,15 @@ public class Index extends BookBase
 
     @Property
     private List<Link> adminLinks;
+
+    @Property
+    private PageLink left;
+
+    @Property
+    private PageLink right;
+
+    @Property
+    private PageLink center;
 
     private Long chapterId;
 
@@ -151,7 +163,6 @@ public class Index extends BookBase
 
     /**
      * Setup all the menu items.
-     *
      */
     @SetupRender
     public void setupMenus()
@@ -169,7 +180,7 @@ public class Index extends BookBase
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", getBookId(), Issues.ALL));
         publicLinks.add(new ViewLink("chapter/issues", "chapter-feedback", false, getBookId(),
                 chapterId));
-        publicLinks.add(new ExportLink("rss-feed", "rss", getBookId()));
+        publicLinks.add(new ExportLink("rss-feed", "feed", getBookId()));
     }
 
     @SetupRender
@@ -177,35 +188,23 @@ public class Index extends BookBase
     {
         if ((previous != null) && (previousTitle != null))
         {
-            this.linkSupport.createNavLink(
-                    NavLinkPosition.LEFT,
-                    "< " + previousTitle,
-                    "chapter/index",
-                    getBookId(),
-                    previous);
+            left = new NavLink("chapter/index", "nav-left", previousTitle, getBookId(), previous);
         }
         else
         {
-            this.linkSupport.createNavLink(
-                    NavLinkPosition.LEFT,
-                    "< Table of content",
-                    "book/index",
-                    getBookId());
+            left = new ViewLink("book/index", "toc", getBookId());
         }
         if ((next != null) && (nextTitle != null))
         {
-            this.linkSupport.createNavLink(
-                    NavLinkPosition.RIGHT,
-                    nextTitle + " >",
-                    "chapter/index",
-                    getBookId(),
-                    next);
+            right = new NavLink("chapter/index", "nav-right", nextTitle, getBookId(), next);
         }
-        this.linkSupport.createNavLink(
-                NavLinkPosition.CENTER,
-                getBook().getTitle(),
-                "book/index",
-                getBookId());
+        center = new NavLink("chapter/index", "book-root", getBook().getTitle(), getBookId());
+    }
+
+    @OnEvent(value = "feed")
+    public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException
+    {
+        return feedSource.produceFeed(ActivitySourceType.BOOK, bookId);
     }
 
     @OnEvent(value = "delete")

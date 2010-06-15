@@ -33,21 +33,21 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
-import com.wooki.NavLinkPosition;
-import com.wooki.actions.Link;
-import com.wooki.actions.impl.EditLink;
-import com.wooki.actions.impl.ExportLink;
-import com.wooki.actions.impl.ViewLink;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
+import com.wooki.links.Link;
+import com.wooki.links.PageLink;
+import com.wooki.links.impl.EditLink;
+import com.wooki.links.impl.ExportLink;
+import com.wooki.links.impl.NavLink;
+import com.wooki.links.impl.ViewLink;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.HttpError;
-import com.wooki.services.LinkSupport;
 import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
@@ -76,9 +76,6 @@ public class Index extends BookBase
 
     @Inject
     private FeedSource feedSource;
-
-    @Inject
-    private LinkSupport linkSupport;
 
     @InjectPage
     private Edit editChapter;
@@ -118,6 +115,9 @@ public class Index extends BookBase
 
     @Property
     private List<Link> adminLinks;
+
+    @Property
+    private PageLink right;
 
     private Long firstChapterId;
 
@@ -213,11 +213,7 @@ public class Index extends BookBase
     {
         if ((firstChapterId != null) && (firstChapterTitle != null))
         {
-            linkSupport.createNavLink(
-                    NavLinkPosition.RIGHT,
-                    firstChapterTitle + " >",
-                    "chapter/index",
-                    getBookId(),
+            right = new NavLink("chapter/index", "nav-right", firstChapterTitle, getBookId(),
                     firstChapterId);
         }
     }

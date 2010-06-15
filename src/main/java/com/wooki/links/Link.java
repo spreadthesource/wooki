@@ -1,8 +1,12 @@
-package com.wooki.actions;
+package com.wooki.links;
+
+import org.apache.tapestry5.ioc.MessageFormatter;
 
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
+ * Base interface for wooki's link.
+ *
  * @author ccordenier
  */
 public interface Link
@@ -35,5 +39,13 @@ public interface Link
      * @return
      */
     String getConfirmMessageKey();
+    
+    /**
+     * This method is called to format the label that will be displayed to the user
+     *
+     * @param formatter
+     * @return
+     */
+    String format(MessageFormatter formatter);
 
 }

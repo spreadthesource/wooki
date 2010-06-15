@@ -1,5 +1,8 @@
 package com.wooki.components.menu;
 
+import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.ClientElement;
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
@@ -10,71 +13,66 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavascriptSupport;
 
-import com.wooki.links.EventLink;
-import com.wooki.links.Link;
 import com.wooki.links.PageLink;
 
-public class MenuItem
+/**
+ * This component display the navigation bar that will be displayed on top of the page.
+ * 
+ * @author ccordenier
+ */
+public class NavItem implements ClientElement
 {
-
-    @Parameter(name = "class")
-    @Property
-    private String rowClass;
-
     @Parameter
     @Property
-    private Link link;
+    private PageLink link;
+
+    @Parameter(name = "id", defaultPrefix = BindingConstants.LITERAL)
+    private String idParameter;
 
     @Inject
     private Messages messages;
 
     @Inject
-    private JavascriptSupport jsSupport;
+    private ComponentResources resources;
 
-    @InjectComponent
-    private org.apache.tapestry5.corelib.components.EventLink elink;
+    @Inject
+    private JavascriptSupport javascriptSupport;
+
+    @Inject
+    private JavascriptSupport jsSupport;
 
     @InjectComponent
     private org.apache.tapestry5.corelib.components.PageLink plink;
 
+    private String clientId;
+
+    void beginRender()
+    {
+        clientId = resources.isBound("id") ? idParameter : javascriptSupport
+                .allocateClientId(resources);
+    }
+
     @AfterRender
     void setupConfirm()
     {
-        if (link.getConfirmMessageKey() != null)
+        if (link != null && link.getConfirmMessageKey() != null)
         {
             JSONObject params = new JSONObject();
-            if (isAction())
-            {
-                params.put("lnkId", elink.getClientId());
-            }
-            else
-            {
-                params.put("lnkId", plink.getClientId());
-            }
+            params.put("lnkId", plink.getClientId());
             params.put("message", messages.get(link.getConfirmMessageKey()));
             jsSupport.addInitializerCall("initConfirm", params);
         }
-    }
-
-    public boolean isAction()
-    {
-        return link instanceof EventLink;
-    }
-
-    public EventLink getCurrentEventLink()
-    {
-        return EventLink.class.cast(link);
-    }
-
-    public PageLink getCurrentPageLink()
-    {
-        return PageLink.class.cast(link);
     }
 
     public String getLabel()
     {
         MessageFormatter formatter = messages.getFormatter(link.getLabelMessageKey());
         return link.format(formatter);
+    }
+
+    public String getClientId()
+    {
+        return clientId;
     }
 
 }

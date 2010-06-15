@@ -1,6 +1,6 @@
-package com.wooki.actions.impl;
+package com.wooki.links.impl;
 
-import com.wooki.actions.EventLink;
+import com.wooki.links.EventLink;
 
 /**
  * Base class for action links.
@@ -13,12 +13,12 @@ public abstract class AbstractEventLink extends AbstractLink implements EventLin
 
     private String event;
 
-    public AbstractEventLink(String labelKey, Object[] context)
+    public AbstractEventLink(String labelKey, Object... context)
     {
         this("action", labelKey, context);
     }
 
-    public AbstractEventLink(String event, String labelKey, Object[] context)
+    public AbstractEventLink(String event, String labelKey, Object... context)
     {
         super(labelKey, context);
         this.event = event;

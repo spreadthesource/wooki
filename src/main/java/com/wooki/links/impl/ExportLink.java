@@ -1,9 +1,9 @@
-package com.wooki.actions.impl;
+package com.wooki.links.impl;
 
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
- * Print book link used to generate a PDF from a book.
+ * This class is used to define a link that will export data i.e. PDF, RSS...
  * 
  * @author ccordenier
  */

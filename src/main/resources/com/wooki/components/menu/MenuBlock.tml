@@ -5,7 +5,7 @@
 
 	<ul id="${blockId}" class="${blockClasses}">
 		<t:loop t:source="links" t:value="current" t:empty="block:empty" t:index="index">
-			<t:menu.menuitem t:link="current" t:rowClass="rowClass" />
+			<t:menu.menuitem t:link="current" t:class="rowClass" />
 		</t:loop>
 	</ul>
 

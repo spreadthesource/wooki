@@ -44,8 +44,7 @@ public class Index
     @Validate("required")
     private String dbUsername;
 
-    @Property
-    @Validate("required")
+    @Property 
     private String dbPassword;
 
     @Property
@@ -115,6 +114,7 @@ public class Index
         switch (dbType)
         {
             case H2:
+            default:
                 dbDriver = "org.h2.Driver";
                 dbDialect = "org.hibernate.dialect.H2Dialect";
                 dbUsername = "sa";
@@ -126,9 +126,6 @@ public class Index
                 dbDialect = "org.hibernate.dialect.HSQLDialect";
                 dbUsername = "sa";
                 dbUrl = "jdbc:hsqldb:mem:wookidb";
-                break;
-
-            default:
                 break;
         }
     }

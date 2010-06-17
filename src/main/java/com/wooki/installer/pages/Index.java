@@ -111,22 +111,10 @@ public class Index
     }
     
     private void initDbValues(DbType dbType) {
-        switch (dbType)
-        {
-            case H2:
-            default:
-                dbDriver = "org.h2.Driver";
-                dbDialect = "org.hibernate.dialect.H2Dialect";
-                dbUsername = "sa";
-                dbUrl = "jdbc:h2:target/wookidb";
-                break;
-
-            case HSQLDB:
-                dbDriver = "org.hsqldb.jdbcDriver";
-                dbDialect = "org.hibernate.dialect.HSQLDialect";
-                dbUsername = "sa";
-                dbUrl = "jdbc:hsqldb:mem:wookidb";
-                break;
-        }
+        dbDialect = dbType.getDbDialect();
+        dbUrl = dbType.getDbUrl();
+        dbDriver = dbType.getDbDriver();
+        dbUsername = dbType.getDbUsername();
+        dbPassword = dbType.getDbPassword();
     }
 }

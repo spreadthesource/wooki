@@ -420,10 +420,19 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
+				<resources>
+					<resource>
+						<directory>${basedir}/src/main/resources</directory>
+					</resource>
+					<resource>
+						<directory>${basedir}/src/dev/resources</directory>
+					</resource>
+				</resources>
 				<filters>
 					<filter>${basedir}/src/build/dev.properties</filter>
 				</filters>
 			</build>
+			
 		</profile>
 		<profile>
 			<id>prod</id>

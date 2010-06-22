@@ -198,7 +198,7 @@ public class Index extends BookBase
         {
             right = new NavLink("chapter/index", "nav-right", nextTitle, getBookId(), next);
         }
-        center = new NavLink("chapter/index", "book-root", getBook().getTitle(), getBookId());
+        center = new NavLink("book/index", "book-root", getBook().getTitle(), getBookId());
     }
 
     @OnEvent(value = "feed")

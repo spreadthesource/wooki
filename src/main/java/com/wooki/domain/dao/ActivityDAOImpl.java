@@ -24,7 +24,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.activity.AbstractBookActivity;
-import com.wooki.domain.model.activity.AbtractChapterActivity;
+import com.wooki.domain.model.activity.AbstractChapterActivity;
 import com.wooki.domain.model.activity.AccountActivity;
 import com.wooki.domain.model.activity.AccountEventType;
 import com.wooki.domain.model.activity.Activity;
@@ -60,7 +60,7 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
     public List<Activity> listAllActivitiesOnChapter(Long chapterId, QueryFilter... filters)
     {
         Defense.notNull(chapterId, "chapterId");
-        Criteria crit = session.createCriteria(AbtractChapterActivity.class);
+        Criteria crit = session.createCriteria(AbstractChapterActivity.class);
         crit.add(Restrictions.eq("chapter.id", chapterId));
         applyFilters(crit, filters);
         return crit.list();

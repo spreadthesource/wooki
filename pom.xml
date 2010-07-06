@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-db-migration</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
@@ -382,6 +382,8 @@
 				<artifactId>maven-jetty-plugin</artifactId>
 				<version>6.1.9</version>
 				<configuration>
+					<webAppSourceDirectory>${basedir}/src/main/webapp</webAppSourceDirectory>
+					<webXml>${basedir}/src/test/devapp/WEB-INF/web.xml</webXml>
 					<!-- Log to the console. -->
 					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
 						<!--
@@ -390,7 +392,8 @@
 						-->
 						<append>true</append>
 					</requestLog>
-					<port>8081</port>
+					<port>8080</port>
+					<useTestClasspath>true</useTestClasspath>
 				</configuration>
 			</plugin>
 
@@ -398,18 +401,13 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<additionalClasspathElements>
-						<additionalClasspathElement>${basedir}/src/main/webapp/WEB-INF</additionalClasspathElement>
-					</additionalClasspathElements>
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<argLine>-Xmx500m</argLine>
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
-			</plugin>
-
-		
+			</plugin>		
 		</plugins>
 	</build>
 

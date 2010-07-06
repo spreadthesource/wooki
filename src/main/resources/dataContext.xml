@@ -36,6 +36,9 @@
 				<value>
 					classpath*:config/database.properties
 				</value>
+				<value>
+					classpath*:installer/database.properties
+				</value>
 			</list>
 		</property>
 	</bean>

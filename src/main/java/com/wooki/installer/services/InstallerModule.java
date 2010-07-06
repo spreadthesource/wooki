@@ -14,8 +14,8 @@ import org.apache.tapestry5.ioc.services.SymbolProvider;
 
 import com.spreadthesource.tapestry.dbmigration.MigrationSymbolConstants;
 import com.spreadthesource.tapestry.dbmigration.services.MigrationModule;
-import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
 import com.spreadthesource.tapestry.installer.InstallerConstants;
+import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
 import com.spreadthesource.tapestry.installer.services.ConfigurationTask;
 import com.wooki.core.services.CoreModule;
 
@@ -30,6 +30,7 @@ public class InstallerModule
     public void contributeApplicationDefaults(MappedConfiguration<String, String> conf)
     {
         conf.add(MigrationSymbolConstants.DEFAULT_HIBERNATE_CONFIGURATION, "false");
+        conf.add(InstallerConstants.SILENT_MODE, "true");
     }
 
     /**
@@ -60,16 +61,9 @@ public class InstallerModule
         });
     }
 
-{
-    public void contributeApplicationDefaults(MappedConfiguration<String, String> configuration)
-    {
-        configuration.add(InstallerConstants.SILENT_MODE, "true");
-    }
-    
     public static void bind(ServiceBinder binder)
     {
         binder.bind(GlobalSettingsTask.class, GlobalSettingsTaskImpl.class);
-        //binder.bind(MigrationTask.class, MigrationTaskImpl.class);
     }
 
     public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers)
@@ -88,6 +82,5 @@ public class InstallerModule
             @Inject GlobalSettingsTask settings)
     {
         configuration.add("WookiConf", settings, "before:*");
-        //configuration.add("Migration", migration, "before:Terminator,after:WookiConf");
     }
 }

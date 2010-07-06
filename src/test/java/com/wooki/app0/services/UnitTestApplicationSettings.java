@@ -46,4 +46,9 @@ public class UnitTestApplicationSettings implements ApplicationSettings
         return get(symbolName);
     }
 
+    public boolean isAlreadyInstalled()
+    {
+        return true;
+    }
+
 }

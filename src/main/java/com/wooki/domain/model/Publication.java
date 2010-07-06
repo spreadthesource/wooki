@@ -30,27 +30,31 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * This class is used to publish chapter when an author has decided to publish its work after
  * comment validation.
  */
 @Entity
+@Table(name = "Publication")
 public class Publication extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "publication_id", nullable = false)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_chapter", nullable = false)
+    @JoinColumn(name = "chapter_id", nullable = false)
     private Chapter chapter;
 
     @Lob
+    @Column(name = "content")
     private String content;
 
+    @Column(name = "published")
     private boolean published;
 
     /** The list of comment associated to the current publication */

@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import com.wooki.domain.model.Book;
 
@@ -13,11 +15,13 @@ import com.wooki.domain.model.Book;
  * @author ccordenier
  */
 @Entity
+@Table(name = "AbstractBookActivity")
+@PrimaryKeyJoinColumn(name = "abstract_book_activity_id")
 public abstract class AbstractBookActivity extends Activity
 {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_book", nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     public Book getBook()

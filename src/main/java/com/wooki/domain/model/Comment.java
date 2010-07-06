@@ -27,6 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 /**
  * User added comment on existing book.
@@ -34,34 +35,38 @@ import javax.persistence.OneToOne;
  * @author ccordenier
  */
 @Entity
+@Table(name = "Comment")
 public class Comment extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "comment_id", nullable = false)
     private Long id;
 
+    @Column(name = "title")
     private String title;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "publication_id", nullable = false)
     private Publication publication;
 
     @OneToOne
+    @JoinColumn(name = "comment_label_id")
     private CommentLabel label;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "state", nullable = false)
     private CommentState state;
 
-    @Column(nullable = false)
+    @Column(name = "domId", nullable = false)
     private String domId;
 
+    @Column(name = "content")
     private String content;
 
     public Long getId()

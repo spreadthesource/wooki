@@ -1,13 +1,17 @@
 package com.wooki.domain.model.activity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "ACCOUNT_ACTIVITY_ID")
+@Table(name = "AccountActivity")
+@PrimaryKeyJoinColumn(name = "account_activity_id")
 public class AccountActivity extends Activity
 {
 
+    @Column(name = "type")
     private AccountEventType type;
 
     public AccountEventType getType()

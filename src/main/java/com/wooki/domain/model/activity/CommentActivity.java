@@ -16,23 +16,27 @@
 
 package com.wooki.domain.model.activity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 import com.wooki.domain.model.Comment;
 
 @Entity
-@PrimaryKeyJoinColumn(name = "COMMENT_ACTIVITY_ID")
-public class CommentActivity extends AbtractChapterActivity
+@Table(name = "CommentActivity")
+@PrimaryKeyJoinColumn(name = "comment_activity_id")
+public class CommentActivity extends AbstractChapterActivity
 {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
 
+    @Column(name = "type")
     private CommentEventType type;
 
     public Comment getComment()

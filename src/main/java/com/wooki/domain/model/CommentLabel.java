@@ -21,6 +21,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Will be used to sort comment by labels.
@@ -28,14 +29,16 @@ import javax.persistence.Id;
  * @author ccordenier
  */
 @Entity
+@Table(name = "CommentLabel")
 public class CommentLabel extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "comment_label_id", nullable = false)
     private Long id;
 
+    @Column(name = "label")
     private String label;
 
     public Long getId()

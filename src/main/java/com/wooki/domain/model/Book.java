@@ -31,6 +31,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -38,30 +39,33 @@ import org.hibernate.annotations.IndexColumn;
  * Represents a book with its relation to other elements.
  */
 @Entity
+@Table(name = "Book")
 public class Book extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_book", unique = true, nullable = false)
+    @Column(name = "book_id", unique = true, nullable = false)
     private Long id;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "id_book"), inverseJoinColumns =
-    { @JoinColumn(name = "id_user") })
+    @JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns =
+    { @JoinColumn(name = "user_id") })
     private List<User> users;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
     private User owner;
 
     /**
      * First element will always be the book abstract
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_book", nullable = false)
-    @IndexColumn(name = "CHAPTER_POSITION")
+    @JoinColumn(name = "book_id", nullable = false)
+    @IndexColumn(name = "chapter_position")
     private List<Chapter> chapters;
 
+    @Column(name = "title")
     private String title;
 
     @Column(unique = true)

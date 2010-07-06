@@ -26,6 +26,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.WookiEntity;
@@ -37,19 +38,20 @@ import com.wooki.domain.model.WookiEntity;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "Activity")
 public abstract class Activity extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "activity_id", nullable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_user", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = true)
+    @Column(name = "resourceUnavailable", nullable = true)
     private boolean resourceUnavailable;
 
     public Long getId()

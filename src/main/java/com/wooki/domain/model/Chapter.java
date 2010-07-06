@@ -25,27 +25,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Represents a chapter of the book.
  */
 @Entity
+@Table(name = "Chapter")
 public class Chapter extends WookiEntity
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(nullable = false, name = "chapter_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_book", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "book_id", nullable = false, updatable = false, insertable = false)
     private Book book;
 
     /** User friendly title */
+    @Column(name = "title")
     private String title;
 
     /** Identifier title */
+    @Column(name = "slugTitle")
     private String slugTitle;
 
     /**

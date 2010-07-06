@@ -16,6 +16,7 @@
 
 package com.wooki.domain.model.activity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 
@@ -25,10 +26,11 @@ import javax.persistence.PrimaryKeyJoinColumn;
  * @author ccordenier
  */
 @Entity
-@PrimaryKeyJoinColumn(name = "BOOK_ACTIVITY_ID")
+@PrimaryKeyJoinColumn(name = "book_activity_id")
 public class BookActivity extends AbstractBookActivity
 {
 
+    @Column(name = "type")
     private BookEventType type;
 
     public void setType(BookEventType type)

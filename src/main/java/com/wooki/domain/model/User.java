@@ -27,8 +27,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
@@ -38,6 +40,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Wooki basic user. Can post comment, write book etc.
  */
 @Entity
+@Table(name = "User")
 public class User extends WookiEntity implements UserDetails
 {
 
@@ -45,25 +48,27 @@ public class User extends WookiEntity implements UserDetails
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, name = "id_user")
+    @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "fullname", nullable = false)
     private String fullname;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
     private List<Book> books;
 
-    @Column(nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "UserAuthority")
+    @JoinTable(name = "UserAuthority", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
+    { @JoinColumn(name = "authority_id") })
     private List<Authority> authorities = new LinkedList<Authority>();
 
+    @Column(name = "password")
     private String password;
 
     public Long getId()

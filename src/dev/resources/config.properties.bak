@@ -1,9 +1,0 @@
-#Thu Jun 17 13:50:16 CEST 2010
-dbDriver=org.hsqldb.jdbcDriver
-uploadMaxFileSize=3
-uploadDir=fds
-dbUsername=sa
-dbDialect=org.hibernate.dialect.HSQLDialect
-dbPassword=
-dbUrl=jdbc\:hsqldb\:mem\:wookidb
-sps.installer-version=1.0

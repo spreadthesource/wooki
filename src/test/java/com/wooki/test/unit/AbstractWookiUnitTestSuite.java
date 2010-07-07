@@ -7,6 +7,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.spreadthesource.tapestry.dbmigration.services.MigrationManager;
 import com.spreadthesource.tapestry.installer.services.InstallerModule;
 import com.wooki.app0.services.UnitTestModule;
 import com.wooki.services.WookiModule;
@@ -45,6 +46,10 @@ public abstract class AbstractWookiUnitTestSuite
                 InstallerModule.class, UnitTestModule.class);
         registry = pageTester.getRegistry();
         context = registry.getService(ApplicationContext.class);
+        
+        MigrationManager manager = pageTester.getService(MigrationManager.class);
+        manager.initialize();
+        manager.migrate();
     }
 
     @AfterClass
@@ -52,6 +57,9 @@ public abstract class AbstractWookiUnitTestSuite
     {
         if (registry != null)
         {
+            MigrationManager manager = pageTester.getService(MigrationManager.class);
+            manager.reset();
+            
             registry.shutdown();
         }
     }

@@ -50,9 +50,9 @@ public class StartupServiceImpl implements StartupService
         // enabled headless mode
         System.setProperty("java.awt.headless", "true");
 
-        ClassPathResource script = new ClassPathResource("createAclSchema.sql");
-        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(datasource);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+        //ClassPathResource script = new ClassPathResource("createAclSchema.sql");
+        //SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(datasource);
+        //SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
         WookiSecurityContext securityCtx = (WookiSecurityContext) applicationContext
                 .getBean("wookiSecurityContext"); 

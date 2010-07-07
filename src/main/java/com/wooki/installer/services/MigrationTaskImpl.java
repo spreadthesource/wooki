@@ -33,6 +33,7 @@ public class MigrationTaskImpl implements MigrationTask
 
     public void run()
     {
+        manager.initialize();
         manager.migrate();
     }
 

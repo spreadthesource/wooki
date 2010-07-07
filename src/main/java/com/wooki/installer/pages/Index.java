@@ -2,7 +2,6 @@ package com.wooki.installer.pages;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.MarkupUtils;
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.OnEvent;

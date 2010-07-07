@@ -19,14 +19,11 @@ package com.wooki.services;
 import java.util.List;
 
 import org.apache.tapestry5.Asset;
-import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
 import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.services.ComponentInstanceProcessor;
 import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.internal.services.RequestPageCache;
 import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.Invocation;
 import org.apache.tapestry5.ioc.MappedConfiguration;
@@ -54,9 +51,6 @@ import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.EnvironmentalShadowBuilder;
 import org.apache.tapestry5.services.InvalidationEventHub;
-import org.apache.tapestry5.services.MarkupRenderer;
-import org.apache.tapestry5.services.MarkupRendererFilter;
-import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.services.Traditional;
@@ -88,12 +82,12 @@ import com.wooki.services.security.ActivationContextManager;
 import com.wooki.services.security.ActivationContextManagerImpl;
 import com.wooki.services.security.SecureActivationContextRequestFilter;
 import com.wooki.services.security.UserDetailsServiceImpl;
-import com.wooki.services.security.WookiSecurityContext;
 import com.wooki.services.security.spring.SecurityUrlSource;
 import com.wooki.services.security.spring.SecurityUrlSourceImpl;
 
 @SubModule(
-{ TapestryOverrideModule.class, DataModule.class, ActivityModule.class, FeedModule.class, CoreModule.class })
+{ TapestryOverrideModule.class, DataModule.class, ActivityModule.class, FeedModule.class,
+        CoreModule.class })
 public class WookiModule<T>
 {
 
@@ -204,8 +198,6 @@ public class WookiModule<T>
         configuration.add(
                 WookiSymbolsConstants.ERROR_UNHANDLED_BROWSER_PAGE,
                 "error/unhandledbrowser");
-
-        configuration.add(WookiSymbolsConstants.MIGRATIONS_PATH, "WEB-INF/migrations/");
     }
 
     public static void contributeHibernateEntityPackageManager(Configuration<String> configuration,

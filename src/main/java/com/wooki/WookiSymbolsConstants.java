@@ -27,8 +27,6 @@ public interface WookiSymbolsConstants
 
     public static final String WOOKI_AUTOSAVE_INTERVAL = "wooki.autosave-interval";
 
-    public static final String MIGRATIONS_PATH = "wooki.db-migrations-path";
-
     public static final String UPLOAD_DIR = "wooki.upload-dir";
 
 }

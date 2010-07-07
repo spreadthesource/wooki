@@ -389,7 +389,7 @@
 				<version>6.1.9</version>
 				<configuration>
 					<webAppSourceDirectory>${basedir}/src/main/webapp</webAppSourceDirectory>
-					<webXml>${basedir}/src/test/devapp/WEB-INF/web.xml</webXml>
+					<webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
 					<!-- Log to the console. -->
 					<requestLog implementation="org.mortbay.jetty.NCSARequestLog">
 						<!--

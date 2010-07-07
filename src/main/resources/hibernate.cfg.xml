@@ -4,12 +4,6 @@
 		"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory name="wookidb">
-		<property name="hibernate.connection.driver_class">${driver}</property>
-		<property name="hibernate.connection.username">${dbuser}</property>
-		<property name="hibernate.connection.password">${dbpassword}</property>
-		<property name="hibernate.dialect">${sql_dialect}</property>
-		<property name="hibernate.connection.url">${url}</property>
-		<property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="hibernate.show_sql">${show_sql}</property>
+
 	</session-factory>
 </hibernate-configuration>

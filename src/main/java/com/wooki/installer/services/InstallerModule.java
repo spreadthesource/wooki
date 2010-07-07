@@ -64,6 +64,7 @@ public class InstallerModule
     public static void bind(ServiceBinder binder)
     {
         binder.bind(GlobalSettingsTask.class, GlobalSettingsTaskImpl.class);
+        binder.bind(MigrationTask.class, MigrationTaskImpl.class);
     }
 
     public static void contributeSymbolSource(OrderedConfiguration<SymbolProvider> providers)
@@ -79,8 +80,9 @@ public class InstallerModule
 
     public static void contributeConfigurationManager(
             OrderedConfiguration<ConfigurationTask> configuration,
-            @Inject GlobalSettingsTask settings)
+            @Inject GlobalSettingsTask settings, @Inject MigrationTask migrationTask)
     {
         configuration.add("WookiConf", settings, "before:*");
+        configuration.add("WookiSchema", migrationTask, "after:WookiConf");
     }
 }

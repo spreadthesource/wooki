@@ -60,6 +60,7 @@ import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.util.StringToEnumCoercion;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import com.spreadthesource.tapestry.spring.hibernate.SpringHibernateModule;
 import com.wooki.AppendPosition;
 import com.wooki.WookiSymbolsConstants;
 import com.wooki.core.services.CoreModule;
@@ -87,7 +88,7 @@ import com.wooki.services.security.spring.SecurityUrlSourceImpl;
 
 @SubModule(
 { TapestryOverrideModule.class, DataModule.class, ActivityModule.class, FeedModule.class,
-        CoreModule.class })
+        CoreModule.class, SpringHibernateModule.class })
 public class WookiModule<T>
 {
 

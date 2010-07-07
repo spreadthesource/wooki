@@ -54,7 +54,6 @@
 	<bean id="sessionFactory"
 		class="com.spreadthesource.tapestry.spring.hibernate.TapestryLocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
 		<property name="packageNames">
 			<list>

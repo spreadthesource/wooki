@@ -23,7 +23,8 @@ import com.wooki.core.services.CoreModule;
  * Module for installation wizard application.
  */
 @SubModule(
-{ CoreModule.class, MigrationModule.class })
+{ CoreModule.class, MigrationModule.class,
+        com.spreadthesource.tapestry.installer.services.InstallerModule.class })
 public class InstallerModule
 {
 

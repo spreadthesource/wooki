@@ -3,12 +3,14 @@ package com.wooki.installer.schema;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.spreadthesource.tapestry.dbmigration.annotations.Version;
-import com.spreadthesource.tapestry.dbmigration.migrations.CreateConstraint;
-import com.spreadthesource.tapestry.dbmigration.migrations.CreateConstraintContext;
-import com.spreadthesource.tapestry.dbmigration.migrations.CreateTableContext;
-import com.spreadthesource.tapestry.dbmigration.migrations.JoinTable;
+import com.spreadthesource.tapestry.dbmigration.command.CreateConstraint;
+import com.spreadthesource.tapestry.dbmigration.command.Drop;
+import com.spreadthesource.tapestry.dbmigration.command.JoinTable;
+import com.spreadthesource.tapestry.dbmigration.migrations.Constraint;
+import com.spreadthesource.tapestry.dbmigration.migrations.DropContext;
 import com.spreadthesource.tapestry.dbmigration.migrations.JoinTableContext;
 import com.spreadthesource.tapestry.dbmigration.migrations.Migration;
+import com.spreadthesource.tapestry.dbmigration.migrations.Table;
 import com.spreadthesource.tapestry.dbmigration.migrations.impl.CreateTableImpl;
 import com.spreadthesource.tapestry.dbmigration.services.MigrationHelper;
 
@@ -19,8 +21,21 @@ public class Root implements Migration
     @Inject
     private MigrationHelper helper;
 
-    public void down()
+    static class CreateWookiTable extends CreateTableImpl
     {
+        public CreateWookiTable(String name)
+        {
+            super(name);
+        }
+
+        @Override
+        public void run(Table ctx)
+        {
+            super.run(ctx);
+            ctx.addTimestamp("creationDate").setNotNull(true);
+            ctx.addTimestamp("deletionDate");
+            ctx.addTimestamp("lastModified");
+        }
 
     }
 
@@ -32,7 +47,7 @@ public class Root implements Migration
         {
 
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("authority");
@@ -43,7 +58,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("User")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("email").setNotNull(true);
@@ -56,7 +71,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("Book")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("slugTitle").setUnique(true);
@@ -68,7 +83,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("Chapter")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("title");
@@ -81,7 +96,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("Publication")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addBoolean("published");
@@ -93,7 +108,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("Comment")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("title");
@@ -109,7 +124,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("CommentLabel")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addString("label");
@@ -119,7 +134,7 @@ public class Root implements Migration
         helper.add(new CreateWookiTable("Activity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addBoolean("resourceUnavailable");
@@ -130,7 +145,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("AbstractBookActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("book_id");
@@ -140,7 +155,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("AccountActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addInteger("type");
@@ -150,7 +165,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("AbstractChapterActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("chapter_id");
@@ -160,7 +175,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("BookActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addInteger("type");
@@ -170,7 +185,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("ChapterActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addInteger("type");
@@ -180,7 +195,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("CommentActivity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addInteger("type");
@@ -203,7 +218,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("acl_sid")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("id").setPrimary(true).setUnique(true).setIdentityGenerator("identity");
@@ -214,7 +229,7 @@ public class Root implements Migration
 
         helper.add(new CreateConstraint()
         {
-            public void run(CreateConstraintContext ctx)
+            public void run(Constraint ctx)
             {
                 ctx.setName("acl_sid");
                 ctx.setUnique("unique_uk_1", "sid", "principal");
@@ -224,7 +239,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("acl_class")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("id").setPrimary(true).setUnique(true).setIdentityGenerator("identity");
@@ -235,7 +250,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("acl_object_identity")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("id").setPrimary(true).setUnique(true).setIdentityGenerator("identity");
@@ -249,7 +264,7 @@ public class Root implements Migration
 
         helper.add(new CreateConstraint()
         {
-            public void run(CreateConstraintContext ctx)
+            public void run(Constraint ctx)
             {
                 ctx.setName("acl_object_identity");
                 ctx.setUnique("unique_uk_3", "object_id_class", "object_id_identity");
@@ -270,7 +285,7 @@ public class Root implements Migration
         helper.add(new CreateTableImpl("acl_entry")
         {
             @Override
-            public void run(CreateTableContext ctx)
+            public void run(Table ctx)
             {
                 super.run(ctx);
                 ctx.addLong("id").setPrimary(true).setUnique(true).setIdentityGenerator("identity");
@@ -286,7 +301,7 @@ public class Root implements Migration
 
         helper.add(new CreateConstraint()
         {
-            public void run(CreateConstraintContext ctx)
+            public void run(Constraint ctx)
             {
                 ctx.setName("acl_entry");
                 ctx.setUnique("unique_uk_4", "acl_object_identity", "ace_order");
@@ -303,22 +318,26 @@ public class Root implements Migration
 
     }
 
-    static class CreateWookiTable extends CreateTableImpl
+    public void down()
     {
-        public CreateWookiTable(String name)
+        helper.add(new Drop()
         {
-            super(name);
-        }
+            public void run(DropContext ctx)
+            {
+                // drop constraints
+                ctx.dropForeignKey("acl_object_identity", "foreign_fk_1");
+                ctx.dropForeignKey("acl_object_identity", "foreign_fk_2");
+                ctx.dropForeignKey("acl_object_identity", "foreign_fk_3");
+                ctx.dropForeignKey("acl_entry", "foreign_fk_4");
+                ctx.dropForeignKey("acl_entry", "foreign_fk_5");
 
-        @Override
-        public void run(CreateTableContext ctx)
-        {
-            super.run(ctx);
-            ctx.addTimestamp("creationDate").setNotNull(true);
-            ctx.addTimestamp("deletionDate");
-            ctx.addTimestamp("lastModified");
-        }
-
+                // Drop tables
+                ctx.dropTable("acl_sid");
+                ctx.dropTable("acl_class");
+                ctx.dropTable("acl_object_identity");
+                ctx.dropTable("acl_entry");
+            }
+        });
     }
 
 }

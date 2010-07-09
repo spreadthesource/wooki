@@ -21,10 +21,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -81,15 +78,6 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         searchEngine = context.getBean(SearchEngine.class);
         securityCtx = context.getBean(WookiSecurityContext.class);
         ds = context.getBean(DriverManagerDataSource.class);
-
-        // Reset datas and create required schemas
-        ClassPathResource script = new ClassPathResource("reset.sql");
-        // SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        // SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-
-        script = new ClassPathResource("createAclSchema.sql");
-        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
         // Add author to the book
         User john = new User();

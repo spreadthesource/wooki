@@ -58,7 +58,7 @@ public abstract class AbstractWookiUnitTestSuite
         if (registry != null)
         {
             MigrationManager manager = pageTester.getService(MigrationManager.class);
-            manager.reset();
+            // manager.reset();
             
             registry.shutdown();
         }

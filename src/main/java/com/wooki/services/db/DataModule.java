@@ -1,7 +1,9 @@
 package com.wooki.services.db;
 
 import org.apache.tapestry5.ioc.ServiceBinder;
+import org.apache.tapestry5.ioc.annotations.SubModule;
 
+import com.spreadthesource.tapestry.spring.hibernate.SpringHibernateModule;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.ActivityDAOImpl;
 import com.wooki.domain.dao.AuthorityDAO;
@@ -23,6 +25,8 @@ import com.wooki.services.db.impl.QueryFilterServiceImpl;
  * 
  * @author ccordenier
  */
+@SubModule(
+{ SpringHibernateModule.class })
 public class DataModule
 {
 

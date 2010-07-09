@@ -22,9 +22,6 @@ import org.apache.tapestry5.SymbolConstants;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.springframework.context.ApplicationContext;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
@@ -50,13 +47,9 @@ public class StartupServiceImpl implements StartupService
         // enabled headless mode
         System.setProperty("java.awt.headless", "true");
 
-        //ClassPathResource script = new ClassPathResource("createAclSchema.sql");
-        //SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(datasource);
-        //SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
-
         WookiSecurityContext securityCtx = (WookiSecurityContext) applicationContext
-                .getBean("wookiSecurityContext"); 
-        
+                .getBean("wookiSecurityContext");
+
         // Bypass creation if already done
         if (userManager.findByUsername("ccordenier") != null) { return; }
         User ccordenier = new User();

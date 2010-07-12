@@ -336,6 +336,29 @@ public class Root implements Migration
                 ctx.dropTable("acl_class");
                 ctx.dropTable("acl_object_identity");
                 ctx.dropTable("acl_entry");
+
+                // Remove join table first
+                ctx.dropTable("AuthorityUser");
+                ctx.dropTable("UserAuthority");
+                ctx.dropTable("BookUser");
+                ctx.dropTable("BookAuthor");
+                
+                // Drop wooki schema tables
+                ctx.dropTable("Authority");
+                ctx.dropTable("User");
+                ctx.dropTable("Book");
+                ctx.dropTable("Chapter");
+                ctx.dropTable("Publication");
+                ctx.dropTable("Comment");
+                ctx.dropTable("CommentLabel");
+                ctx.dropTable("Activity");
+                ctx.dropTable("AbstractBookActivity");
+                ctx.dropTable("AccountActivity");
+                ctx.dropTable("AbstractChapterActivity");
+                ctx.dropTable("BookActivity");
+                ctx.dropTable("ChapterActivity");
+                ctx.dropTable("CommentActivity");
+
             }
         });
     }

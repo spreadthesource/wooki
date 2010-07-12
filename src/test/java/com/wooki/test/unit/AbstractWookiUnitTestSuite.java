@@ -46,9 +46,10 @@ public abstract class AbstractWookiUnitTestSuite
                 InstallerModule.class, UnitTestModule.class);
         registry = pageTester.getRegistry();
         context = registry.getService(ApplicationContext.class);
-        
+
         MigrationManager manager = pageTester.getService(MigrationManager.class);
         manager.initialize();
+        manager.reset();
         manager.migrate();
     }
 
@@ -58,8 +59,8 @@ public abstract class AbstractWookiUnitTestSuite
         if (registry != null)
         {
             MigrationManager manager = pageTester.getService(MigrationManager.class);
-            // manager.reset();
-            
+            manager.reset();
+
             registry.shutdown();
         }
     }

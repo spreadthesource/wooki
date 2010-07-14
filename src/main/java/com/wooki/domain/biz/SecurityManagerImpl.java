@@ -27,8 +27,20 @@ public class SecurityManagerImpl implements SecurityManager
 
     public void setCollaboratorPermission(WookiEntity entity, User user)
     {
-        this.aclManager.addPermission(entity, new PrincipalSid(user.getUsername()), BasePermission.WRITE, Book.class);
-        this.aclManager.addPermission(entity, new PrincipalSid(user.getUsername()), BasePermission.DELETE, Book.class);
+        this.aclManager.addPermission(
+                entity,
+                new PrincipalSid(user.getUsername()),
+                BasePermission.WRITE,
+                Book.class);
+    }
+
+    public void removeCollaboratorPermission(WookiEntity entity, User user)
+    {
+        this.aclManager.deletePermission(
+                entity,
+                new PrincipalSid(user.getUsername()),
+                BasePermission.WRITE,
+                Book.class);
     }
 
     public void setOwnerPermission(WookiEntity entity)
@@ -41,7 +53,11 @@ public class SecurityManagerImpl implements SecurityManager
 
     public void setOwnerPermission(WookiEntity entity, User user)
     {
-        this.aclManager.addPermission(entity, new PrincipalSid(user.getUsername()), BasePermission.ADMINISTRATION, Book.class);
+        this.aclManager.addPermission(
+                entity,
+                new PrincipalSid(user.getUsername()),
+                BasePermission.ADMINISTRATION,
+                Book.class);
     }
 
     public synchronized Authority getOrCreateAuthority(String authority)

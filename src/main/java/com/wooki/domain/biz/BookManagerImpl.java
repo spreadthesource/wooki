@@ -158,6 +158,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         user.getBooks().remove(book);
         book.getAuthors().remove(user);
         bookDao.update(book);
+        
+        securityManager.removeCollaboratorPermission(book, user);
     }
 
     public Book updateTitle(Book book) throws TitleAlreadyInUseException

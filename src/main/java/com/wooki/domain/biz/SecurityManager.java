@@ -17,6 +17,14 @@ public interface SecurityManager
     void setOwnerPermission(WookiEntity entity);
     
     /**
+     * Remove collaboration rights on wooki's entity. 
+     *
+     * @param entity
+     * @param user
+     */
+    void removeCollaboratorPermission(WookiEntity entity, User user);
+    
+    /**
      * Set owner permission on an entity using to a given user. 
      *
      * @param entity

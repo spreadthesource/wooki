@@ -33,7 +33,7 @@ import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.links.Link;
 import com.wooki.links.PageLink;
-import com.wooki.links.impl.DeleteLink;
+import com.wooki.links.impl.DeleteChapterLink;
 import com.wooki.links.impl.EditLink;
 import com.wooki.links.impl.ExportLink;
 import com.wooki.links.impl.NavLink;
@@ -174,7 +174,7 @@ public class Index extends BookBase
         {
             adminLinks.add(new EditLink(getBook(), "chapter/edit", "edit-content", getBookId(),
                     chapterId));
-            adminLinks.add(new DeleteLink(getBook(), "delete-chapter"));
+            adminLinks.add(new DeleteChapterLink(chapter, "delete-chapter"));
         }
 
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", getBookId(), Issues.ALL));

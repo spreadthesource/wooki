@@ -2,7 +2,6 @@ package com.wooki.services.activity.impl;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.ComponentResources;
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ComponentSource;
 
@@ -33,7 +32,7 @@ public class ActivityBlockSourceImpl implements ActivityBlockSource
 
     public Block getActivityBlock(Activity activity)
     {
-        Defense.notNull(activity, "Activity cannot be null");
+        assert activity != null;
 
         Component page = this.source.getPage(ACTIVITY_BLOCK_PAGE);
         ComponentResources resources = page.getComponentResources();

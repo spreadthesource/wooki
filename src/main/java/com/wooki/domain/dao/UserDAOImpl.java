@@ -18,7 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -34,7 +33,7 @@ public class UserDAOImpl extends WookiGenericDAOImpl<User, Long> implements User
 
     public User findByUsername(String username)
     {
-        Defense.notNull(username, "username");
+        assert username != null;
 
         Query query = this.session.createQuery("from " + this.getEntityType()
                 + " u where lower(u.username)=:un");
@@ -52,7 +51,7 @@ public class UserDAOImpl extends WookiGenericDAOImpl<User, Long> implements User
     @SuppressWarnings("unchecked")
     public String[] listUserNames(String prefix)
     {
-        Defense.notNull(prefix, "prefix");
+        assert prefix != null;
 
         Query query = this.session.createQuery("select u.username from " + this.getEntityType()
                 + " u where lower(u.username) like :un");

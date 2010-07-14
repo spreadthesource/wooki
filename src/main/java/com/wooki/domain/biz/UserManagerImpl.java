@@ -19,7 +19,6 @@ package com.wooki.domain.biz;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.BasePermission;
@@ -106,7 +105,7 @@ public class UserManagerImpl implements UserManager
 
     public User findById(Long userId)
     {
-        Defense.notNull(userId, "userId");
+        assert userId != null;
         return userDao.findById(userId);
     }
 
@@ -117,7 +116,7 @@ public class UserManagerImpl implements UserManager
 
     public User updateDetails(User user) throws AuthorizationException, UserAlreadyException
     {
-        Defense.notNull(user, "user");
+        assert user != null;
 
         if (!this.securityCtx.isLoggedIn()
                 || !this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
@@ -139,9 +138,9 @@ public class UserManagerImpl implements UserManager
     public User updatePassword(User user, String oldPassword, String newPassword)
             throws AuthorizationException
     {
-        Defense.notNull(user, "user");
-        Defense.notNull(oldPassword, "oldPassword");
-        Defense.notNull(newPassword, "newPassword");
+        assert user != null;
+        assert oldPassword != null;
+        assert newPassword != null;
 
         // Check access
         if (this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()

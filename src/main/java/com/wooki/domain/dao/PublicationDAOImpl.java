@@ -18,7 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -35,8 +34,8 @@ public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> i
 
     public Publication findRevisionById(Long chapterId, Long revision)
     {
-        Defense.notNull(chapterId, "chapterId");
-        Defense.notNull(revision, "revision");
+        assert chapterId != null;
+        assert revision != null;
         Query query = session
                 .createQuery("from "
                         + getEntityType()
@@ -57,7 +56,7 @@ public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> i
 
     public Publication findLastRevision(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         Query query = session
                 .createQuery("from "
                         + getEntityType()
@@ -77,7 +76,7 @@ public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> i
 
     public Publication findLastPublishedRevision(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         Query query = session
                 .createQuery("from "
                         + getEntityType()

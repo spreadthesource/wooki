@@ -18,9 +18,9 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.wooki.domain.model.activity.AbstractBookActivity;
@@ -41,6 +41,13 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
         super(session);
     }
 
+    @Override
+    protected void applyFilters(Criteria crit, QueryFilter... filters)
+    {
+        super.applyFilters(crit, filters);
+        crit.addOrder(Order.desc("creationDate"));
+    }
+
     public List<Activity> list(QueryFilter... filters)
     {
         Criteria crit = session.createCriteria(Activity.class);
@@ -50,7 +57,7 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
     public List<Activity> listAllActivitiesOnComment(Long commentId, QueryFilter... filters)
     {
-        Defense.notNull(commentId, "commentId");
+        assert commentId != null;
         Criteria crit = session.createCriteria(CommentActivity.class);
         crit.add(Restrictions.eq("comment.id", commentId));
         applyFilters(crit, filters);
@@ -59,7 +66,7 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
     public List<Activity> listAllActivitiesOnChapter(Long chapterId, QueryFilter... filters)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         Criteria crit = session.createCriteria(AbstractChapterActivity.class);
         crit.add(Restrictions.eq("chapter.id", chapterId));
         applyFilters(crit, filters);
@@ -68,7 +75,7 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
     public List<Activity> listAllActivitiesOnBook(Long bookId, QueryFilter... filters)
     {
-        Defense.notNull(bookId, "bookId");
+        assert bookId != null;
         Criteria crit = session.createCriteria(AbstractBookActivity.class);
         crit.add(Restrictions.eq("book.id", bookId));
         applyFilters(crit, filters);
@@ -77,18 +84,19 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
     public List<Activity> listCoauthorBookActivity(Long userId, QueryFilter... filters)
     {
-        Defense.notNull(userId, "userId");
+        assert userId != null;
 
-        Criteria crit = session.createCriteria(AbstractBookActivity.class).add(
-                Restrictions.ne("user.id", userId)).createCriteria("book")
-                .createAlias("users", "u").add(Restrictions.eq("u.id", userId));
+        Criteria crit = session.createCriteria(AbstractBookActivity.class);
+        crit.add(Restrictions.ne("user.id", userId)).createCriteria("book").createAlias(
+                "users",
+                "u").add(Restrictions.eq("u.id", userId));
         applyFilters(crit, filters);
         return crit.list();
     }
 
     public List<Activity> listUserActivity(Long userId, QueryFilter... filters)
     {
-        Defense.notNull(userId, "userId");
+        assert userId != null;
 
         Criteria crit = session.createCriteria(AbstractBookActivity.class, "a");
         crit.add(Restrictions.eq("a.user.id", userId));
@@ -96,10 +104,10 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
         return crit.list();
     }
-    
+
     public List<Activity> listUserPublicActivity(Long userId, QueryFilter... filters)
     {
-        Defense.notNull(userId, "userId");
+        assert userId != null;
 
         Criteria crit = session.createCriteria(AbstractBookActivity.class, "a");
         crit.add(Restrictions.eq("a.user.id", userId));
@@ -111,11 +119,12 @@ public class ActivityDAOImpl extends WookiGenericDAOImpl<Activity, Long> impleme
 
     public List<Activity> listActivityOnBook(Long userId, QueryFilter... filters)
     {
-        Defense.notNull(userId, "userId");
+        assert userId != null;
 
-        Criteria crit = session.createCriteria(AbstractBookActivity.class).add(
-                Restrictions.eq("user.id", userId)).createCriteria("book")
-                .createAlias("users", "u").add(Restrictions.eq("u.id", userId));
+        Criteria crit = session.createCriteria(AbstractBookActivity.class);
+        crit.add(Restrictions.eq("user.id", userId)).createCriteria("book").createAlias(
+                "users",
+                "u").add(Restrictions.eq("u.id", userId));
         applyFilters(crit, filters);
         return crit.list();
     }

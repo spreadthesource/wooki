@@ -19,7 +19,6 @@ package com.wooki.domain.biz;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -121,7 +120,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public Publication getRevision(Long chapterId, String revision)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         if (LAST.equalsIgnoreCase(revision) || revision == null) { return publicationDao
                 .findLastRevision(chapterId); }
         try
@@ -143,7 +142,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public Publication getLastPublishedPublication(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         return publicationDao.findLastPublishedRevision(chapterId);
     }
 
@@ -157,7 +156,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
     public void publishChapter(Long chapterId)
     {
 
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
 
         Publication published = publicationDao.findLastRevision(chapterId);
         Chapter chapter = this.chapterDao.findById(chapterId);
@@ -212,15 +211,15 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public Chapter update(Chapter chapter)
     {
-        Defense.notNull(chapter, "chapter");
+        assert chapter != null;
         return this.chapterDao.update(chapter);
     }
 
     public void updateContent(Long chapterId, String content)
     {
 
-        Defense.notNull(chapterId, "chapterId");
-        Defense.notNull(content, "content");
+        assert chapterId != null;
+        assert content != null;
 
         Publication publication = publicationDao.findLastRevision(chapterId);
 
@@ -233,8 +232,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             Chapter chapter = chapterDao.findById(chapterId);
 
             // Security check
-            if (!securityCtx.isLoggedIn()
-                    || !this.securityCtx.canWrite(chapter.getBook())) { throw new AuthorizationException(
+            if (!securityCtx.isLoggedIn() || !this.securityCtx.canWrite(chapter.getBook())) { throw new AuthorizationException(
                     "Publish action not authorized"); }
             publication.setChapter(chapter);
 
@@ -257,7 +255,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public void remove(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
 
         Chapter toDelete = chapterDao.findById(chapterId);
         if (toDelete != null)

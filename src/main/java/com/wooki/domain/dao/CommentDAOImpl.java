@@ -18,7 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -35,7 +34,7 @@ public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implement
 
     public boolean isOwner(Long commId, String username)
     {
-        Defense.notNull(commId, "commId");
+        assert commId != null;
         Query query = this.session
                 .createQuery("select count(c) from "
                         + this.getEntityType()
@@ -47,7 +46,7 @@ public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implement
 
     public List<Comment> listForPublication(Long publicationId)
     {
-        Defense.notNull(publicationId, "publicationId");
+        assert publicationId != null;
         Query query = this.session
                 .createQuery("from "
                         + getEntityType()
@@ -59,7 +58,7 @@ public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implement
 
     public List<Comment> listForChapter(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         Query query = this.session
                 .createQuery("from "
                         + getEntityType()
@@ -71,7 +70,7 @@ public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implement
 
     public List<Comment> listForPublicationAndDomId(Long publicationId, String domId)
     {
-        Defense.notNull(publicationId, "publicationId");
+        assert publicationId != null;
         Query query = this.session
                 .createQuery("from "
                         + getEntityType()
@@ -85,7 +84,7 @@ public class CommentDAOImpl extends WookiGenericDAOImpl<Comment, Long> implement
 
     public List<Object[]> listCommentsInfoForPublication(Long publicationId)
     {
-        Defense.notNull(publicationId, "publicationId");
+        assert publicationId != null;
         String queryStr = String
                 .format(
                         "select c.domId, count(c.domId) from %s c where c.publication.id=:id and c.state!=:st and c.deletionDate is null group by c.domId",

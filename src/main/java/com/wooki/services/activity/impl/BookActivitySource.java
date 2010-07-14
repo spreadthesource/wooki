@@ -2,8 +2,6 @@ package com.wooki.services.activity.impl;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
-
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.activity.ActivitySource;
@@ -59,7 +57,7 @@ public class BookActivitySource implements ActivitySource
      */
     private void checkContext(Long... context)
     {
-        Defense.notNull(context, "context");
+        assert context != null;
         if (context.length != 1 || context[0] == null) { throw new IllegalArgumentException(
                 "BookActivitySource lookup method require the book id as first and single parameter"); }
     }

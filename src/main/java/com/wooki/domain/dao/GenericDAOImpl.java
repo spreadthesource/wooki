@@ -21,7 +21,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -76,7 +75,7 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
     @SuppressWarnings("unchecked")
     public T findById(PK id)
     {
-        Defense.notNull(id, "id");
+        assert id != null;
 
         Criteria crit = session.createCriteria(getEntityType());
         crit.add(Restrictions.idEq(id));

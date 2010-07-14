@@ -18,7 +18,6 @@ package com.wooki.domain.biz;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
@@ -44,7 +43,7 @@ public class CommentManagerImpl implements CommentManager
     {
         this.commentDao = commentDao;
         this.activityDao = activityDAO;
-        
+
         this.securityCtx = context.getBean(WookiSecurityContext.class);
     }
 
@@ -55,7 +54,7 @@ public class CommentManagerImpl implements CommentManager
 
     public List<Comment> listForChapter(Long chapterId)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         return this.commentDao.listForChapter(chapterId);
     }
 
@@ -78,7 +77,7 @@ public class CommentManagerImpl implements CommentManager
     {
 
         Comment c = this.commentDao.findById(commId);
-        Defense.notNull(c, "comment");
+        assert c != null;
 
         if (!securityCtx.isOwner(c)) { throw new AuthorizationException(
                 "User is not authorized to remove this comment : " + commId); }
@@ -107,7 +106,7 @@ public class CommentManagerImpl implements CommentManager
 
     public Comment update(Comment comment)
     {
-        Defense.notNull(comment, "comment");
+        assert comment != null;
         return commentDao.update(comment);
     }
 

@@ -19,7 +19,6 @@ package com.wooki.domain.biz;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
@@ -57,11 +56,11 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     private final ChapterDAO chapterDao;
 
     private final QueryFilterService filterService;
-    
+
     private final SecurityManager securityManager;
 
     private final WookiSecurityContext securityCtx;
-    
+
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
             ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService)
     {
@@ -79,8 +78,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
             UserAlreadyOwnerException
     {
 
-        Defense.notNull(book, "book");
-        Defense.notNull(username, "username");
+        assert book != null;
+        assert username != null;
 
         // Security checks
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwner(book)) { throw new AuthorizationException(
@@ -96,13 +95,13 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         book.addUser(toAdd);
         bookDao.update(book);
         this.securityManager.setCollaboratorPermission(book, toAdd);
-        
+
         return toAdd;
     }
 
     public void remove(Long bookId)
     {
-        Defense.notNull(bookId, "bookId");
+        assert bookId != null;
 
         Book toRemove = this.bookDao.findById(bookId);
 
@@ -149,8 +148,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     public void removeAuthor(Book book, Long authorId)
     {
 
-        Defense.notNull(book, "book");
-        Defense.notNull(authorId, "authorId");
+        assert book != null;
+        assert authorId != null;
 
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwner(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
@@ -164,7 +163,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     public Book updateTitle(Book book) throws TitleAlreadyInUseException
     {
 
-        Defense.notNull(book, "book");
+        assert book != null;
 
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.canWrite(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
@@ -189,8 +188,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     public boolean isAuthor(Book book, String username)
     {
 
-        Defense.notNull(book, "book");
-        Defense.notNull(username, "username");
+        assert book != null;
+        assert username != null;
 
         return bookDao.isAuthor(book.getId(), username);
     }
@@ -198,8 +197,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     public Chapter addChapter(Book book, String title) throws AuthorizationException
     {
 
-        Defense.notNull(book, "book");
-        Defense.notNull(title, "title");
+        assert book != null;
+        assert title != null;
 
         if (!securityCtx.canWrite(book)) { throw new AuthorizationException(
                 "Current user is not an author of " + book.getTitle()); }
@@ -235,7 +234,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     public Book create(String title)
     {
 
-        Defense.notNull(title, "title");
+        assert title != null;
 
         if (!this.securityCtx.isLoggedIn()) { throw new AuthorizationException(
                 "Only logged user can create books."); }

@@ -18,7 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -43,7 +42,7 @@ public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements Book
 
     public List<Book> listByOwner(Long id)
     {
-        Defense.notNull(id, "user id");
+        assert id != null;
         Query query = session.createQuery("select b from " + getEntityType()
                 + " b where b.owner.id=:uid and b.deletionDate is null");
         query.setParameter("uid", id);
@@ -52,7 +51,7 @@ public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements Book
 
     public List<Book> listByCollaborator(Long id)
     {
-        Defense.notNull(id, "user id");
+        assert id != null;
         Query query = session
                 .createQuery("select b from "
                         + getEntityType()
@@ -71,7 +70,7 @@ public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements Book
 
     public boolean isAuthor(Long bookId, String username)
     {
-        Defense.notNull(bookId, "bookId");
+        assert bookId != null;
 
         Query query = this.session
                 .createQuery("select count(b) from Book b join b.users as u where u.username=:un and b.id=:id");
@@ -82,7 +81,7 @@ public class BookDAOImpl extends WookiGenericDAOImpl<Book, Long> implements Book
 
     public boolean isOwner(Long bookId, String username)
     {
-        Defense.notNull(bookId, "bookId");
+        assert bookId != null;
         Query query = this.session
                 .createQuery("select count(b) from Book b where b.id=:id and b.owner.username=:un");
         Long result = (Long) query.setParameter("un", username).setParameter("id", bookId)

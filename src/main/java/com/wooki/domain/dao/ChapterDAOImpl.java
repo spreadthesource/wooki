@@ -18,7 +18,6 @@ package com.wooki.domain.dao;
 
 import java.util.List;
 
-import org.apache.tapestry5.ioc.internal.util.Defense;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -36,7 +35,7 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public boolean isAuthor(Long chapterId, String username)
     {
-        Defense.notNull(chapterId, "chapterId");
+        assert chapterId != null;
         Query query = this.session
                 .createQuery("select count(b) from Book b, Chapter c join b.users as u where c.id=:id and b.id=c.book.id and u.username=:un");
         Long result = (Long) query.setParameter("un", username).setParameter("id", chapterId)
@@ -46,8 +45,8 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public List<Object[]> findNext(Long bookId, Long chapterId)
     {
-        Defense.notNull(bookId, "bookId");
-        Defense.notNull(chapterId, "chapterId");
+        assert bookId != null;
+        assert chapterId != null;
         Query query = session
                 .createQuery(String
                         .format("select item.id, item.title from "
@@ -64,8 +63,8 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public List<Object[]> findPrevious(Long bookId, Long chapterId)
     {
-        Defense.notNull(bookId, "bookId");
-        Defense.notNull(chapterId, "chapterId");
+        assert bookId != null;
+        assert chapterId != null;
         Query query = session
                 .createQuery(String
                         .format("select item.id, item.title from "
@@ -82,7 +81,7 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public List<Chapter> listChapterInfo(Long bookId)
     {
-        Defense.notNull(bookId, "bookId");
+        assert bookId != null;
         Query query = session
                 .createQuery(String
                         .format(
@@ -95,7 +94,7 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public List<Chapter> listChapters(Long idBook)
     {
-        Defense.notNull(idBook, "bookId");
+        assert idBook != null;
         Query query = this.session.createQuery("from " + getEntityType()
                 + " c where c.book.id=:book and c.deletionDate is null");
         List<Chapter> result = (List<Chapter>) query.setParameter("book", idBook).list();
@@ -104,7 +103,7 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
 
     public List<Chapter> listLastModified(Long id, int nbElts)
     {
-        Defense.notNull(id, "bookId");
+        assert id != null;
         Query query = this.session
                 .createQuery("from "
                         + this.getEntityType()

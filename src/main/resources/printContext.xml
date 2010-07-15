@@ -166,7 +166,7 @@
 	</bean>
 
 	<bean id="myHostConfig" class="com.wooki.services.utils.MyHostConfiguration">
-		<property name="proxyHostPlusPort" value="proxy:3128" />
+		<!--  property name="proxyHostPlusPort" value="proxy:3128" /-->
 	</bean>
 
 	<bean id="httpParams" class="org.apache.commons.httpclient.params.HttpClientParams">

@@ -17,12 +17,9 @@
 package com.wooki.test.unit;
 
 import org.apache.tapestry5.ioc.Messages;
-import org.apache.tapestry5.test.PageTester;
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.wooki.app0.services.AppModule;
 import com.wooki.services.ServicesMessages;
 import com.wooki.services.utils.LastActivityMessages;
 
@@ -31,17 +28,8 @@ import com.wooki.services.utils.LastActivityMessages;
  * 
  * @author ccordenier
  */
-public class UtilityClassTest extends Assert
+public class UtilityClassTest extends AbstractWookiUnitTestSuite
 {
-
-    private PageTester pageTester;
-
-    @BeforeClass
-    public void setup()
-    {
-        pageTester = new PageTester("com.wooki.app0", "app", "src/test/app0", AppModule.class);
-    }
-
     @Test
     public void testLastActivityMessage()
     {
@@ -51,25 +39,25 @@ public class UtilityClassTest extends Assert
         String message = LastActivityMessages.getActivityPeriod(
                 System.currentTimeMillis(),
                 messages);
-        assertTrue(message.contains("few seconds"));
+        Assert.assertTrue(message.contains("few seconds"));
 
         message = LastActivityMessages.getActivityPeriod(
                 System.currentTimeMillis() - 61000,
                 messages);
-        assertTrue(message.contains("minute(s) ago"));
+        Assert.assertTrue(message.contains("minute(s) ago"));
 
         message = LastActivityMessages.getActivityPeriod(
                 System.currentTimeMillis() - (61 * 60000),
                 messages);
-        assertTrue(message.contains("hour(s) ago"));
+        Assert.assertTrue(message.contains("hour(s) ago"));
 
         message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis()
                 - (61 * 60000 * 25), messages);
-        assertTrue(message.contains("day(s) ago"));
+        Assert.assertTrue(message.contains("day(s) ago"));
 
         message = LastActivityMessages.getActivityPeriod(System.currentTimeMillis()
                 - (61 * 60000 * 25 * 5), messages);
-        assertTrue(!message.contains("ago"));
+        Assert.assertTrue(!message.contains("ago"));
 
     }
 

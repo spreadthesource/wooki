@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import com.spreadthesource.tapestry.dbmigration.services.MigrationManager;
 import com.spreadthesource.tapestry.installer.services.InstallerModule;
+import com.wooki.app0.services.AppModule;
 import com.wooki.app0.services.UnitTestModule;
 import com.wooki.services.WookiModule;
 import com.wooki.test.WookiPageTester;
@@ -43,7 +44,7 @@ public abstract class AbstractWookiUnitTestSuite
     {
         pageTester = new WookiPageTester("com.wooki", "wooki", "src/main/webapp",
                 WookiModule.class, com.wooki.installer.services.InstallerModule.class,
-                InstallerModule.class, UnitTestModule.class);
+                InstallerModule.class, UnitTestModule.class, AppModule.class);
         registry = pageTester.getRegistry();
         context = registry.getService(ApplicationContext.class);
 

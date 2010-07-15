@@ -112,7 +112,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
                 isElementPresent("//a[@href='/chapter/edit/1/2']"),
                 "Edit chapter link is missing");
         Assert.assertTrue(
-                isElementPresent("//a[@href='.+/chapter/index:delete?t:ac=1/2']"),
+                isElementPresent("//a[contains(@href,':delete?t:ac=1/2')]"),
                 "Remove chapter link is missing.");
     }
 

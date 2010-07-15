@@ -38,13 +38,10 @@ import org.apache.maven.doxia.UnsupportedFormatException;
 import org.apache.maven.doxia.wrapper.InputFileWrapper;
 import org.apache.maven.doxia.wrapper.OutputFileWrapper;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -114,17 +111,8 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         DataSource ds = context.getBean(DriverManagerDataSource.class);
 
         UserManager userManager = registry.getService(UserManager.class);
-        
-        WookiSecurityContext securityCtx = context.getBean(WookiSecurityContext.class);
-        
-        // Reset datas and create required schemas
-        ClassPathResource script = new ClassPathResource("reset.sql");
-        // SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        // SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
 
-        script = new ClassPathResource("createAclSchema.sql");
-        SimpleJdbcTemplate tpl = new SimpleJdbcTemplate(ds);
-        SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
+        WookiSecurityContext securityCtx = context.getBean(WookiSecurityContext.class);
 
         // Add author to the book
         User conversion = new User();

@@ -21,12 +21,11 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.tapestry5.SymbolConstants;
-import org.apache.tapestry5.hibernate.HibernateSymbols;
+import org.apache.tapestry5.ioc.Configuration;
 import org.apache.tapestry5.ioc.MappedConfiguration;
 import org.apache.tapestry5.ioc.OrderedConfiguration;
-import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.SubModule;
+import org.apache.tapestry5.services.LibraryMapping;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.RequestFilter;
 import org.apache.tapestry5.services.RequestGlobals;
@@ -34,8 +33,6 @@ import org.apache.tapestry5.services.RequestHandler;
 import org.apache.tapestry5.services.Response;
 import org.mockito.Mockito;
 
-import com.wooki.services.ServicesMessages;
-import com.wooki.services.ServicesMessagesImpl;
 import com.wooki.services.internal.TapestryOverrideModule;
 
 /**
@@ -43,28 +40,18 @@ import com.wooki.services.internal.TapestryOverrideModule;
  * 
  * @author ccordenier
  */
-@SubModule(
-{ TapestryOverrideModule.class })
+@SubModule(TapestryOverrideModule.class)
 public class AppModule
 {
-
-    public void contributeApplicationDefaults(MappedConfiguration<String, String> conf)
-    {
-        conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
-        conf.add(SymbolConstants.PRODUCTION_MODE, "false");
-        conf.add(SymbolConstants.APPLICATION_VERSION, "0.1");
-        conf.add(HibernateSymbols.EARLY_START_UP, "false");
-    }
-
-    public static void bind(ServiceBinder binder)
-    {
-        binder.bind(ServicesMessages.class, ServicesMessagesImpl.class);
-    }
-
     public void contributeWookiRequestExceptionHandler(
             MappedConfiguration<Class, String> exceptionMap)
     {
-        exceptionMap.add(IllegalArgumentException.class, "IAEReport");
+        exceptionMap.add(IllegalArgumentException.class, "app0/IAEReport");
+    }
+
+    public static void contributeComponentClassResolver(Configuration<LibraryMapping> configuration)
+    {
+        configuration.add(new LibraryMapping("app0", "com.wooki.app0"));
     }
 
     /**

@@ -17,31 +17,17 @@
 package com.wooki.test.unit;
 
 import org.apache.tapestry5.dom.Document;
-import org.apache.tapestry5.test.PageTester;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.wooki.app0.services.AppModule;
-import com.wooki.installer.services.InstallerModule;
-import com.wooki.test.WookiPageTester;
-
-public class ExceptionReportTest
+public class ExceptionReportTest extends AbstractWookiUnitTestSuite
 {
-
-    private PageTester pageTester;
-
-    @BeforeClass
-    public void setup()
-    {
-        pageTester = new WookiPageTester("com.wooki.app0", "app", "src/test/app0", AppModule.class, InstallerModule.class);
-    }
 
     @Test
     public void verifyWookiExceptionHandling()
     {
-        Document document = pageTester.renderPage("ThrowIAE");
+        Document document = pageTester.renderPage("app0/ThrowIAE");
         Assert.assertNotNull(
                 document.getElementById("specificReport"),
                 "Wiki Exception should handle IllegalArgumentException");
@@ -51,7 +37,7 @@ public class ExceptionReportTest
     @Test
     public void verifyWookiExceptionNonHandling()
     {
-        Document document = pageTester.renderPage("ThrowNPE");
+        Document document = pageTester.renderPage("app0/ThrowNPE");
         Assert.assertNull(
                 document.getElementById("specificReport"),
                 "Wiki Exception has not handled NullPointerException");

@@ -45,7 +45,6 @@
 			</div>
 			
 		</t:form>
-		<a t:type="actionlink">Restart</a>
 	</body>
 	
 	<t:block t:id="dbDetails">

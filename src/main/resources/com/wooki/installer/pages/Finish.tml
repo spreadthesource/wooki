@@ -1,0 +1,14 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:type="layout">
+
+	<head>
+		<title>Wooki Installer Page</title>
+	</head>
+
+	<body>
+			<p>
+				Installation process is over ! 
+				<a href="${restartUri}">Start Wooki</a>
+			</p>
+	</body>
+
+</html>

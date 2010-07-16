@@ -2,7 +2,24 @@
 
 ## Getting Started
 
+### Running Wooki using the WAR packaged version
+
+Requirements:
+
+* A web application server like Tomcat or Jetty
+
+Steps:
+
+* Download the latest WAR from http://wookicentral.com/download
+* Unzip the archive in your webapps directly
+* Follow installation instructions
+* That's it !
+
+**Important** : You MUST explode the archive to allow Wooki to keep installation informations between versions.
+Or backup the 'WEB-INF/classes/config.properties' file after installation process.
+
 ### Running Wooki directly from the source
+
 Requirements:
 
 * Maven 2 or more recent
@@ -13,18 +30,6 @@ Steps:
 * Go to the repository directory
 * Run “mvn jetty:run”
 * Open your browser to http://localhost:8080/wooki
-
-### Running Wooki using the WAR packaged version
-
-Requirements:
-
-* A web application server like Tomcat or Jetty
-
-Steps:
-
-* Download the latest WAR on http://static.spreadthesource.com/wooki-0.1.war
-* Copy the downloaded WAR to “webserver_homedir/webapps”
-* Start or restart your server
 
 ## More Informations & contacts
 

@@ -31,7 +31,7 @@ public class InstallerModule
     public void contributeApplicationDefaults(MappedConfiguration<String, String> conf)
     {
         conf.add(MigrationSymbolConstants.DEFAULT_HIBERNATE_CONFIGURATION, "false");
-        conf.add(InstallerConstants.SILENT_MODE, "true");
+        conf.add(InstallerConstants.TERMINATOR_PAGE, "finish");
     }
 
     /**

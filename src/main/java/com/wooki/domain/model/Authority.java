@@ -21,7 +21,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Authority")
+@Table(name = "Authorities")
 public class Authority extends WookiEntity implements Serializable
 {
     private static final long serialVersionUID = -4698804116621759012L;
@@ -32,7 +32,7 @@ public class Authority extends WookiEntity implements Serializable
     private Long id;
 
     @ManyToMany
-    @JoinTable(name = "AuthorityUser", joinColumns = @JoinColumn(name = "authority_id"), inverseJoinColumns =
+    @JoinTable(name = "AuthoritiesUsers", joinColumns = @JoinColumn(name = "authority_id"), inverseJoinColumns =
     { @JoinColumn(name = "user_id") })
     private List<User> users = new LinkedList<User>();
 

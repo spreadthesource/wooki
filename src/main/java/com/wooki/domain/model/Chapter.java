@@ -31,7 +31,7 @@ import javax.persistence.Table;
  * Represents a chapter of the book.
  */
 @Entity
-@Table(name = "Chapter")
+@Table(name = "Chapters")
 public class Chapter extends WookiEntity
 {
 

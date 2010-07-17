@@ -29,7 +29,7 @@ import javax.persistence.Table;
  * @author ccordenier
  */
 @Entity
-@Table(name = "CommentLabel")
+@Table(name = "CommentsLabels")
 public class CommentLabel extends WookiEntity
 {
 

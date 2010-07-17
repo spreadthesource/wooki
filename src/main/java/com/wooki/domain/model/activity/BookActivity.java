@@ -19,6 +19,7 @@ package com.wooki.domain.model.activity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
 /**
  * Log activities on book.
@@ -26,6 +27,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
  * @author ccordenier
  */
 @Entity
+@Table(name = "BooksActivities")
 @PrimaryKeyJoinColumn(name = "book_activity_id")
 public class BookActivity extends AbstractBookActivity
 {

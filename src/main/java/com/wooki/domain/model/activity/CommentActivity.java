@@ -27,7 +27,7 @@ import javax.persistence.Table;
 import com.wooki.domain.model.Comment;
 
 @Entity
-@Table(name = "CommentActivity")
+@Table(name = "CommentsActivities")
 @PrimaryKeyJoinColumn(name = "comment_activity_id")
 public class CommentActivity extends AbstractChapterActivity
 {

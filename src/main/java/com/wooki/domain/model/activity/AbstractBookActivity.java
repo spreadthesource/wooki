@@ -15,7 +15,7 @@ import com.wooki.domain.model.Book;
  * @author ccordenier
  */
 @Entity
-@Table(name = "AbstractBookActivity")
+@Table(name = "AbstractBooksActivities")
 @PrimaryKeyJoinColumn(name = "abstract_book_activity_id")
 public abstract class AbstractBookActivity extends Activity
 {

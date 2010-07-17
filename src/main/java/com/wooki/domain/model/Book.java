@@ -39,7 +39,7 @@ import org.hibernate.annotations.IndexColumn;
  * Represents a book with its relation to other elements.
  */
 @Entity
-@Table(name = "Book")
+@Table(name = "Books")
 public class Book extends WookiEntity
 {
 
@@ -49,7 +49,7 @@ public class Book extends WookiEntity
     private Long id;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "BookAuthor", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns =
+    @JoinTable(name = "BooksAuthors", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns =
     { @JoinColumn(name = "user_id") })
     private List<User> users;
 

@@ -40,7 +40,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Wooki basic user. Can post comment, write book etc.
  */
 @Entity
-@Table(name = "User")
+@Table(name = "Users")
 public class User extends WookiEntity implements UserDetails
 {
 
@@ -64,7 +64,7 @@ public class User extends WookiEntity implements UserDetails
     private String email;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "UserAuthority", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
+    @JoinTable(name = "UsersAuthorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns =
     { @JoinColumn(name = "authority_id") })
     private List<Authority> authorities = new LinkedList<Authority>();
 

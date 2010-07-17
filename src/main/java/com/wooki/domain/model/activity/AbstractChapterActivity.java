@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import com.wooki.domain.model.Chapter;
 
 @Entity
-@Table(name = "AbstractChapterActivity")
+@Table(name = "AbstractChaptersActivities")
 @PrimaryKeyJoinColumn(name = "abstract_chapter_activity_id")
 public class AbstractChapterActivity extends AbstractBookActivity
 {

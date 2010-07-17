@@ -63,7 +63,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * 
  * @author ccordenier
  */
-public class ConversionsTest extends AbstractWookiUnitTestSuite
+public class ConversionsTest extends AbstractWookiUnitTestSuite 
 {
 
     private Logger logger = Logger.getLogger(ConversionsTest.class);

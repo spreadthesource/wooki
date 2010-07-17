@@ -6,7 +6,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "AccountActivity")
+@Table(name = "AccountsActivities")
 @PrimaryKeyJoinColumn(name = "account_activity_id")
 public class AccountActivity extends Activity
 {

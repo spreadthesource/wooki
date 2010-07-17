@@ -27,7 +27,7 @@ import javax.persistence.Table;
  * @author ccordenier
  */
 @Entity
-@Table(name = "ChapterActivity")
+@Table(name = "ChaptersActivities")
 @PrimaryKeyJoinColumn(name = "chapter_activity_id")
 public class ChapterActivity extends AbstractChapterActivity
 {

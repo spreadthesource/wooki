@@ -35,7 +35,7 @@ import javax.persistence.Table;
  * @author ccordenier
  */
 @Entity
-@Table(name = "Comment")
+@Table(name = "Comments")
 public class Comment extends WookiEntity
 {
 

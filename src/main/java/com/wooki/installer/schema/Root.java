@@ -43,7 +43,7 @@ public class Root implements Migration
     {
 
         // Wooki schema
-        helper.add(new CreateWookiTable("Authority")
+        helper.add(new CreateWookiTable("Authorities")
         {
 
             @Override
@@ -55,7 +55,7 @@ public class Root implements Migration
 
         });
 
-        helper.add(new CreateWookiTable("User")
+        helper.add(new CreateWookiTable("Users")
         {
             @Override
             public void run(Table ctx)
@@ -68,7 +68,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("Book")
+        helper.add(new CreateWookiTable("Books")
         {
             @Override
             public void run(Table ctx)
@@ -80,7 +80,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("Chapter")
+        helper.add(new CreateWookiTable("Chapters")
         {
             @Override
             public void run(Table ctx)
@@ -93,7 +93,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("Publication")
+        helper.add(new CreateWookiTable("Publications")
         {
             @Override
             public void run(Table ctx)
@@ -105,7 +105,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("Comment")
+        helper.add(new CreateWookiTable("Comments")
         {
             @Override
             public void run(Table ctx)
@@ -121,7 +121,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("CommentLabel")
+        helper.add(new CreateWookiTable("CommentsLabels")
         {
             @Override
             public void run(Table ctx)
@@ -131,7 +131,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateWookiTable("Activity")
+        helper.add(new CreateWookiTable("Activities")
         {
             @Override
             public void run(Table ctx)
@@ -142,7 +142,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("AbstractBookActivity")
+        helper.add(new CreateTableImpl("AbstractBooksActivities")
         {
             @Override
             public void run(Table ctx)
@@ -152,7 +152,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("AccountActivity")
+        helper.add(new CreateTableImpl("AccountsActivities")
         {
             @Override
             public void run(Table ctx)
@@ -162,7 +162,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("AbstractChapterActivity")
+        helper.add(new CreateTableImpl("AbstractChaptersActivities")
         {
             @Override
             public void run(Table ctx)
@@ -172,7 +172,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("BookActivity")
+        helper.add(new CreateTableImpl("BooksActivities")
         {
             @Override
             public void run(Table ctx)
@@ -182,7 +182,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("ChapterActivity")
+        helper.add(new CreateTableImpl("ChaptersActivities")
         {
             @Override
             public void run(Table ctx)
@@ -192,7 +192,7 @@ public class Root implements Migration
             }
         });
 
-        helper.add(new CreateTableImpl("CommentActivity")
+        helper.add(new CreateTableImpl("CommentsActivities")
         {
             @Override
             public void run(Table ctx)
@@ -207,10 +207,10 @@ public class Root implements Migration
         {
             public void run(JoinTableContext ctx)
             {
-                ctx.join("Authority", "User");
-                ctx.join("User", "Authority");
-                ctx.join("Book", "User");
-                ctx.join("BookAuthor", "Book", "User");
+                ctx.join("Authorities", "Users");
+                ctx.join("Users", "Authorities");
+                ctx.join("Books", "Users");
+                ctx.join("BooksAuthors", "Books", "Users");
             }
         });
 
@@ -231,7 +231,7 @@ public class Root implements Migration
         {
             public void run(Constraint ctx)
             {
-                ctx.setName("acl_sid");
+                ctx.setTableName("acl_sid");
                 ctx.setUnique("unique_uk_1", "sid", "principal");
             }
         });
@@ -266,19 +266,13 @@ public class Root implements Migration
         {
             public void run(Constraint ctx)
             {
-                ctx.setName("acl_object_identity");
+                ctx.setTableName("acl_object_identity");
                 ctx.setUnique("unique_uk_3", "object_id_class", "object_id_identity");
-                ctx.setForeignKey("foreign_fk_1", "acl_object_identity", new String[]
-                { "parent_object" }, new String[]
-                { "id" });
+                ctx.setForeignKey("foreign_fk_1", "acl_object_identity", "parent_object", "id");
 
-                ctx.setForeignKey("foreign_fk_2", "acl_class", new String[]
-                { "object_id_class" }, new String[]
-                { "id" });
+                ctx.setForeignKey("foreign_fk_2", "acl_class", "object_id_class", "id");
 
-                ctx.setForeignKey("foreign_fk_3", "acl_sid", new String[]
-                { "owner_sid" }, new String[]
-                { "id" });
+                ctx.setForeignKey("foreign_fk_3", "acl_sid", "owner_sid", "id");
             }
         });
 
@@ -303,16 +297,16 @@ public class Root implements Migration
         {
             public void run(Constraint ctx)
             {
-                ctx.setName("acl_entry");
+                ctx.setTableName("acl_entry");
                 ctx.setUnique("unique_uk_4", "acl_object_identity", "ace_order");
 
-                ctx.setForeignKey("foreign_fk_4", "acl_object_identity", new String[]
-                { "acl_object_identity" }, new String[]
-                { "id" });
+                ctx.setForeignKey(
+                        "foreign_fk_4",
+                        "acl_object_identity",
+                        "acl_object_identity",
+                        "id");
 
-                ctx.setForeignKey("foreign_fk_5", "acl_sid", new String[]
-                { "sid" }, new String[]
-                { "id" });
+                ctx.setForeignKey("foreign_fk_5", "acl_sid", "sid", "id");
             }
         });
 
@@ -338,26 +332,26 @@ public class Root implements Migration
                 ctx.dropTable("acl_entry");
 
                 // Remove join table first
-                ctx.dropTable("AuthorityUser");
-                ctx.dropTable("UserAuthority");
-                ctx.dropTable("BookUser");
-                ctx.dropTable("BookAuthor");
-                
+                ctx.dropTable("AuthoritiesUsers");
+                ctx.dropTable("UsersAuthorities");
+                ctx.dropTable("BooksUsers");
+                ctx.dropTable("BooksAuthors");
+
                 // Drop wooki schema tables
-                ctx.dropTable("Authority");
-                ctx.dropTable("User");
-                ctx.dropTable("Book");
-                ctx.dropTable("Chapter");
-                ctx.dropTable("Publication");
-                ctx.dropTable("Comment");
-                ctx.dropTable("CommentLabel");
-                ctx.dropTable("Activity");
-                ctx.dropTable("AbstractBookActivity");
-                ctx.dropTable("AccountActivity");
-                ctx.dropTable("AbstractChapterActivity");
-                ctx.dropTable("BookActivity");
-                ctx.dropTable("ChapterActivity");
-                ctx.dropTable("CommentActivity");
+                ctx.dropTable("Authorities");
+                ctx.dropTable("Users");
+                ctx.dropTable("Books");
+                ctx.dropTable("Chapters");
+                ctx.dropTable("Publications");
+                ctx.dropTable("Comments");
+                ctx.dropTable("CommentsLabels");
+                ctx.dropTable("Activities");
+                ctx.dropTable("AbstractBooksActivities");
+                ctx.dropTable("AccountsActivities");
+                ctx.dropTable("AbstractChaptersActivities");
+                ctx.dropTable("BooksActivities");
+                ctx.dropTable("ChaptersActivities");
+                ctx.dropTable("CommentsActivities");
 
             }
         });

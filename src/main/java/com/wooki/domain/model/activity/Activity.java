@@ -38,7 +38,7 @@ import com.wooki.domain.model.WookiEntity;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "Activity")
+@Table(name = "Activities")
 public abstract class Activity extends WookiEntity
 {
 

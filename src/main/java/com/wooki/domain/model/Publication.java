@@ -37,7 +37,7 @@ import javax.persistence.Table;
  * comment validation.
  */
 @Entity
-@Table(name = "Publication")
+@Table(name = "Publications")
 public class Publication extends WookiEntity
 {
 

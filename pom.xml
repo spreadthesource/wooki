@@ -410,7 +410,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					<argLine>-Xmx500m</argLine>
+					<argLine>-Xmx500m -Dsps.installer-silent-mode=true</argLine>
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
 			</plugin>		

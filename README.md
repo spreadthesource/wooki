@@ -7,11 +7,12 @@
 Requirements:
 
 * A web application server like Tomcat or Jetty
+* A minimum of 128Mo of RAM for the JVM
 
 Steps:
 
 * Download the latest WAR from http://wookicentral.com/download
-* Unzip the archive in your webapps directly
+* Unzip the archive in the 'webapps' folder of your server directly
 * Follow installation instructions
 * That's it !
 
@@ -28,7 +29,7 @@ Steps:
 
 * Download the sources
 * Go to the repository directory
-* Run “mvn jetty:run”
+* Run "mvn jetty:run"
 * Open your browser to http://localhost:8080/wooki
 
 ## More Informations & contacts

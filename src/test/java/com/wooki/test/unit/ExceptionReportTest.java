@@ -18,7 +18,6 @@ package com.wooki.test.unit;
 
 import org.apache.tapestry5.dom.Document;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
 public class ExceptionReportTest extends AbstractWookiUnitTestSuite
@@ -43,12 +42,4 @@ public class ExceptionReportTest extends AbstractWookiUnitTestSuite
                 "Wiki Exception has not handled NullPointerException");
     }
 
-    @AfterClass
-    public void cleanup()
-    {
-        if (pageTester != null)
-        {
-            pageTester.shutdown();
-        }
-    }
 }

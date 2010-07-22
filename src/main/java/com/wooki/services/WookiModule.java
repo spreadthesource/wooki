@@ -114,7 +114,7 @@ public class WookiModule<T>
     {
         conf.add(SymbolConstants.SUPPORTED_LOCALES, "en");
         conf.add(SymbolConstants.FORCE_ABSOLUTE_URIS, "true");
-        conf.add(SymbolConstants.APPLICATION_VERSION, "0.2.0");
+        conf.add(SymbolConstants.APPLICATION_VERSION, "0.3.0");
         conf.add(WookiSymbolsConstants.ERROR_WOOKI_EXCEPTION_REPORT, "error/generic");
     }
 

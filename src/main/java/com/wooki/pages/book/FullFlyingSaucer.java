@@ -22,13 +22,13 @@ import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Context;
 import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
-import com.wooki.WookiSymbolsConstants;
+import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.installer.services.GlobalSettingsTask;
 import com.wooki.services.UploadedAssetDispatcher;
 import com.wooki.services.parsers.DOMManager;
 
@@ -56,8 +56,7 @@ public class FullFlyingSaucer extends Index
     private DOMManager domManager;
 
     @Inject
-    @Symbol(WookiSymbolsConstants.UPLOAD_DIR)
-    private String uploadDir;
+    private ApplicationSettings settings;
 
     @Property
     private int chapterIdx;
@@ -128,7 +127,8 @@ public class FullFlyingSaucer extends Index
             String result = input.replaceAll(String.format(
                     "%s%s",
                     request.getContextPath(),
-                    UploadedAssetDispatcher.PATH_PREFIX), "file:" + uploadDir + "/");
+                    UploadedAssetDispatcher.PATH_PREFIX), "file:"
+                    + settings.get(GlobalSettingsTask.UPLOAD_DIR) + "/");
             return result;
         }
         return "";

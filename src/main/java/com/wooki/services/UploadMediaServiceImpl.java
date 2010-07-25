@@ -10,17 +10,16 @@ import org.apache.tapestry5.internal.InternalConstants;
 import org.apache.tapestry5.internal.TapestryInternalUtils;
 import org.apache.tapestry5.internal.services.RequestConstants;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.Response;
 import org.apache.tapestry5.upload.services.UploadedFile;
 
+import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
 import com.wooki.WookiRequestConstants;
-import com.wooki.WookiSymbolsConstants;
+import com.wooki.installer.services.GlobalSettingsTask;
 
 public class UploadMediaServiceImpl implements UploadMediaService
-{
-
+{    
     private final Request request;
 
     private final Response response;
@@ -30,12 +29,12 @@ public class UploadMediaServiceImpl implements UploadMediaService
     private String pathPrefix;
 
     public UploadMediaServiceImpl(Request request, Response response,
-            @Inject @Symbol(WookiSymbolsConstants.UPLOAD_DIR) String uploadFolder)
+            @Inject ApplicationSettings settings)
     {
         super();
         this.request = request;
         this.response = response;
-        this.uploadDir = new File(uploadFolder);
+        this.uploadDir = new File(settings.get(GlobalSettingsTask.UPLOAD_DIR));
         this.pathPrefix = RequestConstants.ASSET_PATH_PREFIX
                 + WookiRequestConstants.UPLOADED_FOLDER;
     }

@@ -24,7 +24,7 @@ public class GlobalSettingsTaskImpl implements GlobalSettingsTask
         this.settings = new HashMap<String, String>();
         this.configured = silent;
 
-        settings.put(UPLOAD_DIR, "/");
+        settings.put(UPLOAD_DIR, System.getProperty("java.io.tmpdir"));
         settings.put(UPLOAD_MAX_FILE_SIZE, "3");
 
         settings.put(DB_DRIVER, DbType.H2.getDbDriver());

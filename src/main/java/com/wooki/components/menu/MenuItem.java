@@ -8,7 +8,7 @@ import org.apache.tapestry5.ioc.MessageFormatter;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
-import org.apache.tapestry5.services.javascript.JavascriptSupport;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.wooki.links.EventLink;
 import com.wooki.links.Link;
@@ -29,7 +29,7 @@ public class MenuItem
     private Messages messages;
 
     @Inject
-    private JavascriptSupport jsSupport;
+    private JavaScriptSupport jsSupport;
 
     @InjectComponent
     private org.apache.tapestry5.corelib.components.EventLink elink;

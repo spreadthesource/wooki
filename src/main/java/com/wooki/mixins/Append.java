@@ -37,7 +37,7 @@ import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.AssetSource;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.InitializationPriority;
-import org.apache.tapestry5.services.javascript.JavascriptSupport;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.services.javascript.StylesheetLink;
 
 /**
@@ -67,7 +67,7 @@ public class Append
     private RenderSupport support;
 
     @Inject
-    private JavascriptSupport javascriptSupport;
+    private JavaScriptSupport javascriptSupport;
 
     @Inject
     private Request request;

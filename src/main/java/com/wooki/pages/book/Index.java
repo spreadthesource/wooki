@@ -21,15 +21,21 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
+import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
@@ -56,6 +62,8 @@ import com.wooki.services.security.WookiSecurityContext;
 /**
  * This page displays a book with its table of contents.
  */
+@Import(library =
+{ "context:static/js/jquery-ui-1.7.3.custom.min.js" })
 public class Index extends BookBase
 {
 
@@ -76,6 +84,12 @@ public class Index extends BookBase
 
     @Inject
     private FeedSource feedSource;
+
+    @Inject
+    private JavaScriptSupport jsSupport;
+
+    @Inject
+    private ComponentResources resources;
 
     @InjectPage
     private Edit editChapter;
@@ -218,6 +232,14 @@ public class Index extends BookBase
         }
     }
 
+    @AfterRender
+    public void setupChapterSort()
+    {
+        JSONObject params = new JSONObject();
+        params.put("url", resources.createEventLink("reorder").toAbsoluteURI());
+        jsSupport.addInitializerCall("initSortChapters", params);
+    }
+
     @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
     public Object addNewChapter()
     {
@@ -246,6 +268,14 @@ public class Index extends BookBase
             ex.printStackTrace();
             return this;
         }
+    }
+
+    @OnEvent(value = "reorder")
+    public void reorder(@RequestParameter(value = "chapterId") Long chapterId,
+            @RequestParameter(value = "newPos") int newPos)
+    {
+        // add +1 because introduction is not sortable
+        bookManager.updateChapterIndex(getBookId(), chapterId, newPos + 1);
     }
 
     /**

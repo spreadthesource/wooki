@@ -34,7 +34,7 @@ public class WookiPageTester extends PageTester
     protected ModuleDef[] provideExtraModuleDefs()
     {
         servletContext = new MockServletContext();
-        servletContext.addInitParameter("contextConfigLocation", "classpath*:applicationContext*.xml,classpath*:securityContext.xml");
+        servletContext.addInitParameter("contextConfigLocation", "classpath*:applicationContext*.xml");
         return new ModuleDef[]
         { new SpringModuleDef(servletContext) };
     }

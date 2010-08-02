@@ -516,6 +516,32 @@ jQuery.extend(Tapestry.Initializer, {
 	
 	initUploadDialog : function(param) {
 		
+	},
+	
+	/**
+	 * Initialize table of contents to make chapter list sortable.
+	 */
+	initSortChapters : function(params) {
+		jQuery("#table-of-contents").sortable({
+			stop: function(event, ui) {
+				id = ui.item.attr('id').split('-')[1];
+				Tapestry.ajaxRequest(params.url, {
+					parameters : $H({chapterId: id, newPos: jQuery("ol li").index(ui.item)}),
+					onFailure : function() {
+						// Display an error message en reload page
+						alert(Wooki.Messages.sortChapterFailure);
+						location.reload();
+					},
+					onSuccess : function() {
+						// Update next link
+						next = jQuery("#nav-right").find("a");
+						first = jQuery("#table-of-contents").children("li:first").find("a");
+						next.attr("href", first.attr("href"));
+						next.html(first.html() + " >");
+					}
+				} );
+			},
+		});
 	}
 
 });

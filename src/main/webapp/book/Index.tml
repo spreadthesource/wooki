@@ -37,7 +37,7 @@
     <ol id="table-of-contents">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
-                <li>
+                <li id="chapter-${currentChapter.id}">
                     <h3>
                         <t:pagelink t:page="chapter/index" t:context="chapterCtx">
                             ${currentChapter.title}
@@ -57,8 +57,8 @@
                 <p:else>
 					<t:security.ifCanWrite t:object="book">
                 		<t:if t:test="showWorkingCopyLink">
-			                <li>
-			                    <h3>
+                			<li id="chapter-${currentChapter.id}">
+                                <h3>
 		                        	<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
 	                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
 	                                    <em>(Working copy) </em>
@@ -73,29 +73,27 @@
                 </p:else>
             </t:if>
         </t:loop>
-		<t:security.ifCanWrite t:object="book">
-            <!-- Add chapter section based on simple show hide mechanism -->
-            <li>
-                <h3 class="add-chapter-link">
-                    <t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
-                        Add a chapter
-                    </t:actionlink>
-                </h3>
-                <div style="display:none;" id="add-chapter-form">
-                    <t:form t:id="addChapterForm" class="small-form">
-                        <table>
-                            <tr>
-                                <td>
-                                    <t:textfield t:value="chapterName" class="long-field" t:validate="required" />
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="form-submit">
-                            <input t:type="submit" class="btn-active" value="Add Chapter" />or <a href="#" id="hide-add-chapter">cancel</a>
-                        </div>
-                    </t:form>
-                </div>
-            </li>
-		</t:security.ifCanWrite>
     </ol>
+	<t:security.ifCanWrite t:object="book">
+           <!-- Add chapter section based on simple show hide mechanism -->
+           <h3 class="add-chapter-link">
+               <t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
+                   Add a chapter
+               </t:actionlink>
+           </h3>
+           <div style="display:none;" id="add-chapter-form">
+               <t:form t:id="addChapterForm" class="small-form">
+                   <table>
+                       <tr>
+                           <td>
+                               <t:textfield t:value="chapterName" class="long-field" t:validate="required" />
+                           </td>
+                       </tr>
+                   </table>
+                   <div class="form-submit">
+                       <input t:type="submit" class="btn-active" value="Add Chapter" />or <a href="#" id="hide-add-chapter">cancel</a>
+                   </div>
+               </t:form>
+           </div>
+	</t:security.ifCanWrite>
 </html>

@@ -85,9 +85,9 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
         Query query = session
                 .createQuery(String
                         .format(
-                                "select NEW %s(c.id, c.title, c.lastModified) from %s c where c.book.id=:book and c.deletionDate is null",
+                                "select NEW %s(item.id, item.title, item.lastModified) from %s book join book.chapters item where book.id=:book and item.deletionDate is null order by index(item) asc",
                                 getEntityType(),
-                                getEntityType()));
+                                Book.class.getName()));
         query.setParameter("book", bookId);
         return query.list();
     }
@@ -95,8 +95,9 @@ public class ChapterDAOImpl extends WookiGenericDAOImpl<Chapter, Long> implement
     public List<Chapter> listChapters(Long idBook)
     {
         assert idBook != null;
-        Query query = this.session.createQuery("from " + getEntityType()
-                + " c where c.book.id=:book and c.deletionDate is null");
+        Query query = this.session.createQuery(String.format(
+                "select item from %s book join book.chapters item where book.id=:book and item.deletionDate is null order by index(item) asc",
+                Book.class.getName()));
         List<Chapter> result = (List<Chapter>) query.setParameter("book", idBook).list();
         return result;
     }

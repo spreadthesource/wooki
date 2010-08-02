@@ -370,6 +370,28 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         // .contains("<p>You will need éé ...</p>"));
     }
 
+    @Test
+    public void testUpdateChapterIndex()
+    {
+        Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
+        Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");
+
+        List<Chapter> chapters = chapterManager.listChapters(myProduct.getId());
+        Assert.assertNotNull(chapters, "Chapters are missing.");
+        Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
+
+        Chapter toMove = chapters.get(0);
+        bookManager.updateChapterIndex(myProduct.getId(), toMove.getId(), 1);
+        
+        chapters = chapterManager.listChapters(myProduct.getId());
+        Assert.assertNotNull(chapters, "Chapters are missing.");
+        Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
+        Assert.assertTrue(chapters.get(1).getId().equals(toMove.getId()));
+        
+        // Reset to initial order
+        bookManager.updateChapterIndex(myProduct.getId(), toMove.getId(), 0);
+    }
+
     /**
      * Test sequence :
      * <ul>

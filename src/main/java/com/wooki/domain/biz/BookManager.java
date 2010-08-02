@@ -52,6 +52,9 @@ public interface BookManager
     @CommitAfter
     void remove(Long bookId);
 
+    @CommitAfter
+    void updateChapterIndex(Long bookId, Long chapterId, int to);
+
     /**
      * Update book.
      * 

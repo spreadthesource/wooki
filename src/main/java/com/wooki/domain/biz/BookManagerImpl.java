@@ -158,7 +158,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         user.getBooks().remove(book);
         book.getAuthors().remove(user);
         bookDao.update(book);
-        
+
         securityManager.removeCollaboratorPermission(book, user);
     }
 
@@ -185,6 +185,30 @@ public class BookManagerImpl extends AbstractManager implements BookManager
             book.setSlugTitle(slug);
         }
         return bookDao.update(book);
+    }
+
+    public void updateChapterIndex(Long bookId, Long chapterId, int to)
+    {
+        assert bookId != null;
+        assert chapterId != null;
+
+        Book book = bookDao.findById(bookId);
+
+        List<Chapter> chapters = book.getChapters();
+        Chapter toMove = null;
+        for (Chapter chapter : chapters)
+        {
+            if (chapterId.equals(chapter.getId()))
+            {
+                toMove = chapter;
+                break;
+            }
+        }
+
+        if (toMove == null) { throw new IllegalArgumentException("Chapter does not exist"); }
+        book.getChapters().remove(toMove);
+        book.getChapters().add(to, toMove);
+        bookDao.update(book);
     }
 
     public boolean isAuthor(Book book, String username)

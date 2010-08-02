@@ -31,7 +31,7 @@ import org.apache.tapestry5.json.JSONObject;
  * CommentDialog create a nice modal window. Wooki classical use of this dialog is to let users add
  * comments to a block of some published content
  */
-@IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.2.custom.min.js")
+@IncludeJavaScriptLibrary("context:static/js/jquery-ui-1.7.3.custom.min.js")
 public class Dialog implements ClientElement
 {
 

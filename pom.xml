@@ -41,19 +41,25 @@
 			<version>${tapestry-release-version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.howardlewisship</groupId>
+			<artifactId>tapx-core</artifactId>
+			<version>1.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Spread the source -->
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-googleanalytics</artifactId>
 			<version>1.4-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-installer</artifactId>
 			<version>1.1.0-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.spreadthesource</groupId>
 			<artifactId>tapestry5-spring-tx</artifactId>
@@ -71,7 +77,7 @@
 			<artifactId>tapestry5-db-migration</artifactId>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -99,11 +105,11 @@
 			<artifactId>hsqldb</artifactId>
 			<version>1.8.0.10</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.2.133</version>	
+			<version>1.2.133</version>
 		</dependency>
 
 		<!-- Spring -->
@@ -410,10 +416,10 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/conf/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					<argLine>-Xmx500m -Dsps.installer-silent-mode=true</argLine>
+					<argLine>-Xmx500m -Dsps.installer-silent-mode=true -Dtapx.test-mode=true</argLine>
 					<redirectTestOutputToFile>false</redirectTestOutputToFile>
 				</configuration>
-			</plugin>		
+			</plugin>
 		</plugins>
 	</build>
 
@@ -436,7 +442,7 @@
 					<filter>${basedir}/src/build/dev.properties</filter>
 				</filters>
 			</build>
-			
+
 		</profile>
 		<profile>
 			<id>prod</id>
@@ -527,6 +533,16 @@
 		<repository>
 			<id>springsource maven repo</id>
 			<url>http://maven.springframework.org/milestone</url>
+		</repository>
+
+		<repository>
+			<id>tapestry360-stable</id>
+			<url>http://tapestry.formos.com/maven-repository/</url>
+		</repository>
+
+		<repository>
+			<id>tapestry360-snapshot</id>
+			<url>http://tapestry.formos.com/maven-snapshot-repository/</url>
 		</repository>
 
 	</repositories>

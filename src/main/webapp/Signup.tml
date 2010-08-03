@@ -30,6 +30,22 @@
 					<td></td>
     			</tr>
     		</table>
+    		
+    		<table>
+    			<tr>
+    				<th><label t:type="label" t:for="fcaptcha"></label></th>
+    				<td>
+    					
+    					<t:tapx.kaptchafield image="kaptcha" t:id="fcaptcha" />
+    				</td>
+    				<td>${message:captcha-message}</td>
+    			</tr>
+    		</table>
+    		
+    		<div id="captcha">
+    			<t:tapx.kaptchaimage t:id="kaptcha" style="float:left;"/>
+    		</div>
+    		
 			<div class="form-submit">
 				<input type="submit" class="btn-active" value="signup" /> or <a href="#" t:type="pagelink" t:page="index">cancel</a>
 			</div>

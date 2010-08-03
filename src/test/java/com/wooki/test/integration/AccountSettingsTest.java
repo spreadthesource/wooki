@@ -25,6 +25,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite
         type("id=fullname", "John Doe");
         type("id=email", "John.Doe@gmail.com");
         type("id=password", "mylongpassword");
+        type("id=fcaptcha", "i8cookies");
         click("//form[@id='signupForm']//input[@type='submit']");
         waitForPageToLoad();
         checkDashboard("john");

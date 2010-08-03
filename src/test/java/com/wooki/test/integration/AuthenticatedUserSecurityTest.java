@@ -28,6 +28,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         type("id=fullname", "Author Doe");
         type("id=email", "author@gmail.com");
         type("id=password", "mylongpassword");
+        type("id=fcaptcha", "i8cookies");
         click("//form[@id='signupForm']//input[@type='submit']");
         waitForPageToLoad();
         checkDashboard("author");
@@ -116,7 +117,9 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     { "signup" })
     public void testComment()
     {
-        open("/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1", "true");
+        open(
+                "/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1",
+                "true");
         checkAccessDenied();
     }
 

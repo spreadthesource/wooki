@@ -266,6 +266,8 @@ span.autosave { margin-left: 10px; }
 .small-form td { padding: 5px 10px 5px 0px; }
 .small-form table tr td input { width:100%; margin-right:-10px;}
 
+#captcha { float: left; width: 100%; padding-left: 180px; margin: 10px;}
+#captcha img {padding: 5px; }
 /*****
  * BOOK LAYOUT
  */

@@ -22,9 +22,8 @@ import org.apache.tapestry5.Asset;
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.Link;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
@@ -37,6 +36,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.FormSupport;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.upload.services.MultipartDecoder;
 import org.apache.tapestry5.upload.services.UploadedFile;
 import org.apache.tapestry5.util.TextStreamResponse;
@@ -47,7 +47,7 @@ import com.wooki.services.UploadMediaService;
 /**
  * Integrate wymeditor as a mixin to be used with textarea.
  */
-@IncludeJavaScriptLibrary(
+@Import(library =
 {
         "context:/static/js/jquery.timer.js",
         "context:/static/js/wymeditor/jquery.wymeditor.js",
@@ -106,7 +106,7 @@ public class WymEditor
     private TextArea container;
 
     @Inject
-    private RenderSupport renderSupport;
+    private JavaScriptSupport renderSupport;
 
     @AfterRender
     public void attachWymEditor()
@@ -150,7 +150,7 @@ public class WymEditor
         data.put("params", params);
 
         // Use wymeditor
-        renderSupport.addInit("initWymEdit", data);
+        renderSupport.addInitializerCall("initWymEdit", data);
 
     }
 

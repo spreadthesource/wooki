@@ -22,7 +22,6 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.BindParameter;
 import org.apache.tapestry5.annotations.InjectContainer;
@@ -62,9 +61,6 @@ public class Append
 
     @Inject
     private AssetSource assetSource;
-
-    @Inject
-    private RenderSupport support;
 
     @Inject
     private JavaScriptSupport javascriptSupport;

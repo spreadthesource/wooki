@@ -1,13 +1,13 @@
 package com.wooki.mixins;
 
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 /**
  * This mixins implements a simple show hide effect.
@@ -45,7 +45,7 @@ public class ShowHideOnClick
     private AbstractLink showLnkId;
 
     @Inject
-    private RenderSupport support;
+    private JavaScriptSupport support;
 
     /**
      * Generate Javascript method call.
@@ -66,7 +66,7 @@ public class ShowHideOnClick
             data.put("formClass", this.resetFormClass);
         }
 
-        support.addInit("initShowHideEffect", data);
+        support.addInitializerCall("initShowHideEffect", data);
     }
 
 }

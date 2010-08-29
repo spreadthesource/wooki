@@ -17,7 +17,6 @@
 package com.wooki.mixins;
 
 import org.apache.tapestry5.BindingConstants;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.MixinAfter;
@@ -25,6 +24,7 @@ import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 /**
  * Open the link in a new window.
@@ -42,7 +42,7 @@ public class OpenInWindow
     private String options;
 
     @Inject
-    private RenderSupport renderSupport;
+    private JavaScriptSupport renderSupport;
 
     @InjectContainer
     private AbstractLink link;
@@ -55,7 +55,7 @@ public class OpenInWindow
         param.put("url", link.getLink().toAbsoluteURI());
         param.put("name", name);
         param.put("options", options);
-        renderSupport.addInit("initOpenInWindow", param);
+        renderSupport.addInitializerCall("initOpenInWindow", param);
     }
 
 }

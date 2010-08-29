@@ -238,6 +238,7 @@ public class Index extends BookBase
         JSONObject params = new JSONObject();
         params.put("url", resources.createEventLink("reorder").toAbsoluteURI());
         jsSupport.addInitializerCall("initSortChapters", params);
+        jsSupport.addInitializerCall("initAddChapterFocus", new JSONObject());
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")

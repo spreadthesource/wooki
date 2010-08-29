@@ -76,8 +76,8 @@
     </ol>
 	<t:security.ifCanWrite t:object="book">
            <!-- Add chapter section based on simple show hide mechanism -->
-           <h3 class="add-chapter-link">
-               <t:actionlink class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
+           <h3 id="add-chapter-link">
+               <t:actionlink class="active" t:id="showAddChapterField" t:mixins="wooki/showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
                    Add a chapter
                </t:actionlink>
            </h3>
@@ -86,7 +86,7 @@
                    <table>
                        <tr>
                            <td>
-                               <t:textfield t:value="chapterName" class="long-field" t:validate="required" />
+                               <t:textfield t:value="chapterName" t:id="chapterName" class="long-field" t:validate="required" />
                            </td>
                        </tr>
                    </table>

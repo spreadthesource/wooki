@@ -23,6 +23,7 @@ import java.util.ConcurrentModificationException;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
@@ -38,6 +39,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.json.JSONArray;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
@@ -71,6 +73,9 @@ public class Edit extends BookBase
 
     @Inject
     private Messages messages;
+
+    @Inject
+    private JavaScriptSupport jsSupport;
 
     @Inject
     private Request request;
@@ -201,6 +206,12 @@ public class Edit extends BookBase
         center = new NavLink("book/index", "book-root", "cancel-edition", getBook().getTitle(),
                 getBookId());
 
+    }
+
+    @AfterRender
+    public void setupJs()
+    {
+        this.jsSupport.addInitializerCall("initUpdateTitleFocus", new JSONObject());
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")

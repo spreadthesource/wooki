@@ -136,7 +136,6 @@ public class Index extends BookBase
     @SetupRender
     public Object setupDisplay()
     {
-
         this.setupContent();
 
         if (!this.isViewingRevision())

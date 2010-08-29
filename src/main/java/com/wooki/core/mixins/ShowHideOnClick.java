@@ -1,7 +1,8 @@
-package com.wooki.mixins;
+package com.wooki.core.mixins;
 
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectContainer;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.corelib.base.AbstractLink;
@@ -14,6 +15,8 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
  * 
  * @author ccordenier
  */
+@Import(library =
+{ "context:/static/js/wooki-core.js" })
 public class ShowHideOnClick
 {
 

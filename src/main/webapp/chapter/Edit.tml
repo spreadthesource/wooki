@@ -7,7 +7,7 @@
 	<t:block t:id="titleBlock">
 		<h2 class="title-with-link">
 			${chapter?.title}
-			<a href="#" t:type="actionlink" class="active" t:id="showAddChapterField" t:mixins="showHideOnClick" t:toShow="update-title-div" t:hideLnkId="hide-edit-title" t:resetFormClass="reset-after-hide">(modify)</a> 
+			<a href="#" t:type="actionlink" class="active" t:id="showAddChapterField" t:mixins="wooki/showHideOnClick" t:toShow="update-title-div" t:hideLnkId="hide-edit-title" t:resetFormClass="reset-after-hide">(modify)</a> 
 		</h2>
 		<div style="display:none;" id="update-title-div">
 			<t:form t:id="updateTitle" class="small-form reset-after-hide" t:zone="updateTitleZone">

@@ -454,35 +454,6 @@ jQuery.extend(Tapestry.Initializer, {
 			}.bind(params));
 		}
 	},
-
-	/**
-	 * Implement a simple show hide effect for chapter addition.
-	 *
-	 */
-	initShowHideEffect: function(data) {
-		if(data != undefined) {
-			jQuery("#"+data.showLnkId).bind("click", data, function(event) {
-				if(jQuery("#"+event.data.showLnkId).disabled) {
-					return false;
-				}
-				jQuery("#"+event.data.showLnkId).disabled = true;
-				jQuery("#"+event.data.toShow).slideDown(event.data.duration);
-				return false;
-			});
-			jQuery("#"+data.hideLnkId).bind("click", data, function(event) {
-				if(event.data.formClass !== undefined) {
-					jQuery("."+event.data.formClass).each(
-						function (i, form) { 
-							form.reset(); 
-						}
-					);
-				}
-				jQuery("#"+event.data.showLnkId).disabled = false;
-				jQuery("#"+event.data.toShow).slideUp(data.duration);
-				return false;
-			});
-		}
-	},
 	
 	/**
 	 * Init a link that will update a zone with a 
@@ -542,8 +513,28 @@ jQuery.extend(Tapestry.Initializer, {
 				} );
 			},
 		});
-	}
+	},
+	
+	/**
+	 * Focus on chapter name field when add chapter form is shown.
+	 *
+	 */
+	initAddChapterFocus: function(data) {
+		if(jQuery("#add-chapter-form").length > 0) {
+			jQuery("#add-chapter-form").bind(Wooki.Core.Events.SHOW, function() {
+				jQuery("#chapterName").focus();
+			});
+		}
+	},
 
+	initUpdateTitleFocus: function(data) {
+		if(jQuery("#update-title-div").length > 0) {
+			jQuery("#update-title-div").bind(Wooki.Core.Events.SHOW, function() {
+				jQuery("#title").focus();
+			});
+		}
+	}
+	
 });
 
 // Do not not desactivate Zone after a link is clicked.

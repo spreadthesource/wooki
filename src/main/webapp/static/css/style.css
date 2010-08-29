@@ -302,8 +302,8 @@ span.autosave { margin-left: 10px; }
 #table-of-contents { margin: 10px; padding:0px; }
 #table-of-contents li { display:block; padding:10px; list-style:none;}
 #table-of-contents h3 { width: 500px; float:left;}
-#table-of-contents h3.add-chapter-link { float: none;  }
-#table-of-contents h3.add-chapter-link a { color:#FF7351; }
+#add-chapter-link { float: none;  margin-top: 20px; }
+#add-chapter-link a { color:#FF7351; }
 .last-update { margin:0px; padding:0px; line-height:20px; text-align:right; color:#6E6D65;}
 
 /*****

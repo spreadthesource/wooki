@@ -18,16 +18,17 @@ package com.wooki.pages.chapter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ConcurrentModificationException;
 
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.beaneditor.Validate;
 import org.apache.tapestry5.corelib.components.Form;
@@ -41,6 +42,8 @@ import org.apache.tapestry5.upload.services.UploadSymbols;
 import org.apache.tapestry5.util.TextStreamResponse;
 
 import com.ibm.icu.util.Calendar;
+import com.wooki.Draft;
+import com.wooki.Drafts;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.exception.PublicationXmlException;
@@ -54,9 +57,9 @@ import com.wooki.links.impl.ViewLink;
  * 
  * @author ccordenier
  */
-@IncludeJavaScriptLibrary(
-{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
-@IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
+@Import(library =
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" }, stylesheet =
+{ "context:/static/css/jquery.notifyBar.css" })
 public class Edit extends BookBase
 {
 
@@ -81,6 +84,9 @@ public class Edit extends BookBase
     @Inject
     @Symbol(UploadSymbols.FILESIZE_MAX)
     private long maxFileSize;
+
+    @SessionState
+    private Drafts drafts;
 
     private Long chapterId;
 
@@ -115,6 +121,9 @@ public class Edit extends BookBase
     @Property
     private PageLink center;
 
+    @Property
+    private Draft draft;
+
     private DateFormat format = new SimpleDateFormat("hh:mm");
 
     private boolean publish;
@@ -126,9 +135,11 @@ public class Edit extends BookBase
     {
 
         this.chapterId = chapterId;
-        this.chapter = chapterManager.findById(chapterId);
+        chapter = chapterManager.findById(chapterId);
 
-        if (this.chapter == null) { return redirectToBookIndex(); }
+        if (chapter == null) { return redirectToBookIndex(); }
+
+        draft = drafts.getOrCreate(chapter);
 
         return null;
     }
@@ -136,27 +147,36 @@ public class Edit extends BookBase
     @SetupRender
     public void prepareFormData()
     {
-        this.data = chapterManager.getLastContent(chapterId);
-        // Check if we are editing the abstract chapter
-        if (this.getBook().getChapters() != null && this.getBook().getChapters().size() > 0
-                && this.getBook().getChapters().get(0).getId().equals(this.chapterId))
+        // If currently edited then get it from user session, otherwise took content from db
+        if (draft.getData() != null)
         {
-            this.abstractChapter = true;
+            data = draft.getData();
+        }
+        else
+        {
+            data = chapterManager.getLastContent(chapterId);
+        }
+
+        // Check if we are editing the abstract chapter
+        if (getBook().getChapters() != null && getBook().getChapters().size() > 0
+                && getBook().getChapters().get(0).getId().equals(chapterId))
+        {
+            abstractChapter = true;
         }
 
         // Prepare previous and next links
-        Object[] data = this.chapterManager.findPrevious(this.getBookId(), this.chapterId);
+        Object[] data = chapterManager.findPrevious(getBookId(), chapterId);
         if (data != null && data.length == 2)
         {
-            this.previous = (Long) data[0];
-            this.previousTitle = (String) data[1];
+            previous = (Long) data[0];
+            previousTitle = (String) data[1];
         }
 
-        data = this.chapterManager.findNext(this.getBookId(), this.chapterId);
+        data = chapterManager.findNext(getBookId(), chapterId);
         if (data != null && data.length == 2)
         {
-            this.next = (Long) data[0];
-            this.nextTitle = (String) data[1];
+            next = (Long) data[0];
+            nextTitle = (String) data[1];
         }
     }
 
@@ -186,15 +206,15 @@ public class Edit extends BookBase
     @OnEvent(value = EventConstants.SUCCESS, component = "updateTitle")
     public Object updateTitle()
     {
-        this.chapterManager.update(chapter);
-        return this.titleBlock;
+        chapterManager.update(chapter);
+        return titleBlock;
     }
 
     @OnEvent(value = EventConstants.PASSIVATE)
     public Object[] retrieveIds()
     {
         return new Object[]
-        { this.getBookId(), this.chapterId };
+        { getBookId(), chapterId };
     }
 
     /**
@@ -202,7 +222,7 @@ public class Edit extends BookBase
      */
     public void onPublish()
     {
-        this.publish = true;
+        publish = true;
     }
 
     /**
@@ -210,7 +230,7 @@ public class Edit extends BookBase
      */
     public void onUpdate()
     {
-        this.publish = false;
+        publish = false;
     }
 
     /**
@@ -222,10 +242,11 @@ public class Edit extends BookBase
     public Object updateChapter()
     {
 
-        // If autosave then save and return
+        draft.setData(data);
+
+        // If autosave then save in session and return
         if (request.isXHR())
         {
-            chapterManager.updateContent(chapterId, data);
             JSONObject result = new JSONObject();
             result.put("message", messages.format("autosave-success", format.format(Calendar
                     .getInstance().getTime())));
@@ -236,24 +257,27 @@ public class Edit extends BookBase
         {
             if (!cancel)
             {
-                chapterManager.updateContent(chapterId, data);
+                chapterManager.updateContent(chapterId, draft);
                 if (publish)
                 {
                     chapterManager.publishChapter(chapterId);
                 }
             }
 
-            index.setBookId(this.getBookId());
+            index.setBookId(getBookId());
 
             if (publish)
             {
-                index.setupChapter(this.getBookId(), chapterId);
+                index.setupChapter(getBookId(), chapterId);
             }
             else
             {
-                index.setupChapter(this.getBookId(), chapterId, ChapterManager.LAST);
+                index.setupChapter(getBookId(), chapterId, ChapterManager.LAST);
                 index.setRevision(ChapterManager.LAST);
             }
+
+            // Clean session
+            drafts.remove(chapter);
 
             return index;
 
@@ -263,13 +287,20 @@ public class Edit extends BookBase
             editChapterForm.recordError(messages.get("publication-exception"));
             return this;
         }
+        catch (ConcurrentModificationException cmEx)
+        {
+            // Update the draft and inform the user
+            draft.setTimestamp(chapter.getLastModified());
+            editChapterForm.recordError(messages.get("concurrent-modification-exception"));
+            return this;
+        }
 
     }
 
     public Object[] getCancelCtx()
     {
         return new Object[]
-        { this.getBookId(), this.chapterId };
+        { getBookId(), chapterId };
     }
 
     public Long getChapterId()

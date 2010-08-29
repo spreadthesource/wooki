@@ -12,6 +12,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.wooki.Draft;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.UserManager;
@@ -231,8 +232,10 @@ public class HTMLParser extends DefaultHandler
                                         Chapter currentChapter = bookManager.addChapter(
                                                 book,
                                                 currentChapterTitle);
-                                        chapterManager.updateContent(currentChapter.getId(), buffer
-                                                .toString());
+                                        Draft draft = new Draft();
+                                        draft.setTimestamp(currentChapter.getLastModified());
+                                        draft.setData(buffer.toString());
+                                        chapterManager.updateContent(currentChapter.getId(), draft);
                                         buffer.setLength(0);
                                     }
                                 }

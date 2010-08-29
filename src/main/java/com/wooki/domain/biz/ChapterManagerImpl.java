@@ -16,14 +16,19 @@
 
 package com.wooki.domain.biz;
 
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.tapestry5.ioc.internal.util.CollectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
+import com.wooki.Draft;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.ChapterDAO;
 import com.wooki.domain.dao.CommentDAO;
@@ -58,6 +63,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
     private WookiSecurityContext securityCtx;
 
     private Logger logger = LoggerFactory.getLogger(ChapterManagerImpl.class);
+
+    private Map<Long, ReentrantLock> locks = CollectionFactory.newConcurrentMap();
 
     public ChapterManagerImpl(ChapterDAO chapterDAO, ActivityDAO activityDAO,
             CommentDAO commentDAO, PublicationDAO publicationDAO, DOMManager domManager,
@@ -215,13 +222,35 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         return this.chapterDao.update(chapter);
     }
 
-    public void updateContent(Long chapterId, String content)
+    public void updateContent(Long chapterId, Draft draft)
     {
 
         assert chapterId != null;
-        assert content != null;
+        assert draft != null;
+        assert draft.getData() != null;
+
+        // Update last modified timestamp
+        Date lastModified = Calendar.getInstance().getTime();
+        ReentrantLock lock = getOrCreateLock(chapterId);
 
         Publication publication = publicationDao.findLastRevision(chapterId);
+        lock.lock();
+
+        Chapter chapter = null;
+
+        try
+        {
+            chapter = chapterDao.findById(chapterId);
+            if (chapter.getLastModified() != null
+                    && !chapter.getLastModified().equals(draft.getTimestamp())) { throw new ConcurrentModificationException(
+                    "Document has been modified by another user in the meantime."); }
+            chapter.setLastModified(lastModified);
+            chapterDao.update(chapter);
+        }
+        finally
+        {
+            lock.unlock();
+        }
 
         // we check the published flag. If set, then this Publication must
         // be considered as "locked" and we must create a new publication as
@@ -229,7 +258,6 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         if (publication == null || (publication != null && publication.isPublished()))
         {
             publication = new Publication();
-            Chapter chapter = chapterDao.findById(chapterId);
 
             // Security check
             if (!securityCtx.isLoggedIn() || !this.securityCtx.canWrite(chapter.getBook())) { throw new AuthorizationException(
@@ -240,16 +268,15 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             publicationDao.create(publication);
         }
 
-        publication.setContent(content);
-        publication.setLastModified(Calendar.getInstance().getTime());
-
+        publication.setContent(draft.getData());
+        publication.setLastModified(lastModified);
         publicationDao.update(publication);
 
     }
 
-    public void updateAndPublishContent(Long chapterId, String content)
+    public void updateAndPublishContent(Long chapterId, Draft draft)
     {
-        updateContent(chapterId, content);
+        updateContent(chapterId, draft);
         publishChapter(chapterId);
     }
 
@@ -312,6 +339,17 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
     public List<Chapter> listChaptersInfo(Long bookId)
     {
         return chapterDao.listChapterInfo(bookId);
+    }
+
+    private synchronized ReentrantLock getOrCreateLock(Long chapterId)
+    {
+        assert chapterId != null;
+
+        if (locks.containsKey(chapterId)) { return locks.get(chapterId); }
+
+        ReentrantLock lock = new ReentrantLock();
+        locks.put(chapterId, lock);
+        return lock;
     }
 
 }

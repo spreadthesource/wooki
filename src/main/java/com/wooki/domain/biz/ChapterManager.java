@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
+import com.wooki.Draft;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Comment;
 import com.wooki.domain.model.Publication;
@@ -39,7 +40,7 @@ public interface ChapterManager
      * @param content
      * @param domId
      */
-    
+
     @CommitAfter
     Comment addComment(Long publicationId, String content, String domId);
 
@@ -134,7 +135,7 @@ public interface ChapterManager
      * @param chapter
      */
     @CommitAfter
-    void updateContent(Long chapterId, String content);
+    void updateContent(Long chapterId, Draft draft);
 
     /**
      * Update and publish a chapter content. When a chapter content is updated then all its related
@@ -143,7 +144,7 @@ public interface ChapterManager
      * @param chapter
      */
     @CommitAfter
-    void updateAndPublishContent(Long chapterId, String content);
+    void updateAndPublishContent(Long chapterId, Draft draft);
 
     /**
      * Remove chapter from book.

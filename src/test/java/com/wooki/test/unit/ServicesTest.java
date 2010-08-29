@@ -27,6 +27,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.wooki.Draft;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
@@ -96,12 +97,15 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
 
         // Create new chapters and modify its content
         Chapter chapterOne = bookManager.addChapter(productBook, "Requirements");
-        chapterManager.updateContent(chapterOne.getId(), "<p>You will need éé ...</p>");
+        Draft draft = new Draft();
+        draft.setData("<p>You will need éé ...</p>");
+        draft.setTimestamp(chapterOne.getLastModified());
+        chapterManager.updateContent(chapterOne.getId(), draft);
 
         Chapter chapterTwo = bookManager.addChapter(productBook, "Installation");
-        chapterManager.updateContent(
-                chapterTwo.getId(),
-                "<p>First you have to set environment variables...</p>");
+        draft.setData("<p>First you have to set environment variables...</p>");
+        draft.setTimestamp(chapterTwo.getLastModified());
+        chapterManager.updateContent(chapterTwo.getId(), draft);
     }
 
     @AfterClass
@@ -131,9 +135,10 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         securityCtx.log(robink);
 
         Chapter chapter = bookManager.addChapter(myProduct, "Robin Book");
-        chapterManager.updateAndPublishContent(
-                chapter.getId(),
-                "<p>Hello world from unit test cases...</p>");
+        Draft draft = new Draft();
+        draft.setTimestamp(chapter.getLastModified());
+        draft.setData("<p>Hello world from unit test cases...</p>");
+        chapterManager.updateAndPublishContent(chapter.getId(), draft);
         Publication published = chapterManager.getRevision(chapter.getId(), null);
         Assert.assertNotNull(published);
         chapterManager.addComment(published.getId(), "Yes", "b1");
@@ -302,9 +307,12 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         this.securityCtx.log(john);
 
         // Publish all the chapters
+        Draft draft = new Draft();
         for (Chapter chapter : chapterManager.listChapters(myProduct.getId()))
         {
-            chapterManager.updateAndPublishContent(chapter.getId(), "Some content...");
+            draft.setTimestamp(chapter.getLastModified());
+            draft.setData("Some content...");
+            chapterManager.updateAndPublishContent(chapter.getId(), draft);
         }
 
         Object[] result = chapterManager.findPrevious(myProduct.getId(), chapters.get(1).getId());
@@ -370,6 +378,9 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         // .contains("<p>You will need éé ...</p>"));
     }
 
+    /**
+     * This test tries to reorder the list of chapters for a given book.
+     */
     @Test
     public void testUpdateChapterIndex()
     {
@@ -382,12 +393,12 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
 
         Chapter toMove = chapters.get(0);
         bookManager.updateChapterIndex(myProduct.getId(), toMove.getId(), 1);
-        
+
         chapters = chapterManager.listChapters(myProduct.getId());
         Assert.assertNotNull(chapters, "Chapters are missing.");
         Assert.assertEquals(chapters.size(), 3, "Chapter count is incorrect.");
         Assert.assertTrue(chapters.get(1).getId().equals(toMove.getId()));
-        
+
         // Reset to initial order
         bookManager.updateChapterIndex(myProduct.getId(), toMove.getId(), 0);
     }
@@ -417,7 +428,10 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
 
         // Add a chapter and do search again
         Chapter chapterThree = bookManager.addChapter(myProduct, "Chapter Tree");
-        chapterManager.updateContent(chapterThree.getId(), "<p>Sample Chapter Three Content</p>");
+        Draft draft = new Draft();
+        draft.setTimestamp(chapterThree.getLastModified());
+        draft.setData("<p>Sample Chapter Three Content</p>");
+        chapterManager.updateContent(chapterThree.getId(), draft);
 
         myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
         Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");
@@ -521,10 +535,12 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         // Assert.assertNull(published, "No revision has been published.");
 
         // Update content and publish
-        String published = "<p>Tapestry is totally amazing éàê</p>";
-        chapterManager.updateAndPublishContent(chapters.get(0).getId(), published);
+        Draft draft = new Draft();
+        draft.setData("<p>Tapestry is totally amazing éàê</p>");
+        draft.setTimestamp(chapters.get(0).getLastModified());
+        chapterManager.updateAndPublishContent(chapters.get(0).getId(), draft);
         chapterManager.publishChapter(chapters.get(0).getId());
-        published = chapterManager.getLastPublishedContent(chapters.get(0).getId());
+        String published = chapterManager.getLastPublishedContent(chapters.get(0).getId());
         Publication publication = chapterManager.getLastPublishedPublication(chapters.get(0)
                 .getId());
         Assert.assertNotNull(published, "No revision has been published.");

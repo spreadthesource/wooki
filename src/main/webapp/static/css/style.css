@@ -300,7 +300,7 @@ span.autosave { margin-left: 10px; }
 
 /* table of contents */
 #table-of-contents { margin: 10px; padding:0px; }
-#table-of-contents li { display:block; padding:10px; list-style:none;}
+#table-of-contents li { display:block; padding:10px; list-style:none; cursor: move;}
 #table-of-contents h3 { width: 500px; float:left;}
 #add-chapter-link { float: none;  margin-top: 20px; }
 #add-chapter-link a { color:#FF7351; }

@@ -494,6 +494,7 @@ jQuery.extend(Tapestry.Initializer, {
 	 */
 	initSortChapters : function(params) {
 		jQuery("#table-of-contents").sortable({
+			cursor: 'move',
 			stop: function(event, ui) {
 				id = ui.item.attr('id').split('-')[1];
 				Tapestry.ajaxRequest(params.url, {

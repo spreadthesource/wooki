@@ -5,7 +5,8 @@
 
     <t:if test="printError">
         <t:errors t:messages="prop:printErrors"/>
-    </t:if><h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
+    </t:if>
+    <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
     <div id="meta">
         <p id="authors">
             By

@@ -110,4 +110,18 @@ public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> i
         }
     }
 
+    public List<Publication> listPublication(Long chapterId)
+    {
+        assert chapterId != null;
+
+        Query query = session
+                .createQuery(String
+                        .format(
+                                "select NEW %s(p.id, p.published) from %s p where p.chapter.id=:chapter and p.chapter.deletionDate is null order by p.creationDate desc",
+                                getEntityType(),
+                                getEntityType()));
+        query.setParameter("chapter", chapterId);
+        return query.list();
+    }
+
 }

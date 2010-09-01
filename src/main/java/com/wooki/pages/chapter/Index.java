@@ -176,8 +176,9 @@ public class Index extends BookBase
             adminLinks.add(new DeleteChapterLink(chapter, "delete-chapter"));
         }
 
+        publicLinks.add(new ViewLink("chapter/history", "history", getBookId(), chapterId));
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", getBookId(), Issues.ALL));
-        publicLinks.add(new ViewLink("chapter/issues", "chapter-feedback", false, getBookId(),
+        publicLinks.add(new ViewLink(chapter, "chapter/issues", "chapter-feedback", false, getBookId(),
                 chapterId));
         publicLinks.add(new ExportLink("rss-feed", "feed", getBookId()));
     }

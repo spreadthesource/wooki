@@ -147,6 +147,16 @@ public interface ChapterManager
     void updateAndPublishContent(Long chapterId, Draft draft);
 
     /**
+     * Call this method to restore a previous publication as the current one. If operation succeeds
+     * then a new revision is created.
+     * 
+     * @param chapterId
+     * @param revision
+     */
+    @CommitAfter
+    void restoreRevision(Long chapterId, String revision);
+
+    /**
      * Remove chapter from book.
      * 
      * @param book
@@ -170,5 +180,13 @@ public interface ChapterManager
      * @return
      */
     List<Chapter> listChaptersInfo(Long bookId);
+
+    /**
+     * List all the publication informations for a given chapter.
+     * 
+     * @param chapterId
+     * @return
+     */
+    List<Publication> listPublicationInfo(Long chapterId);
 
 }

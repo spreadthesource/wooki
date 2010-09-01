@@ -1,6 +1,5 @@
 package com.wooki.base;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -61,7 +60,7 @@ public class BookBase
     private boolean resourceNotFound;
 
     @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupBookBase(Long bookId) throws IOException
+    public Object setupBookBase(Long bookId)
     {
         this.bookId = bookId;
 

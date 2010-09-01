@@ -6,20 +6,19 @@ import com.wooki.links.PageLink;
 
 /**
  * This component display the navigation bar that will be displayed on top of the page.
- *
+ * 
  * @author ccordenier
- *
  */
 public class NavBar
 {
 
-    @Parameter
+    @Parameter(autoconnect = true)
     private PageLink left;
 
-    @Parameter
+    @Parameter(autoconnect = true)
     private PageLink right;
 
-    @Parameter
+    @Parameter(autoconnect = true)
     private PageLink center;
-    
+
 }

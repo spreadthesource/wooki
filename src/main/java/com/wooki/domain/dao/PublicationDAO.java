@@ -16,6 +16,8 @@
 
 package com.wooki.domain.dao;
 
+import java.util.List;
+
 import com.wooki.domain.model.Publication;
 
 /**
@@ -58,5 +60,13 @@ public interface PublicationDAO extends GenericDAO<Publication, Long>
      * @return
      */
     boolean isPublished(Long revision);
+
+    /**
+     * List all the existing publication for a given book.
+     *
+     * @param chapterId
+     * @return
+     */
+    List<Publication> listPublication(Long chapterId);
 
 }

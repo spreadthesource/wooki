@@ -216,6 +216,19 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     }
 
+    public void restoreRevision(Long chapterId, String revision)
+    {
+        assert chapterId != null;
+
+        Publication toRestore = getRevision(chapterId, revision);
+        Chapter chapter = findById(chapterId);
+        toRestore.getContent();
+        Draft draft = new Draft();
+        draft.setData(toRestore.getContent());
+        draft.setTimestamp(chapter.getLastModified());
+        updateAndPublishContent(chapterId, draft);
+    }
+
     public Chapter update(Chapter chapter)
     {
         assert chapter != null;
@@ -333,12 +346,20 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
 
     public List<Chapter> listChapters(Long bookId)
     {
+        assert bookId != null;
         return chapterDao.listChapters(bookId);
     }
 
     public List<Chapter> listChaptersInfo(Long bookId)
     {
+        assert bookId != null;
         return chapterDao.listChapterInfo(bookId);
+    }
+
+    public List<Publication> listPublicationInfo(Long chapterId)
+    {
+        assert chapterId != null;
+        return publicationDao.listPublication(chapterId);
     }
 
     private synchronized ReentrantLock getOrCreateLock(Long chapterId)

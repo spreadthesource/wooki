@@ -4,11 +4,14 @@
 	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id" t:publicLinks="publicLinks" t:center="center">
 	
 	<body>
+	
+		<t:wooki.flashmessage message="message" />
+	
 		<h2 class="entry-title"><a href="#" t:type="pagelink" t:page="chapter/index" t:context="[book?.id,chapter?.id]">${chapter?.title}</a></h2>
 		
 		<ul t:type="loop" t:source="publications" t:value="publication">
 			<li>
-				Revision ${publication.id} 
+				Revision of <t:output value="prop:publication?.creationDate" t:format="prop:timestamp" />
 				<t:if test="publication.published">
 					(${message:last-publication}) <a t:type="pagelink" t:context="[book?.id,chapter?.id]" t:page="chapter/index">${message:view-revision-link}</a>
 					<p:else>

@@ -14,18 +14,17 @@
 // limitations under the License.
 //
 
-package com.wooki.components;
+package com.wooki.core.components;
 
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.RenderSupport;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-@IncludeJavaScriptLibrary(
-{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
-@IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
+@Import(library =
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" }, stylesheet =
+{ "context:/static/css/jquery.notifyBar.css" })
 public class FlashMessage
 {
 
@@ -33,12 +32,14 @@ public class FlashMessage
     private String message;
 
     @Inject
-    private RenderSupport support;
+    private JavaScriptSupport support;
 
     private String flashMessageId;
 
-    void beginRender(MarkupWriter writer)
+    boolean beginRender(MarkupWriter writer)
     {
+
+        if ("".equals(message) || message == null) { return false; }
 
         flashMessageId = support.allocateClientId("flash-msg");
 
@@ -54,6 +55,7 @@ public class FlashMessage
         writer.end(); // div
         writer.end(); // div
 
+        return true;
     }
 
     // Add javascript
@@ -61,7 +63,7 @@ public class FlashMessage
     {
         if (flashMessageId != null)
         {
-            support.addInit("initFlashMsgBox", this.flashMessageId);
+            support.addInitializerCall("initFlashMsgBox", this.flashMessageId);
         }
     }
 

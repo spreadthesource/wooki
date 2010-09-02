@@ -17,6 +17,7 @@
 package com.wooki.domain.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -66,10 +67,11 @@ public class Publication extends WookiEntity
 
     }
 
-    public Publication(Long id, boolean published)
+    public Publication(Long id, boolean published, Date creationDate)
     {
         this.id = id;
         this.published = published;
+        this.setCreationDate(creationDate);
     }
 
     public Long getId()

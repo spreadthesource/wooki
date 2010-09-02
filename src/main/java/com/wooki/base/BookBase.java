@@ -43,6 +43,9 @@ public class BookBase
     @Property
     private DateFormat sinceFormat = DateUtils.getSinceDateFormat();
 
+    @Property
+    private DateFormat timestamp = DateUtils.getLastModified();
+    
     private Publication publication;
 
     private Book book;

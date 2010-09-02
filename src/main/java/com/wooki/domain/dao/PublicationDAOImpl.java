@@ -117,7 +117,7 @@ public class PublicationDAOImpl extends WookiGenericDAOImpl<Publication, Long> i
         Query query = session
                 .createQuery(String
                         .format(
-                                "select NEW %s(p.id, p.published) from %s p where p.chapter.id=:chapter and p.chapter.deletionDate is null order by p.creationDate desc",
+                                "select NEW %s(p.id, p.published, p.creationDate) from %s p where p.chapter.id=:chapter and p.chapter.deletionDate is null order by p.creationDate desc",
                                 getEntityType(),
                                 getEntityType()));
         query.setParameter("chapter", chapterId);

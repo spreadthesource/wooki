@@ -28,6 +28,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -70,6 +71,10 @@ public class Book extends WookiEntity
 
     @Column(unique = true)
     private String slugTitle;
+
+    @Lob
+    @Column(name = "abstract")
+    private String bookAbstract;
 
     public void addUser(User user)
     {
@@ -151,6 +156,16 @@ public class Book extends WookiEntity
     public void setOwner(User owner)
     {
         this.owner = owner;
+    }
+
+    public String getAbstract()
+    {
+        return this.bookAbstract;
+    }
+
+    public void setAbstract(String content)
+    {
+        this.bookAbstract = content;
     }
 
 }

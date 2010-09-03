@@ -2,13 +2,13 @@
 <suite name="Wooki Application Test Suite" annotations="1.5"
 	parallel="false">
 
-	<test name="Unit Tests">
+	<test name="Unit Tests" enabled="true">
 		<packages>
 			<package name="com.wooki.test.unit" />
 		</packages>
 	</test>
 
-	<test name="Integration Tests" parallel="false">
+	<test name="Integration Tests" parallel="false" enabled="true">
 		<packages>
 			<package name="com.wooki.test.integration" />
 		</packages>

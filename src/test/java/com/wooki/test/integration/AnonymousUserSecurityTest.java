@@ -90,8 +90,8 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
 
         open("/book/index/1/last", "true");
         waitForPageToLoad();
-        checkAccessDenied();
-
+        checkNotFound();
+        
         open("/book/index/1/2/3", "true");
         waitForPageToLoad();
         checkNotFound();

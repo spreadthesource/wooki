@@ -27,12 +27,10 @@
         </p>
     </div>
     
-    <t:outputRaw value="content" />
-    
-    <t:unless t:test="last">
-        <t:commentBubbles t:publicationId="publicationId" t:book="book" />
-    </t:unless>
-    
+    <p>
+    	<t:outputRaw value="book?.abstract" />
+    </p>
+
     <h2>Table of contents</h2>
     
     <ol id="table-of-contents">

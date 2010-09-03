@@ -53,7 +53,6 @@ import com.wooki.links.impl.NavLink;
 import com.wooki.links.impl.ViewLink;
 import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
-import com.wooki.services.HttpError;
 import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.export.ExportService;
 import com.wooki.services.feeds.FeedSource;
@@ -99,12 +98,6 @@ public class Index extends BookBase
     private boolean printError;
 
     @Property
-    private Long bookAbstractId;
-
-    @Property
-    private String bookAbstractTitle;
-
-    @Property
     private User currentUser;
 
     @Property
@@ -137,30 +130,7 @@ public class Index extends BookBase
 
     private String firstChapterTitle;
 
-    private boolean showWorkingCopyLink;
-
     private boolean bookAuthor;
-
-    /**
-     * Setup all the data to display in the book index page.
-     * 
-     * @param bookId
-     * @throws IOException
-     */
-    @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupBookIndex(Long bookId, String revision)
-    {
-
-        this.setRevision(revision);
-        this.setViewingRevision(true);
-
-        // Only authors have access to the last revision
-        if (ChapterManager.LAST.equalsIgnoreCase(revision)
-                && !(this.securityCtx.isLoggedIn() && this.securityCtx.canWrite(this.getBook()))) { return new HttpError(
-                403, "Access denied"); }
-
-        return true;
-    }
 
     /**
      * Prepare book display.
@@ -173,30 +143,13 @@ public class Index extends BookBase
         this.bookAuthor = this.securityCtx.canWrite(this.getBook());
 
         // List chapter infos
-        List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-        this.bookAbstractId = chapters.get(0).getId();
-        this.bookAbstractTitle = chapters.get(0).getTitle();
+        chaptersInfo = chapterManager.listChaptersInfo(this.getBookId());
 
-        Object[] firstChapterData = chapterManager.findNext(getBookId(), this.bookAbstractId);
-        if (firstChapterData != null)
+        if (chaptersInfo != null && chaptersInfo.size() > 0)
         {
-            this.firstChapterId = (Long) firstChapterData[0];
-            this.firstChapterTitle = (String) firstChapterData[1];
+            this.firstChapterId = chaptersInfo.get(0).getId();
+            this.firstChapterTitle = chaptersInfo.get(0).getTitle();
         }
-
-        if (chapters.size() > 0)
-        {
-            this.chaptersInfo = chapters.subList(1, chapters.size());
-        }
-
-        // Get abstract publication
-        Publication abstractPublication = this.isViewingRevision() ? this.chapterManager
-                .getRevision(this.bookAbstractId, this.getRevision()) : this.chapterManager
-                .getLastPublishedPublication(this.bookAbstractId);
-        this.setPublication(abstractPublication);
-
-        // Setup abstract content
-        this.setupContent();
 
     }
 
@@ -206,18 +159,10 @@ public class Index extends BookBase
         publicLinks = new ArrayList<Link>();
         adminLinks = new ArrayList<Link>();
 
-        if (isAbstractHasWorkingCopy())
-        {
-            publicLinks.add(new ViewLink(this.getBook(), "book", "working-copy", true, this
-                    .getBookId(), ChapterManager.LAST));
-        }
-
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", this.getBookId(), "all"));
         publicLinks.add(new ExportLink("print-pdf", "pdf", this.getBookId()));
         publicLinks.add(new ExportLink("rss-feed", "feed", this.getBookId()));
 
-        adminLinks.add(new EditLink(getBook(), "chapter/edit", "edit-intro", getBookId(),
-                bookAbstractId));
         adminLinks.add(new EditLink(getBook(), "book/settings", "settings", getBookId()));
 
     }
@@ -275,8 +220,7 @@ public class Index extends BookBase
     public void reorder(@RequestParameter(value = "chapterId") Long chapterId,
             @RequestParameter(value = "newPos") int newPos)
     {
-        // add +1 because introduction is not sortable
-        bookManager.updateChapterIndex(getBookId(), chapterId, newPos + 1);
+        bookManager.updateChapterIndex(getBookId(), chapterId, newPos);
     }
 
     /**
@@ -313,11 +257,6 @@ public class Index extends BookBase
         return (publication != null);
     }
 
-    public boolean isAbstractHasWorkingCopy()
-    {
-        return hasWorkingCopy(this.bookAbstractId);
-    }
-
     public boolean isShowWorkingCopyLink()
     {
         long chapterId = currentChapter.getId();
@@ -333,29 +272,6 @@ public class Index extends BookBase
             return bookAuthor && workingCopy;
         }
         return false;
-    }
-
-    /**
-     * Get edit context for chapter
-     * 
-     * @return
-     */
-    public Object[] getEditCtx()
-    {
-        return new Object[]
-        { this.getBookId(), this.bookAbstractId };
-    }
-
-    public Object[] getAbstractWorkingCopyCtx()
-    {
-        return new Object[]
-        { this.getBookId(), ChapterManager.LAST };
-    }
-
-    public Object[] getIssuesCtx()
-    {
-        return new Object[]
-        { this.getBookId(), "all" };
     }
 
     /**

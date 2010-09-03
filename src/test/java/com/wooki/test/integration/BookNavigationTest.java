@@ -32,7 +32,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite
         // checking abstract
 
         // checking table of contents
-        checkTableOfContentsPresent(3);
+        checkTableOfContentsPresent(4);
     }
 
     @Test

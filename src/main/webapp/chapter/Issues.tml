@@ -5,12 +5,7 @@
 
     <h2>Issues</h2>
     <t:loop t:source="chapters" value="chapter" t:index="loopIdx">
-        <t:if test="abstractChapter">
-            <h3><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${chapter?.title}</a></h3>
-            <p:else>
-                <h3><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h3>
-            </p:else>
-        </t:if>
+		<h3><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h3>
         <t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" t:abstractChapter="prop:abstractChapter"/>
     </t:loop>
 </html>

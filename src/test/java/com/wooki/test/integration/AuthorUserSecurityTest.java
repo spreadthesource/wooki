@@ -39,14 +39,11 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
         waitForPageToLoad();
         checkBookTitle(BookNavigationTest.BOOK_TITLE);
         Assert.assertTrue(
-                isElementPresent("//a[@href='/book/1/last']"),
+                isElementPresent("//a[@href='/chapter/1/1/last']"),
                 "Working copy link is missing");
         Assert.assertTrue(
-                isElementPresent("//a[@href='/chapter/edit/1/1']"),
-                "Abstract edit link is missing");
-        Assert.assertTrue(
                 isElementPresent("//a[@href='/book/settings/1']"),
-                "Abstract edit link is missing");
+                "Book settings link is missing");
         Assert.assertTrue(isElementPresent("id=add-chapter-form"), "Add chapter link is missing");
     }
 
@@ -57,7 +54,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     { "signin" })
     public void testCommentPopup()
     {
-        open("/book/1");
+        open("/chapter/1/1");
         waitForPageToLoad();
         checkBookTitle(BookNavigationTest.BOOK_TITLE);
 
@@ -68,7 +65,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
                 "10000");
         Assert
                 .assertTrue(
-                        isElementPresent("//form[@action='/book/index.commentbubbles.commentdialogcontent.updatestateform/2']"),
+                        isElementPresent("//form[@action='/chapter/index.commentbubbles.commentdialogcontent.updatestateform/2']"),
                         "Change comment state form is missing.");
     }
 
@@ -79,7 +76,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     { "signin" })
     public void testWorkingCopy()
     {
-        open("/book/1/last");
+        open("/chapter/1/1/last");
         waitForPageToLoad();
         checkBookTitle(BookNavigationTest.BOOK_TITLE);
     }

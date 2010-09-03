@@ -118,7 +118,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     public void testComment()
     {
         open(
-                "/book/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1",
+                "/chapter/index.commentbubbles.commentdialogcontent.clickandremove:clickandremove/1?t:ac=1/1",
                 "true");
         checkAccessDenied();
     }
@@ -143,7 +143,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         // User is not owner so he has not access to the last copy
         open("/book/1/last", "true");
         waitForPageToLoad();
-        checkAccessDenied();
+        checkNotFound();
     }
 
     /**

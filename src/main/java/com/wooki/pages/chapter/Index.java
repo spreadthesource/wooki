@@ -125,11 +125,6 @@ public class Index extends BookBase
         this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
         if (this.getPublication() == null) { return new HttpError(404, "Chapter not found"); }
 
-        // Return to book index in case of abstract watching
-        List<Chapter> chapters = chapterManager.listChaptersInfo(this.getBookId());
-        if (!this.isViewingRevision() && chapterId.equals(chapters.get(0).getId())) { return this
-                .redirectToBookIndex(); }
-
         return true;
     }
 
@@ -178,8 +173,8 @@ public class Index extends BookBase
 
         publicLinks.add(new ViewLink("chapter/history", "history", getBookId(), chapterId));
         publicLinks.add(new ViewLink("chapter/issues", "all-feedback", getBookId(), Issues.ALL));
-        publicLinks.add(new ViewLink(chapter, "chapter/issues", "chapter-feedback", false, getBookId(),
-                chapterId));
+        publicLinks.add(new ViewLink(chapter, "chapter/issues", "chapter-feedback", false,
+                getBookId(), chapterId));
         publicLinks.add(new ExportLink("rss-feed", "feed", getBookId()));
     }
 

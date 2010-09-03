@@ -18,6 +18,13 @@
                             <input t:validate="required" t:type="textfield" t:id="title" t:value="book.title"/>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label t:type="label" t:for="abstract">
+                            </label>
+                            <input t:type="textarea" t:id="abstract" t:value="book.abstract"/>
+                        </td>
+                    </tr>
                 </table>
                 <div class="form-submit">
                     <t:submit class="btn-active" t:value="Update" />or <a href="#" t:type="pagelink" t:page="book/settings" t:mixins="ResetFormOnClick">cancel</a>

@@ -498,7 +498,7 @@ jQuery.extend(Tapestry.Initializer, {
 			stop: function(event, ui) {
 				id = ui.item.attr('id').split('-')[1];
 				Tapestry.ajaxRequest(params.url, {
-					parameters : $H({chapterId: id, newPos: jQuery("ol li").index(ui.item)}),
+					parameters : $H({chapterId: id, newPos: jQuery(".toc-row").index(ui.item)}),
 					onFailure : function() {
 						// Display an error message en reload page
 						alert(Wooki.Messages.sortChapterFailure);
@@ -534,6 +534,21 @@ jQuery.extend(Tapestry.Initializer, {
 				jQuery("#title").focus();
 			});
 		}
+	},
+	
+	/**
+	 * Initialize edit links on book index for authorized user.
+	 *
+	 */
+	initTocRows: function() {
+		jQuery('.toc-row').each(function(i) {
+			jQuery(this).bind("mouseenter", function(e){
+				jQuery(this).find(".nav").css('visibility','visible');
+			});
+			jQuery(this).bind("mouseleave", function(e){
+				jQuery(this).find(".nav").css('visibility','hidden');
+			});
+		});
 	}
 	
 });

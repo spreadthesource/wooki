@@ -26,12 +26,14 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
@@ -180,19 +182,20 @@ public class Index extends BookBase
     @AfterRender
     public void setupChapterSort()
     {
-        JSONObject params = new JSONObject();
-        params.put("url", resources.createEventLink("reorder").toAbsoluteURI());
-        jsSupport.addInitializerCall("initSortChapters", params);
-        jsSupport.addInitializerCall("initAddChapterFocus", new JSONObject());
+        if (securityCtx.canWrite(getBook()))
+        {
+            JSONObject params = new JSONObject();
+            params.put("url", resources.createEventLink("reorder").toAbsoluteURI());
+            jsSupport.addInitializerCall("initAddChapterFocus", new JSONObject());
+            jsSupport.addInitializerCall("initSortChapters", params);
+            jsSupport.addInitializerCall("initTocRows", new JSONObject());
+        }
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
-    public Object addNewChapter()
+    public void addNewChapter()
     {
-        Chapter chapter = bookManager.addChapter(this.getBook(), chapterName);
-        editChapter.setBookId(this.getBookId());
-        editChapter.setChapterId(chapter.getId());
-        return editChapter;
+        bookManager.addChapter(this.getBook(), chapterName);
     }
 
     /**
@@ -236,6 +239,12 @@ public class Index extends BookBase
         return feedSource.produceFeed(ActivitySourceType.BOOK, bookId);
     }
 
+    @OnEvent(value = "publish")
+    public void publish(Long chapterId)
+    {
+        chapterManager.publishChapter(chapterId);
+    }
+
     public String[] getPrintErrors()
     {
         return new String[]
@@ -254,7 +263,7 @@ public class Index extends BookBase
 
         Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
 
-        return (publication != null);
+        return publication != null;
     }
 
     public boolean isShowWorkingCopyLink()

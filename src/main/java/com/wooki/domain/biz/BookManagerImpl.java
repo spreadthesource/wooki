@@ -22,6 +22,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 
 import com.ibm.icu.util.Calendar;
+import com.wooki.Draft;
 import com.wooki.domain.dao.ActivityDAO;
 import com.wooki.domain.dao.BookDAO;
 import com.wooki.domain.dao.ChapterDAO;
@@ -60,9 +61,11 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     private final SecurityManager securityManager;
 
     private final WookiSecurityContext securityCtx;
+    
+    private final ChapterManager chapterManager;
 
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
-            ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService)
+            ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService, ChapterManager chapterManager)
     {
         this.bookDao = bookDAO;
         this.userDao = userDAO;
@@ -72,6 +75,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
         this.securityCtx = context.getBean(WookiSecurityContext.class);
         this.securityManager = context.getBean(SecurityManager.class);
+        this.chapterManager = chapterManager;
     }
 
     public User addAuthor(Book book, String username) throws UserNotFoundException,
@@ -194,6 +198,9 @@ public class BookManagerImpl extends AbstractManager implements BookManager
 
         Book book = bookDao.findById(bookId);
 
+        if (!this.securityCtx.isLoggedIn() || !this.securityCtx.canWrite(book)) { throw new AuthorizationException(
+        "Action not authorized"); }
+        
         List<Chapter> chapters = book.getChapters();
         Chapter toMove = null;
         for (Chapter chapter : chapters)
@@ -253,7 +260,13 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         activity.setType(ChapterEventType.CREATE);
         activity.setChapter(chapter);
         activityDao.create(activity);
-
+        
+        // Create a first draft
+        Draft draft = new Draft();
+        draft.setTimestamp(chapter.getCreationDate());
+        draft.setData("");
+        chapterManager.updateContent(chapter.getId(), draft);
+        
         return chapter;
     }
 

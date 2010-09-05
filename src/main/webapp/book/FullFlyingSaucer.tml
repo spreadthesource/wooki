@@ -35,10 +35,11 @@
 
 			<div id="content">
 			
-				<h2 class="breaker" id="abstract">Abstract</h2>
-				<t:outputRaw value="content" />
+				<p>
+					<t:outputRaw value="book?.abstract" />
+				</p>
 		    
-			    <h2 class="breaker" id="toc">Table of contents</h2>
+			    <h2 id="toc">Table of contents</h2>
 			    
 			    <ol id="table-of-contents">
 			        <t:loop t:source="chaptersInfo" t:value="currentChapter" t:index="chapterIdx">

@@ -16,10 +16,13 @@
 
 package com.wooki.pages.book;
 
+import java.util.List;
+
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Meta;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Context;
@@ -27,7 +30,11 @@ import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
 import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
+import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
+import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
+import com.wooki.domain.model.User;
 import com.wooki.installer.services.GlobalSettingsTask;
 import com.wooki.services.UploadedAssetDispatcher;
 import com.wooki.services.parsers.DOMManager;
@@ -37,7 +44,7 @@ import com.wooki.services.parsers.DOMManager;
  */
 @Meta(value =
 { "content-type=text/xml" })
-public class FullFlyingSaucer extends Index
+public class FullFlyingSaucer extends BookBase
 {
 
     @Inject
@@ -61,21 +68,35 @@ public class FullFlyingSaucer extends Index
     @Property
     private int chapterIdx;
 
+    @Property
+    private List<User> authors;
+
+    @Property
+    private User currentUser;
+
+    @Property
+    private List<Chapter> chaptersInfo;
+
+    @Property
+    private int loopIdx;
+
+    @Property
+    private Chapter currentChapter;
+
+    @SetupRender
+    public void setupBookDisplay()
+    {
+
+        this.authors = this.getBook().getAuthors();
+
+        // List chapter infos
+        chaptersInfo = chapterManager.listChaptersInfo(this.getBookId());
+
+    }
+
     public String getPrintCssPath()
     {
         return this.context.getRealFile("/static/css/print.css").getAbsolutePath();
-    }
-
-    @Override
-    public void setupMenus()
-    {
-        // Empty in print mode
-    }
-
-    @Override
-    public void setupNav()
-    {
-        // Empty for print version
     }
 
     @Override
@@ -87,8 +108,7 @@ public class FullFlyingSaucer extends Index
 
     public String getLastPublishedContent()
     {
-        String result = this.chapterManager.getLastPublishedContent(this.getCurrentChapter()
-                .getId());
+        String result = this.chapterManager.getLastPublishedContent(currentChapter.getId());
 
         // TODO find a cleaner way to transform image URLs
         return applyGlobalReplaces(result);
@@ -113,6 +133,15 @@ public class FullFlyingSaucer extends Index
         }
     }
 
+    public boolean isPublished()
+    {
+        long chapterId = currentChapter.getId();
+
+        Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+
+        return publication != null;
+    }
+    
     /**
      * TODO Better the global replace chain for future work.
      * 

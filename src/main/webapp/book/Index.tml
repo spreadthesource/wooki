@@ -36,47 +36,65 @@
     <ol id="table-of-contents">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
-                <li id="chapter-${currentChapter.id}">
+                <li id="chapter-${currentChapter.id}" class="toc-row">
                     <h3>
                         <t:pagelink t:page="chapter/index" t:context="chapterCtx">
                             ${currentChapter.title}
                         </t:pagelink>
-                        <t:if t:test="showWorkingCopyLink">
-                            <t:security.ifCanWrite t:object="book">
-                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-                                    <em>(Working copy) </em>
-                                </t:pagelink>
-                            </t:security.ifCanWrite>
-                        </t:if>
                     </h3>
-                    <p class="last-update">
+                  	<p class="last-update">
                         <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
                     </p>
+					<t:delegate to="block:tocNav" />                   
                 </li>
                 <p:else>
 					<t:security.ifCanWrite t:object="book">
-                		<t:if t:test="showWorkingCopyLink">
-                			<li id="chapter-${currentChapter.id}">
-                                <h3>
-		                        	<span class="inactive">${currentChapter.title} <em>(not published) </em></span>
-	                                <t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-	                                    <em>(Working copy) </em>
-	                                </t:pagelink>
-			                    </h3>
-			                    <p class="last-update">
-			                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-			                    </p>
-			                </li>
-                        </t:if>
+               			<li id="chapter-${currentChapter.id}" class="toc-row">
+							<h3>
+	                        	<span class="inactive">${currentChapter.title}</span>
+		                    </h3>
+		                    <p class="last-update">
+		                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+		                    </p>
+		                    <t:delegate to="block:tocNav" />                   
+		                </li>
 					</t:security.ifCanWrite>
                 </p:else>
             </t:if>
         </t:loop>
     </ol>
+    
+    <t:block id="tocNav">
+    	<ul class="nav">
+			<t:security.ifCanWrite t:object="book">
+            	<li class="first">
+					<t:pagelink t:page="chapter/edit" t:context="[book?.id,currentChapter?.id]">
+						Edit
+					</t:pagelink>
+	            </li>
+	            <t:if t:test="showWorkingCopyLink">
+	            	<li>
+		            	<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+							Working copy
+						</t:pagelink>
+					</li>
+					<li>
+						<t:eventLink t:event="publish" t:context="currentChapter?.id">
+					        Publish
+						</t:eventLink>
+					</li>
+                </t:if>
+                <p:else>
+                	<li class="li-place-holder first"></li>
+				</p:else>
+             </t:security.ifCanWrite>
+         </ul>
+    </t:block>
+    
 	<t:security.ifCanWrite t:object="book">
            <!-- Add chapter section based on simple show hide mechanism -->
            <h3 id="add-chapter-link">
-               <t:actionlink class="active" t:id="showAddChapterField" t:mixins="wooki/showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter">
+               <t:actionlink class="active" t:id="showAddChapterField" t:mixins="wooki/showHideOnClick" t:toShow="add-chapter-form" t:hideLnkId="hide-add-chapter" t:resetFormClass="small-form">
                    Add a chapter
                </t:actionlink>
            </h3>
@@ -90,7 +108,7 @@
                        </tr>
                    </table>
                    <div class="form-submit">
-                       <input t:type="submit" class="btn-active" value="Add Chapter" />or <a href="#" id="hide-add-chapter">cancel</a>
+                       <input t:type="submit" class="btn-active" value="Add Chapter" /> or <a href="#" id="hide-add-chapter">close</a>
                    </div>
                </t:form>
            </div>

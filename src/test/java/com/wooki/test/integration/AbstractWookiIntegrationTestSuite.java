@@ -162,7 +162,7 @@ public abstract class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
         Assert.assertTrue(
                 this.getText("//div[@id='book']").contains("Table of contents"),
                 "Cannot find Table of contents");
-        Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']//li"), number);
+        Assert.assertEquals(this.getXpathCount("//ol[@id='table-of-contents']/li"), number);
     }
 
     /**

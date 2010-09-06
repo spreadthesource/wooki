@@ -38,6 +38,25 @@ jQuery.extend(Tapestry.Initializer, {
 				return false;
 			});
 		}
+	}, 
+	
+
+	/**
+	 * Used by confirm mixin
+	 */
+	initConfirm: function(params) {
+		if(params !== undefined && params.lnkId !== undefined) {
+			$(params.lnkId).observe('click', function(e) {
+				message = "Are you sure you want to delete this item ?";
+				if(params.message !== undefined) {
+					message = params.message;
+				}
+				if(!window.confirm(message)) {
+					Event.stop(e);
+					return;
+				}
+			}.bind(params));
+		}
 	}
 
 });

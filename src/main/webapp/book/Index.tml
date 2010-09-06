@@ -33,7 +33,7 @@
 
     <h2>Table of contents</h2>
     
-    <ol id="table-of-contents">
+    <ol id="table-of-contents" t:type="zone" t:id="tableOfContents" t:update="none">
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
                 <li id="chapter-${currentChapter.id}" class="toc-row">
@@ -42,10 +42,7 @@
                             ${currentChapter.title}
                         </t:pagelink>
                     </h3>
-                  	<p class="last-update">
-                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-                    </p>
-					<t:delegate to="block:tocNav" />                   
+					<t:delegate t:to="block:tocNav" />
                 </li>
                 <p:else>
 					<t:security.ifCanWrite t:object="book">
@@ -53,10 +50,7 @@
 							<h3>
 	                        	<span class="inactive">${currentChapter.title}</span>
 		                    </h3>
-		                    <p class="last-update">
-		                        <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
-		                    </p>
-		                    <t:delegate to="block:tocNav" />                   
+		                    <t:delegate t:to="block:tocNav" />
 		                </li>
 					</t:security.ifCanWrite>
                 </p:else>
@@ -65,30 +59,43 @@
     </ol>
     
     <t:block id="tocNav">
-    	<ul class="nav">
-			<t:security.ifCanWrite t:object="book">
-            	<li class="first">
-					<t:pagelink t:page="chapter/edit" t:context="[book?.id,currentChapter?.id]">
-						Edit
-					</t:pagelink>
-	            </li>
-	            <t:if t:test="showWorkingCopyLink">
+    	<div class="toc-chapter-navbar nav">
+    		<p class="last-update">
+		    	Last updated <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+			</p>
+	    	<ul class="nav">
+				<t:security.ifCanWrite t:object="book">
+					<li class="first">
+						<a href="#" class="toc-move-handler">Move</a>
+		            </li>
 	            	<li>
-		            	<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-							Working copy
+						<t:pagelink t:page="chapter/edit" t:context="[book?.id,currentChapter?.id]">
+							Edit
 						</t:pagelink>
+		            </li>
+		            <li>
+						<a t:type="eventLink" t:event="delete" t:context="currentChapter?.id" t:mixins="wooki/confirm">
+					        Delete
+						</a>
 					</li>
-					<li>
-						<t:eventLink t:event="publish" t:context="currentChapter?.id">
-					        Publish
-						</t:eventLink>
-					</li>
-                </t:if>
-                <p:else>
-                	<li class="li-place-holder first"></li>
-				</p:else>
-             </t:security.ifCanWrite>
-         </ul>
+					<t:if t:test="showWorkingCopyLink">
+		            	<li>
+			            	<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+								Working copy
+							</t:pagelink>
+						</li>
+						<li>
+							<a t:type="eventLink" t:event="publish" t:context="currentChapter?.id">
+						        Publish
+							</a>
+						</li>
+	                </t:if>					
+	                <p:else>
+	                	<li class="li-place-holder first"></li>
+					</p:else>
+	             </t:security.ifCanWrite>
+	         </ul>
+         </div>
     </t:block>
     
 	<t:security.ifCanWrite t:object="book">
@@ -99,7 +106,7 @@
                </t:actionlink>
            </h3>
            <div style="display:none;" id="add-chapter-form">
-               <t:form t:id="addChapterForm" class="small-form">
+               <t:form t:id="addChapterForm" class="small-form" t:zone="table-of-contents">
                    <table>
                        <tr>
                            <td>

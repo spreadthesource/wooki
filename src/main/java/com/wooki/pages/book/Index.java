@@ -26,15 +26,18 @@ import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Import;
+import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.RequestParameter;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
+import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.sun.syndication.feed.atom.Feed;
@@ -90,8 +93,14 @@ public class Index extends BookBase
     @Inject
     private ComponentResources resources;
 
+    @Inject
+    private Request request;
+
     @InjectPage
     private Edit editChapter;
+
+    @InjectComponent
+    private Zone tableOfContents;
 
     @Property
     @Persist(PersistenceConstants.FLASH)
@@ -187,13 +196,15 @@ public class Index extends BookBase
             jsSupport.addInitializerCall("initAddChapterFocus", new JSONObject());
             jsSupport.addInitializerCall("initSortChapters", params);
             jsSupport.addInitializerCall("initTocRows", new JSONObject());
+            jsSupport.addInitializerCall("listenTocUpdate", new JSONObject());
         }
     }
 
     @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
-    public void addNewChapter()
+    public Object addNewChapter()
     {
         bookManager.addChapter(this.getBook(), chapterName);
+        return tocRefresh();
     }
 
     /**
@@ -238,9 +249,17 @@ public class Index extends BookBase
     }
 
     @OnEvent(value = "publish")
-    public void publish(Long chapterId)
+    public Object publish(Long chapterId)
     {
         chapterManager.publishChapter(chapterId);
+        return tocRefresh();
+    }
+
+    @OnEvent(value = "delete")
+    public Object delete(Long chapterId)
+    {
+        chapterManager.remove(chapterId);
+        return tocRefresh();
     }
 
     public String[] getPrintErrors()
@@ -306,6 +325,16 @@ public class Index extends BookBase
     public void setCurrentChapter(Chapter currentChapter)
     {
         this.currentChapter = currentChapter;
+    }
+
+    private Object tocRefresh()
+    {
+        if (request.isXHR())
+        {
+            setupBookDisplay();
+            return tableOfContents.getBody();
+        }
+        return null;
     }
 
 }

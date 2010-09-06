@@ -438,24 +438,6 @@ jQuery.extend(Tapestry.Initializer, {
 	},
 	
 	/**
-	 * 
-	 */
-	initConfirm: function(params) {
-		if(params !== undefined && params.lnkId !== undefined) {
-			$(params.lnkId).observe('click', function(e) {
-				message = "Are you sure you want to delete this item ?";
-				if(params.message !== undefined) {
-					message = params.message;
-				}
-				if(!window.confirm(message)) {
-					Event.stop(e);
-					return;
-				}
-			}.bind(params));
-		}
-	},
-	
-	/**
 	 * Init a link that will update a zone with a 
 	 *
 	 */
@@ -495,6 +477,7 @@ jQuery.extend(Tapestry.Initializer, {
 	initSortChapters : function(params) {
 		jQuery("#table-of-contents").sortable({
 			cursor: 'move',
+			handle: 'a.toc-move-handler',
 			stop: function(event, ui) {
 				id = ui.item.attr('id').split('-')[1];
 				Tapestry.ajaxRequest(params.url, {
@@ -514,6 +497,7 @@ jQuery.extend(Tapestry.Initializer, {
 				} );
 			},
 		});
+		
 	},
 	
 	/**
@@ -543,12 +527,19 @@ jQuery.extend(Tapestry.Initializer, {
 	initTocRows: function() {
 		jQuery('.toc-row').each(function(i) {
 			jQuery(this).bind("mouseenter", function(e){
-				jQuery(this).find(".nav").css('visibility','visible');
+				jQuery(this).find(".toc-chapter-navbar").css('visibility','visible');
 			});
 			jQuery(this).bind("mouseleave", function(e){
-				jQuery(this).find(".nav").css('visibility','hidden');
+				jQuery(this).find(".toc-chapter-navbar").css('visibility','hidden');
 			});
 		});
+	},
+	
+	/**
+	 * Listen to chapter update and apply TOC initialisation method
+	 */
+	listenTocUpdate: function() {
+		$("table-of-contents").observeAction(Tapestry.ZONE_UPDATED_EVENT, Tapestry.Initializer.initTocRows);
 	}
 	
 });

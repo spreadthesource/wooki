@@ -4,6 +4,7 @@ import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.ClientElement;
 import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -20,6 +21,8 @@ import com.wooki.links.PageLink;
  * 
  * @author ccordenier
  */
+@Import(library =
+{ "context:/static/js/wooki-core.js" })
 public class NavItem implements ClientElement
 {
     @Parameter

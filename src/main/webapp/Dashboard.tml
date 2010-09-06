@@ -39,7 +39,7 @@
 	        <ul>
 				<t:loop source="userBooks" value="currentBook" t:empty="block:noBooks">
 	            	<li id="ent-${currentBook.id}">
-						<span><a t:id="removeBook" class="delete-book-link" t:type="eventlink" t:event="removeBook" t:context="currentBook.id" t:mixins="confirm" t:message="Doing this will delete the book and all its related activities ?" title="Delete Book">Delete</a></span>
+						<span><a t:id="removeBook" class="delete-book-link" t:type="eventlink" t:event="removeBook" t:context="currentBook.id" t:mixins="wooki/confirm" t:message="Doing this will delete the book and all its related activities ?" title="Delete Book">Delete</a></span>
 	       				<a t:type="pagelink" t:page="book/index" t:context="currentBook.id">${currentBook.title}</a>
 	         		</li>
 	         	</t:loop>

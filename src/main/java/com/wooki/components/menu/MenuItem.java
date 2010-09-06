@@ -1,6 +1,7 @@
 package com.wooki.components.menu;
 
 import org.apache.tapestry5.annotations.AfterRender;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
@@ -14,6 +15,8 @@ import com.wooki.links.EventLink;
 import com.wooki.links.Link;
 import com.wooki.links.PageLink;
 
+@Import(library =
+{ "context:/static/js/wooki-core.js" })
 public class MenuItem
 {
 

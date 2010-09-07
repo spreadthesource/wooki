@@ -292,8 +292,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         // Add abstract
         Chapter bookAbstract = new Chapter();
         bookAbstract.setCreationDate(creationDate);
-        bookAbstract.setTitle("Abstract");
-        bookAbstract.setSlugTitle("Abstract");
+        bookAbstract.setTitle("Introduction");
+        bookAbstract.setSlugTitle("Introduction");
         book.addChapter(bookAbstract);
         book.setOwner(author);
         book.addUser(author);
@@ -312,6 +312,12 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         // Set permissions
         this.securityManager.setOwnerPermission(book);
 
+        // Update content on introduction chapter
+        Draft draft = new Draft();
+        draft.setData("");
+        draft.setTimestamp(book.getCreationDate());
+        chapterManager.updateContent(bookAbstract.getId(), draft);
+        
         return book;
     }
 

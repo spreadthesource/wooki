@@ -40,11 +40,16 @@ public class LastModifiedFormatter
     @Inject
     private ServicesMessages messages;
 
-    @Parameter(required = true, allowNull = false)
-    private long time;
+    @Parameter(required = true)
+    private Long time;
 
     @Parameter(value = "date", defaultPrefix = BindingConstants.LITERAL)
     private String className;
+
+    public boolean setupRender()
+    {
+        return time == null ? false : true;
+    }
 
     @BeginRender
     public void displayDate(MarkupWriter writer)

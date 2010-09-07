@@ -3,9 +3,6 @@
 
 	<t:feedlink t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
 
-    <t:if test="printError">
-        <t:errors t:messages="prop:printErrors"/>
-    </t:if>
     <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
     <div id="meta">
         <p id="authors">
@@ -34,6 +31,9 @@
     <h2>Table of contents</h2>
     
     <ol id="table-of-contents" t:type="zone" t:id="tableOfContents" t:update="none">
+    
+		<t:wooki.flashmessage />
+    
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">
                 <li id="chapter-${currentChapter.id}" class="toc-row">

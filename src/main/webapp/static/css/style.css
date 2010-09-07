@@ -303,14 +303,14 @@ span.autosave { margin-left: 10px; }
 #table-of-contents li.toc-row { display:block; padding:5px; list-style:none; padding-bottom: 0px; }
 #table-of-contents h3 { width: 100%; float:left; padding-top: 5px; padding-bottom: 0px; }
 
-#table-of-contents span.inactive { color: #6E6D65; }
 #table-of-contents div {width: 100%;}
-#table-of-contents div.toc-chapter-navbar {width: 100%; text-align: right; padding: 0px; margin: 0px; visibility: hidden; font-size: 12px;}
+#table-of-contents div.toc-chapter-navbar {clear:left; width: 100%; text-align: right; padding: 0px; margin: 0px; visibility: hidden; font-size: 12px;}
 #table-of-contents div.toc-chapter-navbar li {border-left: 1px solid #C9BB9B;}
 #table-of-contents div.toc-chapter-navbar li.first {border: none;}
-
 #table-of-contents div.toc-chapter-navbar p {float: left; width: auto; padding: 0px;}
-#table-of-contents div.toc-chapter-navbar ul {width: auto; padding: 0px;}
+#table-of-contents div.toc-chapter-navbar ul {width: auto; padding: 0px; margin: 0px;}
+
+#table-of-contents span.inactive { color: #6E6D65; }
 #table-of-contents a.toc-move-handler {cursor: move;}
 
 #add-chapter-link { float: none;  margin-top: 20px; }

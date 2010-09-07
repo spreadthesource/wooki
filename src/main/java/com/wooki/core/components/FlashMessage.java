@@ -28,7 +28,7 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 public class FlashMessage
 {
 
-    @Parameter
+    @Parameter(autoconnect = true, required = true)
     private String message;
 
     @Inject
@@ -65,6 +65,7 @@ public class FlashMessage
         {
             support.addInitializerCall("initFlashMsgBox", this.flashMessageId);
         }
+        message = null;
     }
 
 }

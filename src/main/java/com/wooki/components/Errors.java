@@ -20,25 +20,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.ValidationTracker;
 import org.apache.tapestry5.annotations.Environmental;
-import org.apache.tapestry5.annotations.IncludeJavaScriptLibrary;
-import org.apache.tapestry5.annotations.IncludeStylesheet;
+import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
-@IncludeJavaScriptLibrary(
-{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" })
-@IncludeStylesheet("context:/static/css/jquery.notifyBar.css")
+/**
+ * This component can be used for forms but also for messages coming from action links.
+ * 
+ * @author ccordenier
+ */
+@Import(library =
+{ "context:/static/js/jquery.notifyBar.js", "context:/static/js/notifybar.js" }, stylesheet = "context:/static/css/jquery.notifyBar.css")
 public class Errors
 {
 
-    @Parameter
+    @Parameter(autoconnect = true)
     private String[] messages;
 
     @Inject
-    private RenderSupport support;
+    private JavaScriptSupport support;
 
     // Allow null so we can generate a better error message if missing
     @Environmental(false)
@@ -92,7 +95,7 @@ public class Errors
     {
         if (errorListId != null)
         {
-            support.addInit("initErrorBox", this.errorListId);
+            support.addInitializerCall("initErrorBox", this.errorListId);
         }
     }
 

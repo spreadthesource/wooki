@@ -39,6 +39,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
+import org.slf4j.Logger;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
@@ -96,15 +97,14 @@ public class Index extends BookBase
     @Inject
     private Request request;
 
+    @Inject
+    private Logger logger;
+
     @InjectPage
     private Edit editChapter;
 
     @InjectComponent
     private Zone tableOfContents;
-
-    @Property
-    @Persist(PersistenceConstants.FLASH)
-    private boolean printError;
 
     @Property
     private User currentUser;
@@ -117,6 +117,10 @@ public class Index extends BookBase
 
     @Property
     private List<Chapter> chaptersInfo;
+
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private String flashMessage;
 
     private Chapter currentChapter;
 
@@ -203,8 +207,17 @@ public class Index extends BookBase
     @OnEvent(value = EventConstants.SUCCESS, component = "addChapterForm")
     public Object addNewChapter()
     {
-        bookManager.addChapter(this.getBook(), chapterName);
-        return tocRefresh();
+        try
+        {
+            bookManager.addChapter(this.getBook(), chapterName);
+            flashMessage = messages.format("chapter-add-success", chapterName);
+            return tocRefresh();
+        }
+        catch (Exception ex)
+        {
+            logger.error("An Error has occured while creating new chapter", ex);
+            return this;
+        }
     }
 
     /**
@@ -222,8 +235,7 @@ public class Index extends BookBase
         }
         catch (Exception ex)
         {
-            this.printError = true;
-            ex.printStackTrace();
+            logger.error("An Error has occured during PDF generation", ex);
             return this;
         }
     }
@@ -252,6 +264,7 @@ public class Index extends BookBase
     public Object publish(Long chapterId)
     {
         chapterManager.publishChapter(chapterId);
+        flashMessage = messages.format("chapter-publish-success", chapterName);
         return tocRefresh();
     }
 
@@ -259,13 +272,8 @@ public class Index extends BookBase
     public Object delete(Long chapterId)
     {
         chapterManager.remove(chapterId);
+        flashMessage = messages.format("chapter-delete-success", chapterName);
         return tocRefresh();
-    }
-
-    public String[] getPrintErrors()
-    {
-        return new String[]
-        { this.messages.get("print-error") };
     }
 
     @OnEvent(value = EventConstants.PASSIVATE)

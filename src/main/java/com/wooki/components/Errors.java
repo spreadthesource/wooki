@@ -54,13 +54,16 @@ public class Errors
 
         List<String> errors = null;
 
-        if (tracker == null && messages != null)
+        if (messages != null && messages.length > 0)
         {
             errors = Arrays.asList(messages);
         }
         else
         {
-            errors = tracker.getErrors();
+            if (tracker != null)
+            {
+                errors = tracker.getErrors();
+            }
         }
 
         if (errors != null && !errors.isEmpty())

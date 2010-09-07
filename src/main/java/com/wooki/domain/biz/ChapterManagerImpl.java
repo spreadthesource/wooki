@@ -160,7 +160,7 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         return null;
     }
 
-    public void publishChapter(Long chapterId)
+    public Chapter publishChapter(Long chapterId)
     {
 
         assert chapterId != null;
@@ -213,6 +213,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         ca.setCreationDate(Calendar.getInstance().getTime());
         ca.setUser(author);
         activityDao.create(ca);
+
+        return chapter;
 
     }
 
@@ -293,11 +295,15 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         publishChapter(chapterId);
     }
 
-    public void remove(Long chapterId)
+    public Chapter remove(Long chapterId)
     {
         assert chapterId != null;
 
         Chapter toDelete = chapterDao.findById(chapterId);
+
+        if (toDelete == null) { throw new IllegalArgumentException("Cannot find chapter with id "
+                + chapterId); }
+
         if (toDelete != null)
         {
             // The logged user must be allow to write to the book to delete a chapter in it
@@ -327,6 +333,8 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
             // TODO Delete publication entries also ??
 
         }
+
+        return toDelete;
 
     }
 

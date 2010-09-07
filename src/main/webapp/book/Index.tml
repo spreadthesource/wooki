@@ -33,6 +33,8 @@
     <ol id="table-of-contents" t:type="zone" t:id="tableOfContents" t:update="none">
     
 		<t:wooki.flashmessage />
+		
+		<t:errors />
     
         <t:loop t:source="chaptersInfo" t:value="currentChapter">
             <t:if t:test="published">

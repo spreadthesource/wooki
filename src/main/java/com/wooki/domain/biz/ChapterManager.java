@@ -101,7 +101,7 @@ public interface ChapterManager
      * @param chapterId
      */
     @CommitAfter
-    void publishChapter(Long chapter);
+    Chapter publishChapter(Long chapter);
 
     /**
      * Find the last published chapter content.
@@ -161,9 +161,10 @@ public interface ChapterManager
      * 
      * @param book
      * @param chapterId
+     * @return TODO
      */
     @CommitAfter
-    void remove(Long chapterId);
+    Chapter remove(Long chapterId);
 
     /**
      * List the chapters for a given book.

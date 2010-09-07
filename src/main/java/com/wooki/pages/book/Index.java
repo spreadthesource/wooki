@@ -27,7 +27,6 @@ import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
-import org.apache.tapestry5.annotations.InjectPage;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
@@ -55,7 +54,6 @@ import com.wooki.links.impl.EditLink;
 import com.wooki.links.impl.ExportLink;
 import com.wooki.links.impl.NavLink;
 import com.wooki.links.impl.ViewLink;
-import com.wooki.pages.chapter.Edit;
 import com.wooki.services.BookStreamResponse;
 import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.export.ExportService;
@@ -100,9 +98,6 @@ public class Index extends BookBase
     @Inject
     private Logger logger;
 
-    @InjectPage
-    private Edit editChapter;
-
     @InjectComponent
     private Zone tableOfContents;
 
@@ -121,6 +116,10 @@ public class Index extends BookBase
     @Property
     @Persist(PersistenceConstants.FLASH)
     private String flashMessage;
+
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private String[] errors;
 
     private Chapter currentChapter;
 
@@ -215,6 +214,8 @@ public class Index extends BookBase
         }
         catch (Exception ex)
         {
+            errors = new String[]
+            { messages.get("chapter-add-failure") };
             logger.error("An Error has occured while creating new chapter", ex);
             return this;
         }
@@ -235,6 +236,8 @@ public class Index extends BookBase
         }
         catch (Exception ex)
         {
+            errors = new String[]
+            { messages.get("print-error") };
             logger.error("An Error has occured during PDF generation", ex);
             return this;
         }
@@ -263,17 +266,37 @@ public class Index extends BookBase
     @OnEvent(value = "publish")
     public Object publish(Long chapterId)
     {
-        chapterManager.publishChapter(chapterId);
-        flashMessage = messages.format("chapter-publish-success", chapterName);
-        return tocRefresh();
+        try
+        {
+            Chapter toPublish = chapterManager.publishChapter(chapterId);
+            flashMessage = messages.format("chapter-publish-success", toPublish.getTitle());
+            return tocRefresh();
+        }
+        catch (Exception ex)
+        {
+            logger.error("An unexpected exception has occured during publish action", ex);
+            errors = new String[]
+            { messages.get("chapter-publish-failure") };
+            return this;
+        }
     }
 
     @OnEvent(value = "delete")
     public Object delete(Long chapterId)
     {
-        chapterManager.remove(chapterId);
-        flashMessage = messages.format("chapter-delete-success", chapterName);
-        return tocRefresh();
+        try
+        {
+            Chapter toRemove = chapterManager.remove(chapterId);
+            flashMessage = messages.format("chapter-delete-success", toRemove.getTitle());
+            return tocRefresh();
+        }
+        catch (Exception ex)
+        {
+            logger.error("An unexpected exception has occured during delete action", ex);
+            errors = new String[]
+            { messages.get("chapter-delete-failure") };
+            return this;
+        }
     }
 
     @OnEvent(value = EventConstants.PASSIVATE)
@@ -335,6 +358,11 @@ public class Index extends BookBase
         this.currentChapter = currentChapter;
     }
 
+    /**
+     * If request is XHR then return the TOC block, otherwise refresh the whole page.
+     * 
+     * @return
+     */
     private Object tocRefresh()
     {
         if (request.isXHR())

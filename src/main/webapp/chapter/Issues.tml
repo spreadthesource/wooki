@@ -3,7 +3,7 @@
 
 	<t:feedlink t:page="book/index" t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
 
-    <h2>Issues</h2>
+    <h2>${message:issues-page-title}</h2>
     <t:loop t:source="chapters" value="chapter" t:index="loopIdx">
 		<h3><a href="#" t:type="pagelink" t:page="chapter/index" t:context="chapterCtx">${chapter?.title}</a></h3>
         <t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" t:abstractChapter="prop:abstractChapter"/>

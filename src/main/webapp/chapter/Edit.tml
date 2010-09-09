@@ -15,7 +15,7 @@
 				<table>
 					<tr>
 						<td>
-							<t:textfield t:id="title" t:value="chapter.title" class="long-field" t:validate="required" />
+							<t:textfield t:id="title" t:value="chapter.title" class="long-field" />
 						</td>
 					</tr>
 				</table>

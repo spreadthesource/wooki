@@ -170,6 +170,16 @@ abbr { padding-right: 3px; padding-left: 3px; }
 .dialog-content { color:black; background: white; margin:0px 20px 20px 0px;}
 .dialog-container { display:none; }
 
+/*****
+ * SORTABLE chapter links
+ */
+.sort-ui-icon {background-image:url("../img/ui-icons_222222_256x240.png"); height:16px; width:16px; background-repeat:no-repeat;
+display:block;
+overflow:hidden;
+text-indent:-99999px;}
+.book-sort-ui-icon {background-position: -128px -48px; cursor: move; margin-left:-1.3em; position:absolute; }
+
+
 /******
  * COMMENT POPUP LINK
  */

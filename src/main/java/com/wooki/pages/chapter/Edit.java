@@ -99,7 +99,6 @@ public class Edit extends BookBase
     private Chapter chapter;
 
     @Property
-    @Validate("required")
     private String data;
 
     @Property

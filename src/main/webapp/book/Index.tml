@@ -36,66 +36,87 @@
 		
 		<t:errors />
     
-        <t:loop t:source="chaptersInfo" t:value="currentChapter">
-            <t:if t:test="published">
-                <li id="chapter-${currentChapter.id}" class="toc-row">
-                    <h3>
-                        <t:pagelink t:page="chapter/index" t:context="chapterCtx">
-                            ${currentChapter.title}
-                        </t:pagelink>
-                    </h3>
-					<t:delegate t:to="block:tocNav" />
-                </li>
-                <p:else>
-					<t:security.ifCanWrite t:object="book">
-               			<li id="chapter-${currentChapter.id}" class="toc-row">
+		<t:security.ifCanWrite t:object="book">
+		
+			<!-- For authors -->
+			<t:loop t:source="chaptersInfo" t:value="currentChapter">
+				<t:if t:test="published">
+	                <li id="chapter-${currentChapter.id}" class="toc-row">
+	                    <h3>
+	                        <a t:type="pagelink" t:page="chapter/index" t:context="chapterCtx" class="active">
+	                            ${currentChapter.title}
+	                        </a>
+	                    </h3>
+						<t:delegate t:to="block:tocNav" />
+	                </li>
+	                <p:else>
+	                	<li id="chapter-${currentChapter.id}" class="toc-row">
+		                	<h3>
+								<span class="inactive">${currentChapter.title}</span>
+							</h3>
+							<t:delegate t:to="block:tocNav" />
+						</li>
+	                </p:else>
+                </t:if>
+			</t:loop>
+			
+			<!-- For readers -->
+			<p:else>
+				<t:loop t:source="chaptersInfo" t:value="currentChapter">
+					<t:if t:test="published">
+						<li id="chapter-${currentChapter.id}" class="toc-row">
 							<h3>
-	                        	<span class="inactive">${currentChapter.title}</span>
-		                    </h3>
-		                    <t:delegate t:to="block:tocNav" />
-		                </li>
-					</t:security.ifCanWrite>
-                </p:else>
-            </t:if>
-        </t:loop>
+	                        	<t:pagelink t:page="chapter/index" t:context="chapterCtx">
+	                            	${currentChapter.title}
+	                        	</t:pagelink>
+	                    	</h3>
+							<div class="toc-chapter-navbar nav">
+					    		<p class="last-update">
+							    	Last updated <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
+								</p>
+						    	<ul class="nav">
+									<li class="li-place-holder first"></li>
+								</ul>
+					         </div>
+				         </li>
+					</t:if>
+				</t:loop>
+				
+			</p:else>
+			
+		</t:security.ifCanWrite>
+    
     </ol>
     
     <t:block id="tocNav">
     	<div class="toc-chapter-navbar nav">
+    		<span class="sort-ui-icon book-sort-ui-icon toc-move-handler"/>
     		<p class="last-update">
 		    	Last updated <t:lastModifiedFormatter t:time="currentChapter.lastModified?.time" />
 			</p>
 	    	<ul class="nav">
-				<t:security.ifCanWrite t:object="book">
-					<li class="first">
-						<a href="#" class="toc-move-handler">Move</a>
-		            </li>
+            	<li class="first">
+					<t:pagelink t:page="chapter/edit" t:context="[book?.id,currentChapter?.id]">
+						Edit
+					</t:pagelink>
+	            </li>
+	            <li>
+					<a t:type="eventLink" t:event="delete" t:context="currentChapter?.id" t:mixins="wooki/confirm">
+				        Delete
+					</a>
+				</li>
+				<t:if t:test="showWorkingCopyLink">
 	            	<li>
-						<t:pagelink t:page="chapter/edit" t:context="[book?.id,currentChapter?.id]">
-							Edit
+		            	<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
+							Working copy
 						</t:pagelink>
-		            </li>
-		            <li>
-						<a t:type="eventLink" t:event="delete" t:context="currentChapter?.id" t:mixins="wooki/confirm">
-					        Delete
+					</li>
+					<li>
+						<a t:type="eventLink" t:event="publish" t:context="currentChapter?.id">
+					        Publish
 						</a>
 					</li>
-					<t:if t:test="showWorkingCopyLink">
-		            	<li>
-			            	<t:pagelink t:page="chapter/index" t:context="chapterWorkingCopyCtx">
-								Working copy
-							</t:pagelink>
-						</li>
-						<li>
-							<a t:type="eventLink" t:event="publish" t:context="currentChapter?.id">
-						        Publish
-							</a>
-						</li>
-	                </t:if>					
-	                <p:else>
-	                	<li class="li-place-holder first"></li>
-					</p:else>
-	             </t:security.ifCanWrite>
+                </t:if>					
 	         </ul>
          </div>
     </t:block>

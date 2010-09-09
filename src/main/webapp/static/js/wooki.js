@@ -477,7 +477,7 @@ jQuery.extend(Tapestry.Initializer, {
 	initSortChapters : function(params) {
 		jQuery("#table-of-contents").sortable({
 			cursor: 'move',
-			handle: 'a.toc-move-handler',
+			handle: 'span.toc-move-handler',
 			stop: function(event, ui) {
 				id = ui.item.attr('id').split('-')[1];
 				Tapestry.ajaxRequest(params.url, {
@@ -490,7 +490,7 @@ jQuery.extend(Tapestry.Initializer, {
 					onSuccess : function() {
 						// Update next link
 						next = jQuery("#nav-right").find("a");
-						first = jQuery("#table-of-contents").children("li:first").find("a");
+						first = jQuery("#table-of-contents").find("a.active:first");
 						next.attr("href", first.attr("href"));
 						next.html(first.html() + " >");
 					}

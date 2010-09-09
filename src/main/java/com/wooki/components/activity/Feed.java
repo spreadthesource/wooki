@@ -20,13 +20,18 @@ import java.util.List;
 
 import org.apache.tapestry5.BindingConstants;
 import org.apache.tapestry5.Block;
+import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.Id;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
+import org.apache.tapestry5.internal.services.PageRenderQueue;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.Environment;
+import org.apache.tapestry5.services.PartialMarkupRenderer;
+import org.apache.tapestry5.services.PartialMarkupRendererFilter;
 
 import com.wooki.MoreEventResult;
 import com.wooki.WookiEventConstants;
@@ -81,6 +86,9 @@ public class Feed<T extends Activity>
     private Environment environment;
 
     @Inject
+    private PageRenderQueue renderQueue;
+
+    @Inject
     private EnumServiceLocator locator;
 
     @Property
@@ -129,7 +137,7 @@ public class Feed<T extends Activity>
     {
         this.source = this.locator.getService(this.type);
         int startIdx = nbElts * page;
-        Long [] parameters = context == null ? null : context.toArray(new Long[context.size()]);
+        Long[] parameters = context == null ? null : context.toArray(new Long[context.size()]);
         this.activities = this.source.listActivitiesRange(startIdx, this.nbElts, parameters);
         this.hasMore = this.activities.size() == nbElts;
     }
@@ -153,6 +161,28 @@ public class Feed<T extends Activity>
         MoreEventResult result = new MoreEventResult();
         result.setRenderable(this.activitiesBlock);
         result.setHasMore(this.activities.size() == this.nbElts);
+
+        // Add a filter that will set the environment before rendering elements
+        renderQueue.addPartialMarkupRendererFilter(new PartialMarkupRendererFilter()
+        {
+
+            public void renderMarkup(MarkupWriter writer, JSONObject reply,
+                    PartialMarkupRenderer renderer)
+            {
+                try
+                {
+                    environment
+                            .push(ActivityDisplayContext.class, new FeedActivityDisplayContext());
+                    renderer.renderMarkup(writer, reply);
+                }
+                finally
+                {
+                    environment.pop(ActivityDisplayContext.class);
+                }
+
+            }
+        });
+
         return result;
     }
 

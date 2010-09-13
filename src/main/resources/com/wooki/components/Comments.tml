@@ -1,0 +1,6 @@
+<t:container xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+	<t:loop t:source="chapters" value="chapter" t:index="loopIdx">
+		<h3><a href="#" t:type="pagelink" t:page="chapter/index" t:context="[bookId, chapter.getId()]">${chapter?.title}</a></h3>
+		<t:revisionIssue t:bookId="bookId" t:chapterId="chapter?.id" />
+	</t:loop>
+</t:container>

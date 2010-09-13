@@ -31,15 +31,15 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
     { "signin" })
     public void checkAbstractIssuesLink()
     {
-        open("chapter/issues/1/all");
+        open("book/issues/1");
         waitForPageToLoad();
-        Assert.assertTrue(isTextPresent("Abstract"));
+        Assert.assertTrue(isTextPresent("Introduction"));
         Assert.assertTrue(isTextPresent("Last Publication"));
         click("//div[@id='content']//h3[1]/a");
         waitForPageToLoad();
         checkBookTitle(BookNavigationTest.BOOK_TITLE);
 
-        open("chapter/issues/1/all");
+        open("book/issues/1");
         waitForPageToLoad();
         click("//div[@id='content']//ul[2]//a[2]");
         waitForPageToLoad();
@@ -54,9 +54,9 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
     public void checkChapterIssuesLink()
     {
         // open issues page
-        open("chapter/issues/1/all");
+        open("book/issues/1");
         waitForPageToLoad();
-        Assert.assertTrue(isTextPresent("Abstract"));
+        Assert.assertTrue(isTextPresent("Introduction"));
         Assert.assertTrue(isTextPresent("Last Publication"));
         // Click on the link to last publication (default)
         click("//div[@id='content']//h3[2]/a");
@@ -64,7 +64,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
         checkChapterTitle("Collaborative document publishing");
 
         // Click on the link to the revision
-        open("chapter/issues/1/all");
+        open("book/issues/1");
         waitForPageToLoad();
         click("//div[@id='content']//ul[3]//a[2]");
         waitForPageToLoad();

@@ -16,9 +16,6 @@
 
 package com.wooki.pages.book;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.ComponentResources;
@@ -40,24 +37,14 @@ import org.apache.tapestry5.services.Request;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 import org.slf4j.Logger;
 
-import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.io.FeedException;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
 import com.wooki.domain.model.User;
-import com.wooki.links.Link;
 import com.wooki.links.PageLink;
-import com.wooki.links.impl.EditLink;
-import com.wooki.links.impl.ExportLink;
 import com.wooki.links.impl.NavLink;
-import com.wooki.links.impl.ViewLink;
-import com.wooki.services.BookStreamResponse;
-import com.wooki.services.activity.ActivitySourceType;
-import com.wooki.services.export.ExportService;
-import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -79,12 +66,6 @@ public class Index extends BookBase
 
     @Inject
     private WookiSecurityContext securityCtx;
-
-    @Inject
-    private ExportService exportService;
-
-    @Inject
-    private FeedSource feedSource;
 
     @Inject
     private JavaScriptSupport jsSupport;
@@ -130,12 +111,6 @@ public class Index extends BookBase
     private String chapterName;
 
     @Property
-    private List<Link> publicLinks;
-
-    @Property
-    private List<Link> adminLinks;
-
-    @Property
     private PageLink right;
 
     private Long firstChapterId;
@@ -159,6 +134,10 @@ public class Index extends BookBase
 
         if (chaptersInfo != null && chaptersInfo.size() > 0)
         {
+            for (Chapter chapter : chaptersInfo)
+            {
+
+            }
             this.firstChapterId = chaptersInfo.get(0).getId();
             this.firstChapterTitle = chaptersInfo.get(0).getTitle();
         }
@@ -166,22 +145,9 @@ public class Index extends BookBase
     }
 
     @SetupRender
-    public void setupMenus()
-    {
-        publicLinks = new ArrayList<Link>();
-        adminLinks = new ArrayList<Link>();
-
-        publicLinks.add(new ViewLink("chapter/issues", "all-feedback", this.getBookId(), "all"));
-        publicLinks.add(new ExportLink("print-pdf", "pdf", this.getBookId()));
-        publicLinks.add(new ExportLink("rss-feed", "feed", this.getBookId()));
-
-        adminLinks.add(new EditLink(getBook(), "book/settings", "settings", getBookId()));
-
-    }
-
-    @SetupRender
     public void setupNav()
     {
+        selectMenuItem(0);
         if ((firstChapterId != null) && (firstChapterTitle != null))
         {
             right = new NavLink("chapter/index", "nav-right", firstChapterTitle, getBookId(),
@@ -195,7 +161,7 @@ public class Index extends BookBase
         if (securityCtx.canWrite(getBook()))
         {
             JSONObject params = new JSONObject();
-            params.put("url", resources.createEventLink("reorder").toAbsoluteURI());
+            params.put("url", resources.createEventLink("reorder").toURI());
             jsSupport.addInitializerCall("initAddChapterFocus", new JSONObject());
             jsSupport.addInitializerCall("initSortChapters", params);
             jsSupport.addInitializerCall("initTocRows", new JSONObject());
@@ -221,46 +187,11 @@ public class Index extends BookBase
         }
     }
 
-    /**
-     * Simply export to PDF.
-     * 
-     * @return
-     */
-    @OnEvent(value = "pdf")
-    public Object exportPdf()
-    {
-        try
-        {
-            InputStream bookStream = this.exportService.exportPdf(this.getBookId());
-            return new BookStreamResponse(this.getBook().getSlugTitle(), bookStream);
-        }
-        catch (Exception ex)
-        {
-            errors = new String[]
-            { messages.get("print-error") };
-            logger.error("An Error has occured during PDF generation", ex);
-            return this;
-        }
-    }
-
     @OnEvent(value = "reorder")
     public void reorder(@RequestParameter(value = "chapterId") Long chapterId,
             @RequestParameter(value = "newPos") int newPos)
     {
         bookManager.updateChapterIndex(getBookId(), chapterId, newPos);
-    }
-
-    /**
-     * Create the Atom feed of the book activity
-     * 
-     * @throws IOException
-     * @throws FeedException
-     * @throws IllegalArgumentException
-     */
-    @OnEvent(value = "feed")
-    public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException
-    {
-        return feedSource.produceFeed(ActivitySourceType.BOOK, bookId);
     }
 
     @OnEvent(value = "publish")

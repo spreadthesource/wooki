@@ -51,6 +51,8 @@
 				<value>index</value>
 				<value>book</value>
 				<value>book/index</value>
+				<value>book/issues</value>
+				<value>chapter/issues</value>
 				<value>chapter</value>
 				<value>chapter/index</value>
 				<value>chapter/issues</value>

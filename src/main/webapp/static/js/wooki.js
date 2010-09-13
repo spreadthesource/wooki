@@ -292,6 +292,7 @@ jQuery.extend(Tapestry.Initializer, {
 			jQuery.wymeditors(0).fullscreen();
 			jQuery.wymeditors(0).uploadImageDialog();
 			jQuery.wymeditors(0).autosave();
+			jQuery(".wym_iframe").focus();
 		}
 	},
 	

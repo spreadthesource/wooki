@@ -3859,7 +3859,6 @@ WYMeditor.WymClassExplorer.prototype.initIframe = function(iframe) {
     //This function is executed twice, though it is called once!
     //But MSIE needs that, otherwise designMode won't work.
     //Weird.
-    
     this._iframe = iframe;
     this._doc = iframe.contentWindow.document;
     
@@ -4078,6 +4077,7 @@ WYMeditor.WymClassMozilla.prototype.initIframe = function(iframe) {
     this.html(this._wym._html);
     
     //init designMode
+    this._doc.designMode = "on";
     this.enableDesignMode();
     
     //pre-bind functions

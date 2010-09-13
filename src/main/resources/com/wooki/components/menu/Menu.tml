@@ -3,8 +3,8 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
 	xmlns:p="tapestry:parameter">
 
-	<t:menu.menuBlock t:links="availablePublicLinks" t:class="book-menu shadowed" id="bookMenu" />
+	<t:menu.menuBlock t:links="availablePublicLinks" t:class="book-menu" id="bookMenu" />
 
-	<t:menu.menuBlock t:links="availableAdminLinks"  t:class="book-admin book-menu shadowed" id="adminMenu" />
+	<t:menu.menuBlock t:links="availableAdminLinks"  t:class="book-admin book-menu" id="adminMenu" />
 
 </t:container>

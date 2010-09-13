@@ -84,7 +84,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite
     @Test
     public void checkIssues()
     {
-        open("chapter/issues/1/all");
+        open("book/issues/1");
         waitForPageToLoad();
 
         int bookId = 1;

@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -92,6 +93,10 @@ public class Settings extends BookBase
     @Property
     private PageLink center;
 
+    @Property
+    @Persist(PersistenceConstants.FLASH)
+    private String flashMessage;
+
     private User loggedAuthor;
 
     @SetupRender
@@ -105,6 +110,14 @@ public class Settings extends BookBase
     {
         left = new ViewLink("book/index", "toc", getBookId());
         center = new NavLink("book/index", "book-root", getBook().getTitle(), getBookId());
+    }
+
+    @Override
+    @SetupRender
+    public void setupMenus()
+    {
+        super.setupMenus();
+        selectAdmin(0);
     }
 
     @OnEvent(value = EventConstants.PREPARE_FOR_SUBMIT)
@@ -159,6 +172,7 @@ public class Settings extends BookBase
         try
         {
             this.setBook(bookManager.updateTitle(this.getBook()));
+            flashMessage = messages.get("book-description-update-success");
         }
         catch (TitleAlreadyInUseException taiuEx)
         {

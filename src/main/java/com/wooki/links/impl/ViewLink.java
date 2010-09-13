@@ -28,7 +28,7 @@ public class ViewLink extends AbstractPageLink
         this.resource = resource;
         this.secured = secured;
     }
-
+    
     public boolean isAuthorized(WookiSecurityContext securityContext)
     {
         return resource != null && secured ? securityContext.canWrite(resource) : true;

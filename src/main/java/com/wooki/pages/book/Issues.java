@@ -14,9 +14,8 @@
 // limitations under the License.
 //
 
-package com.wooki.pages.chapter;
+package com.wooki.pages.book;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tapestry5.EventConstants;
@@ -25,7 +24,7 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.wooki.base.ChapterBase;
+import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.links.PageLink;
@@ -37,7 +36,7 @@ import com.wooki.links.impl.ViewLink;
  * 
  * @author ccordenier
  */
-public class Issues extends ChapterBase
+public class Issues extends BookBase
 {
 
     @Inject
@@ -63,30 +62,30 @@ public class Issues extends ChapterBase
     @SetupRender
     public void setupNav()
     {
-        left = new ViewLink("book/issues", "book-issues", getBookId());
+        left = new ViewLink("book/index", "toc", getBookId());
         center = new NavLink("book/index", "book-root", getBook().getTitle(), getBookId());
     }
 
-    @OnEvent(value = EventConstants.ACTIVATE)
-    public Object setupComments(Long bookId, Long chapterId)
+    @Override
+    @SetupRender
+    public void setupMenus()
     {
-        this.chapters = new ArrayList<Chapter>();
+        super.setupMenus();
+        selectMenuItem(1);
+    }
 
-        // Get book related information
-        this.chapterId = chapterId;
-        chapter = this.chapterManager.findById(chapterId);
-        if (chapter == null) { return redirectToBookIndex(); }
-
-        this.chapters.add(chapter);
-
-        return true;
+    @OnEvent(value = EventConstants.ACTIVATE)
+    public Object setupComments(Long bookId)
+    {
+        this.chapters = this.chapterManager.listChaptersInfo(bookId);
+        return null;
     }
 
     @OnEvent(value = EventConstants.PASSIVATE)
     public Object[] retrieveBookId()
     {
         return new Object[]
-        { this.getBookId(), this.chapterId };
+        { this.getBookId() };
     }
 
 }

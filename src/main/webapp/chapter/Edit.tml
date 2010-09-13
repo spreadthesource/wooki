@@ -1,6 +1,6 @@
 <html t:type="booklayout"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd"
-	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id"  t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center">
+	xmlns:p="tapestry:parameter" t:title="prop:book?.title" t:bookId="book?.id"  t:menu="menu" t:adminActions="adminActions" t:left="left" t:right="right" t:center="center" t:adminLinks="adminLinks" t:publicLinks="publicLinks" >
 	
 	<t:feedlink t:page="book/index" t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
 	
@@ -36,8 +36,8 @@
 			<input t:type="textarea" t:id="data" t:mixins="wymeditor" t:uploadImageDialogId="uploadImageDialogId"/>
 		</fieldset>
 		<div class="form-submit wym-autosave">
-			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="save" title="Modifications will be only visible by authors" />
-			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="publish" title="Modifications will be visible by everyone" />
+			<t:submit t:id="update" t:type="submit" t:event="update" class="wymupdate btn-active" style="border:0px !important" value="Save draft" title="Modifications will be only visible by authors" />
+			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="Publish" title="Modifications will be visible by everyone" />
 			or 
 			<t:if test="abstractChapter">
 				<a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id" t:mixins="wooki/confirm" t:message="message:cancel-edit-message">${message:cancel-link}</a>

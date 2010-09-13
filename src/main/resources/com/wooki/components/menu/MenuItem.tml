@@ -6,7 +6,7 @@
 		<t:if test="action">
 			<a class="bookmenuitem" t:id="elink" t:type="eventLink" t:context="currentEventLink.context" t:event="prop:currentEventLink.event">${label}</a>
 			<p:else>
-				<a class="bookmenuitem" t:id="plink" t:type="pageLink" t:page="prop:currentPageLink.page" t:context="currentPageLink.context">${label}</a>
+				<a class="${itemClass}" t:id="plink" t:type="pageLink" t:page="prop:currentPageLink.page" t:context="currentPageLink.context">${label}</a>
 			</p:else>
 		</t:if>
 	</li>

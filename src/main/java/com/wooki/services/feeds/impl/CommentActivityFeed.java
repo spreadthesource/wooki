@@ -38,10 +38,9 @@ public class CommentActivityFeed extends AbstractActivityFeed<CommentActivity>
         if (CommentEventType.POST.equals(activity.getType()))
         {
             org.apache.tapestry5.Link link = linkSource.createPageRenderLink(
-                    "chapter/issues",
+                    "book/issues",
                     true,
-                    activity.getComment().getPublication().getChapter().getBook().getId(),
-                    Issues.ALL);
+                    activity.getComment().getPublication().getChapter().getBook().getId());
             link.setAnchor("c" + activity.getComment().getId());
             Link result = new Link();
             result.setHref(link.toAbsoluteURI());

@@ -30,7 +30,7 @@ import org.apache.tapestry5.services.Request;
 import org.slf4j.Logger;
 
 import com.spreadthesource.tapestry.installer.services.ApplicationSettings;
-import com.wooki.base.BookBase;
+import com.wooki.base.PageBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.domain.model.Publication;
@@ -44,7 +44,7 @@ import com.wooki.services.parsers.DOMManager;
  */
 @Meta(value =
 { "content-type=text/xml" })
-public class FullFlyingSaucer extends BookBase
+public class FullFlyingSaucer extends PageBase
 {
 
     @Inject

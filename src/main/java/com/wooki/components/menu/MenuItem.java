@@ -59,6 +59,12 @@ public class MenuItem
         }
     }
 
+    public String getItemClass()
+    {
+        if (getCurrentPageLink().isSelected()) { return "bookmenuitem selected"; }
+        return "bookmenuitem";
+    }
+
     public boolean isAction()
     {
         return link instanceof EventLink;

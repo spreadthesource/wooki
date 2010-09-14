@@ -117,7 +117,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         // SimpleJdbcTestUtils.executeSqlScript(tpl, script, true);
     }
 
-    @Test
+    @Test(enabled = true)
     public void testActivity() throws UserAlreadyException, UserNotFoundException,
             UserAlreadyOwnerException
     {
@@ -171,7 +171,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify that can we can load datas with manyToMany association.
      */
-    @Test
+    @Test(enabled = true)
     public void testListBookByUser()
     {
         List<Book> books = bookManager.listByOwner("john");
@@ -179,7 +179,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         Assert.assertEquals(books.size(), 3, "John has one book");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testOwnerOfBook()
     {
         List<Book> books = bookManager.listByOwner("john");
@@ -218,7 +218,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify like feature
      */
-    @Test
+    @Test(enabled = true)
     public void testListBooksByTitle()
     {
         List<Book> books = bookManager.listByTitle("%Product%");
@@ -243,7 +243,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify initial book list size.
      */
-    @Test
+    @Test(enabled = true)
     public void testListBook()
     {
         List<Book> books = bookManager.list();
@@ -256,7 +256,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
      * 
      * @throws UserAlreadyException
      */
-    @Test
+    @Test(enabled = true)
     public void testChangeTitle() throws UserAlreadyException
     {
 
@@ -294,7 +294,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void testChapterPreviousAndNext() throws UserAlreadyException
     {
         Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
@@ -342,7 +342,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify initial chapter list size.
      */
-    @Test
+    @Test(enabled = true)
     // TODO : this test needs to be updated as a chapter does not contains
     // content anymore
     public void testChapterValues()
@@ -360,7 +360,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
         // "<p>You will need éé ...</p>");
     }
 
-    @Test
+    @Test(enabled = true)
     // TODO : this test needs to be updated as a chapter does not contains
     // content anymore
     public void testUpdateChapterContent()
@@ -381,7 +381,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * This test tries to reorder the list of chapters for a given book.
      */
-    @Test
+    @Test(enabled = true)
     public void testUpdateChapterIndex()
     {
         Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
@@ -411,7 +411,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
      * <li>Remove Chapter and verify list size</li>
      * </ul>
      */
-    @Test
+    @Test(enabled = true)
     public void testChapterAdd() throws UserAlreadyException, AuthorizationException
     {
 
@@ -451,7 +451,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify if we can simply add comment on chapters.
      */
-    @Test
+    @Test(enabled = true)
     public void testCommentAdd()
     {
         Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
@@ -491,7 +491,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
      * 
      * @throws UnsupportedEncodingException
      */
-    @Test
+    @Test(enabled = true)
     public void testPublicationIso()
     {
         System.setProperty("file.encoding", "ISO-8859-1");
@@ -503,7 +503,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
      * 
      * @throws UnsupportedEncodingException
      */
-    @Test
+    @Test(enabled = true)
     public void testPublicationUtf()
     {
         System.setProperty("file.encoding", "UTF-8");
@@ -515,7 +515,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
      * 
      * @throws UnsupportedEncodingException
      */
-    @Test
+    @Test(enabled = true)
     public void testPublicationCp()
     {
         System.setProperty("file.encoding", "cp1252");
@@ -551,7 +551,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify that we cannot create a user that already exists.
      */
-    @Test
+    @Test(enabled = true)
     public void checkUserExists()
     {
         User user = userManager.findByUsername("JoHN");
@@ -561,7 +561,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verifies that an exception is thrown when adding an author that already exists.
      */
-    @Test
+    @Test(enabled = true)
     public void verifyAuthorAlreadyExists()
     {
         User john = new User();
@@ -583,7 +583,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Verify that findByUsername is case insensitive.
      */
-    @Test
+    @Test(enabled = true)
     public void checkFindByUserName()
     {
         User user = userManager.findByUsername("JOHn");

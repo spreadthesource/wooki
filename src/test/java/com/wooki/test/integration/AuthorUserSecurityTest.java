@@ -16,7 +16,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Login with an existing user, this is the first method to execute in the test.
      */
-    @Test
+    @Test(enabled = true)
     public void signin()
     {
         open("signin");
@@ -31,7 +31,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Check index page.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void testIndex()
     {
@@ -50,7 +50,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Check that an author is authorized to change the state of a comment.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void testCommentPopup()
     {
@@ -72,7 +72,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Verify that the author has access to the working copy.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void testWorkingCopy()
     {
@@ -84,7 +84,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Verify that the author has access to the edit page.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void testEditChapter()
     {
@@ -98,7 +98,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Verify that an author have access to links to modify and delete a chapter
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void testAdminChapter()
     {

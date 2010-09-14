@@ -18,7 +18,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Register a new user, this is the first method to execute in the test.
      */
-    @Test
+    @Test(enabled = true)
     public void signup()
     {
         open("/signup");
@@ -37,11 +37,10 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Check index page.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testIndex()
     {
-
         open("/userNotExist", "true");
         waitForPageToLoad();
         checkNotFound();
@@ -67,7 +66,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Test access to dashboard.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testDashboard()
     {
@@ -89,7 +88,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Test access to dashboard.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testAccountSettings()
     {
@@ -113,7 +112,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Verify that the user cannot delete a comment when he is not the owner
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testComment()
     {
@@ -126,7 +125,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * Verify that elements are not present if the user is not author of the book.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testBookIndex()
     {
@@ -149,7 +148,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * When the user is authenticated, it should not be able to see signin.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testSignin()
     {
@@ -161,7 +160,7 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
     /**
      * When the user is authenticated, it should not be able to see signup.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testSignup()
     {

@@ -63,7 +63,7 @@ import com.wooki.services.security.WookiSecurityContext;
  * 
  * @author ccordenier
  */
-public class ConversionsTest extends AbstractWookiUnitTestSuite 
+public class ConversionsTest extends AbstractWookiUnitTestSuite
 {
 
     private Logger logger = Logger.getLogger(ConversionsTest.class);
@@ -125,7 +125,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         securityCtx.log(conversion);
     }
 
-    @Test
+    @Test(enabled = true)
     public void testBookmarks()
     {
         String bookmarks = this.generator
@@ -151,7 +151,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
                         "Bookmark generation is wrong");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testAPTConversion()
     {
         String result = /*
@@ -187,7 +187,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         }
     }
 
-    // TODO find a solution for proxy 
+    // TODO find a solution for proxy
     @Test(enabled = false)
     public void docbookConversion()
     {
@@ -248,7 +248,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void testAptConversion()
     {
         String result = "   ------\n            Title\n            ------\n            Author\n            ------\n             Date\n\n  Paragraph 1, line 1.\n  Paragraph 1, line 2.\n\n  Paragraph 2, line 1.\n  Paragraph 2, line 2.\n\nSection title\n\n* Sub-section title\n\n** Sub-sub-section title\n\n*** Sub-sub-sub-section title\n\n**** Sub-sub-sub-sub-section title\n\n      * List item 1.\n\n      * List item 2.\n\n        Paragraph contained in list item 2.\n\n            * Sub-list item 1.\n\n            * Sub-list item 2.\n\n      * List item 3.\n        Force end of list:\n\n      []\n\n+------------------------------------------+\nVerbatim text not contained in list item 3\n+------------------------------------------+\n\n      [[1]] Numbered item 1.\n\n                [[A]] Numbered item A.\n\n                [[B]] Numbered item B.\n\n      [[2]] Numbered item 2.\n\n  List numbering schemes: [[1]], [[a]], [[A]], [[i]], [[I]].\n\n      [Defined term 1] of definition list.\n\n      [Defined term 2] of definition list.\n\n+-------------------------------+\nVerbatim text\n                        in a box\n+-------------------------------+\n\n  --- instead of +-- suppresses the box around verbatim text.\n\n[Figure name] Figure caption\n\n*----------*--------------+----------------:\n| Centered | Left-aligned | Right-aligned  |\n| cell 1,1 | cell 1,2     | cell 1,3       |\n*----------*--------------+----------------:\n| cell 2,1 | cell 2,2     | cell 2,3       |\n*----------*--------------+----------------:\nTable caption\n\n  No grid, no caption:\n\n*-----*------*\n cell | cell\n*-----*------*\n cell | cell\n*-----*------*\n\n  Horizontal line:\n\n=======================================================================\n\n^L\n  New page.\n\n  <Italic> font. <<Bold>> font. <<<Monospaced>>> font.\n\n  {Anchor}. Link to {{anchor}}. Link to {{http://www.pixware.fr}}.\n  Link to {{{anchor}showing alternate text}}.\n  Link to {{{http://www.pixware.fr}Pixware home page}}.\n\n  Force line\\\n  break.\n\n  Non\\ breaking\\ space.\n\n  Escaped special characters: \\~, \\=, \\-, \\+, \\*, \\[, \\], \\<, \\>, \\{, \\}, \\\\.\n\n  Copyright symbol: \\251, \\xA9, \\u00a9.\n\n~~Commented out.";
@@ -340,7 +340,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         logger.debug("The book title is " + book.getTitle());
     }
 
-    @Test
+    @Test(enabled = true)
     public void testLatexConversion()
     {
         String result = /*
@@ -380,7 +380,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
         }
     }
 
-    @Test
+    @Test(enabled = true)
     public void testAddIds()
     {
         String result = generator.adaptContent(
@@ -395,7 +395,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
      * Create comments on chapter content and verify that when content changes, comments are well
      * re-assigned.
      */
-    @Test
+    @Test(enabled = true)
     public void testReAssignOnPreviousHeader()
     {
 
@@ -417,7 +417,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
                 "Comment must be assigned to previous 'h' element id");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testReAssignOnPreviousHeader2()
     {
 
@@ -439,7 +439,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
                 "Comment must be assigned to previous 'h' element id");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testReAssignOnBook()
     {
 
@@ -461,7 +461,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
                 "Comment must be assigned to previous 'h' element id");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testReAssignOnParent()
     {
 
@@ -483,7 +483,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
                 "Comment must be assigned to previous 'h' element id");
     }
 
-    @Test
+    @Test(enabled = true)
     public void testAssignUnchanged()
     {
 

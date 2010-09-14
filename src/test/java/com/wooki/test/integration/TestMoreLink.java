@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 public class TestMoreLink extends AbstractWookiIntegrationTestSuite
 {
 
-    @Test
+    @Test(enabled = true)
     public void testMoreLink()
     {
         open("dev/MoreLinkTest");

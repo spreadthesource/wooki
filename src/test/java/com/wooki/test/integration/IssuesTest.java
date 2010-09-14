@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 public class IssuesTest extends AbstractWookiIntegrationTestSuite
 {
 
-    @Test
+    @Test(enabled = true)
     public void signin()
     {
         open("signin");
@@ -27,7 +27,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
     /**
      * Simply check links and text are present
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void checkAbstractIssuesLink()
     {
@@ -49,7 +49,7 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
     /**
      * Simply check links and text are present
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signin" })
     public void checkChapterIssuesLink()
     {

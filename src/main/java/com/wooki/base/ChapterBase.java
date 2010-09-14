@@ -1,6 +1,5 @@
 package com.wooki.base;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +11,14 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.io.FeedException;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
 import com.wooki.links.Link;
 import com.wooki.links.PageLink;
 import com.wooki.links.impl.DeleteChapterLink;
 import com.wooki.links.impl.EditLink;
-import com.wooki.links.impl.ExportLink;
 import com.wooki.links.impl.ViewLink;
 import com.wooki.services.HttpError;
-import com.wooki.services.activity.ActivitySourceType;
-import com.wooki.services.feeds.FeedSource;
 import com.wooki.services.security.WookiSecurityContext;
 
 /**
@@ -36,9 +30,6 @@ public class ChapterBase extends PageBase
 {
     @Inject
     private ChapterManager chapterManager;
-
-    @Inject
-    private FeedSource feedSource;
 
     @Inject
     private WookiSecurityContext securityCtx;
@@ -104,13 +95,7 @@ public class ChapterBase extends PageBase
         publicLinks.add(new ViewLink("chapter/history", "history", getBookId(), chapterId));
         publicLinks.add(new ViewLink(chapter, "chapter/issues", "all-feedback", false, getBookId(),
                 chapterId));
-        publicLinks.add(new ExportLink("rss-feed", "feed", getBookId()));
-    }
-
-    @OnEvent(value = "feed")
-    public Feed getFeed(Long bookId) throws IOException, IllegalArgumentException, FeedException
-    {
-        return feedSource.produceFeed(ActivitySourceType.BOOK, bookId);
+        publicLinks.add(new ViewLink("chapter/rss", "rss-feed", getBookId(), chapterId));
     }
 
     @OnEvent(value = "delete")

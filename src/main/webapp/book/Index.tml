@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html t:type="booklayout" t:adminLinks="adminLinks" t:publicLinks="publicLinks" t:title="prop:book?.title" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter" t:menu="menu" t:right="right">
 
-	<t:feedlink t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
+	<t:feedlink t:page="book/rss" t:titleKey="recent-activity" t:titleFormat="book?.title" t:context="book?.id" />
 
     <h1><a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${book?.title}</a></h1>
     <div id="meta">

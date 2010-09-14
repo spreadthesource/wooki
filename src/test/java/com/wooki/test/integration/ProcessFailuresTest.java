@@ -14,7 +14,7 @@ public class ProcessFailuresTest extends AbstractWookiIntegrationTestSuite
     /**
      * Register a new user, this is the first method to execute in the test.
      */
-    @Test
+    @Test(enabled = true)
     public void signup()
     {
         open("/signup");

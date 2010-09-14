@@ -23,7 +23,7 @@ import org.testng.annotations.Test;
 public class ExceptionReportTest extends AbstractWookiUnitTestSuite
 {
 
-    @Test
+    @Test(enabled = true)
     public void verifyWookiExceptionHandling()
     {
         Document document = pageTester.renderPage("app0/ThrowIAE");
@@ -33,7 +33,7 @@ public class ExceptionReportTest extends AbstractWookiUnitTestSuite
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void verifyWookiExceptionNonHandling()
     {
         Document document = pageTester.renderPage("app0/ThrowNPE");

@@ -13,6 +13,7 @@ import org.apache.tapestry5.dom.Element;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.ComponentSource;
+import org.apache.tapestry5.services.PageRenderLinkSource;
 import org.apache.tapestry5.services.RequestGlobals;
 
 /**
@@ -23,7 +24,7 @@ import org.apache.tapestry5.services.RequestGlobals;
 public class FeedLink extends AbstractLink
 {
 
-    @Parameter(defaultPrefix = BindingConstants.LITERAL, value = "feed")
+    @Parameter(defaultPrefix = BindingConstants.LITERAL)
     private String event;
 
     /**
@@ -61,17 +62,18 @@ public class FeedLink extends AbstractLink
     @Inject
     private RequestGlobals request;
 
-    String defaultEvent()
-    {
-        return resources.getId();
-    }
+    @Inject
+    private PageRenderLinkSource linkSource;
 
     @AfterRenderTemplate
     void createLink(MarkupWriter writer)
     {
         ComponentResources containerResources = resources.isBound("page") ? source.getComponent(
                 page).getComponentResources() : resources.getContainerResources();
-        Link link = containerResources.createEventLink(event, context);
+
+        Link link = resources.isBound("event") ? containerResources.createEventLink(event, context)
+                : containerResources
+                        .createPageLink(containerResources.getPageName(), true, context);
         String title = resources.isBound("titleFormat") ? this.messages.format(
                 titleKey,
                 titleFormat) : this.messages.get(titleKey);
@@ -91,6 +93,6 @@ public class FeedLink extends AbstractLink
                 "alternate",
                 "href",
                 protocol + "://" + httpRequest.getServerName() + ":" + httpRequest.getServerPort()
-                        + link.toAbsoluteURI());
+                        + link.toURI());
     }
 }

@@ -30,7 +30,7 @@ import com.wooki.services.utils.LastActivityMessages;
  */
 public class UtilityClassTest extends AbstractWookiUnitTestSuite
 {
-    @Test
+    @Test(enabled = true)
     public void testLastActivityMessage()
     {
 

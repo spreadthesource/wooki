@@ -11,6 +11,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
+import com.wooki.core.components.RootEventLink;
 import com.wooki.links.EventLink;
 import com.wooki.links.Link;
 import com.wooki.links.PageLink;
@@ -35,7 +36,7 @@ public class MenuItem
     private JavaScriptSupport jsSupport;
 
     @InjectComponent
-    private org.apache.tapestry5.corelib.components.EventLink elink;
+    private RootEventLink elink;
 
     @InjectComponent
     private org.apache.tapestry5.corelib.components.PageLink plink;

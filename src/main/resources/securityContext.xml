@@ -52,7 +52,10 @@
 				<value>book</value>
 				<value>book/index</value>
 				<value>book/issues</value>
+				<value>book/rss</value>
+				<value>book/pdf</value>
 				<value>chapter/issues</value>
+				<value>chapter/rss</value>
 				<value>chapter</value>
 				<value>chapter/index</value>
 				<value>chapter/issues</value>

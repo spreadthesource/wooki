@@ -15,7 +15,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite
     /**
      * Check book index
      */
-    @Test
+    @Test(enabled = true)
     public void bookIndex()
     {
         // opening book
@@ -35,7 +35,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite
         checkTableOfContentsPresent(4);
     }
 
-    @Test
+    @Test(enabled = true)
     public void checkChapters()
     {
         int bookId = 1;
@@ -81,7 +81,7 @@ public class BookNavigationTest extends AbstractWookiIntegrationTestSuite
 
     }
 
-    @Test
+    @Test(enabled = true)
     public void checkIssues()
     {
         open("book/issues/1");

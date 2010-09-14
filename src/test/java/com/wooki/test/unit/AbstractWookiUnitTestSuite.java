@@ -21,7 +21,7 @@ import com.wooki.test.WookiPageTester;
  * @author ccordenier
  */
 @Test(sequential = true)
-public abstract class AbstractWookiUnitTestSuite 
+public abstract class AbstractWookiUnitTestSuite
 {
 
     /**

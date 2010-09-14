@@ -4,7 +4,7 @@
 
 	<li class="${rowClass}">
 		<t:if test="action">
-			<a class="bookmenuitem" t:id="elink" t:type="eventLink" t:context="currentEventLink.context" t:event="prop:currentEventLink.event">${label}</a>
+			<a class="bookmenuitem" t:id="elink" t:type="wooki/rooteventLink" t:context="currentEventLink.context" t:event="prop:currentEventLink.event">${label}</a>
 			<p:else>
 				<a class="${itemClass}" t:id="plink" t:type="pageLink" t:page="prop:currentPageLink.page" t:context="currentPageLink.context">${label}</a>
 			</p:else>

@@ -14,7 +14,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Verify different access type to index page
      */
-    @Test
+    @Test(enabled = true)
     public void testIndexPage()
     {
 
@@ -37,7 +37,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to account settings page.
      */
-    @Test
+    @Test(enabled = true)
     public void testAccountSettings()
     {
         // Verify redirection to signin page
@@ -49,7 +49,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to account settings page.
      */
-    @Test
+    @Test(enabled = true)
     public void testDashboard()
     {
         // Verify redirection to signin page
@@ -61,7 +61,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to book settings page.
      */
-    @Test
+    @Test(enabled = true)
     public void testBookSettings()
     {
         // Verify redirection to signin pages
@@ -73,7 +73,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to book settings page.
      */
-    @Test
+    @Test(enabled = true)
     public void testBookAccess()
     {
         open("/book/1");
@@ -91,7 +91,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         open("/book/index/1/last", "true");
         waitForPageToLoad();
         checkNotFound();
-        
+
         open("/book/index/1/2/3", "true");
         waitForPageToLoad();
         checkNotFound();
@@ -100,7 +100,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to book settings page.
      */
-    @Test
+    @Test(enabled = true)
     public void testEditChapter()
     {
 
@@ -122,7 +122,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Test chapter access.
      */
-    @Test
+    @Test(enabled = true)
     public void testChapterAccess()
     {
         // Access an existing chapter

@@ -16,7 +16,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite
     /**
      * Register a new user, this is the first method to execute in the test.
      */
-    @Test
+    @Test(enabled = true)
     public void signup()
     {
         open("signup");
@@ -34,7 +34,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite
     /**
      * Check index page.
      */
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testUpdatePasswordFailure()
     {
@@ -52,7 +52,7 @@ public class AccountSettingsTest extends AbstractWookiIntegrationTestSuite
 
     }
 
-    @Test(dependsOnMethods =
+    @Test(enabled = true, dependsOnMethods =
     { "signup" })
     public void testUpdatePasswordSuccess()
     {

@@ -25,6 +25,7 @@ import org.apache.tapestry5.Block;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.Messages;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.Request;
@@ -73,6 +74,9 @@ public class Index
     @Inject
     private FeedSource feedSource;
 
+    @Inject
+    private Request request;
+
     @Property
     private List<Book> userBooks;
 
@@ -94,8 +98,8 @@ public class Index
     @Property
     private Block userCtx;
 
-    @Inject
-    private Request request;
+    @Property
+    private String flashMessage;
 
     /**
      * Set current user if someone has logged in.
@@ -153,13 +157,22 @@ public class Index
         return feedSource.produceFeed(ActivitySourceType.BOOK_CREATION);
     }
 
+    @SetupRender
+    public void setupIEMessage()
+    {
+        if (isIeFamily())
+        {
+            flashMessage = "Wooki will be a lot more comfortable to use with Chrome, Firefox or Safari !";
+        }
+    }
+
     public String getTitle()
     {
         if (this.user != null) { return messages.format("profile-title", this.user.getUsername()); }
         return messages.get("index-message");
     }
 
-    public boolean isDisplayMessage()
+    public boolean isIeFamily()
     {
         String userAgent = request.getHeader("User-Agent");
         return userAgent != null ? (userAgent.toLowerCase().contains(" msie ") && this.user == null)

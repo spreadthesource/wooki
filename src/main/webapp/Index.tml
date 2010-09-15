@@ -77,9 +77,7 @@
     </t:block>
     
 	<t:extension-point id="extraBlock" />
-
-	<t:if t:test="displayMessage">
-		<t:wooki.flashMessage t:message="literal:Wooki will be a lot more comfortable to use with Chrome, Firefox or Safari !" />
-	</t:if>
-
+	
+	<t:wooki.flashMessage />
+	
 </html>

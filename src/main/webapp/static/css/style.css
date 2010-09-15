@@ -281,7 +281,7 @@ span.autosave { margin-left: 10px; }
  * BOOK LAYOUT
  */
 #book { background:#FFFFFF; padding: 10px;  line-height:1.35em; }
-#book em { color: #6E6D65; font-style: normal; font-size: 16px; }
+#book em { color: #6E6D65; font-style: normal; font-size: 12px; }
 #book-wrapper { background:#6E6D65; position:relative; padding-left:40px; margin-bottom:20px; border:1px solid #6E6D65; }
 
 #meta { text-align:center; color:#6E6D65; }

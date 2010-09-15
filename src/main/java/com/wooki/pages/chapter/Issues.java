@@ -63,6 +63,7 @@ public class Issues extends ChapterBase
     @SetupRender
     public void setupNav()
     {
+        selectPublic(2);
         left = new ViewLink("book/issues", "book-issues", getBookId());
         center = new NavLink("book/index", "book-root", getBook().getTitle(), getBookId());
     }

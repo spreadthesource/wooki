@@ -72,6 +72,20 @@ public class History extends ChapterBase
         }
     }
 
+    @OnEvent(value = "deleteRevision")
+    public void deleteRevision(String revision)
+    {
+        try
+        {
+            chapterManager.deleteRevision(getChapterId(), revision);
+            message = messages.get("revision-restored");
+        }
+        catch (Exception ex)
+        {
+            message = messages.get("revision-delete-error");
+        }
+    }
+
     @OnEvent(value = EventConstants.PASSIVATE)
     public Object[] retrieveIds()
     {

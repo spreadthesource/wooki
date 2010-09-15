@@ -17,6 +17,7 @@
 package com.wooki.pages.book;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -27,6 +28,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import com.wooki.base.BookBase;
 import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.model.Chapter;
+import com.wooki.domain.model.Publication;
 import com.wooki.links.PageLink;
 import com.wooki.links.impl.NavLink;
 import com.wooki.links.impl.ViewLink;
@@ -74,10 +76,25 @@ public class Issues extends BookBase
         selectMenuItem(1);
     }
 
+    /**
+     * Prepare the list of comments to display, only published chapter can have user comments.
+     * 
+     * @param bookId
+     * @return
+     */
     @OnEvent(value = EventConstants.ACTIVATE)
     public Object setupComments(Long bookId)
     {
         this.chapters = this.chapterManager.listChaptersInfo(bookId);
+        ListIterator<Chapter> it = chapters.listIterator();
+        while (it.hasNext())
+        {
+            Chapter n = it.next();
+            if (!isPublished(n.getId()))
+            {
+                it.remove();
+            }
+        }
         return null;
     }
 
@@ -86,6 +103,13 @@ public class Issues extends BookBase
     {
         return new Object[]
         { this.getBookId() };
+    }
+
+    public boolean isPublished(Long chapterId)
+    {
+        Publication publication = chapterManager.getLastPublishedPublication(chapterId);
+
+        return publication != null;
     }
 
 }

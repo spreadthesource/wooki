@@ -8,8 +8,10 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SetupRender;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import com.wooki.domain.biz.ChapterManager;
 import com.wooki.domain.biz.CommentManager;
 import com.wooki.domain.model.Comment;
+import com.wooki.domain.model.Publication;
 import com.wooki.services.utils.DateUtils;
 
 /**
@@ -19,19 +21,17 @@ import com.wooki.services.utils.DateUtils;
  */
 public class RevisionIssue
 {
-
-    @Inject
-    private CommentManager commentManager;
-
     @Parameter(required = true, allowNull = false)
     private Long bookId;
 
     @Parameter(required = true, allowNull = false)
     private Long chapterId;
 
-    @Parameter
-    @Property
-    private boolean abstractChapter;
+    @Inject
+    private CommentManager commentManager;
+
+    @Inject
+    private ChapterManager chapterManager;
 
     @Property
     private List<Comment> comments;
@@ -46,9 +46,10 @@ public class RevisionIssue
     private SimpleDateFormat format = DateUtils.getLastModified();
 
     @SetupRender
-    public void listComments()
+    public Object listComments()
     {
         this.comments = this.commentManager.listForChapter(this.chapterId);
+        return true;
     }
 
     public Object[] getRevisionCtx()

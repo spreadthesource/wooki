@@ -132,14 +132,14 @@ public class Index extends BookBase
         // List chapter infos
         chaptersInfo = chapterManager.listChaptersInfo(this.getBookId());
 
-        if (chaptersInfo != null && chaptersInfo.size() > 0)
+        for (Chapter c : chaptersInfo)
         {
-            for (Chapter chapter : chaptersInfo)
+            if (isPublished(c.getId()))
             {
-
+                this.firstChapterId = c.getId();
+                this.firstChapterTitle = c.getTitle();
+                break;
             }
-            this.firstChapterId = chaptersInfo.get(0).getId();
-            this.firstChapterTitle = chaptersInfo.get(0).getTitle();
         }
 
     }
@@ -236,13 +236,18 @@ public class Index extends BookBase
         return this.getBookId();
     }
 
+    public boolean isPublished(Long chapterId)
+    {
+        Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
+
+        return publication != null;
+    }
+
     public boolean isPublished()
     {
         long chapterId = currentChapter.getId();
 
-        Publication publication = this.chapterManager.getLastPublishedPublication(chapterId);
-
-        return publication != null;
+        return isPublished(chapterId);
     }
 
     public boolean isShowWorkingCopyLink()

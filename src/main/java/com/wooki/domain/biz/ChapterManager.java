@@ -157,6 +157,16 @@ public interface ChapterManager
     void restoreRevision(Long chapterId, String revision);
 
     /**
+     * Call this method to delete a publication revision. If the operation succeed then the chapter
+     * will be associated to the previous publication.
+     * 
+     * @param chapterId
+     * @param revision
+     */
+    @CommitAfter
+    void deleteRevision(Long chapterId, String revision);
+
+    /**
      * Remove chapter from book.
      * 
      * @param book

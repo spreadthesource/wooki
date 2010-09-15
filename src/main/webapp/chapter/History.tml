@@ -11,7 +11,7 @@
 		
 		<ul t:type="loop" t:source="publications" t:value="publication">
 			<li>
-				Revision of <t:output value="prop:publication?.creationDate" t:format="prop:timestamp" />
+				Revision of <t:output value="prop:publication?.creationDate" t:format="prop:timestamp" />&nbsp;
 				<t:if test="publication.published">
 					(${message:last-publication}) <a t:type="pagelink" t:context="[book?.id,chapter?.id]" t:page="chapter/index">${message:view-revision-link}</a>
 					<p:else>
@@ -21,6 +21,7 @@
 				 
 				<t:security.ifCanWrite object="book">
 					&nbsp;<a t:type="eventlink" t:event="restore" t:context="publication.id">${message:replace-with-revision-link}</a>
+					&nbsp;<a t:type="eventlink" t:event="deleteRevision" t:context="publication.id">${message:delete-revision-link}</a>
 				</t:security.ifCanWrite>
 			</li>
 		</ul>

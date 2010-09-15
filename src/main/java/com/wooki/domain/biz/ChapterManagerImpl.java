@@ -231,6 +231,19 @@ public class ChapterManagerImpl extends AbstractManager implements ChapterManage
         updateAndPublishContent(chapterId, draft);
     }
 
+    public void deleteRevision(Long chapterId, String revision)
+    {
+        assert chapterId != null;
+        List<Publication> publications = publicationDao.listPublication(chapterId);
+        if (publications.size() <= 1) { throw new IllegalStateException(
+                "Chapter must be associated at least to one revision"); }
+        
+        Publication toDelete = getRevision(chapterId, revision);
+        publicationDao.delete(toDelete);
+        
+        Publication last = publicationDao.findLastRevision(chapterId);
+    }
+
     public Chapter update(Chapter chapter)
     {
         assert chapter != null;

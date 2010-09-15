@@ -496,7 +496,7 @@ jQuery.extend(Tapestry.Initializer, {
 						next.html(first.html() + " >");
 					}
 				} );
-			},
+			}
 		});
 		
 	},

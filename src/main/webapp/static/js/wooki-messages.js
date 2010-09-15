@@ -1,3 +1,3 @@
 Wooki.Messages = {
-	sortChapterFailure : "Error to sort chapter, please refresh the page.",
+	sortChapterFailure : "Error to sort chapter, please refresh the page."
 };

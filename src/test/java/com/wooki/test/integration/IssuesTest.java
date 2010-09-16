@@ -47,11 +47,56 @@ public class IssuesTest extends AbstractWookiIntegrationTestSuite
     }
 
     /**
+     * This test verifies that in the chapter issue page there is only on chapter displayed.
+     */
+    @Test(enabled = true, dependsOnMethods =
+    { "signin" })
+    public void testChapterIssues()
+    {
+        open("chapter/issues/1/1");
+        waitForPageToLoad();
+        assertEquals(getXpathCount("//div[@id='book']/h3"), 1);
+    }
+
+    /**
+     * Verifies that the menu bar is correct.
+     */
+    @Test(enabled = true, dependsOnMethods =
+    { "signin" })
+    public void testMenuBar()
+    {
+        open("chapter/issues/1/1");
+        waitForPageToLoad();
+        assertEquals(
+                getXpathCount("//a[@class='bookmenuitem selected']"),
+                1,
+                "Only one element should be selected in the menu");
+        assertEquals(
+                getText("//a[@class='bookmenuitem selected']"),
+                "Comments",
+                "Comments menu item should be selected in Comments page");
+    }
+
+    /**
+     * Verify navigation links in chapter issues page
+     */
+    @Test(enabled = true, dependsOnMethods =
+    { "signin" })
+    public void testChapterIssuesNav()
+    {
+        open("chapter/issues/1/1");
+        waitForPageToLoad();
+        click("//li[@id='nav-left']/a[1]");
+        waitForPageToLoad();
+        assertEquals(getXpathCount("//div[@id='book']/h3"), 4);
+    }
+    
+    /**
      * Simply check links and text are present
      */
     @Test(enabled = true, dependsOnMethods =
     { "signin" })
-    public void checkChapterIssuesLink()
+    public void testChapterIssuesLink()
     {
         // open issues page
         open("book/issues/1");

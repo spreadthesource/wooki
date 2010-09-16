@@ -188,7 +188,7 @@ public class ConversionsTest extends AbstractWookiUnitTestSuite
     }
 
     // TODO find a solution for proxy
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void docbookConversion()
     {
         String result = "<book>	  <bookinfo>	    <title>An Example Book</title>	    	    <author>	      <firstname>Your first name</firstname>	      <surname>Your surname</surname>	      <affiliation>	        <address><email>foo@example.com</email></address>	      </affiliation>	    </author>		    <copyright>	      <year>2000</year>	      <holder>Copyright string here</holder>	    </copyright>		    <abstract>	      <para>If your book has an abstract then it should go here.</para>	    </abstract>	  </bookinfo>		  <preface>	    <title>Preface</title>		    <para>Your book may have a preface, in which case it should be placed	      here.</para>	  </preface>	      	  <chapter>	    <title>My First Chapter</title>		    <para>This is the first chapter in my book.</para>		    <sect1>	      <title>My First Section</title>		      <para>This is the first section in my book.</para>	    </sect1>	  </chapter>	</book>";

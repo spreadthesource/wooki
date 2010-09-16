@@ -6,7 +6,6 @@ import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.EventConstants;
 import org.apache.tapestry5.Link;
 import org.apache.tapestry5.MarkupWriter;
-import org.apache.tapestry5.RenderSupport;
 import org.apache.tapestry5.annotations.AfterRender;
 import org.apache.tapestry5.annotations.BeginRender;
 import org.apache.tapestry5.annotations.OnEvent;
@@ -19,6 +18,7 @@ import org.apache.tapestry5.ioc.services.TypeCoercer;
 import org.apache.tapestry5.json.JSONObject;
 import org.apache.tapestry5.services.PartialMarkupRenderer;
 import org.apache.tapestry5.services.PartialMarkupRendererFilter;
+import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 
 import com.wooki.AppendPosition;
 import com.wooki.MoreEventResult;
@@ -61,7 +61,7 @@ public class MoreLink extends AbstractLink
     private ComponentResources resources;
 
     @Inject
-    private RenderSupport renderSupport;
+    private JavaScriptSupport renderSupport;
 
     @Inject
     private TypeCoercer typeCoercer;
@@ -87,8 +87,8 @@ public class MoreLink extends AbstractLink
         data.put("position", this.position.toString());
         data.put("zone", this.zone);
         data.put("loader", loader);
-        data.put("url", link.toAbsoluteURI());
-        renderSupport.addInit("initMoreLink", data);
+        data.put("url", link.toURI());
+        renderSupport.addInitializerCall("initMoreLink", data);
     }
 
     @AfterRender
@@ -138,7 +138,7 @@ public class MoreLink extends AbstractLink
                 if (holder.hasValue())
                 {
                     Link link = resources.createEventLink(EventConstants.ACTION, page + 1);
-                    reply.put("href", link.toAbsoluteURI());
+                    reply.put("href", link.toURI());
                     reply.put("hasMore", holder.get().hasMore());
                 }
                 else

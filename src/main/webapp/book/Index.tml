@@ -142,6 +142,7 @@
                    </table>
                    <div class="form-submit">
                        <input t:type="submit" class="btn-active" value="Add Chapter" /> or <a href="#" id="hide-add-chapter">close</a>
+                       <span t:type="wooki/ajaxloader" t:zone="table-of-contents" t:trigger="addChapterForm" />
                    </div>
                </t:form>
            </div>

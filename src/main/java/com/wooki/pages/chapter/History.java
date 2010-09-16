@@ -18,11 +18,15 @@ import com.wooki.domain.exception.PublicationXmlException;
 import com.wooki.domain.model.Publication;
 import com.wooki.links.PageLink;
 import com.wooki.links.impl.NavLink;
+import com.wooki.services.security.WookiSecurityContext;
 
 public class History extends ChapterBase
 {
     @Inject
     private ChapterManager chapterManager;
+
+    @Inject
+    private WookiSecurityContext securityCtx;
 
     @Inject
     private Messages messages;
@@ -40,11 +44,17 @@ public class History extends ChapterBase
     @Property
     private PageLink center;
 
+    @Property
+    private int index;
+
+    private boolean canWrite;
+
     @SetupRender
     public void prepareDisplay()
     {
         // Get publication
         this.publications = chapterManager.listPublicationInfo(getChapter().getId());
+        canWrite = securityCtx.canWrite(getBook());
     }
 
     @SetupRender
@@ -80,7 +90,7 @@ public class History extends ChapterBase
             chapterManager.deleteRevision(getChapterId(), revision);
             message = messages.get("revision-restored");
         }
-        catch (Exception ex)
+        catch (IllegalStateException ex)
         {
             message = messages.get("revision-delete-error");
         }
@@ -91,5 +101,10 @@ public class History extends ChapterBase
     {
         return new Object[]
         { getBookId(), getChapterId() };
+    }
+
+    public boolean isActionsAvailable()
+    {
+        return canWrite && index > 0 && !publication.isPublished();
     }
 }

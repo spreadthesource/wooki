@@ -9,7 +9,7 @@
 	
 		<h2 class="entry-title"><a href="#" t:type="pagelink" t:page="chapter/index" t:context="[book?.id,chapter?.id]">${chapter?.title}</a></h2>
 		
-		<ul t:type="loop" t:source="publications" t:value="publication">
+		<ul t:type="loop" t:source="publications" t:value="publication" t:index="index">
 			<li>
 				Revision of <t:output value="prop:publication?.creationDate" t:format="prop:timestamp" />&nbsp;
 				<t:if test="publication.published">
@@ -18,11 +18,14 @@
 						<a t:type="pagelink" t:context="[book?.id,chapter?.id,publication?.id]" t:page="chapter/index">${message:view-revision-link}</a>
 					</p:else>
 				</t:if> 
-				 
-				<t:security.ifCanWrite object="book">
-					&nbsp;<a t:type="eventlink" t:event="restore" t:context="publication.id">${message:replace-with-revision-link}</a>
-					&nbsp;<a t:type="eventlink" t:event="deleteRevision" t:context="publication.id">${message:delete-revision-link}</a>
-				</t:security.ifCanWrite>
+				
+				<t:if test="actionsAvailable">
+					<t:security.ifCanWrite object="book">
+						&nbsp;<a t:type="eventlink" t:event="restore" t:context="publication.id">${message:replace-with-revision-link}</a>
+						&nbsp;<a t:type="eventlink" t:event="deleteRevision" t:context="publication.id">${message:delete-revision-link}</a>
+					</t:security.ifCanWrite>
+				</t:if> 
+				
 			</li>
 		</ul>
 	</body>

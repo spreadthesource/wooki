@@ -61,11 +61,12 @@ public class BookManagerImpl extends AbstractManager implements BookManager
     private final SecurityManager securityManager;
 
     private final WookiSecurityContext securityCtx;
-    
+
     private final ChapterManager chapterManager;
 
     public BookManagerImpl(BookDAO bookDAO, UserDAO userDAO, ActivityDAO activityDAO,
-            ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService, ChapterManager chapterManager)
+            ChapterDAO chapterDAO, ApplicationContext context, QueryFilterService filterService,
+            ChapterManager chapterManager)
     {
         this.bookDao = bookDAO;
         this.userDao = userDAO;
@@ -158,12 +159,13 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.isOwner(book)) { throw new AuthorizationException(
                 "Action not authorized"); }
 
-        User user = userDao.findById(authorId);
-        user.getBooks().remove(book);
-        book.getAuthors().remove(user);
+        User toRemove = userDao.findById(authorId);
+        toRemove.getBooks().remove(book);
+        book.getAuthors().remove(toRemove);
         bookDao.update(book);
 
-        securityManager.removeCollaboratorPermission(book, user);
+        securityManager.removeCollaboratorPermission(book, toRemove);
+
     }
 
     public Book updateTitle(Book book) throws TitleAlreadyInUseException
@@ -199,8 +201,8 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         Book book = bookDao.findById(bookId);
 
         if (!this.securityCtx.isLoggedIn() || !this.securityCtx.canWrite(book)) { throw new AuthorizationException(
-        "Action not authorized"); }
-        
+                "Action not authorized"); }
+
         List<Chapter> chapters = book.getChapters();
         Chapter toMove = null;
         for (Chapter chapter : chapters)
@@ -260,13 +262,13 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         activity.setType(ChapterEventType.CREATE);
         activity.setChapter(chapter);
         activityDao.create(activity);
-        
+
         // Create a first draft
         Draft draft = new Draft();
         draft.setTimestamp(chapter.getCreationDate());
         draft.setData("");
         chapterManager.updateContent(chapter.getId(), draft);
-        
+
         return chapter;
     }
 
@@ -317,7 +319,7 @@ public class BookManagerImpl extends AbstractManager implements BookManager
         draft.setData("");
         draft.setTimestamp(book.getCreationDate());
         chapterManager.updateContent(bookAbstract.getId(), draft);
-        
+
         return book;
     }
 

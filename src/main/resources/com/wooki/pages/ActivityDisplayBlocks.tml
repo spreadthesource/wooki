@@ -12,6 +12,12 @@
 		</li>
 	</t:block>
 
+	<t:block t:id="bookActivityBlock_AUTHOR_ADDED">
+		<li class="${style}">
+			<a href="#" t:type="pagelink" t:page="Index" t:context="bookActivity?.user?.username">${bookActivity?.user?.username}</a><span>  ${getActivityLabel(bookActivity.type)} </span><t:lastModifiedFormatter t:time="bookActivity.creationDate?.time" />
+		</li>
+	</t:block>
+
 	<t:block t:id="chapterActivityBlock">
 		<li class="${style}">
 			<a href="#" t:type="pagelink" t:page="Index" t:context="chapterActivity?.user?.username">${chapterActivity?.user?.username}</a> <em> has  ${getActivityLabel(chapterActivity.type)} a chapter </em><t:lastModifiedFormatter t:time="chapterActivity.creationDate?.time" />

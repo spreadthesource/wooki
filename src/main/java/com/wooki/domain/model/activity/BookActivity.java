@@ -29,7 +29,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "BooksActivities")
 @PrimaryKeyJoinColumn(name = "book_activity_id")
-public class BookActivity extends AbstractBookActivity
+public class BookActivity extends AbstractBookActivity<BookEventType>
 {
 
     @Column(name = "type")

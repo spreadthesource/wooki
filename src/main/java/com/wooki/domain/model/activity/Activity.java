@@ -39,7 +39,7 @@ import com.wooki.domain.model.WookiEntity;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Activities")
-public abstract class Activity extends WookiEntity
+public abstract class Activity<T> extends WookiEntity
 {
 
     @Id
@@ -83,5 +83,9 @@ public abstract class Activity extends WookiEntity
     {
         this.resourceUnavailable = resourceUnavailable;
     }
+    
+    public abstract T getType();
+    
+    public abstract void setType(T type);
 
 }

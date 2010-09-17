@@ -17,7 +17,7 @@ import com.wooki.domain.model.Book;
 @Entity
 @Table(name = "AbstractBooksActivities")
 @PrimaryKeyJoinColumn(name = "abstract_book_activity_id")
-public abstract class AbstractBookActivity extends Activity
+public abstract class AbstractBookActivity<T> extends Activity<T>
 {
 
     @ManyToOne(fetch = FetchType.LAZY)

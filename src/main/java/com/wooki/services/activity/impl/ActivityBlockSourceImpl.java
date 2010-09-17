@@ -37,8 +37,11 @@ public class ActivityBlockSourceImpl implements ActivityBlockSource
         Component page = this.source.getPage(ACTIVITY_BLOCK_PAGE);
         ComponentResources resources = page.getComponentResources();
 
-        Block result = resources.findBlock(activity.getClass().getSimpleName() + BLOCK_SUFFIX);
+        Block result = resources.findBlock(activity.getClass().getSimpleName() + BLOCK_SUFFIX + "_"
+                + activity.getType().toString());
+        if (result != null) { return result; }
 
+        result = resources.findBlock(activity.getClass().getSimpleName() + BLOCK_SUFFIX);
         if (result != null) { return result; }
 
         return resources.findBlock("empty");

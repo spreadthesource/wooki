@@ -100,7 +100,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to book settings page.
      */
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void testEditChapter()
     {
 

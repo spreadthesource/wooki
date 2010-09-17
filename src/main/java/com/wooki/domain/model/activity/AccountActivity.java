@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "AccountsActivities")
 @PrimaryKeyJoinColumn(name = "account_activity_id")
-public class AccountActivity extends Activity
+public class AccountActivity extends Activity<AccountEventType>
 {
 
     @Column(name = "type")

@@ -462,7 +462,7 @@ jQuery.extend(Tapestry.Initializer, {
 						jQuery("#" + data.elt).closest(".more-link").remove();
 					}
 				};
-				setTimeout(jQuery.getJSON(jQuery("#" + data.elt).attr("href"), successHandler), 250);
+				setTimeout(function() { jQuery.getJSON(jQuery("#" + data.elt).attr("href"), successHandler);}, 250);
 				return false;
 			});
 		}
@@ -509,6 +509,9 @@ jQuery.extend(Tapestry.Initializer, {
 		if(jQuery("#add-chapter-form").length > 0) {
 			jQuery("#add-chapter-form").bind(Wooki.Core.Events.SHOW, function() {
 				jQuery("#chapterName").focus();
+			});
+			$("addChapterForm").observeAction(Tapestry.FORM_PROCESS_SUBMIT_EVENT, function() {
+				this.reset();
 			});
 		}
 	},

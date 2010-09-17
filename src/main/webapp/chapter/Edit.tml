@@ -40,9 +40,9 @@
 			<t:submit t:id="publish" t:type="submit" t:event="publish" class="wymupdate btn-active" style="border:0px !important" value="Publish" title="Modifications will be visible by everyone" />
 			or 
 			<t:if test="abstractChapter">
-				<a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id" t:mixins="wooki/confirm" t:message="message:cancel-edit-message">${message:cancel-link}</a>
+				<a href="#" t:type="pagelink" t:page="book/index" t:context="book?.id">${message:cancel-link}</a>
 				<p:else>
-					<a href="#" t:type="pagelink" t:page="chapter/index" t:context="cancelCtx" t:mixins="wooki/confirm" t:message="message:cancel-edit-message">${message:cancel-link}</a>
+					<a href="#" t:type="pagelink" t:page="chapter/index" t:context="cancelCtx">${message:cancel-link}</a>
 				</p:else>
 			</t:if>
 		</div>

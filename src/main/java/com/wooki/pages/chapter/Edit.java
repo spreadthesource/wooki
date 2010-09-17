@@ -179,7 +179,7 @@ public class Edit extends ChapterBase
         
         if ((previous != null) && (previousTitle != null))
         {
-            left = new NavLink("chapter/index", "nav-left", "cancel-edition", previousTitle,
+            left = new NavLink("chapter/index", "nav-left", previousTitle,
                     getBookId(), previous);
         }
         else
@@ -189,10 +189,10 @@ public class Edit extends ChapterBase
 
         if ((next != null) && (nextTitle != null))
         {
-            right = new NavLink("chapter/index", "nav-right", "cancel-edition", nextTitle,
+            right = new NavLink("chapter/index", "nav-right", nextTitle,
                     getBookId(), next);
         }
-        center = new NavLink("book/index", "book-root", "cancel-edition", getBook().getTitle(),
+        center = new NavLink("book/index", "book-root", getBook().getTitle(),
                 getBookId());
 
     }

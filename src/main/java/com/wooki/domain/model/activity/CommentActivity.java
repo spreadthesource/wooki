@@ -29,7 +29,7 @@ import com.wooki.domain.model.Comment;
 @Entity
 @Table(name = "CommentsActivities")
 @PrimaryKeyJoinColumn(name = "comment_activity_id")
-public class CommentActivity extends AbstractChapterActivity
+public class CommentActivity extends AbstractChapterActivity<CommentEventType>
 {
 
     @ManyToOne(fetch = FetchType.LAZY)

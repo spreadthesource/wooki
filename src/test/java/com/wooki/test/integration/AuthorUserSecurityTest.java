@@ -84,7 +84,7 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Verify that the author has access to the edit page.
      */
-    @Test(enabled = true, dependsOnMethods =
+    @Test(enabled = false, dependsOnMethods =
     { "signin" })
     public void testEditChapter()
     {

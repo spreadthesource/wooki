@@ -104,7 +104,8 @@ public class AuthenticatedUserSecurityTest extends AbstractWookiIntegrationTestS
         }
         catch (SeleniumException se)
         {
-            assertTrue(se.getMessage().contains("404"));
+            checkNotFound();
+            // assertTrue(se.getMessage().contains("404"));
         }
 
     }

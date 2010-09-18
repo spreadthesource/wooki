@@ -17,6 +17,7 @@
 package com.wooki.pages;
 
 import org.apache.tapestry5.EventConstants;
+import org.apache.tapestry5.PersistenceConstants;
 import org.apache.tapestry5.annotations.Component;
 import org.apache.tapestry5.annotations.OnEvent;
 import org.apache.tapestry5.annotations.Persist;
@@ -82,8 +83,8 @@ public class AccountSettings
     private String newPasswordConfirmation;
 
     @Property
-    @Persist("flash")
-    private Boolean passwordChangeSuccess;
+    @Persist(PersistenceConstants.FLASH)
+    private String flashMessage;
 
     /**
      * Set current user if someone has logged in.
@@ -161,7 +162,7 @@ public class AccountSettings
         try
         {
             this.user = userManager.updatePassword(user, oldPassword, newPassword);
-            this.passwordChangeSuccess = true;
+            this.flashMessage = messages.get("success-password-updated");
         }
         catch (AuthorizationException e)
         {

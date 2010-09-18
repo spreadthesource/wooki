@@ -52,6 +52,6 @@ public class AjaxDialogLink extends DialogLink
         Link link = resources.createEventLink(EventConstants.ACTION, context);
 
         support.addInit("openJQueryAjaxDialogOnClick", getClientId(), zone, getDialog(), link
-                .toAbsoluteURI());
+                .toURI());
     }
 }

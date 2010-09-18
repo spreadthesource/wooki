@@ -23,9 +23,22 @@ public interface PageLink extends Link
     boolean isSelected();
 
     /**
+     * Check if the link should be clickable or not
+     * @return
+     */
+    boolean isDisabled();
+    
+    /**
      * Call this method to marke an item as selected.
      * 
      * @param selected
      */
     void setSelected(boolean selected);
+    
+    /**
+     * Call this method to marke an item as disabled.
+     * 
+     * @param selected
+     */
+    void setDisabled(boolean selected);
 }

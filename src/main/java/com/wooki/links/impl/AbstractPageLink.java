@@ -15,6 +15,8 @@ public abstract class AbstractPageLink extends AbstractLink implements PageLink
 
     private boolean selected;
 
+    private boolean clickable;
+
     public AbstractPageLink(String page, String labelKey, Object... context)
     {
         super(labelKey, context);
@@ -51,4 +53,13 @@ public abstract class AbstractPageLink extends AbstractLink implements PageLink
         this.selected = selected;
     }
 
+    public boolean isDisabled()
+    {
+        return false;
+    }
+
+    public void setDisabled(boolean click)
+    {
+        this.clickable = click;
+    }
 }

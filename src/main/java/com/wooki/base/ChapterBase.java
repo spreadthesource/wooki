@@ -54,7 +54,8 @@ public class ChapterBase extends PageBase
         // Get book related information
         this.chapterId = chapterId;
         this.chapter = this.chapterManager.findById(chapterId);
-        if (this.chapter == null) { return new HttpError(404, "Chapter not found"); }
+        if (this.chapter == null || !chapter.getBook().getId().equals(bookId)) { return new HttpError(
+                404, "Chapter not found"); }
 
         this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
         if (this.getPublication() == null) { return new HttpError(404, "Chapter not found"); }
@@ -69,7 +70,8 @@ public class ChapterBase extends PageBase
         this.setRevision(revision);
 
         // Setup chapter
-        setupChapter(bookId, chapterId);
+        Object result = setupChapter(bookId, chapterId);
+        if (result != null) { return result; }
 
         if (ChapterManager.LAST.equalsIgnoreCase(revision)
                 && !(this.securityCtx.isLoggedIn() && this.securityCtx.canWrite(this.getBook()))) { return new HttpError(
@@ -96,6 +98,7 @@ public class ChapterBase extends PageBase
         publicLinks.add(new ViewLink(chapter, "chapter/issues", "all-feedback", false, getBookId(),
                 chapterId));
         publicLinks.add(new ViewLink("chapter/rss", "rss-feed", getBookId(), chapterId));
+
     }
 
     @OnEvent(value = "delete")
@@ -115,6 +118,18 @@ public class ChapterBase extends PageBase
     {
         PageLink link = (PageLink) publicLinks.get(idx);
         link.setSelected(true);
+    }
+
+    public void disableAdmin(int idx)
+    {
+        PageLink link = (PageLink) adminLinks.get(idx);
+        link.setDisabled(false);
+    }
+
+    public void disablePublic(int idx)
+    {
+        PageLink link = (PageLink) publicLinks.get(idx);
+        link.setDisabled(false);
     }
 
     public Chapter getChapter()

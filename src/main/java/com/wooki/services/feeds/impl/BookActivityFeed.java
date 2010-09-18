@@ -1,20 +1,11 @@
 package com.wooki.services.feeds.impl;
 
-import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import com.sun.syndication.feed.atom.Link;
 import com.wooki.domain.model.activity.BookActivity;
 import com.wooki.domain.model.activity.BookEventType;
-import com.wooki.services.ServicesMessages;
 
 public class BookActivityFeed extends AbstractActivityFeed<BookActivity>
 {
-
-    public BookActivityFeed(@Inject LinkSource linkSource, @Inject ServicesMessages messages)
-    {
-        super(linkSource, messages);
-    }
 
     public String getTitle(BookActivity activity)
     {
@@ -41,7 +32,7 @@ public class BookActivityFeed extends AbstractActivityFeed<BookActivity>
                     true,
                     activity.getBook().getId());
             Link result = new Link();
-            result.setHref(link.toAbsoluteURI());
+            result.setHref(link.toURI());
             return result;
         }
         return null;

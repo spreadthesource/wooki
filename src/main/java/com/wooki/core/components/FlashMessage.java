@@ -16,6 +16,7 @@
 
 package com.wooki.core.components;
 
+import org.apache.tapestry5.ComponentResources;
 import org.apache.tapestry5.MarkupWriter;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.Parameter;
@@ -33,6 +34,9 @@ public class FlashMessage
 
     @Inject
     private JavaScriptSupport support;
+
+    @Inject
+    private ComponentResources resources;
 
     private String flashMessageId;
 
@@ -65,6 +69,7 @@ public class FlashMessage
         {
             support.addInitializerCall("initFlashMsgBox", this.flashMessageId);
         }
+
         message = null;
     }
 

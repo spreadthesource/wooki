@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Content;
 import com.sun.syndication.feed.atom.Entry;
@@ -14,7 +15,6 @@ import com.sun.syndication.feed.atom.Person;
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
-import com.wooki.services.activity.ActivitySource;
 import com.wooki.services.feeds.ActivityFeedWriter;
 import com.wooki.services.feeds.FeedProducer;
 
@@ -26,27 +26,17 @@ import com.wooki.services.feeds.FeedProducer;
 public abstract class AbstractFeedProducer implements FeedProducer
 {
 
-    protected final ServicesMessages messages;
+    @Inject
+    protected ServicesMessages messages;
 
-    protected final LinkSource lnkSource;
+    @Inject
+    protected LinkSource lnkSource;
 
-    protected final ActivityFeedWriter<Activity> activityFeed;
-
-    protected final ActivitySource source;
-
-    public AbstractFeedProducer(ServicesMessages messages, LinkSource lnkSource,
-            ActivityFeedWriter<Activity> activityFeed, ActivitySource source)
-    {
-        super();
-        this.messages = messages;
-        this.lnkSource = lnkSource;
-        this.activityFeed = activityFeed;
-        this.source = source;
-    }
+    @Inject
+    protected ActivityFeedWriter<Activity> activityFeed;
 
     protected Feed fillFeed(String id, String title, List<Link> altLinks, List<Activity> activities)
     {
-
         Feed result = new Feed("atom_1.0");
 
         result.setTitle(title);
@@ -109,7 +99,7 @@ public abstract class AbstractFeedProducer implements FeedProducer
         Person person = new Person();
         person.setName(user.getFullname());
         person.setUri(this.lnkSource.createPageRenderLink("index", true, user.getUsername())
-                .toAbsoluteURI());
+                .toURI());
         person.setEmail(user.getEmail());
         return person;
     }

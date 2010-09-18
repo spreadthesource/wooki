@@ -5,7 +5,9 @@ Wooki.Core = {
 	Events : {
 		SHOW : "show",
 		HIDE : "hide"
-	}
+	},
+	
+	alreadyConfirmed: false
 };
 
 jQuery.extend(Tapestry.Initializer, {
@@ -63,6 +65,7 @@ jQuery.extend(Tapestry.Initializer, {
 					Event.stop(e);
 					return;
 				}
+				Wooki.Core.alreadyConfirmed = true;
 			}.bind(params));
 		}
 	},

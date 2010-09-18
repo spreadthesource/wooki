@@ -9,7 +9,7 @@
 	
 		<h2 class="entry-title"><a href="#" t:type="pagelink" t:page="chapter/index" t:context="[book?.id,chapter?.id]">${chapter?.title}</a></h2>
 		
-		<ul t:type="loop" t:source="publications" t:value="publication" t:index="index">
+		<ul id="revision-history" t:type="loop" t:source="publications" t:value="publication" t:index="index">
 			<li>
 				Revision of <t:output value="prop:publication?.creationDate" t:format="prop:timestamp" />&nbsp;
 				<t:if test="publication.published">

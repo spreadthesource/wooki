@@ -1,21 +1,11 @@
 package com.wooki.services.feeds.impl;
 
-import org.apache.tapestry5.internal.services.LinkSource;
-import org.apache.tapestry5.ioc.annotations.Inject;
-
 import com.sun.syndication.feed.atom.Link;
 import com.wooki.domain.model.activity.CommentActivity;
 import com.wooki.domain.model.activity.CommentEventType;
-import com.wooki.pages.chapter.Issues;
-import com.wooki.services.ServicesMessages;
 
 public class CommentActivityFeed extends AbstractActivityFeed<CommentActivity>
 {
-
-    public CommentActivityFeed(@Inject LinkSource linkSource, @Inject ServicesMessages messages)
-    {
-        super(linkSource, messages);
-    }
 
     public String getTitle(CommentActivity activity)
     {
@@ -43,7 +33,7 @@ public class CommentActivityFeed extends AbstractActivityFeed<CommentActivity>
                     activity.getComment().getPublication().getChapter().getBook().getId());
             link.setAnchor("c" + activity.getComment().getId());
             Link result = new Link();
-            result.setHref(link.toAbsoluteURI());
+            result.setHref(link.toURI());
             return result;
         }
         return null;

@@ -75,7 +75,7 @@ public class ClickAndRemove extends AbstractLink
         Link link = resources.createEventLink(CLICK_AND_REMOVE, this.entityId);
         JSONObject data = new JSONObject();
         data.put("elt", this.getClientId());
-        data.put("url", link.toAbsoluteURI());
+        data.put("url", link.toURI());
         data.put("toRemove", domPrefix + entityId);
         support.addInit("initClickAndRemove", data);
     }

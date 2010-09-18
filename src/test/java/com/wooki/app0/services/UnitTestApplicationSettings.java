@@ -17,7 +17,7 @@ public class UnitTestApplicationSettings implements ApplicationSettings
         settings.put("hibernate.connection.url", "jdbc:hsqldb:mem:wookidbunittest");
         settings.put("hibernate.connection.username", "sa");
         settings.put("hibernate.connection.password", "");
-        settings.put("hibernate.show_sql", "true");
+        settings.put("hibernate.show_sql", "false");
         settings.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
     }
 

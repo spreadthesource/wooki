@@ -84,7 +84,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         waitForPageToLoad();
         checkBookTitle("The book of Wooki");
 
-        open("/book/index/2", "true");
+        open("/book/index/9999", "true");
         waitForPageToLoad();
         checkNotFound();
 
@@ -100,7 +100,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
     /**
      * Try to access to book settings page.
      */
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testEditChapter()
     {
 

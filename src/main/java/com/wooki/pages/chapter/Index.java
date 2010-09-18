@@ -36,6 +36,9 @@ import com.wooki.links.impl.ViewLink;
 public class Index extends ChapterBase
 {
 
+    // this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
+    // if (this.getPublication() == null) { return new HttpError(404, "Chapter not found"); }
+
     @Inject
     private ChapterManager chapterManager;
 

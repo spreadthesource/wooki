@@ -45,7 +45,7 @@ public class PageBase
 
     @Property
     private DateFormat timestamp = DateUtils.getLastModified();
-    
+
     private Publication publication;
 
     private Book book;
@@ -65,6 +65,7 @@ public class PageBase
     @OnEvent(value = EventConstants.ACTIVATE)
     public Object setupBookBase(Long bookId)
     {
+
         this.bookId = bookId;
 
         // Check resource exists

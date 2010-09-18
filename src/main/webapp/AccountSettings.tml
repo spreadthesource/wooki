@@ -36,9 +36,7 @@
 	<div class="feed section shadowed right-col x380">
 		<h2>Password change</h2>
 		
-		<t:if t:test="passwordChangeSuccess">
-			<t:wooki.flashMessage t:message="message:success-password-updated" />
-		</t:if>
+		<t:wooki.flashMessage />
 		
 		<form t:type="form" t:id="passwordChange" class="small-form" t:clientValidation="false">
 	

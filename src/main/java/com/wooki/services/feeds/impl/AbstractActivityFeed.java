@@ -2,9 +2,13 @@ package com.wooki.services.feeds.impl;
 
 import java.lang.reflect.ParameterizedType;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.tapestry5.Link;
 import org.apache.tapestry5.internal.services.LinkSource;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.ioc.annotations.UsesMappedConfiguration;
+import org.apache.tapestry5.services.RequestGlobals;
 
 import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.ServicesMessages;
@@ -25,16 +29,19 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
 
     protected final Class<T> activityType;
 
-    protected final LinkSource linkSource;
+    @Inject
+    protected LinkSource linkSource;
 
-    protected final ServicesMessages messages;
+    @Inject
+    protected ServicesMessages messages;
 
-    public AbstractActivityFeed(@Inject LinkSource linkSource, @Inject ServicesMessages messages)
+    @Inject
+    protected RequestGlobals globals;
+    
+    public AbstractActivityFeed()
     {
         this.activityType = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
-        this.linkSource = linkSource;
-        this.messages = messages;
         this.keyPrefixForTitle = PREFIX + this.activityType.getSimpleName() + "_";
         this.keyPrefixForSummary = PREFIX + this.activityType.getSimpleName() + "_";
     }
@@ -47,6 +54,12 @@ public abstract class AbstractActivityFeed<T extends Activity> implements Activi
     public String getKeyForSummary(String event)
     {
         return keyPrefixForSummary + event + SUFFIX_TITLE;
+    }
+    
+    protected String toUrl(Link link) {
+        HttpServletRequest request = globals.getHTTPServletRequest();
+        String result = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + link.toURI();
+        return result;
     }
 
 }

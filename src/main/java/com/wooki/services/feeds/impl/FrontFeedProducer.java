@@ -3,15 +3,12 @@ package com.wooki.services.feeds.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.internal.services.LinkSource;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.feed.atom.Link;
-import com.wooki.domain.model.activity.Activity;
 import com.wooki.services.EnumServiceLocator;
-import com.wooki.services.ServicesMessages;
 import com.wooki.services.activity.ActivitySourceType;
-import com.wooki.services.feeds.ActivityFeedWriter;
 
 /**
  * Produces the feed for a single book.
@@ -21,12 +18,8 @@ import com.wooki.services.feeds.ActivityFeedWriter;
 public class FrontFeedProducer extends AbstractFeedProducer
 {
 
-    public FrontFeedProducer(ServicesMessages messages, LinkSource lnkSource,
-            ActivityFeedWriter<Activity> activityFeed, EnumServiceLocator locator)
-    {
-        super(messages, lnkSource, activityFeed, locator
-                .getService(ActivitySourceType.BOOK_CREATION));
-    }
+    @Inject
+    private EnumServiceLocator locator;
 
     /**
      * Read book definition and generate corresponding feed.
@@ -40,12 +33,13 @@ public class FrontFeedProducer extends AbstractFeedProducer
         List<Link> alternateLinks = new ArrayList<Link>();
 
         Link linkToSelf = new Link();
-        linkToSelf.setHref(lnkSource.createPageRenderLink("index", false).toAbsoluteURI());
+        linkToSelf.setHref(lnkSource.createPageRenderLink("index", false).toURI());
         linkToSelf.setTitle(messages.getMessages().get("front-feed-title"));
 
         alternateLinks.add(linkToSelf);
 
-        return super.fillFeed(id, title, alternateLinks, source.listActivitiesForFeed(context));
+        return super.fillFeed(id, title, alternateLinks, locator.getService(
+                ActivitySourceType.BOOK_CREATION).listActivitiesForFeed(context));
     }
 
 }

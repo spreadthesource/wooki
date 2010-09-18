@@ -119,11 +119,11 @@ public class CommentBubbles
 
         // Add update link
         Link lnk = resources.createEventLink("displayComment", this.publicationId, "blockId");
-        bubble.put("url", lnk.toAbsoluteURI());
+        bubble.put("url", lnk.toURI());
         bubble.put("zoneId", commentList.getClientId());
         bubble.put("dialogId", commentDialog.getClientId());
         bubble.put("updateUrl", resources.createEventLink("updateBubbles", this.publicationId)
-                .toAbsoluteURI());
+                .toURI());
         if (this.commentsInfos != null)
         {
             for (Object[] obj : this.commentsInfos)

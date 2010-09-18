@@ -21,7 +21,7 @@ WYMeditor.editor.prototype.autosave = function() {
 			.bind(
 					'beforeunload',
 					function() {
-						if (!post_action) {
+						if (!post_action && !Wooki.Core.alreadyConfirmed) {
 							if (confirm("Doing this you may lose your current work, Save draft before leaving ?")) {
 								wym.update();
 								var form = jQuery("#" + wym._options.formId);

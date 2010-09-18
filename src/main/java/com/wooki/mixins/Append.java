@@ -89,7 +89,7 @@ public class Append
         Link link = formResources.createFormEventLink(EventConstants.ACTION, context);
 
         JSONObject params = new JSONObject();
-        params.put("url", link.toAbsoluteURI());
+        params.put("url", link.toURI());
         params.put("element", form.getClientId());
         params.put("to", to);
         params.put("position", position);

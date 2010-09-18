@@ -69,7 +69,7 @@ public abstract class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
     {
         Assert.assertTrue(
                 this.getText("//title").equalsIgnoreCase("Resource Not Found"),
-                "Resource should not be found but was " + this.getText("//title"));
+                "Resource should not have been found but was " + this.getText("//title"));
     }
 
     /**

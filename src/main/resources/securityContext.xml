@@ -62,6 +62,7 @@
 				<value>searchresult</value>
 				<value>error/generic</value>
 				<value>chapter/history</value>
+				<value>IESupport</value>
 			</list>
 		</constructor-arg>
 		<property name="productionMode" value="${tapestry.production-mode}" />

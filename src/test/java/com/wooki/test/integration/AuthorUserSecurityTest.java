@@ -76,23 +76,10 @@ public class AuthorUserSecurityTest extends AbstractWookiIntegrationTestSuite
     { "signin" })
     public void testWorkingCopy()
     {
+        chooseOkOnNextConfirmation();
         open("/chapter/1/1/last");
         waitForPageToLoad();
         checkBookTitle(BookNavigationTest.BOOK_TITLE);
-    }
-
-    /**
-     * Verify that the author has access to the edit page.
-     */
-    @Test(enabled = false, dependsOnMethods =
-    { "signin" })
-    public void testEditChapter()
-    {
-        open("/chapter/edit/1/1");
-        waitForPageToLoad();
-        checkBookTitle(BookNavigationTest.BOOK_TITLE);
-        Assert.assertTrue(isElementPresent("id=updateTitle"), "Missing update title form");
-        Assert.assertTrue(isElementPresent("id=editChapterForm"), "Missing edit chapter form");
     }
 
     /**

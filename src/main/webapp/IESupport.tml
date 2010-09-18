@@ -1,0 +1,18 @@
+<html t:type="layout" xmlns:t="http://tapestry.apache.org/schema/tapestry_5_1_0.xsd" xmlns:p="tapestry:parameter">
+
+	<div class="section wrapper">
+		<p>
+			Wooki makes an extensive use of new browser technologies, and this won't stop i.e. to handle real-time concurrent
+    		document edition or off-line storage.
+    		Since using Wooki with Internet Explorer is not representative of its design and objectives, 
+    		we have decided to decline all the requests coming from this browser.
+		</p>
+		<p>
+    		Anyway, Wooki has been developed and tested with Firefox, Safari and Chrome. Give it a try ! 
+    	</p>
+    	<em>
+    		Sorry for inconvenience.
+    	</em>
+	</div>
+
+</html>

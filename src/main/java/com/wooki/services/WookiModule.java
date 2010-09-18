@@ -50,6 +50,7 @@ import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.Dispatcher;
 import org.apache.tapestry5.services.Environment;
 import org.apache.tapestry5.services.EnvironmentalShadowBuilder;
+import org.apache.tapestry5.services.HttpServletRequestFilter;
 import org.apache.tapestry5.services.InvalidationEventHub;
 import org.apache.tapestry5.services.PageRenderRequestFilter;
 import org.apache.tapestry5.services.Response;
@@ -226,6 +227,7 @@ public class WookiModule<T>
             OrderedConfiguration<PageRenderRequestFilter> filters, WookiViewRefererFilter vrFilter)
     {
         filters.add("ViewRefererFilter", vrFilter);
+        filters.addInstance("IESupport", BrowserSelection.class);
     }
 
     /**
@@ -253,6 +255,12 @@ public class WookiModule<T>
         excludePattern.add(".*edit.*");
         excludePattern.add("dev.*");
         excludePattern.add("error.*");
+    }
+
+    public void contributeHttpServletRequestHandler(
+            OrderedConfiguration<HttpServletRequestFilter> configuration)
+    {
+        // configuration.add("MSIESupport", new BrowserSelection(), "before:StoreIntoGlobals");
     }
 
     /**

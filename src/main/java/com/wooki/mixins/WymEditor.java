@@ -135,7 +135,7 @@ public class WymEditor
         params.put("autosaveStatus", autosaveStatus);
 
         Link uploadActionLink = resources.createEventLink("uploadImage");
-        params.put("uploadAction", uploadActionLink.toAbsoluteURI());
+        params.put("uploadAction", uploadActionLink.toURI());
 
         // Add activation context
         String activationContext = uploadActionLink

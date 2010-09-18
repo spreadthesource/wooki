@@ -192,7 +192,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     /**
      * Check that an author cannot add a chapter if he is not user of the book.
      */
-    @Test()
+    @Test(enabled = true)
     public void verifyCheckAuthor() throws UserAlreadyException, AuthorizationException
     {
         User jean = getOrCreate("jean");
@@ -495,7 +495,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     public void testPublicationIso()
     {
         System.setProperty("file.encoding", "ISO-8859-1");
-        this.testPublication();
+        this.publication();
     }
 
     /**
@@ -507,7 +507,7 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     public void testPublicationUtf()
     {
         System.setProperty("file.encoding", "UTF-8");
-        this.testPublication();
+        this.publication();
     }
 
     /**
@@ -519,10 +519,10 @@ public class ServicesTest extends AbstractWookiUnitTestSuite
     public void testPublicationCp()
     {
         System.setProperty("file.encoding", "cp1252");
-        this.testPublication();
+        this.publication();
     }
 
-    public void testPublication()
+    public void publication()
     {
         Book myProduct = bookManager.findBookBySlugTitle("my-first-product-book");
         Assert.assertNotNull(myProduct, "'my-first-product-book' is not available.");

@@ -76,13 +76,11 @@ public class FeedModule
      * @param configuration
      */
     public static void contributeFeedSource(
-            MappedConfiguration<ActivitySourceType, FeedProducer> configuration,
-            @Autobuild SingleBookFeedProducer singleBook, @Autobuild FrontFeedProducer front,
-            @Autobuild UserPublicFeedProducer user)
+            MappedConfiguration<ActivitySourceType, FeedProducer> configuration)
     {
-        configuration.add(ActivitySourceType.BOOK, singleBook);
-        configuration.add(ActivitySourceType.BOOK_CREATION, front);
-        configuration.add(ActivitySourceType.USER_PUBLIC, user);
+        configuration.addInstance(ActivitySourceType.BOOK, SingleBookFeedProducer.class);
+        configuration.addInstance(ActivitySourceType.BOOK_CREATION, FrontFeedProducer.class);
+        configuration.addInstance(ActivitySourceType.USER_PUBLIC, UserPublicFeedProducer.class);
     }
 
 }

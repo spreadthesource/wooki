@@ -52,7 +52,7 @@ public class OpenInWindow
     {
         JSONObject param = new JSONObject();
         param.put("elt", link.getClientId());
-        param.put("url", link.getLink().toAbsoluteURI());
+        param.put("url", link.getLink().toURI());
         param.put("name", name);
         param.put("options", options);
         renderSupport.addInitializerCall("initOpenInWindow", param);

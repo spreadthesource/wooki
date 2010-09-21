@@ -16,6 +16,7 @@
 
 package com.wooki.domain.biz;
 
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -130,6 +131,15 @@ public class UserManagerImpl implements UserManager
         // check if the new username is not already taken by someone else
         if (userByUsername != null && userByUsername.getId() != user.getId()) { throw new UserAlreadyException(); }
 
+        // Update sid
+        BigInteger sidId = userDao.findSid(findById(user.getId()).getUsername());
+        if (sidId != null)
+        {
+            userDao.updateSid(sidId, user.getUsername());
+        }
+
+        // Re-log
+        this.securityCtx.logout();
         this.securityCtx.log(userDao.update(user));
 
         return user;

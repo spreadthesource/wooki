@@ -54,9 +54,8 @@ public class ChapterBase extends PageBase
         // Get book related information
         this.chapterId = chapterId;
         this.chapter = this.chapterManager.findById(chapterId);
-        if (this.chapter == null || !chapter.getBook().getId().equals(bookId)) { 
-            throw new IllegalArgumentException("Book id and chapter id are inconsisten");
-        }
+        if (this.chapter == null || !chapter.getBook().getId().equals(bookId)) { throw new IllegalArgumentException(
+                "Book id and chapter id are inconsistent"); }
 
         this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
         if (this.getPublication() == null) { return new HttpError(404, "Chapter not found"); }
@@ -66,7 +65,7 @@ public class ChapterBase extends PageBase
     @OnEvent(value = EventConstants.ACTIVATE)
     public Object setupChapter(Long bookId, Long chapterId, String revision)
     {
-        
+
         this.setViewingRevision(true);
         this.setRevision(revision);
 

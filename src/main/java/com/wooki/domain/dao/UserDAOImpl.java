@@ -16,6 +16,7 @@
 
 package com.wooki.domain.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -59,6 +60,24 @@ public class UserDAOImpl extends WookiGenericDAOImpl<User, Long> implements User
         List<String> result = (List<String>) query.list();
         if (result != null) { return result.toArray(new String[0]); }
         return new String[] {};
+    }
+
+    public BigInteger findSid(String username)
+    {
+        // selectSidPrimaryKey
+        Query findSid = this.session
+                .createSQLQuery("select id from acl_sid where principal=? and sid=?");
+        findSid.setParameter(0, true);
+        findSid.setParameter(1, username);
+        return (BigInteger) findSid.uniqueResult();
+    }
+
+    public void updateSid(BigInteger sidId, String username)
+    {
+        Query updateSid = this.session.createSQLQuery("update acl_sid set sid=? where id=?");
+        updateSid.setParameter(0, username);
+        updateSid.setParameter(1, sidId);
+        updateSid.executeUpdate();
     }
 
 }

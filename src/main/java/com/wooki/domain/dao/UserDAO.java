@@ -16,6 +16,8 @@
 
 package com.wooki.domain.dao;
 
+import java.math.BigInteger;
+
 import com.wooki.domain.model.User;
 
 /**
@@ -41,5 +43,21 @@ public interface UserDAO extends WookiGenericDAO<User, Long>
      * @return
      */
     String[] listUserNames(String prefix);
+    
+    /**
+     * Update user sid in case of username update
+     *
+     * @param sidId
+     * @param username
+     */
+    void updateSid(BigInteger sidId, String username);
+    
+    /**
+     * Find sid associated to the user
+     *
+     * @param username
+     * @return
+     */
+    BigInteger findSid(String username);
 
 }

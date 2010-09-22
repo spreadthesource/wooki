@@ -97,7 +97,7 @@ public class DOMManagerImpl implements DOMManager
     {
         StringBuffer result = new StringBuffer();
         result.append("<?xml version=\"1.0\" encoding=\"" + this.getCharacterEncoding() + "\"?>");
-        result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(ID_START).append("=\"0\">");
+        result.append("<").append(CHAPTER_ROOT_NODE).append(" ").append(ID_START).append("=\"0\" xml:space=\"preserve\">");
         result.append(content);
         result.append("</").append(CHAPTER_ROOT_NODE).append(">");
         return addIds(result.toString(), prefix);
@@ -404,7 +404,7 @@ public class DOMManagerImpl implements DOMManager
     private String serializeContent(Document doc)
     {
 
-        XMLOutputter output = new XMLOutputter(Format.getCompactFormat().setEncoding(
+        XMLOutputter output = new XMLOutputter(Format.getPrettyFormat().setEncoding(
                 this.getCharacterEncoding()));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try

@@ -41,7 +41,7 @@ ul { list-style-type:disc; }
 p, blockquote, pre { margin: 5px 0px; padding:5px 0px; }
 quote, blockquote {	font-family: Georgia; font-style: italic;  }
 blockquote, pre { margin-left:30px; padding-left:10px; border-left:1px solid #C9BB9B; }
-pre { font-size:12px; white-space:normal; }
+pre { font-size:12px; white-space:pre; }
 
 /** Print specifics */
 

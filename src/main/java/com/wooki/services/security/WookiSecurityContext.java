@@ -16,6 +16,8 @@
 
 package com.wooki.services.security;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import com.wooki.domain.model.User;
 import com.wooki.domain.model.WookiEntity;
 
@@ -80,4 +82,11 @@ public interface WookiSecurityContext
      */
     boolean canDelete(WookiEntity object);
 
+    /**
+     * Check if the logged user has a given granted authority.
+     *
+     * @param authority
+     * @return
+     */
+    boolean hasAuthority(GrantedAuthority authority);
 }

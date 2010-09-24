@@ -36,6 +36,7 @@ import com.wooki.domain.biz.BookManager;
 import com.wooki.domain.biz.UserManager;
 import com.wooki.domain.model.Book;
 import com.wooki.domain.model.User;
+import com.wooki.domain.model.WookiGrantedAuthority;
 import com.wooki.services.HttpError;
 import com.wooki.services.activity.ActivitySourceType;
 import com.wooki.services.feeds.FeedSource;
@@ -99,6 +100,9 @@ public class Index
     private Block userCtx;
 
     @Property
+    private String password;
+    
+    @Property
     private String flashMessage;
 
     /**
@@ -156,6 +160,12 @@ public class Index
     {
         return feedSource.produceFeed(ActivitySourceType.BOOK_CREATION);
     }
+    
+    @OnEvent(value = EventConstants.SUCCESS, component = "changePasswordForm")
+    public void successPasswordChange() throws IOException, IllegalArgumentException, FeedException
+    {
+        userManager.updatePassword(user, null, password);
+    }
 
     @SetupRender
     public void setupIEMessage()
@@ -164,6 +174,11 @@ public class Index
         {
             flashMessage = "Wooki will be a lot more comfortable to use with Chrome, Firefox or Safari !";
         }
+    }
+
+    public boolean isAdminForm()
+    {
+        return this.securityCtx.hasAuthority(WookiGrantedAuthority.ROLE_ADMIN);
     }
 
     public String getTitle()

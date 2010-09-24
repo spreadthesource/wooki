@@ -23,6 +23,7 @@ import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.model.Permission;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -124,6 +125,21 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
 
         return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
         { BasePermission.ADMINISTRATION });
+    }
+
+    public boolean hasAuthority(GrantedAuthority authority)
+    {
+        if (SecurityContextHolder.getContext() != null
+                && SecurityContextHolder.getContext().getAuthentication() != null
+                && SecurityContextHolder.getContext().getAuthentication().getAuthorities() != null)
+        {
+            for (GrantedAuthority auth : SecurityContextHolder.getContext().getAuthentication()
+                    .getAuthorities())
+            {
+                if (auth.getAuthority().equals(authority.getAuthority())) { return true; }
+            }
+        }
+        return false;
     }
 
 }

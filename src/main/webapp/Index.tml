@@ -18,6 +18,28 @@
 					</t:security.ifLoggedIn>	
 					<li><span>Member since</span><t:output t:format="prop:sinceFormat" t:value="user.creationDate" /></li>
 				</ul>
+				<t:if test="adminForm">
+					<ul class="nav">
+						<li><a href="#" t:type="actionlink" class="active" t:id="showAddChapterField" t:mixins="wooki/showHideOnClick" t:toShow="change-password-form" t:hideLnkId="hide-change-password" t:resetFormClass="small-form">
+						Reset password
+						</a></li>
+					</ul>
+				
+                   	<div style="display:none;" id="change-password-form">
+	               		<t:form t:id="changePasswordForm" class="small-form">
+							<table>
+		                       <tr>
+		                           <td>
+		                               <input t:type="passwordfield" t:value="password" t:id="password" class="long-field" t:validate="required" />
+		                           </td>
+		                       </tr>
+							</table>
+							<div class="form-submit">
+								<input t:type="submit" class="btn-active" value="Update password" /> or <a href="#" id="hide-change-password">cancel</a>
+							</div>
+						</t:form>
+					</div>
+				</t:if>
 			</div>
 		  	<t:activity.feed t:clientId="user-public-activity" t:context="user?.id" t:type="literal:USER_PUBLIC" t:title="Public Activity" />
     	</div>

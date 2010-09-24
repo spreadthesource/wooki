@@ -26,6 +26,7 @@ import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.model.AclCache;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.ibm.icu.util.Calendar;
@@ -166,10 +167,14 @@ public class UserManagerImpl implements UserManager
         if (this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
                 .getAuthentication(), user, BasePermission.ADMINISTRATION))
         {
-            String encodedPassword = this.passwordEncoder.encodePassword(
-                    oldPassword,
-                    this.saltSource.getSalt(user));
-            if (!encodedPassword.equals(this.securityCtx.getUser().getPassword())) { throw new AuthorizationException(); }
+            // In case of admin rights, bypass previous old password checking
+            if (!securityCtx.hasAuthority(WookiGrantedAuthority.ROLE_ADMIN))
+            {
+                String encodedPassword = this.passwordEncoder.encodePassword(
+                        oldPassword,
+                        this.saltSource.getSalt(user));
+                if (!encodedPassword.equals(this.securityCtx.getUser().getPassword())) { throw new AuthorizationException(); }
+            }
 
             user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
                     .getSalt(user)));

@@ -47,8 +47,10 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
     public void log(User user)
     {
         if (user == null) { throw new IllegalArgumentException("User cannot be null"); }
-        UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(user,
-                user.getPassword(), user.getAuthorities());
+        UsernamePasswordAuthenticationToken logged = new UsernamePasswordAuthenticationToken(
+                new org.springframework.security.core.userdetails.User(user.getUsername(), user
+                        .getPassword(), true, true, true, true, user.getAuthorities()), user
+                        .getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(logged);
     }
 
@@ -104,24 +106,24 @@ public class WookiSecurityContextImpl implements WookiSecurityContext
 
     public boolean canDelete(WookiEntity object)
     {
-        
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) { return false; }
-        
+
         return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
         { BasePermission.DELETE, BasePermission.ADMINISTRATION });
     }
 
     public boolean isOwner(WookiEntity object)
     {
-        
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) { return false; }
-        
+
         return this.aclPermissionEvaluator.hasPermission(authentication, object, new Permission[]
         { BasePermission.ADMINISTRATION });
     }
-    
+
 }

@@ -41,7 +41,10 @@ public class UserDetailsServiceImpl implements UserDetailsService
             DataAccessException
     {
         User user = userManager.findByUsername(username);
-        return user;
+
+        return user == null ? null : new org.springframework.security.core.userdetails.User(user
+                .getUsername(), user.getPassword(), true, true, true, true, user.getAuthorities());
+
     }
 
 }

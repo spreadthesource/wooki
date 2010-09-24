@@ -50,7 +50,7 @@ public interface WookiSecurityContext
     String getUsername();
 
     /**
-     * Get the name of the logged user.
+     * This method return the wooki entity corresponding to the logged user.
      * 
      * @return
      */

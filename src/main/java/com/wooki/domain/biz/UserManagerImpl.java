@@ -23,6 +23,7 @@ import java.util.Date;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.acls.AclPermissionEvaluator;
 import org.springframework.security.acls.domain.BasePermission;
+import org.springframework.security.acls.model.AclCache;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +42,8 @@ import com.wooki.services.security.WookiSecurityContext;
 
 public class UserManagerImpl implements UserManager
 {
+
+    private AclCache aclCache;
 
     private final UserDAO userDao;
 
@@ -67,6 +70,7 @@ public class UserManagerImpl implements UserManager
         this.passwordEncoder = applicationContext.getBean(PasswordEncoder.class);
         this.aclPermissionEvaluator = applicationContext.getBean(AclPermissionEvaluator.class);
         this.securityManager = applicationContext.getBean(SecurityManager.class);
+        this.aclCache = applicationContext.getBean(AclCache.class);
     }
 
     public void registerUser(User author) throws UserAlreadyException
@@ -115,32 +119,38 @@ public class UserManagerImpl implements UserManager
         return userDao.listUserNames(prefix);
     }
 
-    public User updateDetails(User user) throws AuthorizationException, UserAlreadyException
+    public User updateDetails(User user) throws UserAlreadyException
     {
         assert user != null;
 
         if (!this.securityCtx.isLoggedIn()
                 || !this.aclPermissionEvaluator.hasPermission(SecurityContextHolder.getContext()
-                        .getAuthentication(), user, BasePermission.ADMINISTRATION)
-                || this.securityCtx.getUser().getId() != user.getId()
-                && user.getPassword() != this.securityCtx.getUser().getPassword()) { throw new AuthorizationException(
+                        .getAuthentication(), user, BasePermission.ADMINISTRATION)) { throw new AuthorizationException(
                 "Action not authorized"); }
 
         User userByUsername = findByUsername(user.getUsername());
 
         // check if the new username is not already taken by someone else
-        if (userByUsername != null && userByUsername.getId() != user.getId()) { throw new UserAlreadyException(); }
+        if (userByUsername != null && userByUsername.getId() != user.getId())
+        {
+            // Reset user state and throw an exception
+            userDao.refresh(user);
+            throw new UserAlreadyException();
+        }
 
         // Update sid
-        BigInteger sidId = userDao.findSid(findById(user.getId()).getUsername());
+        BigInteger sidId = userDao.findSid(securityCtx.getUsername());
         if (sidId != null)
         {
             userDao.updateSid(sidId, user.getUsername());
         }
 
-        // Re-log
-        this.securityCtx.logout();
-        this.securityCtx.log(userDao.update(user));
+        // Force re-log
+        this.securityCtx.log(user);
+        userDao.update(user);
+
+        // TODO Not satisfying, we should clear only the Acl for user object
+        aclCache.clearCache();
 
         return user;
     }

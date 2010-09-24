@@ -73,6 +73,16 @@ public abstract class AbstractWookiIntegrationTestSuite extends SeleniumTestCase
     }
 
     /**
+     * Check if the exception report is displayed with a given exception.
+     * 
+     * @param exception
+     */
+    protected void checkException(Class<? extends Exception> exception)
+    {
+        Assert.assertTrue(isTextPresent(exception.getName()));
+    }
+
+    /**
      * Verify that the access to the corresponding has been denied for logged user.
      */
     protected void checkAccessDenied()

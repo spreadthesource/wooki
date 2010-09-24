@@ -128,10 +128,6 @@ public class AccountSettings
         {
             this.user = userManager.updateDetails(user);
         }
-        catch (AuthorizationException e)
-        {
-            userDetails.recordError(messages.get("error-authorization-exception"));
-        }
         catch (UserAlreadyException e)
         {
             userDetails.recordError(username, messages.get("error-username-already-taken"));

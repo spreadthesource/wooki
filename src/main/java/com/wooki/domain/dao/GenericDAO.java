@@ -57,6 +57,13 @@ public interface GenericDAO<T, PK extends Serializable>
     void delete(T persistentObject);
 
     /**
+     * Refresh the object to its db values. 
+     *
+     * @param persistentObject
+     */
+    void refresh(T persistentObject);
+    
+    /**
      * Create a new <tt>Criteria</tt> instance, for the current entity class, or a superclass of an
      * entity class.
      * 

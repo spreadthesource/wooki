@@ -136,7 +136,7 @@ public class AnonymousUserSecurityTest extends AbstractWookiIntegrationTestSuite
         // Resource does not exist
         open("/chapter/1/5", "true");
         waitForPageToLoad();
-        checkNotFound();
+        checkException(IllegalArgumentException.class);
 
         // Resource does not exist
         open("/chapter/5/1", "true");

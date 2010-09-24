@@ -72,7 +72,7 @@ public interface UserManager
      * @throws AuthorizationException
      */
     @CommitAfter
-    User updateDetails(User user) throws AuthorizationException, UserAlreadyException;
+    User updateDetails(User user) throws UserAlreadyException;
 
     /**
      * Update an user password

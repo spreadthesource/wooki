@@ -124,7 +124,7 @@ public class DOMManagerImpl implements DOMManager
 
         // Set the new value for
         doc.getRootElement().setAttribute(ID_START, "" + allocator.current());
-        return serializeContent(doc);
+        return serializeContent(doc, true);
 
     }
 
@@ -295,7 +295,7 @@ public class DOMManagerImpl implements DOMManager
         }
 
         // Serialize result
-        return serializeContent(result);
+        return serializeContent(result, false);
     }
 
     /**
@@ -399,13 +399,24 @@ public class DOMManagerImpl implements DOMManager
      * Transform DOM into String representation.
      * 
      * @param doc
+     * @param prettyPrint
+     *            TODO
      * @return
      */
-    private String serializeContent(Document doc)
+    private String serializeContent(Document doc, boolean prettyPrint)
     {
+        XMLOutputter output;
+        if (prettyPrint)
+        {
+            output = new XMLOutputter(Format.getPrettyFormat().setEncoding(
+                    this.getCharacterEncoding()));
+        }
+        else
+        {
+            output = new XMLOutputter(Format.getCompactFormat().setEncoding(
+                    this.getCharacterEncoding()));
+        }
 
-        XMLOutputter output = new XMLOutputter(Format.getPrettyFormat().setEncoding(
-                this.getCharacterEncoding()));
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try
         {

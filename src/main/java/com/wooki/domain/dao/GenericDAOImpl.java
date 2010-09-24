@@ -72,6 +72,11 @@ public abstract class GenericDAOImpl<T extends WookiEntity, PK extends Serializa
         this.session.merge(o);
     }
 
+    public void refresh(T persistentObject)
+    {
+        this.session.refresh(persistentObject);
+    }
+
     @SuppressWarnings("unchecked")
     public T findById(PK id)
     {

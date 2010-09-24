@@ -36,9 +36,6 @@ import com.wooki.links.impl.ViewLink;
 public class Index extends ChapterBase
 {
 
-    // this.setPublication(this.chapterManager.getLastPublishedPublication(chapterId));
-    // if (this.getPublication() == null) { return new HttpError(404, "Chapter not found"); }
-
     @Inject
     private ChapterManager chapterManager;
 
@@ -94,7 +91,7 @@ public class Index extends ChapterBase
     public void setupNav()
     {
         selectPublic(0);
-        
+
         if ((previous != null) && (previousTitle != null))
         {
             left = new NavLink("chapter/index", "nav-left", previousTitle, getBookId(), previous);

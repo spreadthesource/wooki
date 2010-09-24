@@ -85,4 +85,14 @@ public interface UserManager
     User updatePassword(User user, String oldPassword, String newPassword)
             throws AuthorizationException;
 
+    /**
+     * This method force reset of password, it can only be called by administrators.
+     *
+     * @param user
+     * @param newPassword
+     * @throws AuthorizationException
+     */
+    @CommitAfter
+    public void resetPassword(User user, String newPassword) throws AuthorizationException;
+    
 }

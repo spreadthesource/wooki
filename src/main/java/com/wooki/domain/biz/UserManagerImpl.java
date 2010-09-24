@@ -26,7 +26,6 @@ import org.springframework.security.acls.domain.BasePermission;
 import org.springframework.security.acls.model.AclCache;
 import org.springframework.security.authentication.dao.SaltSource;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.ibm.icu.util.Calendar;
@@ -154,6 +153,18 @@ public class UserManagerImpl implements UserManager
         aclCache.clearCache();
 
         return user;
+    }
+
+    public void resetPassword(User user, String newPassword)
+    {
+        assert user != null;
+        assert newPassword != null;
+
+        if (!securityCtx.hasAuthority(WookiGrantedAuthority.ROLE_ADMIN)) { throw new AuthorizationException(); }
+
+        user.setPassword(this.passwordEncoder.encodePassword(newPassword, this.saltSource
+                .getSalt(user)));
+        userDao.update(user);
     }
 
     public User updatePassword(User user, String oldPassword, String newPassword)

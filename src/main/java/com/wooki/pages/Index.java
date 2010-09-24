@@ -164,7 +164,7 @@ public class Index
     @OnEvent(value = EventConstants.SUCCESS, component = "changePasswordForm")
     public void successPasswordChange() throws IOException, IllegalArgumentException, FeedException
     {
-        userManager.updatePassword(user, null, password);
+        userManager.resetPassword(user, password);
     }
 
     @SetupRender
